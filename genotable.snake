@@ -1,0 +1,38 @@
+#STRAINS=['ERS005742', 'ERS005743']
+import pandas as pd
+import os
+
+configfile: "config.yaml"
+SAMPLES_DF=pd.read_table(config["samples"], sep= '\t', header= 0).set_index("strain", drop=False)
+STRAINS=SAMPLES_DF['strain'].tolist()
+
+rule all:
+    input:
+        'roary/gene_presence_absence.csv'
+
+rule run_prokka:
+    input:
+        scaf_f=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, "scaffolds_file"]
+    output:
+        gff_f='annotations/{strain}/{strain}.gff'
+    threads: 16
+    shell:
+        "prokka --cpus {threads} --force --prefix {wildcards.strain} --outdir annotations/{wildcards.strain} {input}"
+
+rule make_assembly:
+    input:
+        fastq=lambda wildcards: [os.path.join('fastq', wildcards.strain,'reads_1.fastq.gz'), os.path.join('fastq', wildcards.strain,'reads_2.fastq.gz')]
+    output:
+        scaf_f='assemblies/{strain}.fa/scaffolds.fasta'
+    threads: 16
+    shell:
+        "spades.py --careful --threads {threads} -o assemblies/{wildcards.strain}.fa -1 {input[0]} -2 {input[1]}"
+
+rule run_roary:
+    input:
+        expand('annotations/{strain}/{strain}.gff', strain= STRAINS)
+    output:
+        'roary/gene_presence_absence.csv'
+    threads: 16
+    shell:
+        'roary -f roary -e -n -v -r -p {threads} -g 100000 -z {input} '
