@@ -1,0 +1,22 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_vcf
+	1	mapping
+	1	process_vcf
+	1	sort_bam
+	5
+
+rule mapping:
+    input: data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2500/bwa.raw.bam
+    jobid: 5
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-09T155311.354480.snakemake.log

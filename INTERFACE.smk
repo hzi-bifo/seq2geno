@@ -1,3 +1,22 @@
+import pandas as pd
+import os
+import re
+configfile: "config.yaml"
+SAMPLES_DF=pd.read_table(config["samples"], sep= '\t', header= 0).set_index("strain", drop=False)
+STRAINS=SAMPLES_DF['strain'].tolist()
+REF_FA=config['reference_sequence']
+REF_GBK=config['reference_annotation']
+TMP_D=(config['tmp_d'] if re.search('\w', config['tmp_d']) else '.')
+CORES=config['cores']
+STAMPY_EXE=config['stampy_exe']
+
+include: "DETECT_SNPS.smk"
+
+rule all:
+    input:
+        vcf_gz=expand(TMP_D+"/{strains}/{mapper}.vcf.gz", strains= STRAINS, mapper= 'bwa')
+    
+'''
 rule import_dna_reads:
     input:
     output:
@@ -83,3 +102,4 @@ rule make_ml_input:
         expr_table
     output:
         ml_markdown
+'''

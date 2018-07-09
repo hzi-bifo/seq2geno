@@ -36,8 +36,11 @@ rule map2reference:
         REF_INDEX=REF_FA+".bwt"
     output:
         temp("{tmp_dir}/{strain}/{mapper}.raw.bam")
-    shell:
-        "bwa mem -v 2 -M -t {CORES} {input[REF]} {input[READS1]} {input[READS2]}| samtools view -b -@ {CORES} > {output[0]} ;"
+#    shell:
+#        "bwa mem -v 2 -M -t {CORES} {input[REF]} {input[READS1]} {input[READS2]}| samtools view -b -@ {CORES} > {output[0]} ;"
+    run:
+        if == 'bwa':
+            
 
 rule samtools_sort:
     input:
