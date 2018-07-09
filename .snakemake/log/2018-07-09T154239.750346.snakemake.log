@@ -1,0 +1,3 @@
+WorkflowError in line 13 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk:
+Failed to open /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/path/to/other/snakefile.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 13, in <module>

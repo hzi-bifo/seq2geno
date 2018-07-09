@@ -1,0 +1,43 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_vcf
+	1	mapping
+	1	process_vcf
+	1	sort_bam
+	5
+
+rule mapping:
+    input: data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2500/bwa.raw.bam
+    jobid: 5
+    wildcards: strain=CH2500, mapper=bwa
+
+Removing temporary output file data/reference/RefCln_UCBPP-PA14.fa.bwt.
+Finished job 5.
+1 of 5 steps (20%) done
+
+rule sort_bam:
+    input: tmp/CH2500/bwa.raw.bam
+    output: tmp/CH2500/bwa.sorted.bam, tmp/CH2500/bwa.sorted.bam.bai
+    jobid: 3
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+    Error in rule sort_bam:
+        jobid: 3
+        output: tmp/CH2500/bwa.sorted.bam, tmp/CH2500/bwa.sorted.bam.bai
+
+RuleException:
+CalledProcessError in line 36 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/DETECT_SNPS.smk:
+Command ' set -euo pipefail;  bamtools sort tmp/CH2500/bwa.raw.bam > tmp/CH2500/bwa.sorted.bam;samtools index tmp/CH2500/bwa.sorted.bam; ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/DETECT_SNPS.smk", line 36, in __rule_sort_bam
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Removing output files of failed job sort_bam since they might be corrupted:
+tmp/CH2500/bwa.sorted.bam
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-09T155804.602086.snakemake.log

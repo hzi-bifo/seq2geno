@@ -1,0 +1,10 @@
+FileNotFoundError in line 5 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk:
+File b'data/samples.tsv' does not exist
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 5, in <module>
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/site-packages/pandas/io/parsers.py", line 705, in parser_f
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/site-packages/pandas/io/parsers.py", line 445, in _read
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/site-packages/pandas/io/parsers.py", line 814, in __init__
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/site-packages/pandas/io/parsers.py", line 1045, in _make_engine
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/site-packages/pandas/io/parsers.py", line 1684, in __init__
+  File "pandas/_libs/parsers.pyx", line 391, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas/_libs/parsers.pyx", line 710, in pandas._libs.parsers.TextReader._setup_parser_source
