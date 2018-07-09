@@ -1,0 +1,4 @@
+CreateRuleException in line 43 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk:
+The name create_consensus_sequence is already used by another rule
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 17, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk", line 43, in <module>

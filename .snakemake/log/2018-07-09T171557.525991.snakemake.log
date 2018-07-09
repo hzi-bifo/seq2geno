@@ -1,0 +1,4 @@
+NameError in line 13 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk:
+name 'RAXML_EXE' is not defined
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 14, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk", line 13, in <module>
