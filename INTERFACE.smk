@@ -9,12 +9,20 @@ REF_GBK=config['reference_annotation']
 TMP_D=(config['tmp_d'] if re.search('\w', config['tmp_d']) else '.')
 CORES=config['cores']
 STAMPY_EXE=config['stampy_exe']
+RAXML_EXE=config['raxml_exe']
+TREE=config['tree']
+RESULT_D=config['result_d']
 
+include: "MAKE_CONS.smk"
+include: "INFER_TREE.smk"
 include: "DETECT_SNPS.smk"
 
 rule all:
     input:
-        vcf_gz=expand(TMP_D+"/{strains}/{mapper}.vcf.gz", strains= STRAINS, mapper= 'bwa')
+        #vcf_gz=expand(TMP_D+"/{strains}/{mapper}.vcf.gz", strains= STRAINS, mapper= 'bwa')
+        #cons_seqs=expand(TMP_D+"/{strains}/{mapper}.cons.fa", strains= STRAINS, mapper= 'bwa')
+        TREE
+        
     
 '''
 rule import_dna_reads:
@@ -83,10 +91,18 @@ rule create_snps_table:
 
 rule infer_tree:
     input:
+        one_big_aln
+    output:
+        tree
+
+rule make_cons_seqs:
+    input:
         vcf
         ref
     output:
-        tree
+        cons_seqs=[...]
+
+
 
 rule create_expr_table:
     input:

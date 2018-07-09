@@ -1,0 +1,67 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_coding_regions_aln
+	4	create_consensus_sequence
+	1	find_best_tree
+	1	postprocess_alignment
+	8
+
+rule create_consensus_sequence:
+    input: tmp/reference.target_regions.fa, tmp/CH2522/bwa.vcf.gz
+    output: tmp/CH2522/bwa.cons.fa
+    jobid: 4
+    wildcards: TMP_D=tmp, strains=CH2522, mapper=bwa
+
+Finished job 4.
+1 of 8 steps (12%) done
+
+rule create_consensus_sequence:
+    input: tmp/reference.target_regions.fa, tmp/CH2502/bwa.vcf.gz
+    output: tmp/CH2502/bwa.cons.fa
+    jobid: 7
+    wildcards: TMP_D=tmp, strains=CH2502, mapper=bwa
+
+Finished job 7.
+2 of 8 steps (25%) done
+
+rule create_consensus_sequence:
+    input: tmp/reference.target_regions.fa, tmp/F1659/bwa.vcf.gz
+    output: tmp/F1659/bwa.cons.fa
+    jobid: 6
+    wildcards: TMP_D=tmp, strains=F1659, mapper=bwa
+
+Finished job 6.
+3 of 8 steps (38%) done
+
+rule create_consensus_sequence:
+    input: tmp/reference.target_regions.fa, tmp/CH2500/bwa.vcf.gz
+    output: tmp/CH2500/bwa.cons.fa
+    jobid: 5
+    wildcards: TMP_D=tmp, strains=CH2500, mapper=bwa
+
+Finished job 5.
+4 of 8 steps (50%) done
+
+rule create_coding_regions_aln:
+    input: tmp/CH2500/bwa.cons.fa, tmp/CH2502/bwa.cons.fa, tmp/CH2522/bwa.cons.fa, tmp/F1659/bwa.cons.fa
+    output: tmp/OneBig.aln
+    jobid: 3
+    wildcards: TMP_D=tmp
+
+    Error in rule create_coding_regions_aln:
+        jobid: 3
+        output: tmp/OneBig.aln
+
+RuleException:
+CalledProcessError in line 42 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/phypal/bin/python /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake.yl2a8uhp.makeAlignment.py ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk", line 42, in __rule_create_coding_regions_aln
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-09T215057.074581.snakemake.log

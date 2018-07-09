@@ -1,77 +1,59 @@
 
-
+'''
 rule all:
     input:
         tree
-
-rule find_best_tree
+'''
+rule find_best_tree:
     input:
-        one_big_vat_aln
+        one_big_var_aln=TMP_D+'/OneBig.var.aln'
     output:
-        tree 
+        tree=TREE
+    params:
+        RAXML= RAXML_EXE,
+        PREFIX= 'OneBig.var',
+        RESULT_D= RESULT_D,
+        RAXML_OUTDIR= RESULT_D,
+       	CORES= CORES
+    shell:
+        '{params[RAXML]} -T {params[CORES]} -w {params[RAXML_OUTDIR]} '
+        '-m GTRGAMMA -s {input} -n {params[PREFIX]} -p 1 -N 1;' 
+        'cp -s {params[RAXML_OUTDIR]}/RAxML_bestTree.{params[PREFIX]} {output}'
 
 rule postprocess_alignment:
     input:
-        one_big_aln
+        one_big_aln='{TMP_D}/OneBig.aln'
     output:
-        one_big_var_aln
+        one_big_var_aln='{TMP_D}/OneBig.var.aln'
+    shell:
+        "trimal -st 1 -gt 1 -complementary -in {input} -out {output}"
 
 rule create_coding_regions_aln:
 ### concatenate 
     input:
-       cons_coding_seqs_every_strain=[...] 
+        cons_coding_seqs_every_strain=expand(
+            "{TMP_D}/{strains}/{mapper}.cons.fa", 
+            TMP_D= TMP_D, strains= STRAINS, mapper= 'bwa')
     output:
-       one_big_aln
+        one_big_aln='{TMP_D}/OneBig.aln'
 
-rule create_consensus_sequence:
-    input:
-        ref_target_seqs
-        vcf_gz
-    output:
-        cons_coding_seqs
-
-rule create_target_seqs:
-### Which feature to parse?
-    input:
-        ref_gbk
-    output: 
-        ref_target_seqs
     params:
-        fea_type='CDS'
-    run:
-        from Bio import SeqIO
-        from Bio.SeqRecord import SeqRecord
-        from Bio.Alphabet import IUPAC
-        import re
-        # read the gbk
-        gbk_f= input[0]
-        rec= SeqIO.read(gbk_f, 'gb')
-        chromosome= rec.id
-        # filter target regions types (gene, CDS...etc)
-        features= [fea for fea in rec.features if fea.type == params['fea_type']]
-
-        seq_records=[]
-        for fea in features:
-            #print(fea.strand)
-            name=fea.qualifiers['locus_tag'][0]
-            start= int(re.sub('\W','',str(fea.location.start)))
-            end= int(re.sub('\W','', str(fea.location.end)))
-            seq= rec.seq[start:end]
-            fasta_header='{}:{}-{}'.format(chromosome, str(start+1), str(end)) # notice that the coordinate should be gff style as the bcftools uses it
-            seq_rec= SeqRecord(seq, id= fasta_header, name= name, description= '')
-            seq_records.append(seq_rec)
-              with open(output[0], 'w') as out_fh:
-                  SeqIO.write(seq_records, out_fh, 'fasta')
-            
+        CORES=CORES, 
+        TMP_D=TMP_D+"/families", 
+        STRAINS=STRAINS 
+    script: 'makeAlignment.py'
+'''            
 rule load_vcf:
     output:
-        vcf_gz
+        vcf_gz=TMP_D+"/{strains}/{mapper}.vcf.gz"
 
 rule load_reference
+    input:
+        REF_FA
     output:
-        ref_fa
-        ref_gbk
- 
+        REF_FA+".fai",
+        REF_FA+".bwt"
+'''
 
 '''
 rule prepare_reference:
