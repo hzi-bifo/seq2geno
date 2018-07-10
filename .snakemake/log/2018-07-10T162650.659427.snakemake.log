@@ -1,0 +1,76 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	compute_gpa_raw_table
+	1	compute_gpa_table
+	4	create_gff
+	7
+
+rule create_gff:
+    input: tmp/CH2500/spades.assem.fa
+    output: tmp/prokka/CH2500.spades.gff
+    jobid: 7
+    wildcards: TMP_D=tmp, strain=CH2500, assembler=spades
+
+Finished job 7.
+1 of 7 steps (14%) done
+
+rule create_gff:
+    input: tmp/F1659/spades.assem.fa
+    output: tmp/prokka/F1659.spades.gff
+    jobid: 6
+    wildcards: TMP_D=tmp, strain=F1659, assembler=spades
+
+Finished job 6.
+2 of 7 steps (29%) done
+
+rule create_gff:
+    input: tmp/CH2522/spades.assem.fa
+    output: tmp/prokka/CH2522.spades.gff
+    jobid: 8
+    wildcards: TMP_D=tmp, strain=CH2522, assembler=spades
+
+Finished job 8.
+3 of 7 steps (43%) done
+
+rule create_gff:
+    input: tmp/CH2502/spades.assem.fa
+    output: tmp/prokka/CH2502.spades.gff
+    jobid: 9
+    wildcards: TMP_D=tmp, strain=CH2502, assembler=spades
+
+Finished job 9.
+4 of 7 steps (57%) done
+
+rule compute_gpa_raw_table:
+    input: tmp/prokka/CH2500.spades.gff, tmp/prokka/CH2502.spades.gff, tmp/prokka/CH2522.spades.gff, tmp/prokka/F1659.spades.gff
+    output: tmp/roary/gene_presence_absence.csv
+    jobid: 4
+    wildcards: TMP_D=tmp
+
+Removing temporary output file tmp/prokka/F1659.spades.gff.
+Removing temporary output file tmp/prokka/CH2500.spades.gff.
+Removing temporary output file tmp/prokka/CH2522.spades.gff.
+Removing temporary output file tmp/prokka/CH2502.spades.gff.
+Finished job 4.
+5 of 7 steps (71%) done
+
+rule compute_gpa_table:
+    input: tmp/roary/gene_presence_absence.csv
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/gpa.tab
+    jobid: 2
+
+Finished job 2.
+6 of 7 steps (86%) done
+
+localrule all:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/Paeru.nwk, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/gpa.tab
+    jobid: 0
+
+Finished job 0.
+7 of 7 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-10T162650.659427.snakemake.log

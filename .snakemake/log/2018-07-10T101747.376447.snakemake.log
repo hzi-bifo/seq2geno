@@ -1,0 +1,66 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	compute_gpa_raw_table
+	4	create_assembly
+	4	create_gff
+	10
+
+rule create_assembly:
+    input: data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz
+    output: tmp/F1659/spades.assem.fa
+    jobid: 2
+    wildcards: TMP_D=tmp, strain=F1659, assembler=spades
+
+Finished job 2.
+1 of 10 steps (10%) done
+
+rule create_assembly:
+    input: data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz
+    output: tmp/CH2500/spades.assem.fa
+    jobid: 6
+    wildcards: TMP_D=tmp, strain=CH2500, assembler=spades
+
+Finished job 6.
+2 of 10 steps (20%) done
+
+rule create_assembly:
+    input: data/strains/dna/CH2522_1.fq.gz, data/strains/dna/CH2522_2.fq.gz
+    output: tmp/CH2522/spades.assem.fa
+    jobid: 5
+    wildcards: TMP_D=tmp, strain=CH2522, assembler=spades
+
+Finished job 5.
+3 of 10 steps (30%) done
+
+rule create_assembly:
+    input: data/strains/dna/CH2502_1.fq.gz, data/strains/dna/CH2502_2.fq.gz
+    output: tmp/CH2502/spades.assem.fa
+    jobid: 3
+    wildcards: TMP_D=tmp, strain=CH2502, assembler=spades
+
+Finished job 3.
+4 of 10 steps (40%) done
+
+rule create_gff:
+    input: tmp/CH2500/spades.assem.fa
+    output: tmp/CH2500/spades.prokka.gff
+    jobid: 9
+    wildcards: TMP_D=tmp, strain=CH2500, assembler=spades
+
+    Error in rule create_gff:
+        jobid: 9
+        output: tmp/CH2500/spades.prokka.gff
+
+RuleException:
+CalledProcessError in line 37 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/COUNT_GPA.smk:
+Command ' set -euo pipefail;  prokka --cpus 16 --force --prefix CH2500 --outdir tmp/prokka/CH2500/CH2500.gff tmp/CH2500/spades.assem.fa;cp CH2500.gff tmp/CH2500/spades.prokka.gff ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/COUNT_GPA.smk", line 37, in __rule_create_gff
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-10T101747.376447.snakemake.log
