@@ -11,8 +11,12 @@ CORES=config['cores']
 STAMPY_EXE=config['stampy_exe']
 RAXML_EXE=config['raxml_exe']
 TREE=config['tree']
+GPA_TABLE=config['gpa_table']
 RESULT_D=config['result_d']
 
+include: "CREATE_GPA_TABLE.smk"
+include: "COUNT_GPA.smk"
+include: "CONSTRUCT_ASSEMBLY.smk"
 include: "MAKE_CONS.smk"
 include: "INFER_TREE.smk"
 include: "DETECT_SNPS.smk"
@@ -21,7 +25,10 @@ rule all:
     input:
         #vcf_gz=expand(TMP_D+"/{strains}/{mapper}.vcf.gz", strains= STRAINS, mapper= 'bwa')
         #cons_seqs=expand(TMP_D+"/{strains}/{mapper}.cons.fa", strains= STRAINS, mapper= 'bwa')
-        TREE
+        TREE,
+#        ASSEM=expand(TMP_D+"/{strains}/{assembler}.assem.fa", strains= STRAINS, assembler= 'spades'),
+#        roary_gpa=TMP_D+"/roary/gene_presence_absence.csv"
+        GPA_TABLE
         
     
 '''
@@ -56,10 +63,16 @@ rule import_rna_params:
 
 rule count_gpa:
     input:
+        assembly
+    output:
+        roary_gpa
+
+rule construct_assembly:
+    input:
         dna_reads
         dna_params
     output:
-        roary_gpa
+        assembly
 
 rule detectSNPs:
     input:
@@ -75,7 +88,6 @@ rule compute_expressions:
         rna_params
         ref
     output:
-        
 
 rule create_gpa_table:
     input:
@@ -116,6 +128,7 @@ rule make_ml_input:
         snps_table
         tree
         expr_table
+        assembly
     output:
         ml_markdown
 '''
