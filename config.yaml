@@ -14,8 +14,14 @@ reference_sequence: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_ve
 reference_annotation: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.gbk'
 ##roary_gpa:
 tree: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/Paeru.nwk'
-##gpa_table:
+gpa_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/gpa.tab'
 ##snps_table:
 ##expr_table:
 ##pheno_table: 
 ##ml_markdown:
+
+#####
+#### testing
+assembler: 'spades'
+annotator: 'prokka'
+gene_sorter: 'roary'
