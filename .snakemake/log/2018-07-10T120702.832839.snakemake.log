@@ -1,0 +1,29 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	compute_gpa_raw_table
+	4	create_gff
+	6
+
+rule create_gff:
+    input: tmp/CH2500/spades.assem.fa
+    output: tmp/CH2500/spades.prokka.gff
+    jobid: 10
+    wildcards: TMP_D=tmp, strain=CH2500, assembler=spades
+
+    Error in rule create_gff:
+        jobid: 10
+        output: tmp/CH2500/spades.prokka.gff
+
+RuleException:
+CalledProcessError in line 37 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/COUNT_GPA.smk:
+Command ' set -euo pipefail;  prokka --cpus 16 --force --prefix CH2500 --outdir tmp/prokka/CH2500 tmp/CH2500/spades.assem.fa;cp tmp/prokka/CH2500/CH2500.gff tmp/CH2500/spades.prokka.gff ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/COUNT_GPA.smk", line 37, in __rule_create_gff
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-10T120702.832839.snakemake.log
