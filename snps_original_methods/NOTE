@@ -1,0 +1,17 @@
+Pool1.protocol
+	fastq-mcf (to remove adapter)
+	my_stampy_pipeline_PE
+		stampy.py
+		sam2art.pl
+		sam_statistics.pl
+		genes_statistics.R
+	my_samtools_SNP_pipeline
+		samtools view
+		samtools sort
+		samtools index
+		samtools mpileup -uf $reference $prefix.bam | bcftools view -bvcg
+		bcftools view $prefix.raw.bcf | vcfutils.pl varFilter -d $mindepth > $prefix.flt.vcf
+	mutation_table.py
+	Snp2Amino.py
+	art2cov.py
+	

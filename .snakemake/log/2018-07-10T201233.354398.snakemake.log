@@ -1,0 +1,7 @@
+Building DAG of jobs...
+InputFunctionException in line 38 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/DETECT_SNPS.smk:
+KeyError: 'the label [reads2] is not in the [index]'
+Wildcards:
+TMP_D=tmp
+strain=F1659
+mapper=bwa
