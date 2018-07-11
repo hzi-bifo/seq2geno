@@ -2,8 +2,11 @@ tmp_d: 'tmp'
 result_d: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results'
 working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3'
 stampy_exe: '/home/thkuo/bin/stampy-1.0.23/stampy.py'
-#raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS-AVX2'
-raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS'
+#raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS'
+raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS-AVX2'
+art2genecount_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/art2genecount.pl'
+sam2art_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/sam2art.pl'
+
 cores: 16
 
 ##### files
@@ -16,7 +19,7 @@ reference_annotation: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_
 tree: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/Paeru.nwk'
 gpa_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/gpa.tab'
 ##snps_table:
-##expr_table:
+expr_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/expr.tab'
 ##pheno_table: 
 ##ml_markdown:
 

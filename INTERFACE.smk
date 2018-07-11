@@ -10,10 +10,10 @@ TMP_D=(config['tmp_d'] if re.search('\w', config['tmp_d']) else '.')
 CORES=config['cores']
 STAMPY_EXE=config['stampy_exe']
 RAXML_EXE=config['raxml_exe']
-TREE=config['tree']
-GPA_TABLE=config['gpa_table']
 RESULT_D=config['result_d']
+print(SAMPLES_DF)
 
+include: "CREATE_EXPR_TABLE.smk"
 include: "CREATE_GPA_TABLE.smk"
 include: "COUNT_GPA.smk"
 include: "CONSTRUCT_ASSEMBLY.smk"
@@ -25,10 +25,11 @@ rule all:
     input:
         #vcf_gz=expand(TMP_D+"/{strains}/{mapper}.vcf.gz", strains= STRAINS, mapper= 'bwa')
         #cons_seqs=expand(TMP_D+"/{strains}/{mapper}.cons.fa", strains= STRAINS, mapper= 'bwa')
-        TREE,
+        config['tree'],
 #        ASSEM=expand(TMP_D+"/{strains}/{assembler}.assem.fa", strains= STRAINS, assembler= 'spades'),
 #        roary_gpa=TMP_D+"/roary/gene_presence_absence.csv"
-        GPA_TABLE
+        config['expr_table'],
+        config['gpa_table']
         
     
 '''
