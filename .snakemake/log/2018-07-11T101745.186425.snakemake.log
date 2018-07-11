@@ -347,3 +347,32 @@ rule create_coding_regions_aln:
     jobid: 15
     wildcards: TMP_D=tmp
 
+Finished job 15.
+34 of 39 steps (87%) done
+
+rule postprocess_alignment:
+    input: tmp/OneBig.aln
+    output: tmp/OneBig.var.aln
+    jobid: 6
+    wildcards: TMP_D=tmp
+
+Finished job 6.
+35 of 39 steps (90%) done
+
+rule find_best_tree:
+    input: tmp/OneBig.var.aln
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/Paeru.nwk
+    jobid: 3
+
+    Error in rule find_best_tree:
+        jobid: 3
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/Paeru.nwk
+
+RuleException:
+CalledProcessError in line 21 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS -T 16 -w /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results -m GTRGAMMA -s tmp/OneBig.var.aln -n OneBig.var -p 1 -N 1;cp -s /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/RAxML_bestTree.OneBig.var /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/Paeru.nwk ' returned non-zero exit status 255.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk", line 21, in __rule_find_best_tree
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-11T101745.186425.snakemake.log
