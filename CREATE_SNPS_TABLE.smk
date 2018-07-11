@@ -16,8 +16,10 @@ rule all_snps_table:
         anno_f='anno.tab'
     output: 'all_SNPs.v4.tab'
     shell:
-        'python2 ./mutation_table.v4.py  -f {input[dict_f]} '
-        '-a {input[anno_f]} -o {output}'
+        'source activate py27;'
+        'python ./mutation_table.v4.py  -f {input[dict_f]} '
+        '-a {input[anno_f]} -o {output};'
+        'source deactivate'
 
 rule syn_snps_table:
     input:
@@ -25,8 +27,10 @@ rule syn_snps_table:
         ref_gbk='reference.gbk'
     output: 'syn_SNPs_final.v4.tab' 
     shell:
-        'python2 ./Snp2Amino.py -f {input[all_snps_tab]} -g {input[ref_gbk]} '
-        '-n all -o {output} '
+        'source activate py27;'
+        'python ./Snp2Amino.py -f {input[all_snps_tab]} -g {input[ref_gbk]} '
+        '-n all -o {output} ;'
+        'source deactivate'
 
 rule nonsyn_snps_table:
     input:
@@ -34,8 +38,10 @@ rule nonsyn_snps_table:
         ref_gbk='reference.gbk'
     output: 'non-syn_SNPs_final.v4.tab' 
     shell:
-        'python2 ./Snp2Amino.py -f {input[all_snps_tab]} -g {input[ref_gbk]} '
-        '-n non-syn -o {output} '
+        'source activate py27;'
+        'python ./Snp2Amino.py -f {input[all_snps_tab]} -g {input[ref_gbk]} '
+        '-n non-syn -o {output} ;'
+        'source deactivate'
 
 rule filter_vcf:
     input:
@@ -61,4 +67,6 @@ rule count_cov:
     output:
         cov_f='{TMP_D}/{strain}/{mapper}.coverage'
     shell:
-        'samtools depth -a {input[bam_f]} > {output[cov_f]}'
+        'source activate Ariane_dna;'
+        'samtools depth -a {input[bam_f]} > {output[cov_f]};'
+        'source deactivate'
