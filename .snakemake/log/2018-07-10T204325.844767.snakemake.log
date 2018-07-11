@@ -1,0 +1,51 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	convert_to_sin
+	1	create_and_make_expr_table
+	1	create_coding_regions_aln
+	4	create_consensus_sequence
+	4	create_vcf
+	1	find_best_tree
+	4	gene_counts
+	1	load_reference
+	4	mapping
+	1	postprocess_alignment
+	4	process_vcf
+	4	rna_mapping
+	4	sort_bam
+	1	write_dict_file
+	39
+
+rule load_reference:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.sthash
+    jobid: 41
+
+Removing temporary output file /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.sthash.
+Failed to remove marker file for job started ([Errno 2] No such file or directory: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.sthash'). Please ensure write permissions for the directory /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake
+Finished job 41.
+1 of 39 steps (3%) done
+
+rule rna_mapping:
+    input: data/strains/rna/F1659.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/F1659/sorted.rmdup.sam
+    jobid: 36
+    wildcards: sample=F1659
+
+    Error in rule rna_mapping:
+        jobid: 36
+        output: tmp/F1659/sorted.rmdup.sam
+
+RuleException:
+CalledProcessError in line 27 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_EXPR_TABLE.smk:
+Command ' set -euo pipefail;  source activate py27;/home/thkuo/bin/stampy-1.0.23/stampy.py --bwaoptions="-q10 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa" -t16 -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa -h /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa -M data/strains/rna/F1659.fastq.gz | samtools view -bS -@ 16 |samtools sort > tmp/F1659/sorted.bam;samtools rmdup -s tmp/F1659/sorted.bam tmp/F1659/sorted.rmdup.bam;samtools view -h tmp/F1659/sorted.rmdup.bam > tmp/F1659/sorted.rmdup.sam ;source deactivate; ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_EXPR_TABLE.smk", line 27, in __rule_rna_mapping
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-10T204325.844767.snakemake.log
