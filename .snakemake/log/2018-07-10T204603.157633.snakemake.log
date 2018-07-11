@@ -1,0 +1,39 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	convert_to_sin
+	1	create_and_make_expr_table
+	1	create_coding_regions_aln
+	4	create_consensus_sequence
+	4	create_vcf
+	1	find_best_tree
+	4	gene_counts
+	1	load_reference
+	4	mapping
+	1	postprocess_alignment
+	4	process_vcf
+	4	rna_mapping
+	4	sort_bam
+	1	write_dict_file
+	39
+
+rule load_reference:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.sthash
+    jobid: 37
+
+Finished job 37.
+1 of 39 steps (3%) done
+
+rule rna_mapping:
+    input: data/strains/rna/F1659.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/F1659/sorted.rmdup.sam
+    jobid: 31
+    wildcards: sample=F1659
+
+Terminating processes on user request, this might take some time.
+Cancelling snakemake on user request.

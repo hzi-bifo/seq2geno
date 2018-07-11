@@ -1,0 +1,127 @@
+###DNA-seq of clinical PA isolates azi09 <27.02.2015>###
+#1 Pool with 24 samples sequenced in the group of B. Tümmler, Mi-Seq, PE
+#Pool1
+
+#Clipping
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 1-B_S1_L001_R1_001.fastq 1-B_S1_L001_R2_001.fastq -o CH2830_R1_clip.fastq -o CH2830_R2_clip.fastq > CH2830_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 2-B_S2_L001_R1_001.fastq 2-B_S2_L001_R2_001.fastq -o CH3177_R1_clip.fastq -o CH3177_R2_clip.fastq > CH3177_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 3-B_S3_L001_R1_001.fastq 3-B_S3_L001_R2_001.fastq -o CH2657_R1_clip.fastq -o CH2657_R2_clip.fastq > CH2657_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 4-B_S4_L001_R1_001.fastq 4-B_S4_L001_R2_001.fastq -o CH3802_R1_clip.fastq -o CH3802_R2_clip.fastq > CH3802_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 5-B_S5_L001_R1_001.fastq 5-B_S5_L001_R2_001.fastq -o CH2764_R1_clip.fastq -o CH2764_R2_clip.fastq > CH2764_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 6-B_S6_L001_R1_001.fastq 6-B_S6_L001_R2_001.fastq -o CH2598_R1_clip.fastq -o CH2598_R2_clip.fastq > CH2598_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 7_S7_L001_R1_001.fastq 7_S7_L001_R2_001.fastq -o CH2848_R1_clip.fastq -o CH2848_R2_clip.fastq > CH2848_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 8_S8_L001_R1_001.fastq 8_S8_L001_R2_001.fastq -o CH2875_R1_clip.fastq -o CH2875_R2_clip.fastq > CH2875_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 9_S9_L001_R1_001.fastq 9_S9_L001_R2_001.fastq -o CH2563_R1_clip.fastq -o CH2563_R2_clip.fastq > CH2563_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 10_S10_L001_R1_001.fastq 10_S10_L001_R2_001.fastq -o CH2591_R1_clip.fastq -o CH2591_R2_clip.fastq > CH2591_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 11_S11_L001_R1_001.fastq 11_S11_L001_R2_001.fastq -o CH2735_R1_clip.fastq -o CH2735_R2_clip.fastq > CH2735_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 12_S12_L001_R1_001.fastq 12_S12_L001_R2_001.fastq -o CH3797_R1_clip.fastq -o CH3797_R2_clip.fastq > CH3797_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 13_S13_L001_R1_001.fastq 13_S13_L001_R2_001.fastq -o CH2746_R1_clip.fastq -o CH2746_R2_clip.fastq > CH2746_clip.log&
+
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 14_S14_L001_R1_001.fastq 14_S14_L001_R2_001.fastq -o CH3484_R1_clip.fastq -o CH3484_R2_clip.fastq > CH3484_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 15-B_S15_L001_R1_001.fastq 15-B_S15_L001_R2_001.fastq -o CH2623_R1_clip.fastq -o CH2623_R2_clip.fastq > CH2623_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 16_S16_L001_R1_001.fastq 16_S16_L001_R2_001.fastq -o CH2660_R1_clip.fastq -o CH2660_R2_clip.fastq > CH2660_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 17_S17_L001_R1_001.fastq 17_S17_L001_R2_001.fastq -o CH2804_R1_clip.fastq -o CH2804_R2_clip.fastq > CH2804_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 18_S18_L001_R1_001.fastq 18_S18_L001_R2_001.fastq -o CH2658_R1_clip.fastq -o CH2658_R2_clip.fastq > CH2658_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 19_S19_L001_R1_001.fastq 19_S19_L001_R2_001.fastq -o CH2860_R1_clip.fastq -o CH2860_R2_clip.fastq > CH2860_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 20_S20_L001_R1_001.fastq 20_S20_L001_R2_001.fastq -o CH2502_R1_clip.fastq -o CH2502_R2_clip.fastq > CH2502_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 21_S21_L001_R1_001.fastq 21_S21_L001_R2_001.fastq -o CH3648_R1_clip.fastq -o CH3648_R2_clip.fastq > CH3648_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 22_S22_L001_R1_001.fastq 22_S22_L001_R2_001.fastq -o CH3325_R1_clip.fastq -o CH3325_R2_clip.fastq > CH3325_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 23_S23_L001_R1_001.fastq 23_S23_L001_R2_001.fastq -o CH4083_R1_clip.fastq -o CH4083_R2_clip.fastq > CH4083_clip.log&
+fastq-mcf -l 50 -q 20 /data3/clinical_isolates_sq/DNA-seq/adapter_sequences/NEBNext_adapter.fasta 24_S24_L001_R1_001.fastq 24_S24_L001_R2_001.fastq -o CH3173_R1_clip.fastq -o CH3173_R2_clip.fastq > CH3173_clip.log&
+
+#Mapping
+my_stampy_pipeline_PE CH2830 CH2830_R1_clip.fastq CH2830_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2830.log&
+my_stampy_pipeline_PE CH3177 CH3177_R1_clip.fastq CH3177_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3177.log&
+my_stampy_pipeline_PE CH2657 CH2657_R1_clip.fastq CH2657_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2657.log&
+my_stampy_pipeline_PE CH3802 CH3802_R1_clip.fastq CH3802_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3802.log&
+my_stampy_pipeline_PE CH2764 CH2764_R1_clip.fastq CH2764_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2764.log&
+my_stampy_pipeline_PE CH2598 CH2598_R1_clip.fastq CH2598_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2598.log&
+my_stampy_pipeline_PE CH2848 CH2848_R1_clip.fastq CH2848_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2848.log&
+my_stampy_pipeline_PE CH2875 CH2875_R1_clip.fastq CH2875_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2875.log&
+my_stampy_pipeline_PE CH2563 CH2563_R1_clip.fastq CH2563_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2563.log&
+my_stampy_pipeline_PE CH2591 CH2591_R1_clip.fastq CH2591_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2591.log&
+my_stampy_pipeline_PE CH2735 CH2735_R1_clip.fastq CH2735_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2735.log&
+my_stampy_pipeline_PE CH3797 CH3797_R1_clip.fastq CH3797_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3797.log&
+my_stampy_pipeline_PE CH2746 CH2746_R1_clip.fastq CH2746_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2746.log&
+my_stampy_pipeline_PE CH3484 CH3484_R1_clip.fastq CH3484_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3484.log&
+my_stampy_pipeline_PE CH2623 CH2623_R1_clip.fastq CH2623_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2623.log&
+my_stampy_pipeline_PE CH2660 CH2660_R1_clip.fastq CH2660_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2660.log&
+my_stampy_pipeline_PE CH2804 CH2804_R1_clip.fastq CH2804_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2804.log&
+my_stampy_pipeline_PE CH2658 CH2658_R1_clip.fastq CH2658_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2658.log&
+my_stampy_pipeline_PE CH2860 CH2860_R1_clip.fastq CH2860_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2860.log&
+my_stampy_pipeline_PE CH2502 CH2502_R1_clip.fastq CH2502_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2502.log&
+my_stampy_pipeline_PE CH3648 CH3648_R1_clip.fastq CH3648_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3648.log&
+my_stampy_pipeline_PE CH3325 CH3325_R1_clip.fastq CH3325_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3325.log&
+my_stampy_pipeline_PE CH4083 CH4083_R1_clip.fastq CH4083_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH4083.log&
+my_stampy_pipeline_PE CH3173 CH3173_R1_clip.fastq CH3173_R2_clip.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3173.log&
+
+#SNP calling
+my_samtools_SNP_pipeline CH2830 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3177 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2657 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3802 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2764 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2598 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2848 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2875 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2563 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2591 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2735 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3797 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2746 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3484 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2623 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2660 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2804 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2658 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2860 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2502 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3648 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3325 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH4083 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3173 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+
+#Mutation analysis:
+# Create file dict.txt with isolate names (.flt.vcf files needed + check that there are no empty line in the dict!!)
+# Create table
+python /data3/scripts/mutation_table.py -f dict.txt -a /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab -o DNA-Pool1.tab &
+# Add amino acid information
+python /data3/scripts/Snp2Amino.py -f DNA-Pool1.tab -g /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_ncRNA.gbk -o DNA_Pool1_final.tab &
+
+#Genome coverage
+#create dictionary.txt with isolate names (.art files needed & rstats)
+#default coverage = min 2 nt; for changes: -c 1 etc.
+python /data3/scripts/art2cov.py -s PE -c 50 -o cov50.txt &
+python /data3/scripts/art2cov.py -s PE -c 40 -o cov40.txt &
+python /data3/scripts/art2cov.py -s PE -c 30 -o cov30.txt &
+python /data3/scripts/art2cov.py -s PE -c 10 -o cov10.txt &
+python /data3/scripts/art2cov.py -s PE -c 5 -o cov5.txt &
+python /data3/scripts/art2cov.py -s PE -c 1 -o cov1.txt &
+
+#Auffälligkeiten:
+#raw.bcf und folgende Dateien für CH2563 im Vergleich sehr klein. Keine änderung bei Wiederholung des SNP Callings, art und bam Dateien normalgroß, Coverage im durchschnittlichen Bereich.
+#CH2502 sehr wenig reads (daher Dateingrößen insg. sehr klein)
+
+
+#Median Insert size unabhängig von Andreas (in den stats) berechnen zum Vergleich
+
+azi09@CPI-SL64001:/data3/scripts/picard-tools-1.67$ 
+
+java -jar data3/scripts/picard-tools-1.67/CollectInsertSizeMetrics.jar I=CH2591.bam O=CH2591.ins H=CH2591.inshist
+
+
+
+
+
+##13.10.16
+changed CH2563 to CH3563!
