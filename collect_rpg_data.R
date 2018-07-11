@@ -13,6 +13,7 @@
 #anno_file	<- args[2]	# annotations of genes
 dict_file	<- snakemake@input[['dict_f']]	# File containing the sample dictionary
 anno_file	<- snakemake@params[['ANNO_F']]	# annotations of genes
+out_file	<- snakemake@output[['expr_table']]
 
 # read annotation
 #annotation <- read.table("/data/reference_sequences/Pseudomonas_aeruginosa_PA14_R_annotation",header=TRUE,row.names=1)
@@ -50,4 +51,5 @@ for (i in 1:nrow(dict)){
 	} # otherwise blank mode is assumed
 	all_rpg[,i]	<- rpg
 }
-write.table(all_rpg,paste(dict_file,".rpg",sep=""),sep="\t", col.names=NA, quote= F)
+#write.table(all_rpg,paste(dict_file,".rpg",sep=""),sep="\t", col.names=NA, quote= F)
+write.table(all_rpg, out_file, sep="\t", col.names=NA, quote= F)

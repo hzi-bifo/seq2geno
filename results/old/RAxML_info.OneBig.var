@@ -46,49 +46,44 @@ Substitution Matrix: GTR
 
 RAxML was called as follows:
 
-/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS-AVX2 -T 16 -w /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results -m GTRGAMMA -s tmp/OneBig.var.aln -n OneBig.var -p 1 -N 1 
+/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS -T 16 -w /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results -m GTRGAMMA -s tmp/OneBig.var.aln -n OneBig.var -p 1 -N 1 
 
 
 Partition: 0 with name: No Name Provided
 Base frequencies: 0.200 0.300 0.303 0.197 
 
 
-WARNING the alpha parameter with a value of 11.856789 estimated by RAxML for partition number 0 with the name "No Name Provided"
+WARNING the alpha parameter with a value of 11.857976 estimated by RAxML for partition number 0 with the name "No Name Provided"
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
 
-WARNING the alpha parameter with a value of 25.116936 estimated by RAxML for partition number 0 with the name "No Name Provided"
+WARNING the alpha parameter with a value of 25.119760 estimated by RAxML for partition number 0 with the name "No Name Provided"
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
 
-WARNING the alpha parameter with a value of 55.801469 estimated by RAxML for partition number 0 with the name "No Name Provided"
+WARNING the alpha parameter with a value of 55.803689 estimated by RAxML for partition number 0 with the name "No Name Provided"
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
 
-WARNING the alpha parameter with a value of 126.722345 estimated by RAxML for partition number 0 with the name "No Name Provided"
+WARNING the alpha parameter with a value of 126.724090 estimated by RAxML for partition number 0 with the name "No Name Provided"
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
 
-WARNING the alpha parameter with a value of 281.261580 estimated by RAxML for partition number 0 with the name "No Name Provided"
+WARNING the alpha parameter with a value of 281.269270 estimated by RAxML for partition number 0 with the name "No Name Provided"
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
 
-WARNING the alpha parameter with a value of 638.101385 estimated by RAxML for partition number 0 with the name "No Name Provided"
+WARNING the alpha parameter with a value of 638.119832 estimated by RAxML for partition number 0 with the name "No Name Provided"
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
 
-WARNING the alpha parameter with a value of 999.880135 estimated by RAxML for partition number 0 with the name "No Name Provided"
-is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
-You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
-
-
-WARNING the alpha parameter with a value of 1000.000000 estimated by RAxML for partition number 0 with the name "No Name Provided"
+WARNING the alpha parameter with a value of 999.880355 estimated by RAxML for partition number 0 with the name "No Name Provided"
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
@@ -97,8 +92,13 @@ WARNING the alpha parameter with a value of 1000.000000 estimated by RAxML for p
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
-Inference[0]: Time 0.539514 GAMMA-based likelihood -421281.531536, best rearrangement setting 1
-alpha[0]: 1000.000000 rates[0] ac ag at cg ct gt: 20.870095 492.064399 37.660688 66.605412 508.795232 1.000000 
+
+WARNING the alpha parameter with a value of 1000.000000 estimated by RAxML for partition number 0 with the name "No Name Provided"
+is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
+You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
+
+Inference[0]: Time 0.124590 GAMMA-based likelihood -421281.483914, best rearrangement setting 1
+alpha[0]: 1000.000000 rates[0] ac ag at cg ct gt: 20.903851 491.272891 37.459109 66.601009 508.714237 1.000000 
 
 
 Conducting final model optimizations on all 1 trees under GAMMA-based models ....
@@ -108,15 +108,15 @@ WARNING the alpha parameter with a value of 1000.000000 estimated by RAxML for p
 is larger than 10.000000. You should do a model test and confirm that you actually need to incorporate a model of rate heterogeneity!
 You can run inferences with a plain substitution model (without rate heterogeneity) by specifyng the CAT model and the "-V" option!
 
-Inference[0] final GAMMA-based Likelihood: -421281.523787 tree written to file /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/RAxML_result.OneBig.var
+Inference[0] final GAMMA-based Likelihood: -421281.472175 tree written to file /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/RAxML_result.OneBig.var
 
 
-Starting final GAMMA-based thorough Optimization on tree 0 likelihood -421281.523787 .... 
+Starting final GAMMA-based thorough Optimization on tree 0 likelihood -421281.472175 .... 
 
-Final GAMMA-based Score of best tree -421281.523787
+Final GAMMA-based Score of best tree -421281.472175
 
 Program execution info written to /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/RAxML_info.OneBig.var
 Best-scoring ML tree written to: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/RAxML_bestTree.OneBig.var
 
-Overall execution time: 0.758470 secs or 0.000211 hours or 0.000009 days
+Overall execution time: 0.274357 secs or 0.000076 hours or 0.000003 days
 
