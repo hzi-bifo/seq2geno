@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	convert_to_sin
+	1	create_and_make_expr_table
+	4	gene_counts
+	4	rna_mapping
+	1	write_dict_file
+	15
+
+rule rna_mapping:
+    input: data/strains/rna/F1659.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa.stidx
+    output: tmp/F1659/sorted.rmdup.sam
+    jobid: 30
+    wildcards: sample=F1659
+
+    Error in rule rna_mapping:
+        jobid: 30
+        output: tmp/F1659/sorted.rmdup.sam
+
+RuleException:
+CalledProcessError in line 26 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_EXPR_TABLE.smk:
+Command ' set -euo pipefail;  source activate Ariane_dna; source activate py27;/home/thkuo/bin/stampy-1.0.23/stampy.py --bwaoptions="-q10 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa" -t16 -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa -h /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.fa -M data/strains/rna/F1659.fastq.gz | samtools view -bS -@ 16 |samtools sort > tmp/F1659/sorted.bam;samtools rmdup -s tmp/F1659/sorted.bam tmp/F1659/sorted.rmdup.bam;samtools view -h tmp/F1659/sorted.rmdup.bam > tmp/F1659/sorted.rmdup.sam ;source deactivate;source deactivate; ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_EXPR_TABLE.smk", line 26, in __rule_rna_mapping
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-10T202820.606390.snakemake.log

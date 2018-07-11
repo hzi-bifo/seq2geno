@@ -8,7 +8,7 @@ rule find_best_tree:
     input:
         one_big_var_aln=TMP_D+'/OneBig.var.aln'
     output:
-        tree=TREE
+        tree=config['tree']
     params:
         RAXML= RAXML_EXE,
         PREFIX= 'OneBig.var',
