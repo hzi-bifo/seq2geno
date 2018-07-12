@@ -1,4 +1,0 @@
-Building DAG of jobs...
-WildcardError in line 19 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/DETECT_SNPS.smk:
-Wildcards in input files cannot be determined from output files:
-'strain'

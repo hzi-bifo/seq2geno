@@ -1,7 +1,0 @@
-Building DAG of jobs...
-InputFunctionException in line 1 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CONSTRUCT_ASSEMBLY.smk:
-KeyError: 'the label [reference] is not in the [index]'
-Wildcards:
-TMP_D=/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data
-strain=reference
-assembler=RefCln_UCBPP-PA14

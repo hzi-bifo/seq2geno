@@ -1,4 +1,0 @@
-TypeError in line 35 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk:
-temp() got an unexpected keyword argument 'one_big_aln'
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 16, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk", line 35, in <module>

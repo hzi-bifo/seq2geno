@@ -5,9 +5,9 @@
 #
 rule process_vcf:
     input:
-        vcf="{TMP_D}/{strains}/{mapper}.vcf"
+        vcf="{TMP_D}/{strain}/{mapper}.vcf"
     output:
-        vcf_gz="{TMP_D}/{strains}/{mapper}.vcf.gz"
+        vcf_gz="{TMP_D}/{strain}/{mapper}.vcf.gz"
     shell:
         "bgzip {input[vcf]}; "
         "tabix -p vcf {output[vcf_gz]}"
