@@ -1,7 +1,0 @@
-Building DAG of jobs...
-InputFunctionException in line 38 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/DETECT_SNPS.smk:
-KeyError: 'the label [CH2502.fastq.gz] is not in the [index]'
-Wildcards:
-TMP_D=tmp/CH2502  data/strains/dna/CH2502_1.fq.gz data/strains/dna/CH2502_2.fq.gz data/strains/rna
-strain=CH2502.fastq.gz
-mapper=bwa

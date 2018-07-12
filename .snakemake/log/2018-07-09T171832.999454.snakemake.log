@@ -1,4 +1,0 @@
-WildcardError in line 33 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk:
-No values given for wildcard 'TMP_D'.
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 16, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INFER_TREE.smk", line 33, in <module>

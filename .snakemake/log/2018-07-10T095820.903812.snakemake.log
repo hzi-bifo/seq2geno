@@ -1,4 +1,0 @@
-WildcardError in line 11 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/COUNT_GPA.smk:
-No values given for wildcard 'assembler'.
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 16, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/COUNT_GPA.smk", line 11, in <module>
