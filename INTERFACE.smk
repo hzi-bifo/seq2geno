@@ -13,6 +13,7 @@ RAXML_EXE=config['raxml_exe']
 RESULT_D=config['result_d']
 print(SAMPLES_DF)
 
+include: "CREATE_INDEL_TABLE.smk"
 include: "CREATE_SNPS_TABLE.smk"
 include: "CREATE_EXPR_TABLE.smk"
 include: "CREATE_GPA_TABLE.smk"
@@ -33,10 +34,10 @@ rule all:
 #        config['tree'],
 #        ASSEM=expand(TMP_D+"/{strains}/{assembler}.assem.fa", strains= STRAINS, assembler= 'spades'),
 #        roary_gpa=TMP_D+"/roary/gene_presence_absence.csv"
-        #config['expr_table'],
-        ancient('results/expr.tab'),
+        config['expr_table'],
         config['syn_snps_table'],
         config['nonsyn_snps_table'],
+        config['indel_table'],
         config['gpa_table']
         
     
@@ -103,6 +104,12 @@ rule create_gpa_table:
         roary_gpa
     output:
         gpa_table
+
+rule create_indel_table:
+    input:
+        roary_gpa
+    output:
+        indel_table    
 
 rule create_snps_table:
     input:
