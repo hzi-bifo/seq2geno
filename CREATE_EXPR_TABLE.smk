@@ -10,10 +10,10 @@ rule rna_mapping:
         CORES=CORES,
         REF_PREFIX=REF_FA,
         STAMPY=STAMPY_EXE,
-        BAM=TMP_D+'/{sample}/sorted.bam',
-        RMDUP_BAM=TMP_D+'/{sample}/sorted.rmdup.bam'
     output:
-        temp(TMP_D+'/{sample}/sorted.rmdup.sam')
+        RMDUP_SAM=temp(TMP_D+'/{sample}/rna_sorted.rmdup.sam'),
+        BAM=temp(TMP_D+'/{sample}/rna_sorted.bam'),
+        RMDUP_BAM=temp(TMP_D+'/{sample}/rna_sorted.rmdup.bam')
     #threads: 16
     shell:
        # 'samtools view -bS {input} |samtools sort | samtools rmdup -s |samtools view -h > {output} '
@@ -22,17 +22,17 @@ rule rna_mapping:
         '{params[STAMPY]} --bwaoptions=\"-q10 {input[REF]}\" '
         '-t{params[CORES]} -g {params[REF_PREFIX]} -h {params[REF_PREFIX]} '
         '-M {input[FQ]} | samtools view -bS -@ {params[CORES]} |'
-        'samtools sort > {params[BAM]};'
-        'samtools rmdup -s {params[BAM]} {params[RMDUP_BAM]};'
-        'samtools view -h {params[RMDUP_BAM]} > {output} ;'
+        'samtools sort > {output[BAM]};'
+        'samtools rmdup -s {output[BAM]} {output[RMDUP_BAM]};'
+        'samtools view -h {output[RMDUP_BAM]} > {output[RMDUP_SAM]} ;'
         #"samtools index {output};"
         "source deactivate;"
 
 rule convert_to_art:
     input: 
-        '{TMP_D}/{sample}/sorted.rmdup.sam'
+        '{TMP_D}/{sample}/rna_sorted.rmdup.sam'
     output:
-        temp('{TMP_D}/{sample}/sorted.rmdup.art')
+        temp('{TMP_D}/{sample}/rna_sorted.rmdup.art')
     params:
         SAM2ART=config['sam2art_exe']
     shell:
@@ -40,9 +40,9 @@ rule convert_to_art:
 
 rule convert_to_sin:
     input: 
-        '{TMP_D}/{sample}/sorted.rmdup.sam'
+        '{TMP_D}/{sample}/rna_sorted.rmdup.sam'
     output:
-        temp('{TMP_D}/{sample}/sorted.rmdup.sin')
+        temp('{TMP_D}/{sample}/rna_sorted.rmdup.sin')
     params:
         SAM2ART=config['sam2art_exe']
     shell:
@@ -50,9 +50,9 @@ rule convert_to_sin:
 
 rule convert_to_flatcount:
     input: 
-        '{TMP_D}/{sample}/sorted.rmdup.sam'
+        '{TMP_D}/{sample}/rna_sorted.rmdup.sam'
     output:
-        temp('{TMP_D}/{sample}/sorted.rmdup.flatcount')
+        temp('{TMP_D}/{sample}/rna_sorted.rmdup.flatcount')
     params:
         SAM2ART=config['sam2art_exe']
     shell:
@@ -66,9 +66,9 @@ rule make_annot_tab:
 '''
 rule gene_counts:
     input:
-        SIN_F='{TMP_D}/{sample}/sorted.rmdup.sin'
+        SIN_F='{TMP_D}/{sample}/rna_sorted.rmdup.sin'
     output:
-        RPG_F='{TMP_D}/{sample}/sorted.rmdup.rpg'
+        RPG_F='{TMP_D}/{sample}/rna_sorted.rmdup.rpg'
     params:
         ART2GENECOUNT=config['art2genecount_exe'], 
         ANNO_F='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
@@ -78,7 +78,7 @@ rule gene_counts:
 
 rule write_dict_file:
     input:
-        RPG_FILES=expand('{TMP_D}/{sample}/sorted.rmdup.rpg', sample= STRAINS,
+        RPG_FILES=expand('{TMP_D}/{sample}/rna_sorted.rmdup.rpg', sample= STRAINS,
             TMP_D= TMP_D)
     output:
         dict_f= TMP_D+'/rpg_dict'

@@ -1,5 +1,0 @@
-Building DAG of jobs...
-InputFunctionException in line 1 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_EXPR_TABLE.smk:
-KeyError: 'the label [rna_reads] is not in the [index]'
-Wildcards:
-sample=CH2502  data/strains/dna/CH2502_1.fq.gz data/strains/dna/CH2502_2.fq.gz data/strains/rna/CH2502.fastq.gz
