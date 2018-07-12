@@ -1,3 +1,17 @@
+import pandas as pd
+import os
+import re
+configfile: "config.yaml"
+SAMPLES_DF=pd.read_table(config["samples"], sep= '\t', header= 0).set_index("strain", drop=False)
+STRAINS=SAMPLES_DF['strain'].tolist()
+REF_FA=config['reference_sequence']
+REF_GBK=config['reference_annotation']
+TMP_D=(config['tmp_d'] if re.search('\w', config['tmp_d']) else '.')
+CORES=config['cores']
+STAMPY_EXE=config['stampy_exe']
+RAXML_EXE=config['raxml_exe']
+RESULT_D=config['result_d']
+
 rule rna_mapping:
     input:
         FQ=lambda wildcards: SAMPLES_DF.loc[wildcards.sample, 'rna_reads'],
@@ -81,7 +95,8 @@ rule write_dict_file:
         RPG_FILES=expand('{TMP_D}/{sample}/rna_sorted.rmdup.rpg', sample= STRAINS,
             TMP_D= TMP_D)
     output:
-        dict_f= TMP_D+'/rpg_dict'
+        #dict_f= TMP_D+'/rpg_dict'
+        dict_f= 'tmp/rpg_dict'
     run:
         out_f= output.dict_f
         out_fh= open(out_f, 'w')
@@ -92,9 +107,9 @@ rule write_dict_file:
 
 rule create_and_make_expr_table:
     input:
-        dict_f= TMP_D+'/rpg_dict'
+        dict_f= 'tmp/rpg_dict'
     output:
-        expr_table=config['expr_table']
+        expr_table='results/expr.tab'
     params:
         ANNO_F='Pseudomonas_aeruginosa_PA14_12genes_R_annotation'
     script: 'collect_rpg_data.R'
