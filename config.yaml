@@ -21,6 +21,7 @@ gpa_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3
 syn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/syn_snps.tab'
 nonsyn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/nonsyn_snps.tab'
 expr_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/expr.tab'
+indel_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/annot.tab'
 ##pheno_table: 
 ##ml_markdown:
 
