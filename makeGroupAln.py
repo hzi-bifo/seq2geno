@@ -66,13 +66,13 @@ list_fh= open(snakemake.output['aln_list'], 'w')
 for k in target_families:
     out_fasta= os.path.join(snakemake.params['TMP_D'], k+'.fa')
     out_aln= os.path.join(snakemake.params['TMP_D'], k+'.aln')
+    out_fasta= re.sub('([^\w_\-\/\.])', r'\\\1', out_fasta)
+    out_aln= re.sub('([^\w_\-\/\.])', r'\\\1', out_aln)
     alignments.append(out_aln)
     with open(out_fasta, 'w') as out_fh:
         out_fh.write('\n'.join(seq_dict[k]))
 #    print(out_fasta)
 #    print(out_aln)
-#    out_fasta= re.sub('([^\w\._\-\/])', r'\\\\\1', out_fasta)
-#    out_aln= re.sub('([^\w\._\-\/])', r'\\\\\1', out_aln)
     
     aln=  MafftCommandline(quiet=True, retree= 1, thread= cores, nuc= True,
             globalpair= True, input= '"'+out_fasta+'"')
