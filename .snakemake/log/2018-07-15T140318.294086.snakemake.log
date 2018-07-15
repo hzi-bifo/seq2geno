@@ -1,0 +1,27 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	sort_gene_family
+	2
+
+rule sort_gene_family:
+    input: tmp/roary/gene_presence_absence.csv, tmp/prokka/CH2500/CH2500.ffn, tmp/prokka/CH2502/CH2502.ffn, tmp/prokka/CH2522/CH2522.ffn, tmp/prokka/F1659/F1659.ffn
+    output: tmp/aln.list
+    jobid: 5
+    wildcards: TMP_D=tmp
+
+Terminating processes on user request, this might take some time.
+    Error in rule sort_gene_family:
+        jobid: 5
+        output: tmp/aln.list
+
+RuleException:
+CalledProcessError in line 35 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/phypal/bin/python /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake.b61itmrv.makeGroupAln.py ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk", line 35, in __rule_sort_gene_family
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-15T140318.294086.snakemake.log
