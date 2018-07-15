@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 111 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk:
+Missing input files for rule vcf_to_indels:
+tmp/indels/vcf.list
