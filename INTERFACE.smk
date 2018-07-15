@@ -39,6 +39,7 @@ rule all:
         config['nonsyn_snps_table'],
         config['indel_table'],
         config['gpa_table']
+#        'tmp/aln.list'
         
     
 '''
