@@ -83,10 +83,10 @@ rule make_gene_family_alignment:
 '''
 rule aln_to_vcf:
     input:
-        core_genes='core_genes_50.txt',
-        seq_aln_files_list='{TMP_D}/extracted_protein_nt/families_aln.list'
+#        core_genes='core_genes_50.txt',
+        seq_aln_files_list='{TMP_D}/aln.list'
     output:
-        vcf_list= '{TMP_D}/indels/vcf.list'
+        vcf_list= '{TMP_D}/aln_vcf.list'
     params:
         cores= CORES,
         msa2vcf_script='jvarkit/dist/msa2vcf.jar',
@@ -94,45 +94,53 @@ rule aln_to_vcf:
     shell:
 #mkdir indels
 #cd indels
-        "cd {wildcards.TMP_D}/indels;"
+#        "cd {wildcards.TMP_D}/indels;"
 #variant calling on msa
 #cat $core_genes | while read i; do echo "java -jar ~/software/jvarkit/dist/msa2vcf.jar< ~/pseudo_genomics/results/assembly/v2/roary/v5/out_95/extracted_proteins_nt/${i}.aln.fasta> ${i}.vcf"; done
-
-        "cat {params.working_dir}/{input[core_genes]} | while read i;" 
-        "do echo \"java -jar {params.msa2vcf_script} " 
-        "< {params.working_dir}/tmp/extracted_protein_nt/${{i}}.aln.fasta"
-        "> ${{i}}.vcf\";done|"
-        "parallel -j {params.cores};"
-
-        "cd {params.working_dir};"
-        "ls {wildcards.TMP_D}/indels|"
-        "grep vcf$ > {output[vcf_list]} "
+#        "cat {params.working_dir}/{input[core_genes]} | while read i;" 
+#        "do echo \"java -jar {params.msa2vcf_script} " 
+#        "< {params.working_dir}/tmp/extracted_protein_nt/${{i}}.aln.fasta"
+#        "> ${{i}}.vcf\";done|"
+#        "parallel -j {params.cores};"
+#
+#        "cd {params.working_dir};"
+#        "ls {wildcards.TMP_D}/indels|"
+#        "grep vcf$ > {output[vcf_list]} "
+        "parallel -j {params.cores} \'java -jar {params.msa2vcf_script}"
+        "< \"{{}}.aln\" > \"{{}}.vcf\"\' ::: `cat {input[seq_aln_files_list]} | sed "
+        "\'s/\.aln$//\'`;"
+        "cat {input[seq_aln_files_list]} | sed \'s/\.aln$/.vcf/\'"
+        "> {output[vcf_list]}"
 
 rule vcf_to_indels:
     input:
-        vcf_list= '{TMP_D}/indels/vcf.list',
-        core_genes='core_genes_50.txt'
+        #vcf_list= '{TMP_D}/indels/vcf.list',
+        #core_genes='core_genes_50.txt'
+        vcf_list= '{TMP_D}/aln_vcf.list'
     output:
-        indel_list= '{TMP_D}/indels/indel.list'
+        indel_list= '{TMP_D}/indel.list'
     params:
+        cores= CORES,
         vcf2indel_script='indel_detection/vcf2indel.py',
         working_dir='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3'
     shell:
 #vcf to indel yes/no vector, stats and gff
 #cat $core_genes | while read i ; do echo "python /net/sgi/metagenomics/projects/pseudo_genomics/src/PseudoGenomics/indel_detection/vcf2indel.py $i.vcf $i ${i}_indels.txt ${i}_indels.gff ${i}_indel_stats.txt"; done
-        "cd {wildcards.TMP_D}/indels;"
-        "cat {params.working_dir}/{input[core_genes]} | while read i;" 
-        "do echo \"java -jar {params.vcf2indel_script} " 
-        "< {params.working_dir}/tmp/extracted_protein_nt/${{i}}.aln.fasta"
-        "> ${{i}}.vcf\";done;"
-        "cd {params.working_dir};"
-        "ls {wildcards.TMP_D}/indels|"
-        "grep indels.txt$ > {output[indel_list]} "
+        "source activate py27;"
+        "parallel -j {params.cores} \'python {params.vcf2indel_script} "
+        "\"{{}}.vcf\" \"{{}}\" \"{{}}_indels.txt\" \"{{}}_indels.gff\" "
+        "\"{{}}_indel_stats.txt\" \'"
+        " ::: `cat {input[vcf_list]} | sed "
+        "\'s/\.vcf$//\'`;"
+        "cat {input[vcf_list]} | sed \'s/\.vcf$/.indels.txt/\'"
+        "> {output[indel_list]};"
+        "source deactivate"
 
 rule create_indel_table:
     input:
         roary_gpa_rtab=TMP_D+'/roary/gene_presence_absence.Rtab',
-        indel_list= TMP_D+'/indels/indel.list'
+        #indel_list= TMP_D+'/indels/indel.list'
+        indel_list= TMP_D+'/indel.list'
     output:
         annot_f=config['indel_table'],
         indel_annot_f='indel_annot.txt',
@@ -143,6 +151,8 @@ rule create_indel_table:
     shell:
         "source activate py27;"
         "python {params.indel_tab_script} <"
-        "(cut -f1 {input[roary_gpa_rtab]}| tail -n+2 | grep -v hdl ) "
+        #"(cut -f1 {input[roary_gpa_rtab]}| tail -n+2 | grep -v hdl ) "
+        "(cut -f1 {input[roary_gpa_rtab]}| tail -n+2 ) "
         "{output[annot_f]} {output[indel_annot_f]} "
-        "{output[indel_stat_f]} {output[roary_abricate]}"
+        "{output[indel_stat_f]} {output[roary_abricate]} ;"
+        "source deactivate"
