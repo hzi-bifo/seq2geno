@@ -19,7 +19,8 @@ rule compute_gpa_raw_table:
         ## remove the roary folder created by snakemake first. 
         ## Otherwise, roary would create another and put all the output files in another automatically created folder
         "rm -r {params.roary_outdir};"
-        "roary -f {params.roary_outdir} -e -n -v -r -p "
+        #"roary -f {params.roary_outdir} -e -n -v -r -p "
+        "roary -f {params.roary_outdir} -v -p "
         "{params.cores} -g 100000 -z {input[gffs]};"
 
 rule create_gff:
