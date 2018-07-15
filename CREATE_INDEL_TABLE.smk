@@ -15,8 +15,9 @@ rule filter_genes:
 
 rule sort_gene_family :
     input:
-        core_genes='core_genes_50.txt',
-        roary_clustered_proteins='{TMP_D}/roary/clustered_proteins',
+#        genes_list='core_genes_50.txt',
+        #roary_clustered_proteins='{TMP_D}/roary/clustered_proteins',
+        roary_gpa="{TMP_D}/roary/gene_presence_absence.csv",
         gene_dna_seqs= expand('{TMP_D}/prokka/{strain}/{strain}.ffn',
 TMP_D=TMP_D, strain= STRAINS)
 
@@ -24,10 +25,26 @@ TMP_D=TMP_D, strain= STRAINS)
         # slightly different from the original usage; 
         # for the convinience of snakemake
         #output_dir='extracted_proteins_nt/' 
-        seq_files_list=temp('{TMP_D}/{extracted_proteins_dir}/families.list')
+        #seq_files_list=temp('{TMP_D}/{extracted_proteins_dir}/families.list')
+        aln_list='{TMP_D}/aln.list'
+    params:
+        CORES= CORES,
+        MIN_SAMPLES= 2,
+        STRAINS= STRAINS,
+        TMP_D= TMP_D+'/extracted_proteins_nt'
+    script: 'makeGroupAln.py'
+'''
     params:
         make_fasta_script='indel_detection/gene_clusters2multi_fasta.py'
     shell:
+        from Bio import SeqIO
+        import pandas as pd
+        # read the target families
+        #
+        # parse the clustering results
+        #
+        # parse and sort the sequences
+        
         "source activate py27;"
         #number of core genes
         #core_genes_wc=$(wc -l $core_genes | cut -f1 -d" ")
@@ -40,7 +57,8 @@ TMP_D=TMP_D, strain= STRAINS)
         "{input[gene_dna_seqs]};"
         "ls {wildcards.TMP_D}/{wildcards.extracted_proteins_dir}|"
         "grep fasta$ > {output[seq_files_list]} "
-
+'''
+'''
 rule make_gene_family_alignment:
     input:
         seq_files_list=temp('{TMP_D}/extracted_protein_nt/families.list')
@@ -62,7 +80,7 @@ rule make_gene_family_alignment:
         'cd {params.working_dir};'
         "ls {wildcards.TMP_D}/indels|"
         "grep aln\.fasta$ > {output[seq_aln_files_list]} "
-
+'''
 rule aln_to_vcf:
     input:
         core_genes='core_genes_50.txt',
