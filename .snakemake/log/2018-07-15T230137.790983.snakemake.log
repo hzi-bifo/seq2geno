@@ -1,0 +1,27 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	vcf_to_indels
+	2
+
+rule vcf_to_indels:
+    input: tmp/aln_vcf.list
+    output: tmp/indel.list
+    jobid: 1
+    wildcards: TMP_D=tmp
+
+Terminating processes on user request, this might take some time.
+    Error in rule vcf_to_indels:
+        jobid: 1
+        output: tmp/indel.list
+
+RuleException:
+CalledProcessError in line 135 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk:
+Command ' set -euo pipefail;  parallel -j 16 'python indel_detection/vcf2indel.py "{}.vcf" "{}_indels.txt" "{}_indels.gff" "{}_indel_stats.txt" ' ::: `cat tmp/aln_vcf.list | sed 's/\.vcf$//'`;cat tmp/aln_vcf.list | sed 's/\.vcf$/.indels.txt/'> tmp/indel.list ' returned non-zero exit status 255.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk", line 135, in __rule_vcf_to_indels
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-15T230137.790983.snakemake.log
