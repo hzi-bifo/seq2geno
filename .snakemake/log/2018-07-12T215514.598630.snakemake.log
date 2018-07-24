@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	aln_to_vcf
+	1	create_and_make_expr_table
+	1	create_indel_table
+	1	make_gene_family_alignment
+	1	vcf_to_indels
+	6
+
+rule create_and_make_expr_table:
+    input: tmp/rpg_dict
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/expr.tab
+    jobid: 4
+
+    Error in rule create_and_make_expr_table:
+        jobid: 4
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/expr.tab
+
+RuleException:
+CalledProcessError in line 100 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_EXPR_TABLE.smk:
+Command ' set -euo pipefail;  Rscript /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake._f4joi71.collect_rpg_data.R ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_EXPR_TABLE.smk", line 100, in __rule_create_and_make_expr_table
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-12T215514.598630.snakemake.log
