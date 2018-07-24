@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	nonsyn_snps_table
+	1	syn_snps_table
+	3
+
+rule nonsyn_snps_table:
+    input: tmp/all_SNPs.tab, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.gbk
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/nonsyn_snps.tab
+    jobid: 3
+
+    Error in rule nonsyn_snps_table:
+        jobid: 3
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/nonsyn_snps.tab
+
+RuleException:
+CalledProcessError in line 47 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_SNPS_TABLE.smk:
+Command ' set -euo pipefail;  source activate py27;python ./Snp2Amino.v2.py -f tmp/all_SNPs.tab -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/data/reference/RefCln_UCBPP-PA14.gbk -n non-syn -o /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/results/nonsyn_snps.tab ;source deactivate ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_SNPS_TABLE.smk", line 47, in __rule_nonsyn_snps_table
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/.snakemake/log/2018-07-12T111758.581085.snakemake.log
