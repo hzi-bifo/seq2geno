@@ -18,8 +18,8 @@ rule sort_gene_family :
 #        genes_list='core_genes_50.txt',
         #roary_clustered_proteins='{TMP_D}/roary/clustered_proteins',
         roary_gpa="{TMP_D}/roary/gene_presence_absence.csv",
-        gene_dna_seqs= expand('{TMP_D}/prokka/{strain}/{strain}.ffn',
-TMP_D=TMP_D, strain= STRAINS)
+        gene_dna_seqs= expand('{TMP_D}/{assembler}/prokka/{strain}/{strain}.ffn',
+TMP_D=TMP_D, strain= STRAINS, assembler= config['assembler'])
 
     output:
         # slightly different from the original usage; 

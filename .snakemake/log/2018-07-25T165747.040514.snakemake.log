@@ -1,0 +1,4 @@
+WildcardError in line 22 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk:
+No values given for wildcard 'assembler'.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/INTERFACE.smk", line 16, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk", line 22, in <module>
