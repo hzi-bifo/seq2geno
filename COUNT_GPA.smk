@@ -11,7 +11,8 @@ rule compute_gpa_raw_table:
         gffs=expand("{TMP_D}/prokka/{strain}.{assembler}.gff", TMP_D= TMP_D, 
             strain= STRAINS, assembler= config['assembler'])
     output:
-        roary_gpa="{TMP_D}/roary/gene_presence_absence.csv"
+        roary_gpa="{TMP_D}/roary/gene_presence_absence.csv",
+        roary_gpa_rtab='{TMP_D}/roary/gene_presence_absence.Rtab'
     params:
         roary_outdir="{TMP_D}/roary",
         cores=CORES
@@ -27,6 +28,8 @@ rule create_gff:
     input:
         assembly="{TMP_D}/{strain}/{assembler}.assem.fa"
     output:
+        #raw_ffn_output="{TMP_D}/prokka/{strain}/{strain}.ffn",## required by the indel table
+        raw_ffn_output="{TMP_D}/{assembler}/prokka/{strain}/{strain}.ffn",## required by the indel table
         gff=temp("{TMP_D}/prokka/{strain}.{assembler}.gff")
     params:
         anno_outdir="{TMP_D}/prokka/{strain}",
