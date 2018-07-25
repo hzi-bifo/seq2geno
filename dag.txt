@@ -1,0 +1,148 @@
+digraph snakemake_dag {
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+	0[label = "all", color = "0.04 0.6 0.85", style="rounded"];
+	1[label = "syn_snps_table", color = "0.02 0.6 0.85", style="rounded"];
+	2[label = "create_indel_table", color = "0.08 0.6 0.85", style="rounded"];
+	3[label = "create_and_make_expr_table", color = "0.18 0.6 0.85", style="rounded"];
+	4[label = "nonsyn_snps_table", color = "0.55 0.6 0.85", style="rounded"];
+	5[label = "compute_gpa_table", color = "0.38 0.6 0.85", style="rounded"];
+	6[label = "all_snps_table", color = "0.36 0.6 0.85", style="rounded"];
+	7[label = "vcf_to_indels", color = "0.24 0.6 0.85", style="rounded"];
+	8[label = "compute_gpa_raw_table", color = "0.51 0.6 0.85", style="rounded"];
+	9[label = "write_dict_file", color = "0.61 0.6 0.85", style="rounded"];
+	10[label = "compute_flatcounts", color = "0.32 0.6 0.85", style="rounded"];
+	11[label = "compute_flatcounts", color = "0.32 0.6 0.85", style="rounded"];
+	12[label = "compute_flatcounts", color = "0.32 0.6 0.85", style="rounded"];
+	13[label = "filter_vcf", color = "0.20 0.6 0.85", style="rounded"];
+	14[label = "filter_vcf", color = "0.20 0.6 0.85", style="rounded"];
+	15[label = "compute_flatcounts", color = "0.32 0.6 0.85", style="rounded"];
+	16[label = "filter_vcf", color = "0.20 0.6 0.85", style="rounded"];
+	17[label = "filter_vcf", color = "0.20 0.6 0.85", style="rounded"];
+	18[label = "aln_to_vcf", color = "0.40 0.6 0.85", style="rounded"];
+	19[label = "create_gff", color = "0.12 0.6 0.85", style="rounded"];
+	20[label = "create_gff", color = "0.12 0.6 0.85", style="rounded"];
+	21[label = "create_gff", color = "0.12 0.6 0.85", style="rounded"];
+	22[label = "create_gff", color = "0.12 0.6 0.85", style="rounded"];
+	23[label = "gene_counts", color = "0.48 0.6 0.85", style="rounded"];
+	24[label = "gene_counts", color = "0.48 0.6 0.85", style="rounded"];
+	25[label = "gene_counts", color = "0.48 0.6 0.85", style="rounded"];
+	26[label = "gene_counts", color = "0.48 0.6 0.85", style="rounded"];
+	27[label = "count_cov", color = "0.06 0.6 0.85", style="rounded"];
+	28[label = "count_cov", color = "0.06 0.6 0.85", style="rounded"];
+	29[label = "count_cov", color = "0.06 0.6 0.85", style="rounded"];
+	30[label = "process_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	31[label = "process_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	32[label = "count_cov", color = "0.06 0.6 0.85", style="rounded"];
+	33[label = "process_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	34[label = "process_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	35[label = "sort_gene_family", color = "0.46 0.6 0.85", style="rounded"];
+	36[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: F1659", color = "0.14 0.6 0.85", style="rounded"];
+	37[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2502", color = "0.14 0.6 0.85", style="rounded"];
+	38[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2522", color = "0.14 0.6 0.85", style="rounded"];
+	39[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2500", color = "0.14 0.6 0.85", style="rounded"];
+	40[label = "convert_to_sin\nTMP_D: tmp", color = "0.10 0.6 0.85", style="rounded"];
+	41[label = "convert_to_sin\nTMP_D: tmp", color = "0.10 0.6 0.85", style="rounded"];
+	42[label = "convert_to_sin\nTMP_D: tmp", color = "0.10 0.6 0.85", style="rounded"];
+	43[label = "convert_to_sin\nTMP_D: tmp", color = "0.10 0.6 0.85", style="rounded"];
+	44[label = "sort_bam", color = "0.28 0.6 0.85", style="rounded"];
+	45[label = "sort_bam", color = "0.28 0.6 0.85", style="rounded"];
+	46[label = "sort_bam", color = "0.28 0.6 0.85", style="rounded"];
+	47[label = "create_vcf", color = "0.26 0.6 0.85", style="rounded"];
+	48[label = "create_vcf", color = "0.26 0.6 0.85", style="rounded"];
+	49[label = "sort_bam", color = "0.28 0.6 0.85", style="rounded"];
+	50[label = "create_vcf", color = "0.26 0.6 0.85", style="rounded"];
+	51[label = "create_vcf", color = "0.26 0.6 0.85", style="rounded"];
+	52[label = "rna_mapping\nsample: CH2500", color = "0.22 0.6 0.85", style="rounded"];
+	53[label = "rna_mapping\nsample: CH2502", color = "0.22 0.6 0.85", style="rounded"];
+	54[label = "rna_mapping\nsample: F1659", color = "0.22 0.6 0.85", style="rounded"];
+	55[label = "rna_mapping\nsample: CH2522", color = "0.22 0.6 0.85", style="rounded"];
+	56[label = "mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2522", color = "0.16 0.6 0.85", style="rounded"];
+	57[label = "mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2500", color = "0.16 0.6 0.85", style="rounded"];
+	58[label = "mapping\nTMP_D: tmp\nmapper: bwa\nstrain: F1659", color = "0.16 0.6 0.85", style="rounded"];
+	59[label = "load_reference", color = "0.42 0.6 0.85", style="rounded"];
+	60[label = "mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2502", color = "0.16 0.6 0.85", style="rounded"];
+	1 -> 0
+	2 -> 0
+	3 -> 0
+	4 -> 0
+	5 -> 0
+	6 -> 1
+	7 -> 2
+	8 -> 2
+	9 -> 3
+	6 -> 4
+	8 -> 5
+	10 -> 6
+	11 -> 6
+	12 -> 6
+	13 -> 6
+	14 -> 6
+	15 -> 6
+	16 -> 6
+	17 -> 6
+	18 -> 7
+	19 -> 8
+	20 -> 8
+	21 -> 8
+	22 -> 8
+	23 -> 9
+	24 -> 9
+	25 -> 9
+	26 -> 9
+	27 -> 10
+	28 -> 11
+	29 -> 12
+	30 -> 13
+	31 -> 14
+	32 -> 15
+	33 -> 16
+	34 -> 17
+	35 -> 18
+	36 -> 19
+	37 -> 20
+	38 -> 21
+	39 -> 22
+	40 -> 23
+	41 -> 24
+	42 -> 25
+	43 -> 26
+	44 -> 27
+	45 -> 28
+	46 -> 29
+	47 -> 30
+	48 -> 31
+	49 -> 32
+	50 -> 33
+	51 -> 34
+	22 -> 35
+	21 -> 35
+	20 -> 35
+	19 -> 35
+	8 -> 35
+	52 -> 40
+	53 -> 41
+	54 -> 42
+	55 -> 43
+	56 -> 44
+	57 -> 45
+	58 -> 46
+	44 -> 47
+	59 -> 47
+	49 -> 48
+	59 -> 48
+	60 -> 49
+	46 -> 50
+	59 -> 50
+	59 -> 51
+	45 -> 51
+	59 -> 52
+	59 -> 53
+	59 -> 54
+	59 -> 55
+	59 -> 56
+	59 -> 57
+	59 -> 58
+	59 -> 60
+}            
