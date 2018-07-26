@@ -8,9 +8,9 @@
 
 rule all_snps_table:
     input:
-        vcf_files=expand("{TMP_D}/{strain}/{mapper}.flatcount", 
+        vcf_files=expand("{TMP_D}/{strain}/{mapper}/variant.flatcount", 
             TMP_D=TMP_D, strain=STRAINS, mapper= ['bwa']),
-        snp_vcf_files=expand("{TMP_D}/{strain}/{mapper}.snp-vcf", 
+        snp_vcf_files=expand("{TMP_D}/{strain}/{mapper}/variant.snp-vcf", 
             TMP_D=TMP_D, strain=STRAINS, mapper= ['bwa']),
         dict_f='strain_list',
         anno_f='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
@@ -48,9 +48,9 @@ rule nonsyn_snps_table:
 
 rule filter_vcf:
     input:
-        vcf_gz="{TMP_D}/{strain}/{mapper}.vcf.gz"
+        vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz"
     output:
-        snp_vcf_f="{TMP_D}/{strain}/{mapper}.snp-vcf"
+        snp_vcf_f="{TMP_D}/{strain}/{mapper}/variant.snp-vcf"
     shell:
         'vcftools --gzvcf {input[vcf_gz]} --remove-indels --recode '
         '--recode-INFO-all --stdout > {output[snp_vcf_f]}'
@@ -58,16 +58,16 @@ rule filter_vcf:
 
 rule compute_flatcounts:
     input:
-       cov_f='{TMP_D}/{strain}/{mapper}.coverage'
+       cov_f='{TMP_D}/{strain}/{mapper}/mapping.coverage'
     output:
-       flt_f='{TMP_D}/{strain}/{mapper}.flatcount'
+       flt_f='{TMP_D}/{strain}/{mapper}/variant.flatcount'
     shell:
        'python bam_cov2flatcount.py -in_f {input[cov_f]} -out_f {output[flt_f]}'
     
 rule count_cov:
     input:
-        bam_f='{TMP_D}/{strain}/{mapper}.sorted.bam'
+        bam_f='{TMP_D}/{strain}/{mapper}/sorted.bam'
     output:
-        cov_f='{TMP_D}/{strain}/{mapper}.coverage'
+        cov_f='{TMP_D}/{strain}/{mapper}/mapping.coverage'
     shell:
         'samtools depth -a {input[bam_f]} > {output[cov_f]};'
