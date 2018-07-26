@@ -5,9 +5,9 @@
 #
 rule process_vcf:
     input:
-        vcf="{TMP_D}/{strain}/{mapper}.vcf"
+        vcf="{TMP_D}/{strain}/{mapper}/vcf"
     output:
-        vcf_gz="{TMP_D}/{strain}/{mapper}.vcf.gz"
+        vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz"
     shell:
         "bgzip {input[vcf]}; "
         "tabix -p vcf {output[vcf_gz]}"
@@ -16,10 +16,10 @@ rule create_vcf:
     input:
         REF=REF_FA,
         REF_FA_INDEX=REF_FA+".fai",
-        BAM="{TMP_D}/{strain}/{mapper}.sorted.bam",
-        BAM_INDEX="{TMP_D}/{strain}/{mapper}.sorted.bam.bai"
+        BAM="{TMP_D}/{strain}/{mapper}/sorted.bam",
+        BAM_INDEX="{TMP_D}/{strain}/{mapper}/sorted.bam.bai"
     output:
-        vcf="{TMP_D}/{strain}/{mapper}.vcf"
+        vcf="{TMP_D}/{strain}/{mapper}/vcf"
     params: 
         CORES=CORES
     shell:
@@ -27,10 +27,10 @@ rule create_vcf:
 
 rule sort_bam:
     input:
-        "{TMP_D}/{strain}/{mapper}.raw.bam"
+        "{TMP_D}/{strain}/{mapper}/raw.bam"
     output:
-        temp("{TMP_D}/{strain}/{mapper}.sorted.bam"),
-        temp("{TMP_D}/{strain}/{mapper}.sorted.bam.bai")
+        temp("{TMP_D}/{strain}/{mapper}/sorted.bam"),
+        temp("{TMP_D}/{strain}/{mapper}/sorted.bam.bai")
     shell:
         'bamtools sort -in {input} -out {output[0]};'
         "samtools index {output[0]};"
@@ -42,7 +42,7 @@ rule mapping:
         READS2=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads2'],
         REF_INDEX=REF_FA+".bwt"
     output:
-        temp("{TMP_D}/{strain}/{mapper}.raw.bam")
+        temp("{TMP_D}/{strain}/{mapper}/raw.bam")
     shell:
         "bwa mem -v 2 -M -t {CORES} {input[REF]} {input[READS1]} {input[READS2]}|"
         "samtools view -b -@ {CORES} > {output[0]}"
