@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 1 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/MAKE_CONS.smk:
+Missing input files for rule create_consensus_sequence:
+tmp/CH2522/bwa.vcf.gz
