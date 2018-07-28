@@ -3,15 +3,6 @@
 ### Problems to solve: 
 ### 1. different softwares for the same purpose may need different options and files, such as the index files. How to specifiy them in a rule?   
 #
-rule process_vcf:
-    input:
-        vcf="{TMP_D}/{strain}/{mapper}/vcf"
-    output:
-        vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz"
-    shell:
-        "bgzip {input[vcf]}; "
-        "tabix -p vcf {output[vcf_gz]}"
-
 rule create_vcf:
     input:
         REF=REF_FA,
@@ -19,11 +10,17 @@ rule create_vcf:
         BAM="{TMP_D}/{strain}/{mapper}/sorted.bam",
         BAM_INDEX="{TMP_D}/{strain}/{mapper}/sorted.bam.bai"
     output:
-        vcf="{TMP_D}/{strain}/{mapper}/vcf"
+        vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz",
+        vcf_gz_index= temp("{TMP_D}/{strain}/{mapper}/vcf.gz.tbi")
+        #vcf="{TMP_D}/{strain}/{mapper}/vcf"
     params: 
         CORES=CORES
     shell:
-        "freebayes-parallel <(fasta_generate_regions.py {input[REF_FA_INDEX]} 100000) {params[CORES]} -f {input[REF]} {input[BAM]} > {output[vcf]};"
+        """
+        freebayes-parallel <(fasta_generate_regions.py {input[REF_FA_INDEX]} 100000) {params[CORES]} -f {input[REF]} {input[BAM]} | \
+        bgzip -c {output[vcf_gz]}
+        tabix -p vcf {output[vcf_gz]}
+        """ 
 
 rule sort_bam:
     input:
