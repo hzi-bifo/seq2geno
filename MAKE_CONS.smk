@@ -1,9 +1,9 @@
 rule create_consensus_sequence:
     input:
         ref_target_seqs="{TMP_D}/reference.target_regions.fa",
-        vcf_gz="{TMP_D}/{strains}/{mapper}.vcf.gz"
+        vcf_gz="{TMP_D}/{strains}/{mapper}/vcf.gz"
     output:
-        cons_coding_seqs="{TMP_D}/{strains}/{mapper}.cons.fa"
+        cons_coding_seqs="{TMP_D}/{strains}/{mapper}/cons.fa"
     shell:
         "bcftools consensus -f {input[ref_target_seqs]} "
         "{input[vcf_gz]} > {output}"

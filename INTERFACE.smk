@@ -31,7 +31,7 @@ rule all:
         #expand("{TMP_D}/{strains}/{mapper}.flatcount", TMP_D=TMP_D, strains= STRAINS, mapper= 'bwa')
 #        'tmp/all_SNPs.tab'
         #cons_seqs=expand(TMP_D+"/{strains}/{mapper}.cons.fa", strains= STRAINS, mapper= 'bwa')
-#        config['tree'],
+        config['tree'],
 #        ASSEM=expand(TMP_D+"/{strains}/{assembler}.assem.fa", strains= STRAINS, assembler= 'spades'),
 #        roary_gpa=TMP_D+"/roary/gene_presence_absence.csv"
         config['expr_table'],

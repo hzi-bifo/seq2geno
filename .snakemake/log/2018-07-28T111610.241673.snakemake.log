@@ -1,0 +1,215 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	all
+	1	all_snps_table
+	1	aln_to_vcf
+	4	compute_flatcounts
+	1	compute_gpa_raw_table
+	1	compute_gpa_table
+	4	convert_to_sin
+	4	count_cov
+	1	create_and_make_expr_table
+	4	create_assembly
+	1	create_coding_regions_aln
+	4	create_consensus_sequence
+	4	create_gff
+	1	create_indel_table
+	1	create_ref_target_seqs
+	4	create_vcf
+	4	filter_vcf
+	1	find_best_tree
+	4	gene_counts
+	4	mapping
+	1	nonsyn_snps_table
+	1	postprocess_alignment
+	4	rna_mapping
+	4	sort_bam
+	1	sort_gene_family
+	1	syn_snps_table
+	1	vcf_to_indels
+	1	write_dict_file
+	64
+
+rule create_assembly:
+    input: data/strains/dna/CH2522_1.fq.gz, data/strains/dna/CH2522_2.fq.gz
+    output: tmp/CH2522/spades.assem.fa
+    jobid: 43
+    wildcards: TMP_D=tmp, strain=CH2522, assembler=spades
+
+
+rule create_assembly:
+    input: data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz
+    output: tmp/CH2500/spades.assem.fa
+    jobid: 46
+    wildcards: TMP_D=tmp, strain=CH2500, assembler=spades
+
+
+rule mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/F1659/bwa/raw.bam
+    jobid: 63
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+rule create_assembly:
+    input: data/strains/dna/CH2502_1.fq.gz, data/strains/dna/CH2502_2.fq.gz
+    output: tmp/CH2502/spades.assem.fa
+    jobid: 45
+    wildcards: TMP_D=tmp, strain=CH2502, assembler=spades
+
+
+rule rna_mapping:
+    input: data/strains/rna/F1659.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/F1659/rna_sorted.rmdup.sam, tmp/F1659/rna_sorted.bam, tmp/F1659/rna_sorted.rmdup.bam
+    jobid: 57
+    wildcards: sample=F1659
+
+
+rule create_ref_target_seqs:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.gbk
+    output: tmp/reference.target_regions.fa
+    jobid: 51
+    wildcards: TMP_D=tmp
+
+rule mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2502_1.fq.gz, data/strains/dna/CH2502_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2502/bwa/raw.bam
+    jobid: 64
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+rule rna_mapping:
+    input: data/strains/rna/CH2522.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/CH2522/rna_sorted.rmdup.sam, tmp/CH2522/rna_sorted.bam, tmp/CH2522/rna_sorted.rmdup.bam
+    jobid: 58
+    wildcards: sample=CH2522
+
+
+rule rna_mapping:
+    input: data/strains/rna/CH2500.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/CH2500/rna_sorted.rmdup.sam, tmp/CH2500/rna_sorted.bam, tmp/CH2500/rna_sorted.rmdup.bam
+    jobid: 59
+    wildcards: sample=CH2500
+
+
+rule mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2522_1.fq.gz, data/strains/dna/CH2522_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2522/bwa/raw.bam
+    jobid: 61
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+rule mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2500/bwa/raw.bam
+    jobid: 62
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+rule rna_mapping:
+    input: data/strains/rna/CH2502.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/CH2502/rna_sorted.rmdup.sam, tmp/CH2502/rna_sorted.bam, tmp/CH2502/rna_sorted.rmdup.bam
+    jobid: 60
+    wildcards: sample=CH2502
+
+
+rule create_assembly:
+    input: data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz
+    output: tmp/F1659/spades.assem.fa
+    jobid: 44
+    wildcards: TMP_D=tmp, strain=F1659, assembler=spades
+
+
+rule convert_to_sin:
+    input: tmp/CH2502/rna_sorted.rmdup.sam
+    output: tmp/CH2502/rna_sorted.rmdup.sin
+    jobid: 50
+    wildcards: TMP_D=tmp, sample=CH2502
+
+
+rule sort_bam:
+    input: tmp/CH2500/bwa/raw.bam
+    output: tmp/CH2500/bwa/sorted.bam, tmp/CH2500/bwa/sorted.bam.bai
+    jobid: 54
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+rule create_gff:
+    input: tmp/CH2500/spades.assem.fa
+    output: tmp/spades/prokka/CH2500/CH2500.ffn, tmp/prokka/CH2500.spades.gff
+    jobid: 25
+    wildcards: TMP_D=tmp, assembler=spades, strain=CH2500
+
+
+rule convert_to_sin:
+    input: tmp/CH2500/rna_sorted.rmdup.sam
+    output: tmp/CH2500/rna_sorted.rmdup.sin
+    jobid: 49
+    wildcards: TMP_D=tmp, sample=CH2500
+
+
+rule create_gff:
+    input: tmp/CH2502/spades.assem.fa
+    output: tmp/spades/prokka/CH2502/CH2502.ffn, tmp/prokka/CH2502.spades.gff
+    jobid: 24
+    wildcards: TMP_D=tmp, assembler=spades, strain=CH2502
+
+
+rule sort_bam:
+    input: tmp/CH2502/bwa/raw.bam
+    output: tmp/CH2502/bwa/sorted.bam, tmp/CH2502/bwa/sorted.bam.bai
+    jobid: 56
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+rule convert_to_sin:
+    input: tmp/F1659/rna_sorted.rmdup.sam
+    output: tmp/F1659/rna_sorted.rmdup.sin
+    jobid: 47
+    wildcards: TMP_D=tmp, sample=F1659
+
+
+rule create_gff:
+    input: tmp/F1659/spades.assem.fa
+    output: tmp/spades/prokka/F1659/F1659.ffn, tmp/prokka/F1659.spades.gff
+    jobid: 23
+    wildcards: TMP_D=tmp, assembler=spades, strain=F1659
+
+
+rule sort_bam:
+    input: tmp/F1659/bwa/raw.bam
+    output: tmp/F1659/bwa/sorted.bam, tmp/F1659/bwa/sorted.bam.bai
+    jobid: 55
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+rule create_gff:
+    input: tmp/CH2522/spades.assem.fa
+    output: tmp/spades/prokka/CH2522/CH2522.ffn, tmp/prokka/CH2522.spades.gff
+    jobid: 22
+    wildcards: TMP_D=tmp, assembler=spades, strain=CH2522
+
+
+rule sort_bam:
+    input: tmp/CH2522/bwa/raw.bam
+    output: tmp/CH2522/bwa/sorted.bam, tmp/CH2522/bwa/sorted.bam.bai
+    jobid: 53
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+rule convert_to_sin:
+    input: tmp/CH2522/rna_sorted.rmdup.sam
+    output: tmp/CH2522/rna_sorted.rmdup.sin
+    jobid: 48
+    wildcards: TMP_D=tmp, sample=CH2522
+
+
+rule create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/CH2502/bwa/sorted.bam, tmp/CH2502/bwa/sorted.bam.bai
+    output: tmp/CH2502/bwa/vcf.gz
+    jobid: 39
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+RuleException in line 16 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/DETECT_SNPS.smk:
+'OutputFiles' object has no attribute 'vcf_gz'
