@@ -11,7 +11,12 @@ CORES=config['cores']
 STAMPY_EXE=config['stampy_exe']
 RAXML_EXE=config['raxml_exe']
 RESULT_D=config['result_d']
+#SOFTWARE={'mapper': 'bwa'}
+SOFTWARE= config['software']
+SOFTWARE['annotator']= 'prokka'
+SOFTWARE['gene_sorter']= 'roary'
 print(SAMPLES_DF)
+print(SOFTWARE)
 
 include: "CREATE_INDEL_TABLE.smk"
 include: "CREATE_SNPS_TABLE.smk"
@@ -25,20 +30,21 @@ include: "DETECT_SNPS.smk"
 
 rule all:
     input:
+        #TMP_D+"/roary/gene_presence_absence.csv"
         #vcf_gz=expand(TMP_D+"/{strains}/{mapper}.vcf.gz", strains= STRAINS, mapper= 'bwa')
         #expand("{TMP_D}/{strains}/{mapper}.snp-vcf", TMP_D=TMP_D, strains=
 #STRAINS, mapper= 'bwa'),
         #expand("{TMP_D}/{strains}/{mapper}.flatcount", TMP_D=TMP_D, strains= STRAINS, mapper= 'bwa')
 #        'tmp/all_SNPs.tab'
         #cons_seqs=expand(TMP_D+"/{strains}/{mapper}.cons.fa", strains= STRAINS, mapper= 'bwa')
-        config['tree'],
 #        ASSEM=expand(TMP_D+"/{strains}/{assembler}.assem.fa", strains= STRAINS, assembler= 'spades'),
 #        roary_gpa=TMP_D+"/roary/gene_presence_absence.csv"
-        config['expr_table'],
-        config['syn_snps_table'],
-        config['nonsyn_snps_table'],
-        config['indel_table'],
-        config['gpa_table']
+        #config['tree'],
+        #config['expr_table'],
+        #config['syn_snps_table'],
+        #config['nonsyn_snps_table'],
+        config['indel_table']
+        #config['gpa_table']
 #        'tmp/indel.list'
         
     
