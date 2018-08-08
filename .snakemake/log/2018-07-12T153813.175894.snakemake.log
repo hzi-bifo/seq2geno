@@ -1,4 +1,0 @@
-WildcardError in line 19 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk:
-No values given for wildcard 'TMP_D'.
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/INTERFACE.smk", line 16, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk", line 19, in <module>

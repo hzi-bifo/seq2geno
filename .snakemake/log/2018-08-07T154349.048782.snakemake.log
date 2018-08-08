@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	compute_gpa_raw_table
+	2
+
+rule compute_gpa_raw_table:
+    input: tmp/CH2500/spades/prokka/CH2500.gff, tmp/CH2502/spades/prokka/CH2502.gff, tmp/CH2522/spades/prokka/CH2522.gff, tmp/F1659/spades/prokka/F1659.gff
+    output: tmp/roary/gene_presence_absence.csv, tmp/roary/gene_presence_absence.Rtab
+    jobid: 1
+    wildcards: TMP_D=tmp, gene_sorter=roary
+
+Removing temporary output file tmp/F1659/spades/prokka/F1659.gff.
+Removing temporary output file tmp/CH2500/spades/prokka/CH2500.gff.
+Removing temporary output file tmp/CH2502/spades/prokka/CH2502.gff.
+Removing temporary output file tmp/CH2522/spades/prokka/CH2522.gff.
+Finished job 1.
+1 of 2 steps (50%) done
+
+localrule all:
+    input: tmp/roary/gene_presence_absence.csv
+    jobid: 0
+
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-07T154349.048782.snakemake.log

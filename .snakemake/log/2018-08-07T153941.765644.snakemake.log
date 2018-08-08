@@ -1,0 +1,68 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	compute_gpa_raw_table
+	4	duplicate_gffs
+	6
+
+rule duplicate_gffs:
+    input: tmp/CH2500/spades/prokka/de_novo.gff
+    output: tmp/CH2500/spades/prokka/CH2500.gff
+    jobid: 3
+    wildcards: TMP_D=tmp, strain=CH2500, assembler=spades, annotator=prokka
+
+Finished job 3.
+1 of 6 steps (17%) done
+
+rule duplicate_gffs:
+    input: tmp/F1659/spades/prokka/de_novo.gff
+    output: tmp/F1659/spades/prokka/F1659.gff
+    jobid: 4
+    wildcards: TMP_D=tmp, strain=F1659, assembler=spades, annotator=prokka
+
+Finished job 4.
+2 of 6 steps (33%) done
+
+rule duplicate_gffs:
+    input: tmp/CH2522/spades/prokka/de_novo.gff
+    output: tmp/CH2522/spades/prokka/CH2522.gff
+    jobid: 5
+    wildcards: TMP_D=tmp, strain=CH2522, assembler=spades, annotator=prokka
+
+Finished job 5.
+3 of 6 steps (50%) done
+
+rule duplicate_gffs:
+    input: tmp/CH2502/spades/prokka/de_novo.gff
+    output: tmp/CH2502/spades/prokka/CH2502.gff
+    jobid: 2
+    wildcards: TMP_D=tmp, strain=CH2502, assembler=spades, annotator=prokka
+
+Finished job 2.
+4 of 6 steps (67%) done
+
+rule compute_gpa_raw_table:
+    input: tmp/CH2500/spades/prokka/CH2500.gff, tmp/CH2502/spades/prokka/CH2502.gff, tmp/CH2522/spades/prokka/CH2522.gff, tmp/F1659/spades/prokka/F1659.gff
+    output: tmp/roary/gene_presence_absence.csv, tmp/roary/gene_presence_absence.Rtab
+    jobid: 1
+    wildcards: TMP_D=tmp, gene_sorter=roary
+
+    Error in rule compute_gpa_raw_table:
+        jobid: 1
+        output: tmp/roary/gene_presence_absence.csv, tmp/roary/gene_presence_absence.Rtab
+
+RuleException:
+CalledProcessError in line 27 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/COUNT_GPA.smk:
+Command ' set -euo pipefail;  
+        rm -r tmp/roary
+        roary -b "blastp -qcov_hsp_perc 95"         -f tmp/roary -v -p         
+        16 -g 100000 -z tmp/CH2500/spades/prokka/CH2500.gff tmp/CH2502/spades/prokka/CH2502.gff tmp/CH2522/spades/prokka/CH2522.gff tmp/F1659/spades/prokka/F1659.gff ' returned non-zero exit status 255.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/COUNT_GPA.smk", line 27, in __rule_compute_gpa_raw_table
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-07T153941.765644.snakemake.log

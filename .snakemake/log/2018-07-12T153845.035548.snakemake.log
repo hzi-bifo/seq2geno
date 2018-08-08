@@ -1,4 +1,0 @@
-Building DAG of jobs...
-WildcardError in line 103 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk:
-Wildcards in input files cannot be determined from output files:
-'TMP_D'

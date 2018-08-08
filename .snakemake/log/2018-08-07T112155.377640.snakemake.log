@@ -1,0 +1,18 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	aln_to_vcf
+	1	create_indel_table
+	1	vcf_to_indels
+	4
+
+rule aln_to_vcf:
+    input: tmp/aln.list
+    output: tmp/aln_vcf.list
+    jobid: 8
+    wildcards: TMP_D=tmp
+

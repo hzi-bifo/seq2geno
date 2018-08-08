@@ -1,11 +1,17 @@
 tmp_d: 'tmp'
 result_d: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results'
 working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4'
+
+###### external executives
 stampy_exe: '/home/thkuo/bin/stampy-1.0.23/stampy.py'
 #raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS'
 raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS-AVX2'
 art2genecount_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/art2genecount.pl'
 sam2art_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/sam2art.pl'
+
+software:
+  mapper: 'bwa'
+  assembler: 'spades'
 
 cores: 16
 
@@ -25,8 +31,3 @@ indel_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/
 ##pheno_table: 
 ##ml_markdown:
 
-#####
-#### testing
-assembler: 'spades'
-annotator: 'prokka'
-gene_sorter: 'roary'
