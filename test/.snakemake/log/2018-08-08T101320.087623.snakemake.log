@@ -1,0 +1,25 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	last
+	2
+
+rule last:
+    input: gene-oops.aln, gene-1.aln, gene-2.aln
+    output: aln.list
+    jobid: 4
+
+Finished job 4.
+1 of 2 steps (50%) done
+
+localrule all:
+    input: aln.list
+    jobid: 0
+
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/test/.snakemake/log/2018-08-08T101320.087623.snakemake.log

@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 18 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/test.smk:
+Missing input files for rule source_information:
+fam.list

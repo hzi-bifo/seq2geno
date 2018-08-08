@@ -1,0 +1,111 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	3	aln_to_vcf_per_fam
+	1	create_indel_table
+	1	expand_by_family
+	3	vcf_to_indels_per_fam
+	9
+
+[Wed Aug  8 11:05:22 2018]
+rule aln_to_vcf_per_fam:
+    input: tmp/extracted_proteins_nt/aaeA_1.aln
+    output: tmp/extracted_proteins_nt/aaeA_1.vcf
+    jobid: 23
+    wildcards: fam=aaeA_1
+
+[Wed Aug  8 11:05:24 2018]
+Finished job 23.
+1 of 9 steps (11%) done
+
+[Wed Aug  8 11:05:24 2018]
+rule aln_to_vcf_per_fam:
+    input: tmp/extracted_proteins_nt/aaeA_2.aln
+    output: tmp/extracted_proteins_nt/aaeA_2.vcf
+    jobid: 25
+    wildcards: fam=aaeA_2
+
+[Wed Aug  8 11:05:24 2018]
+Finished job 25.
+2 of 9 steps (22%) done
+
+[Wed Aug  8 11:05:24 2018]
+rule aln_to_vcf_per_fam:
+    input: tmp/extracted_proteins_nt/aaaT.aln
+    output: tmp/extracted_proteins_nt/aaaT.vcf
+    jobid: 24
+    wildcards: fam=aaaT
+
+[Wed Aug  8 11:05:25 2018]
+Finished job 24.
+3 of 9 steps (33%) done
+
+[Wed Aug  8 11:05:25 2018]
+rule vcf_to_indels_per_fam:
+    input: tmp/extracted_proteins_nt/aaaT.vcf
+    output: tmp/extracted_proteins_nt/aaaT_indels.txt, tmp/extracted_proteins_nt/aaaT_indels.gff, tmp/extracted_proteins_nt/aaaT_indel_stats.txt
+    jobid: 21
+    wildcards: fam=aaaT
+
+[Wed Aug  8 11:05:28 2018]
+Finished job 21.
+4 of 9 steps (44%) done
+
+[Wed Aug  8 11:05:28 2018]
+rule vcf_to_indels_per_fam:
+    input: tmp/extracted_proteins_nt/aaeA_2.vcf
+    output: tmp/extracted_proteins_nt/aaeA_2_indels.txt, tmp/extracted_proteins_nt/aaeA_2_indels.gff, tmp/extracted_proteins_nt/aaeA_2_indel_stats.txt
+    jobid: 22
+    wildcards: fam=aaeA_2
+
+[Wed Aug  8 11:05:32 2018]
+Finished job 22.
+5 of 9 steps (56%) done
+
+[Wed Aug  8 11:05:32 2018]
+rule vcf_to_indels_per_fam:
+    input: tmp/extracted_proteins_nt/aaeA_1.vcf
+    output: tmp/extracted_proteins_nt/aaeA_1_indels.txt, tmp/extracted_proteins_nt/aaeA_1_indels.gff, tmp/extracted_proteins_nt/aaeA_1_indel_stats.txt
+    jobid: 20
+    wildcards: fam=aaeA_1
+
+[Wed Aug  8 11:05:35 2018]
+Finished job 20.
+6 of 9 steps (67%) done
+
+[Wed Aug  8 11:05:35 2018]
+rule expand_by_family:
+    input: tmp/extracted_proteins_nt/aaeA_1_indels.txt, tmp/extracted_proteins_nt/aaeA_2_indels.txt, tmp/extracted_proteins_nt/aaaT_indels.txt
+    output: tmp/indel.list
+    jobid: 19
+
+[Wed Aug  8 11:05:35 2018]
+Finished job 19.
+7 of 9 steps (78%) done
+
+[Wed Aug  8 11:05:35 2018]
+rule create_indel_table:
+    input: tmp/roary/gene_presence_absence.Rtab, tmp/indel.list
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/annot.tab, indel_annot.txt, indels_stats.txt, roary_PA14_abricate.txt
+    jobid: 1
+
+    [Wed Aug  8 11:05:36 2018]
+    Error in rule create_indel_table:
+        jobid: 1
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/annot.tab, indel_annot.txt, indels_stats.txt, roary_PA14_abricate.txt
+
+RuleException:
+CalledProcessError in line 146 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk:
+Command ' set -euo pipefail;  
+        source activate py27
+        python indel_detection/generate_indel_features.py         <(cut -f1 tmp/roary/gene_presence_absence.Rtab| tail -n+2 )         /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/annot.tab indel_annot.txt         indels_stats.txt roary_PA14_abricate.txt 
+        source deactivate ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk", line 146, in __rule_create_indel_table
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-08T110521.740957.snakemake.log

@@ -1,0 +1,5 @@
+Building DAG of jobs...
+InputFunctionException in line 1 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk:
+AttributeError: 'Wildcards' object has no attribute 'TMP_D'
+Wildcards:
+fam=__snakemake_dynamic__
