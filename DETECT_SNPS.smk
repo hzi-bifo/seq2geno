@@ -12,7 +12,6 @@ rule create_vcf:
     output:
         vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz",
         vcf_gz_index= temp("{TMP_D}/{strain}/{mapper}/vcf.gz.tbi")
-        #vcf="{TMP_D}/{strain}/{mapper}/vcf"
     params: 
         CORES=CORES
     shell:
@@ -24,25 +23,29 @@ rule create_vcf:
 
 rule sort_bam:
     input:
-        "{TMP_D}/{strain}/{mapper}/raw.bam"
+        paired_bam="{TMP_D}/{strain}/{mapper}/paired.bam"
     output:
-        temp("{TMP_D}/{strain}/{mapper}/sorted.bam"),
-        temp("{TMP_D}/{strain}/{mapper}/sorted.bam.bai")
+        sorted_bam=temp("{TMP_D}/{strain}/{mapper}/sorted.bam"),
+        sorted_bam_index=temp("{TMP_D}/{strain}/{mapper}/sorted.bam.bai")
     shell:
-        'bamtools sort -in {input} -out {output[0]};'
-        "samtools index {output[0]};"
+        """
+        bamtools sort -in {input} -out {output[sorted_bam]}
+        samtools index {output[sorted_bam]}
+        """
 
-rule mapping:
+rule paired_mapping:
     input:
         REF=REF_FA,
         READS1=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads1'],
         READS2=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads2'],
         REF_INDEX=REF_FA+".bwt"
     output:
-        temp("{TMP_D}/{strain}/{mapper}/raw.bam")
+        paired_bam=temp("{TMP_D}/{strain}/{mapper}/paired.bam")
     shell:
-        "bwa mem -v 2 -M -t {CORES} {input[REF]} {input[READS1]} {input[READS2]}|"
-        "samtools view -b -@ {CORES} > {output[0]}"
+        """
+        bwa mem -v 2 -M -t {CORES} {input[REF]} {input[READS1]} {input[READS2]}|\
+        samtools view -b -@ {CORES} > {output[0]}
+        """
 
 rule load_reference:
     input:
@@ -55,10 +58,12 @@ rule load_reference:
     params:
         STAMPY=STAMPY_EXE
     shell:
-        "samtools faidx {input[REF_FA]};" 
-        "bwa index {input};"
-        "source activate py27;"
-        "{params[STAMPY]} -G {input} {input};"
-        "{params[STAMPY]} -g {input} -H {input};"
-        "source deactivate"
+        """
+        samtools faidx {input[REF_FA]}
+        bwa index {input}
+        source activate py27
+        {params[STAMPY]} -G {input} {input}
+        {params[STAMPY]} -g {input} -H {input}
+        source deactivate
+        """
 

@@ -1,3 +1,0 @@
-NameError in line 3 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk:
-name 'TMP_D' is not defined
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3/CREATE_INDEL_TABLE.smk", line 3, in <module>

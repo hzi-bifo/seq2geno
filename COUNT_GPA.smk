@@ -1,46 +1,55 @@
 #####
 ## File names are unable to determine/specify the reads files, 
 ## so all the file names should be carefully listed
-'''
-rule all:
-    input:
-        roary_gpa
-'''
 rule compute_gpa_raw_table:
     input:
-        gffs=expand("{TMP_D}/prokka/{strain}.{assembler}.gff", TMP_D= TMP_D, 
-            strain= STRAINS, assembler= config['assembler'])
+        gffs=lambda wildcards: [os.path.join(wildcards.TMP_D, strain, SOFTWARE['assembler'], SOFTWARE['annotator'], strain+'.gff') for strain in STRAINS]
     output:
-        roary_gpa="{TMP_D}/roary/gene_presence_absence.csv",
-        roary_gpa_rtab='{TMP_D}/roary/gene_presence_absence.Rtab'
+        roary_gpa="{TMP_D}/{gene_sorter}/gene_presence_absence.csv",
+        roary_gpa_rtab='{TMP_D}/{gene_sorter}/gene_presence_absence.Rtab'
     params:
-        roary_outdir="{TMP_D}/roary",
+        #roary_outdir="{TMP_D}/roary",
         cores=CORES
     shell:
         ## remove the roary folder created by snakemake first. 
         ## Otherwise, roary would create another and put all the output files in another automatically created folder
-        "rm -r {params.roary_outdir};"
-        #"roary -f {params.roary_outdir} -e -n -v -r -p "
-        "roary -f {params.roary_outdir} -v -p "
-        "{params.cores} -g 100000 -z {input[gffs]};"
+        """
+        rm -r {wildcards.TMP_D}/{wildcards.gene_sorter}
+        roary -b \"blastp -qcov_hsp_perc 95 \" \
+        -f {wildcards.TMP_D}/{wildcards.gene_sorter} -v -p \
+        {params.cores} -g 100000 {input[gffs]}
+        """
 
+rule duplicate_gffs:
+    ## merely for roary
+    input:
+        gff_output="{TMP_D}/{strain}/{assembler}/{annotator}/de_novo.gff"
+    output:
+        gff_output_copy=temp("{TMP_D}/{strain}/{assembler}/{annotator}/{strain}.gff")
+    shell:
+        """
+        cp {input[gff_output]} {output[gff_output_copy]}
+        """
+        
 rule create_gff:
     input:
-        assembly="{TMP_D}/{strain}/{assembler}.assem.fa"
+        assembly="{TMP_D}/{strain}/{assembler}/assem.fa"
     output:
-        #raw_ffn_output="{TMP_D}/prokka/{strain}/{strain}.ffn",## required by the indel table
-        raw_ffn_output="{TMP_D}/{assembler}/prokka/{strain}/{strain}.ffn",## required by the indel table
-        gff=temp("{TMP_D}/prokka/{strain}.{assembler}.gff")
+        ffn_output="{TMP_D}/{strain}/{assembler}/{annotator}/de_novo.ffn",## required by the indel table
+        gff_output="{TMP_D}/{strain}/{assembler}/{annotator}/de_novo.gff"
     params:
-        anno_outdir="{TMP_D}/prokka/{strain}",
-        anno_out="{strain}.gff",
-        anno_prefix='{strain}',
+        #anno_outdir="{TMP_D}/prokka/{strain}",
+        #anno_out="{strain}.gff",
+        anno_prefix='de_novo',
+        #anno_prefix='{strain}',
         cores=CORES
     shell:
-        "prokka --cpus {params.cores} --force --prefix {wildcards.strain} "
-        "--locustag {wildcards.strain} "
-        "--outdir {params.anno_outdir} {input[assembly]};"
-        "cp {params.anno_outdir}/{params.anno_out} {output[gff]}"
+        """
+        prokka --cpus {params.cores} --force --prefix {params.anno_prefix} \
+        --locustag {wildcards.strain} \
+        --outdir {wildcards.TMP_D}/{wildcards.strain}/{wildcards.assembler}/{wildcards.annotator} {input[assembly]}
+        """
+#        "cp {params.anno_outdir}/{params.anno_out} {output[gff]}"
 '''
 #####
 rule convert_gpa_table:
