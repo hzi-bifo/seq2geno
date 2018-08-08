@@ -26,7 +26,12 @@ files= {snakemake.params['STRAINS'][n]: snakemake.input['gene_dna_seqs'][n]
 
 ## parse the roary gpa table
 fam_dict= {}
-fam_df=pd.read_csv(fam_f, sep=',', quotechar='"', index_col= 0, header= 0)
+fam_df=pd.read_csv(fam_f, sep=',', quotechar='"', index_col= None, header= 0)
+# replace the unsuitable characters
+illegal_pattern= '[^\w_\-\.]'
+fam_df['Gene']=fam_df['Gene'].str.replace(illegal_pattern, '-')
+fam_df.set_index('Gene', inplace=True)
+# reshape the data
 sub_fam_df= fam_df[fam_df['No. isolates']>min_samples][snakemake.params['STRAINS']]
 sub_fam_df['gene']= pd.Series(sub_fam_df.index.tolist(), index= sub_fam_df.index)
 sub_fam_longdf= pd.melt(sub_fam_df, id_vars=['gene'])

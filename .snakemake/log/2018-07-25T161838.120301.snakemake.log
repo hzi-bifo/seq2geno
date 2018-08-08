@@ -1,7 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 16 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk:
-Missing input files for rule sort_gene_family:
-tmp/prokka/CH2522/CH2522.ffn
-tmp/prokka/CH2502/CH2502.ffn
-tmp/prokka/F1659/F1659.ffn
-tmp/prokka/CH2500/CH2500.ffn
