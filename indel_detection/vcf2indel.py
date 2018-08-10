@@ -20,15 +20,25 @@ def vcf2indel(vcf, gene_name, out, out_gff, out_stats):
         for l in vcf_open:
             columns = pd.Series(l.strip().split("\t"))
             _, pos, _, ref, alt, _, _, _, _ = columns[:9]
+#### rewrite the above: pd.read_csv(roary_gpa_table, header= None, index_col=
+#### None, sep= '\t', comment= '#')            
             #insertion at beginning of gene
             hits_temp = {}
+            #the allele of every strain
             samples = pd.Series([i.split("/")[0] for i in columns[9:]])
             #compare length of ref and alternative alleles to extract indels
             alts = alt.split(",")
             #begin counting alt alleles from 1  reference allele  = 0
             for i, alt in zip(range(1, len(alts) + 1), alts) :
                 if not alt == "":
+                    
+#### What's this...?
+#### The character of deletion is also treated like one nucleotide
                     if abs(len(alt) - len(ref)) >= 8:
+#### Only those present in half the strains are included
+#### The detection is NOT reference-based but MOJORITY-based
+#### No matter the deletion (.) was found in REF or ALT,
+#### the mutant type is always the monority one
                         if ref == ".":
                             if len(sample_names.loc[samples == "."]) > sample_names.shape[0]/2:
                                 hits = sample_names.loc[samples != "."]
@@ -41,8 +51,13 @@ def vcf2indel(vcf, gene_name, out, out_gff, out_stats):
                                 hits = sample_names.loc[samples == "."]
                         #reference allele is "." but covered by at least one insertion and deletion
                         elif len(sample_names.loc[samples == "."]) > sample_names.shape[0]/2:
+                            # the inserted nucleotide
+                            # similar to the idea about putting each ALT allele
+                            # in one row
                             hits = sample_names.loc[(str(i) == samples) & (samples != ".")]
                         else:
+                            # When the ALT or REF is not an undetectable
+                            # character, no majority rule is applied...
                             print i
                             hits = sample_names.loc[(str(i) == samples) | (samples == ".")]
                         if len(hits) != 0:

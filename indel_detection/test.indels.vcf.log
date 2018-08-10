@@ -1,0 +1,15 @@
+
+VCFtools - 0.1.15
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--vcf /home/aweimann/pseudo_genomics/results/assembly/v2/roary/v5/out_95/indels/aaeA_1.vcf
+	--recode-INFO-all
+	--keep-only-indels
+	--out test.indels.vcf
+	--recode
+
+After filtering, kept 421 out of 421 Individuals
+Outputting VCF file...
+After filtering, kept 7 out of a possible 92 Sites
+Run Time = 0.00 seconds
