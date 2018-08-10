@@ -1,16 +1,29 @@
 import pandas as pd
 import os
 
+## gene_list -> to subset the roary gpa table
+## abricate table -> to convert the gene family names
+## roary gpa output -> 
+## OOO_indels.txt -> 
+
 def summarize(gene_list, roary_gpa, table_out, stat_out, roary_PA14_abricate_map):
     """summarize indel info"""
     indel_genes = []
     #read in roary group to PA14/abricate gene names mapping
+
+    #####
+    ## to rename the feature names
+    ## useless when applied to the other studies, 
+    ## because the user may not include no reference in the clustering process
     roary2PA14_abricate = pd.read_csv(roary_PA14_abricate_map, sep = "\t", index_col = 0, header = None).iloc[:, 0]
     with open(gene_list) as gl:
         gene_list = [roary2PA14_abricate.loc[i.strip()] for i in gl.readlines()]
+
+    
     gpa = pd.read_csv(roary_gpa, sep = "\t", index_col = 0)
     isolate2freq = pd.Series(pd.np.zeros(gpa.shape[0]))
-    isolate2freq.index = gpa.index
+    isolate2freq.index = gpa.index # the index is genes
+
     #restrict to the genes in gene list
     gpa = gpa.loc[:, gene_list]
     for l in gene_list:
