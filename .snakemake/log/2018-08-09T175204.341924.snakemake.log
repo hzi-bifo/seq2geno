@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Relative file path './test_indels.txt' starts with './'. This is redundant and strongly discouraged. It can also lead to inconsistent results of the file-matching approach used by Snakemake. You can simply omit the './' for relative file paths.
+Relative file path './test.vcf' starts with './'. This is redundant and strongly discouraged. It can also lead to inconsistent results of the file-matching approach used by Snakemake. You can simply omit the './' for relative file paths.
+Relative file path './test_indels.txt' starts with './'. This is redundant and strongly discouraged. It can also lead to inconsistent results of the file-matching approach used by Snakemake. You can simply omit the './' for relative file paths.
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	vcf_to_indels_per_fam
+	2
+
+[Thu Aug  9 17:52:04 2018]
+rule vcf_to_indels_per_fam:
+    input: ./test.vcf
+    output: ./test_indels.txt
+    jobid: 1
+    wildcards: fam=test
+
+[Thu Aug  9 17:52:08 2018]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Thu Aug  9 17:52:08 2018]
+localrule all:
+    input: ./test_indels.txt
+    jobid: 0
+
+[Thu Aug  9 17:52:08 2018]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-09T175204.341924.snakemake.log

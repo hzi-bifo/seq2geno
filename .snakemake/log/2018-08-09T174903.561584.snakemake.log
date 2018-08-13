@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Relative file path './test_indels.txt' starts with './'. This is redundant and strongly discouraged. It can also lead to inconsistent results of the file-matching approach used by Snakemake. You can simply omit the './' for relative file paths.
+Relative file path './test.vcf' starts with './'. This is redundant and strongly discouraged. It can also lead to inconsistent results of the file-matching approach used by Snakemake. You can simply omit the './' for relative file paths.
+Relative file path './test_indels.txt' starts with './'. This is redundant and strongly discouraged. It can also lead to inconsistent results of the file-matching approach used by Snakemake. You can simply omit the './' for relative file paths.
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	vcf_to_indels_per_fam
+	2
+
+[Thu Aug  9 17:49:04 2018]
+rule vcf_to_indels_per_fam:
+    input: ./test.vcf
+    output: ./test_indels.txt, tmp/extracted_proteins_nt/test_indels.gff, tmp/extracted_proteins_nt/test_indel_stats.txt
+    jobid: 1
+    wildcards: fam=test
+
+    [Thu Aug  9 17:49:05 2018]
+    Error in rule vcf_to_indels_per_fam:
+        jobid: 1
+        output: ./test_indels.txt, tmp/extracted_proteins_nt/test_indels.gff, tmp/extracted_proteins_nt/test_indel_stats.txt
+
+RuleException:
+CalledProcessError in line 40 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/test.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/phypal/bin/python /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/indel_detection/.snakemake.ga5rqp3i.vcf2indel.rewrite.py ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/test.smk", line 40, in __rule_vcf_to_indels_per_fam
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-09T174903.561584.snakemake.log

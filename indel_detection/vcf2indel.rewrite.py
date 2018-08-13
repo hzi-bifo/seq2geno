@@ -5,18 +5,16 @@ Feature: converting the table to put each allele type in one row
 import pandas as pd
 
 def is_del(vcf_row):
+    # ALT should contain only one allele type
     ref= vcf_row['REF']
-    alt_str= vcf_row['ALT']
-    search= [x for x in alt_str.split(',') if (len(ref) > len(x)) | ((ref !=
-        '.')&(x == '.'))]
-    return(len(search) > 0)
+    alt= vcf_row['ALT']
+    return((len(ref) > len(alt)) | ((ref != '.')&(alt == '.')))
 
 def is_ins(vcf_row):
+    # ALT should contain only one allele type
     ref= vcf_row['REF']
-    alt_str= vcf_row['ALT']
-    search= [x for x in alt_str.split(',') if (len(ref) < len(x)) | ((ref ==
-        '.')&(x != '.'))]
-    return(len(search) > 0)
+    alt= vcf_row['ALT']
+    return(len(ref) < len(alt))
 
 def find_genotype(f, values_str):
     fields_list= f.split(':')
@@ -36,13 +34,13 @@ def row_expanded_by_alt(vcf_row):
     # columns includes all the strains. The values of each cell is binary. The
     # value of (M, N) describes whether an allele type M was found in strain N.
     status_format=vcf_row['FORMAT']
-    gts_nuc= [str(vcf_row['REF'])]+ (vcf_row['ALT'].split(',') if
-            vcf_row['ALT'] != '.' else ['.'])
+    gts_nuc= [str(vcf_row['REF'])]+ vcf_row['ALT'].split(',')
     gts_status= [('{}/{}'.format(str(n), str(n)) if gts_nuc[n] != '.' else './.') for n in range(len(gts_nuc))] 
+    status_nuc_dict= {gts_status[n]: gts_nuc[n] for n in range(len(gts_nuc))}
     expanded_status_df= pd.DataFrame(data= {gt: is_gt(gt, status_format,
         vcf_row[9:]) for gt in gts_status}).transpose()
     left= pd.DataFrame([vcf_row[:9]]*len(gts_nuc))
-    left['ALT']=gts_nuc
+    left['ALT']=[status_nuc_dict[n] for n in expanded_status_df.index.values.tolist()]
     left.reset_index(drop= True, inplace= True)
     expanded_status_df.reset_index(drop= True, inplace= True)
     return(pd.concat([left, expanded_status_df], axis= 1))
@@ -53,7 +51,8 @@ def df_expanded_by_alt(vcf_df):
         range(vcf_df.shape[0])],axis=0)
     return(new_df.reset_index(drop= True))
 
-def vcf2indel(vcf, gene_name, out, strains_perc_cutoff= 0.5, len_cutoff= 8):
+#def vcf2indel(vcf, gene_name, out, strains_perc_cutoff= 0.5, len_cutoff= 8):
+def vcf2indel(vcf, gene_name, out, len_cutoff= 8):
     # Import a vcf -> convert the format -> filter and detect indels -> find
     # the strains having the indels
 
@@ -65,15 +64,27 @@ def vcf2indel(vcf, gene_name, out, strains_perc_cutoff= 0.5, len_cutoff= 8):
     exp_vcf_df= df_expanded_by_alt(vcf_df)
 
     # filter variants and find indels
+    # case I. ALT is missing value
+    # The class 1 are always the minority
+    case1_mask= (exp_vcf_df['ALT'] ==
+            '.')&(exp_vcf_df.iloc[:,9:].sum(axis=1)>(strain_num/2))
+    exp_vcf_df.loc[case1_mask, 9:]= exp_vcf_df.loc[case1_mask,
+            9:].applymap(lambda x: not x)
+    # case II. ALT is not missing value
+    # If the minority has missing values, include them into class 1
+
+
     indel_df= exp_vcf_df[exp_vcf_df.apply(is_del, axis= 1) | exp_vcf_df.apply(is_ins, axis= 1)] 
     # by length
     indel_df= indel_df[abs(indel_df['REF'].apply(lambda x: len(x.replace('.',
         ''))) - indel_df['ALT'].apply(lambda x: len(x.replace('.', ''))))
         > len_cutoff]# the dot (.) has length 1 but it's not adequate to 1 nucleotide
-    # by frequency
+    # missing values are included only when it's the minority
     strain_num= indel_df.shape[1]-9
-    indel_df= indel_df[(indel_df.iloc[:,9:].sum(axis= 1) / strain_num)
-            > strains_perc_cutoff]
+    indel_df= indel_df.drop(indel_df[(indel_df['ALT'] == '.')
+        & ((indel_df.iloc[:,9:].sum(axis=1)/strain_num) >= 0.5)].index)
+    # remove redundant rows
+    indel_df= indel_df[indel_df.iloc[:,9:].sum(axis= 1) > 0]
     
     # find strains with the indels
     status_df= indel_df.iloc[:, 9:]

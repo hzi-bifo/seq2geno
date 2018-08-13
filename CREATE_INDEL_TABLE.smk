@@ -47,17 +47,10 @@ rule vcf_to_indels_per_fam:
 '{fam}_indel_stats.txt'),
     params:
         cores= CORES,
-        vcf2indel_script='indel_detection/vcf2indel.py',
-        working_dir='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3'
-
-    shell:
-        """
-        source activate py27
-        python {params.vcf2indel_script} \
-        {input} {wildcards.fam} {output[FAM_INDELS_TXT]} \
-        {output[FAM_INDELS_GFF]} {output[FAM_INDELS_STATS]} 
-        source deactivate
-        """
+        working_dir='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3',
+        strains_perc_cutoff= 0.5,
+        len_cutoff= 8
+    script: 'indel_detection/vcf2indel.py'
 
 rule expand_by_family:
     input:
