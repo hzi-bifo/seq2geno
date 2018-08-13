@@ -18,7 +18,12 @@ cat $core_genes | while read i; do echo "java -jar ~/software/jvarkit/dist/msa2v
 #vcf to indel yes/no vector, stats and gff
 cat $core_genes | while read i ; do echo "python /net/sgi/metagenomics/projects/pseudo_genomics/src/PseudoGenomics/indel_detection/vcf2indel.py $i.vcf $i ${i}_indels.txt ${i}_indels.gff ${i}_indel_stats.txt"; done
 
-python /net/sgi/metagenomics/projects/pseudo_genomics/src/PseudoGenomics/indel_detection/generate_indel_features.py <(cut -f1 ~/pseudo_genomics/results/assembly/v2/roary/v5/out_95/gene_presence_absence.Rtab | tail -n+2 | grep -v hdl )   ~/pseudo_genomics/results/classification/v6/gpa/out_95/annot.txt indel_annot.txt indels_stats.txt ~/pseudo_genomics/results/assembly/v2/abricate2roary/ncbi/roary_PA14_abricate.txt
+python /net/sgi/metagenomics/projects/pseudo_genomics/src/PseudoGenomics/indel_detection/generate_indel_features.py 
+<(cut -f1 ~/pseudo_genomics/results/assembly/v2/roary/v5/out_95/gene_presence_absence.Rtab | tail -n+2 | grep -v hdl )   
+~/pseudo_genomics/results/classification/v6/gpa/out_95/annot.txt 
+indel_annot.txt 
+indels_stats.txt 
+~/pseudo_genomics/results/assembly/v2/abricate2roary/ncbi/roary_PA14_abricate.txt
 
 
 1. target genes

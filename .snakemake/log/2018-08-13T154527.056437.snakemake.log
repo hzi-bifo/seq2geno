@@ -1,0 +1,40 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_indel_table
+	1	expand_by_family
+	3
+
+[Mon Aug 13 15:45:32 2018]
+rule expand_by_family:
+    input: tmp/extracted_proteins_nt/fhuA_3_indels.txt, tmp/extracted_proteins_nt/aaaT_indels.txt, tmp/extracted_proteins_nt/aaeA_2_indels.txt, tmp/extracted_proteins_nt/aaeA_1_indels.txt, tmp/extracted_proteins_nt/xcpW_indels.txt
+    output: tmp/indel.list
+    jobid: 19
+
+[Mon Aug 13 15:45:32 2018]
+Finished job 19.
+1 of 3 steps (33%) done
+
+[Mon Aug 13 15:45:32 2018]
+rule create_indel_table:
+    input: tmp/indel.list
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/annot.tab, indels_stats.txt
+    jobid: 1
+
+[Mon Aug 13 15:45:33 2018]
+Finished job 1.
+2 of 3 steps (67%) done
+
+[Mon Aug 13 15:45:33 2018]
+localrule all:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/annot.tab
+    jobid: 0
+
+[Mon Aug 13 15:45:33 2018]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-13T154527.056437.snakemake.log
