@@ -1,0 +1,4 @@
+NameError in line 54 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk:
+name 'params' is not defined
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/INTERFACE.smk", line 21, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_INDEL_TABLE.smk", line 54, in <module>
