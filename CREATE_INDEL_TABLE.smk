@@ -7,11 +7,6 @@ rule sort_gene_family :
             SOFTWARE['assembler'], SOFTWARE['annotator'], 
             'de_novo.ffn') for strain in STRAINS]
     output:
-        # slightly different from the original usage; 
-        # for the convinience of snakemake
-        #output_dir='extracted_proteins_nt/' 
-        #seq_files_list=temp('{TMP_D}/{extracted_proteins_dir}/families.list')
-        #aln_list='{TMP_D}/aln.list'
         aln= dynamic(os.path.join(TMP_D, 'extracted_proteins_nt', '{fam}.aln'))
     params:
         CORES= CORES,
@@ -64,22 +59,8 @@ rule expand_by_family:
 
 rule create_indel_table:
     input:
-        roary_gpa_rtab=os.path.join(TMP_D, SOFTWARE['gene_sorter'],
-            'gene_presence_absence.Rtab'),
         indel_list= os.path.join(TMP_D, 'indel.list')
     output:
         annot_f=config['indel_table'],
-        indel_annot_f='indel_annot.txt',
         indel_stat_f='indels_stats.txt',
-        roary_abricate='roary_PA14_abricate.txt'
-    params:
-        indel_tab_script='indel_detection/generate_indel_features.py'
-    shell:
-        """
-        source activate py27
-        python {params.indel_tab_script} \
-        <(cut -f1 {input[roary_gpa_rtab]}| tail -n+2 ) \
-        {output[annot_f]} {output[indel_annot_f]} \
-        {output[indel_stat_f]} {output[roary_abricate]} 
-        source deactivate
-        """
+    script: 'indel_detection/generate_indel_features.py'
