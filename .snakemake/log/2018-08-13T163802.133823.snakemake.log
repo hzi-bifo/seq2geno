@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	5	aln_to_vcf_per_fam
+	1	compute_gpa_table
+	1	create_indel_table
+	1	expand_by_family
+	5	vcf_to_indels_per_fam
+	14
+
+[Mon Aug 13 16:38:04 2018]
+rule compute_gpa_table:
+    input: tmp/roary/gene_presence_absence.csv
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/gpa.tab
+    jobid: 1
+
+    [Mon Aug 13 16:38:04 2018]
+    Error in rule compute_gpa_table:
+        jobid: 1
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/gpa.tab
+
+RuleException:
+CalledProcessError in line 12 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_GPA_TABLE.smk:
+Command ' set -euo pipefail;  Rscript /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/lib/.snakemake.cls5z7fo.roary_gpa2bin.R ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_GPA_TABLE.smk", line 12, in __rule_compute_gpa_table
+  File "/home/thkuo/miniconda3/envs/phypal/lib/python3.6/concurrent/futures/thread.py", line 55, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-13T163802.133823.snakemake.log

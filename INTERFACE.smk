@@ -43,8 +43,8 @@ rule all:
         #config['expr_table'],
         #config['syn_snps_table'],
         #config['nonsyn_snps_table'],
-        config['indel_table']
-        #config['gpa_table']
+        #config['indel_table'],
+        config['gpa_table']
 #        'tmp/indel.list'
         
     
