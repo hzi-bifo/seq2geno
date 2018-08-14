@@ -9,7 +9,7 @@ rule compute_gpa_table:
         roary_gpa=TMP_D+"/roary/gene_presence_absence.csv"
     output:
         gpa_table=config['gpa_table']
-    script: 'roary_gpa2bin.R'
+    script: 'lib/roary_gpa2bin.R'
 '''
 rule load_roary
     output:
