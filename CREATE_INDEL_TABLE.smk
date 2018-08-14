@@ -13,7 +13,7 @@ rule sort_gene_family :
         MIN_SAMPLES= 2,
         STRAINS= STRAINS,
         TMP_D= TMP_D+'/extracted_proteins_nt'
-    script: 'makeGroupAln.py'
+    script: 'lib/makeGroupAln.py'
 
 rule aln_to_vcf_per_fam:
     input:
@@ -22,7 +22,7 @@ rule aln_to_vcf_per_fam:
         FAM_VCF=os.path.join(TMP_D, 'extracted_proteins_nt', '{fam}.vcf') 
     params:
         cores= CORES,
-        msa2vcf_script='jvarkit/dist/msa2vcf.jar',
+        msa2vcf_script='lib/jvarkit/dist/msa2vcf.jar',
         working_dir='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3'
     shell:
         """
@@ -45,7 +45,7 @@ rule vcf_to_indels_per_fam:
         working_dir='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v3',
         strains_perc_cutoff= 0.5,
         len_cutoff= 8
-    script: 'indel_detection/vcf2indel.py'
+    script: 'lib/indel_detection/vcf2indel.py'
 
 rule expand_by_family:
     input:
@@ -63,4 +63,4 @@ rule create_indel_table:
     output:
         annot_f=config['indel_table'],
         indel_stat_f='indels_stats.txt',
-    script: 'indel_detection/generate_indel_features.py'
+    script: 'lib/indel_detection/generate_indel_features.py'
