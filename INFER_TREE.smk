@@ -10,11 +10,14 @@ rule find_best_tree:
         RAXML_OUTDIR= RESULT_D,
        	CORES= CORES
     shell:
-        '{params[RAXML]} -T {params[CORES]} -w {params[RAXML_OUTDIR]} '
-        '-m GTRGAMMA -s {input} -n {params[PREFIX]} -p 1 -N 1;' 
-        'cp -s {params[RAXML_OUTDIR]}/RAxML_bestTree.{params[PREFIX]} {output}'
+        """
+        {params[RAXML]} -T {params[CORES]} -w {params[RAXML_OUTDIR]} \
+        -m GTRGAMMA -s {input} -n {params[PREFIX]} -p 1 -N 1 
+        cp {params[RAXML_OUTDIR]}/RAxML_bestTree.{params[PREFIX]} {output}
+        """
 
 rule postprocess_alignment:
+    ## Remove the invariant sites
     input:
         one_big_aln='{TMP_D}/OneBig.aln'
     output:
@@ -23,7 +26,8 @@ rule postprocess_alignment:
         "trimal -st 1 -gt 1 -complementary -in {input} -out {output}"
 
 rule create_coding_regions_aln:
-### concatenate 
+    ## Sort sequences by gene family, align each family, and concatenate the
+    ## consensus sequence alignments
     input:
         cons_coding_seqs_every_strain=expand(
             "{TMP_D}/{strains}/{mapper}/cons.fa", 

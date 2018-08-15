@@ -1,0 +1,86 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_coding_regions_aln
+	4	create_consensus_sequence
+	1	create_ref_target_seqs
+	4	create_vcf
+	1	find_best_tree
+	1	load_reference
+	4	paired_mapping
+	1	postprocess_alignment
+	4	sort_bam
+	22
+
+[Tue Aug 14 16:08:25 2018]
+rule create_ref_target_seqs:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.gbk
+    output: tmp/reference.target_regions.fa
+    jobid: 22
+    wildcards: TMP_D=tmp
+
+[Tue Aug 14 16:08:28 2018]
+Finished job 22.
+1 of 22 steps (5%) done
+
+[Tue Aug 14 16:08:28 2018]
+rule load_reference:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash
+    jobid: 33
+
+Removing temporary output file /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx.
+Removing temporary output file /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash.
+[Tue Aug 14 16:08:37 2018]
+Finished job 33.
+2 of 22 steps (9%) done
+
+[Tue Aug 14 16:08:37 2018]
+rule paired_mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/F1659/bwa/paired.bam
+    jobid: 38
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Tue Aug 14 16:08:59 2018]
+Finished job 38.
+3 of 22 steps (14%) done
+
+[Tue Aug 14 16:08:59 2018]
+rule sort_bam:
+    input: tmp/F1659/bwa/paired.bam
+    output: tmp/F1659/bwa/sorted.bam, tmp/F1659/bwa/sorted.bam.bai
+    jobid: 34
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+Removing temporary output file tmp/F1659/bwa/paired.bam.
+[Tue Aug 14 16:11:37 2018]
+Finished job 34.
+4 of 22 steps (18%) done
+
+[Tue Aug 14 16:11:37 2018]
+rule create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/F1659/bwa/sorted.bam, tmp/F1659/bwa/sorted.bam.bai
+    output: tmp/F1659/bwa/vcf.gz, tmp/F1659/bwa/vcf.gz.tbi
+    jobid: 24
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+    [Tue Aug 14 16:11:46 2018]
+    Error in rule create_vcf:
+        jobid: 24
+        output: tmp/F1659/bwa/vcf.gz, tmp/F1659/bwa/vcf.gz.tbi
+
+RuleException:
+CalledProcessError in line 18 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/DETECT_SNPS.smk:
+Command ' set -euo pipefail;  
+        freebayes-parallel <(fasta_generate_regions.py /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai 100000) 16 -f /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/F1659/bwa/sorted.bam |         bgzip -c tmp/F1659/bwa/vcf.gz
+        tabix -p vcf tmp/F1659/bwa/vcf.gz ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/DETECT_SNPS.smk", line 18, in __rule_create_vcf
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-14T160820.652296.snakemake.log
