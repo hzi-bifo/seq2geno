@@ -1,0 +1,4 @@
+Building DAG of jobs...
+WildcardError in line 1 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/MAKE_CONS.smk:
+Wildcards in input files cannot be determined from output files:
+'strain'

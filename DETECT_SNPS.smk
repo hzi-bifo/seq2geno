@@ -17,7 +17,7 @@ rule create_vcf:
     shell:
         """
         freebayes-parallel <(fasta_generate_regions.py {input[REF_FA_INDEX]} 100000) {params[CORES]} -f {input[REF]} {input[BAM]} | \
-        bgzip -c {output[vcf_gz]}
+        bgzip -c > {output[vcf_gz]}
         tabix -p vcf {output[vcf_gz]}
         """ 
 
