@@ -30,10 +30,10 @@ include: "DETECT_SNPS.smk"
 
 rule all:
     input:
-        config['tree'],
-        #config['expr_table'],
+        #config['tree'],
+        config['expr_table']
         #config['syn_snps_table'],
         #config['nonsyn_snps_table'],
-        config['indel_table'],
-        config['gpa_table']
+        #config['indel_table'],
+        #config['gpa_table']
         
