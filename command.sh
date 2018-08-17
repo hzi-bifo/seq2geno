@@ -5,4 +5,4 @@
 
 cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4 
 source activate seq2geno
-snakemake --snakefile=INTERFACE.smk
+snakemake --notemp --snakefile=INTERFACE.smk

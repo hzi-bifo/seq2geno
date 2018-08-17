@@ -1,0 +1,360 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	all_snps_table
+	4	compute_flatcounts
+	4	count_cov
+	4	create_vcf
+	4	filter_vcf
+	4	index_vcf
+	1	load_reference
+	1	nonsyn_snps_table
+	4	paired_mapping
+	4	sort_bam
+	1	syn_snps_table
+	33
+
+[Wed Aug 15 16:57:21 2018]
+rule load_reference:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash
+    jobid: 25
+
+[Wed Aug 15 16:57:29 2018]
+Finished job 25.
+1 of 33 steps (3%) done
+
+[Wed Aug 15 16:57:29 2018]
+rule paired_mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/F1659/bwa/paired.bam
+    jobid: 31
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Wed Aug 15 16:57:51 2018]
+Finished job 31.
+2 of 33 steps (6%) done
+
+[Wed Aug 15 16:57:51 2018]
+rule sort_bam:
+    input: tmp/F1659/bwa/paired.bam
+    output: tmp/F1659/bwa/sorted.bam, tmp/F1659/bwa/sorted.bam.bai
+    jobid: 27
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Wed Aug 15 17:00:30 2018]
+Finished job 27.
+3 of 33 steps (9%) done
+
+[Wed Aug 15 17:00:30 2018]
+rule create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/F1659/bwa/sorted.bam, tmp/F1659/bwa/sorted.bam.bai
+    output: tmp/F1659/bwa/vcf.gz
+    jobid: 19
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Wed Aug 15 17:01:10 2018]
+Finished job 19.
+4 of 33 steps (12%) done
+
+[Wed Aug 15 17:01:10 2018]
+rule count_cov:
+    input: tmp/F1659/bwa/sorted.bam
+    output: tmp/F1659/bwa/mapping.coverage
+    jobid: 20
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Wed Aug 15 17:01:28 2018]
+Finished job 20.
+5 of 33 steps (15%) done
+
+[Wed Aug 15 17:01:28 2018]
+rule paired_mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2500/bwa/paired.bam
+    jobid: 32
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Wed Aug 15 17:01:43 2018]
+Finished job 32.
+6 of 33 steps (18%) done
+
+[Wed Aug 15 17:01:43 2018]
+rule sort_bam:
+    input: tmp/CH2500/bwa/paired.bam
+    output: tmp/CH2500/bwa/sorted.bam, tmp/CH2500/bwa/sorted.bam.bai
+    jobid: 28
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Wed Aug 15 17:02:51 2018]
+Finished job 28.
+7 of 33 steps (21%) done
+
+[Wed Aug 15 17:02:51 2018]
+rule create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/CH2500/bwa/sorted.bam, tmp/CH2500/bwa/sorted.bam.bai
+    output: tmp/CH2500/bwa/vcf.gz
+    jobid: 22
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Wed Aug 15 17:03:12 2018]
+Finished job 22.
+8 of 33 steps (24%) done
+
+[Wed Aug 15 17:03:12 2018]
+rule count_cov:
+    input: tmp/CH2500/bwa/sorted.bam
+    output: tmp/CH2500/bwa/mapping.coverage
+    jobid: 21
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Wed Aug 15 17:03:23 2018]
+Finished job 21.
+9 of 33 steps (27%) done
+
+[Wed Aug 15 17:03:23 2018]
+rule paired_mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2522_1.fq.gz, data/strains/dna/CH2522_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2522/bwa/paired.bam
+    jobid: 30
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Wed Aug 15 17:03:39 2018]
+Finished job 30.
+10 of 33 steps (30%) done
+
+[Wed Aug 15 17:03:39 2018]
+rule sort_bam:
+    input: tmp/CH2522/bwa/paired.bam
+    output: tmp/CH2522/bwa/sorted.bam, tmp/CH2522/bwa/sorted.bam.bai
+    jobid: 26
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Wed Aug 15 17:04:45 2018]
+Finished job 26.
+11 of 33 steps (33%) done
+
+[Wed Aug 15 17:04:45 2018]
+rule create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/CH2522/bwa/sorted.bam, tmp/CH2522/bwa/sorted.bam.bai
+    output: tmp/CH2522/bwa/vcf.gz
+    jobid: 14
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Wed Aug 15 17:05:23 2018]
+Finished job 14.
+12 of 33 steps (36%) done
+
+[Wed Aug 15 17:05:23 2018]
+rule count_cov:
+    input: tmp/CH2522/bwa/sorted.bam
+    output: tmp/CH2522/bwa/mapping.coverage
+    jobid: 17
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Wed Aug 15 17:05:34 2018]
+Finished job 17.
+13 of 33 steps (39%) done
+
+[Wed Aug 15 17:05:34 2018]
+rule paired_mapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, data/strains/dna/CH2502_1.fq.gz, data/strains/dna/CH2502_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2502/bwa/paired.bam
+    jobid: 29
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Wed Aug 15 17:05:49 2018]
+Finished job 29.
+14 of 33 steps (42%) done
+
+[Wed Aug 15 17:05:49 2018]
+rule sort_bam:
+    input: tmp/CH2502/bwa/paired.bam
+    output: tmp/CH2502/bwa/sorted.bam, tmp/CH2502/bwa/sorted.bam.bai
+    jobid: 24
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Wed Aug 15 17:06:50 2018]
+Finished job 24.
+15 of 33 steps (45%) done
+
+[Wed Aug 15 17:06:50 2018]
+rule create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/CH2502/bwa/sorted.bam, tmp/CH2502/bwa/sorted.bam.bai
+    output: tmp/CH2502/bwa/vcf.gz
+    jobid: 13
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Wed Aug 15 17:07:21 2018]
+Finished job 13.
+16 of 33 steps (48%) done
+
+[Wed Aug 15 17:07:21 2018]
+rule count_cov:
+    input: tmp/CH2502/bwa/sorted.bam
+    output: tmp/CH2502/bwa/mapping.coverage
+    jobid: 16
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Wed Aug 15 17:07:31 2018]
+Finished job 16.
+17 of 33 steps (52%) done
+
+[Wed Aug 15 17:07:31 2018]
+rule compute_flatcounts:
+    input: tmp/F1659/bwa/mapping.coverage
+    output: tmp/F1659/bwa/variant.flatcount
+    jobid: 9
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Wed Aug 15 17:07:42 2018]
+Finished job 9.
+18 of 33 steps (55%) done
+
+[Wed Aug 15 17:07:42 2018]
+rule compute_flatcounts:
+    input: tmp/CH2500/bwa/mapping.coverage
+    output: tmp/CH2500/bwa/variant.flatcount
+    jobid: 10
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Wed Aug 15 17:07:54 2018]
+Finished job 10.
+19 of 33 steps (58%) done
+
+[Wed Aug 15 17:07:54 2018]
+rule compute_flatcounts:
+    input: tmp/CH2522/bwa/mapping.coverage
+    output: tmp/CH2522/bwa/variant.flatcount
+    jobid: 7
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Wed Aug 15 17:08:05 2018]
+Finished job 7.
+20 of 33 steps (61%) done
+
+[Wed Aug 15 17:08:05 2018]
+rule compute_flatcounts:
+    input: tmp/CH2502/bwa/mapping.coverage
+    output: tmp/CH2502/bwa/variant.flatcount
+    jobid: 6
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Wed Aug 15 17:08:16 2018]
+Finished job 6.
+21 of 33 steps (64%) done
+
+[Wed Aug 15 17:08:16 2018]
+rule index_vcf:
+    input: tmp/CH2522/bwa/vcf.gz
+    output: tmp/CH2522/bwa/vcf.gz.tbi
+    jobid: 15
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Wed Aug 15 17:08:16 2018]
+Finished job 15.
+22 of 33 steps (67%) done
+
+[Wed Aug 15 17:08:16 2018]
+rule filter_vcf:
+    input: tmp/CH2522/bwa/vcf.gz, tmp/CH2522/bwa/vcf.gz.tbi
+    output: tmp/CH2522/bwa/variant.snp-vcf
+    jobid: 5
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Wed Aug 15 17:08:19 2018]
+Finished job 5.
+23 of 33 steps (70%) done
+
+[Wed Aug 15 17:08:19 2018]
+rule index_vcf:
+    input: tmp/CH2502/bwa/vcf.gz
+    output: tmp/CH2502/bwa/vcf.gz.tbi
+    jobid: 12
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Wed Aug 15 17:08:20 2018]
+Finished job 12.
+24 of 33 steps (73%) done
+
+[Wed Aug 15 17:08:20 2018]
+rule filter_vcf:
+    input: tmp/CH2502/bwa/vcf.gz, tmp/CH2502/bwa/vcf.gz.tbi
+    output: tmp/CH2502/bwa/variant.snp-vcf
+    jobid: 4
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Wed Aug 15 17:08:22 2018]
+Finished job 4.
+25 of 33 steps (76%) done
+
+[Wed Aug 15 17:08:22 2018]
+rule index_vcf:
+    input: tmp/F1659/bwa/vcf.gz
+    output: tmp/F1659/bwa/vcf.gz.tbi
+    jobid: 18
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Wed Aug 15 17:08:23 2018]
+Finished job 18.
+26 of 33 steps (79%) done
+
+[Wed Aug 15 17:08:23 2018]
+rule filter_vcf:
+    input: tmp/F1659/bwa/vcf.gz, tmp/F1659/bwa/vcf.gz.tbi
+    output: tmp/F1659/bwa/variant.snp-vcf
+    jobid: 8
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Wed Aug 15 17:08:25 2018]
+Finished job 8.
+27 of 33 steps (82%) done
+
+[Wed Aug 15 17:08:25 2018]
+rule index_vcf:
+    input: tmp/CH2500/bwa/vcf.gz
+    output: tmp/CH2500/bwa/vcf.gz.tbi
+    jobid: 23
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Wed Aug 15 17:08:25 2018]
+Finished job 23.
+28 of 33 steps (85%) done
+
+[Wed Aug 15 17:08:25 2018]
+rule filter_vcf:
+    input: tmp/CH2500/bwa/vcf.gz, tmp/CH2500/bwa/vcf.gz.tbi
+    output: tmp/CH2500/bwa/variant.snp-vcf
+    jobid: 11
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Wed Aug 15 17:08:25 2018]
+Finished job 11.
+29 of 33 steps (88%) done
+
+[Wed Aug 15 17:08:26 2018]
+rule all_snps_table:
+    input: tmp/CH2500/bwa/variant.flatcount, tmp/CH2502/bwa/variant.flatcount, tmp/CH2522/bwa/variant.flatcount, tmp/F1659/bwa/variant.flatcount, tmp/CH2500/bwa/variant.snp-vcf, tmp/CH2502/bwa/variant.snp-vcf, tmp/CH2522/bwa/variant.snp-vcf, tmp/F1659/bwa/variant.snp-vcf, strain_list, Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab
+    output: tmp/all_SNPs.tab
+    jobid: 3
+
+    [Wed Aug 15 17:08:33 2018]
+    Error in rule all_snps_table:
+        jobid: 3
+        output: tmp/all_SNPs.tab
+
+RuleException:
+CalledProcessError in line 50 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_SNPS_TABLE.smk:
+Command ' set -euo pipefail;  
+        source activate py27
+        python ./mutation_table.v5.py  -f strain_list         -a Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab -o tmp/all_SNPs.tab
+        source deactivate ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/CREATE_SNPS_TABLE.smk", line 50, in __rule_all_snps_table
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/.snakemake/log/2018-08-15T165720.579225.snakemake.log
