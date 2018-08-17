@@ -127,7 +127,7 @@ names.sort()
 counts_list= {}
 for name in names:
     print(name)
-    flc_f= 'tmp/'+name+'/bwa.flatcount'
+    flc_f= 'tmp/'+name+'/bwa/variant.flatcount'
     counts= load_flatcount(flc_f)
     counts_list[name]= counts
 counts_df= pd.DataFrame(data= counts_list)
@@ -158,7 +158,7 @@ print('counts_df: {}-by-{}'.format(str(counts_df.shape[0]), str(counts_df.shape[
 
 #with open(Args.DictFile) as infile:
 for name in names:
-    filename = 'tmp/'+name+"/bwa.snp-vcf"
+    filename = 'tmp/'+name+"/bwa/variant.snp-vcf"
 
     print(filename)
     vcf_df= pd.read_csv(filename, sep= '\t', comment= '#', 
