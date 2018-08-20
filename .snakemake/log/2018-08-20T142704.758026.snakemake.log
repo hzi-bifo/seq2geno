@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 20 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk:
+Missing input files for rule syn_snps_table:
+/all_SNPs.tsv

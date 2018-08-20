@@ -27,6 +27,7 @@ include: "CONSTRUCT_ASSEMBLY.smk"
 include: "MAKE_CONS.smk"
 include: "INFER_TREE.smk"
 include: "DETECT_SNPS.smk"
+include: "DETECT_SNPS_FOR_TABLE.smk"
 
 rule all:
     input:
