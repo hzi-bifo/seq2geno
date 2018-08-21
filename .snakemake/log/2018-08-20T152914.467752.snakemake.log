@@ -1,0 +1,6 @@
+Building DAG of jobs...
+InputFunctionException in line 62 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk:
+AttributeError: 'Wildcards' object has no attribute 'sample'
+Wildcards:
+TMP_D=tmp
+strain=CH2522
