@@ -1,0 +1,10 @@
+Building DAG of jobs...
+AmbiguousRuleException:
+Rules stampy_remapping and for_tab_sort_bam are ambiguous for the file tmp/CH2502/bwa/st_sorted.bam.
+Consider starting rule output with a unique prefix or constrain your wildcards.
+Wildcards:
+	stampy_remapping: TMP_D=tmp,mapper=bwa,strain=CH2502
+	for_tab_sort_bam: TMP_D=tmp,mapper=bwa,strain=CH2502
+Expected input files:
+	stampy_remapping: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash tmp/CH2502/dna.bwa.bam
+	for_tab_sort_bam: tmp/CH2502/bwa/st_paired.bam
