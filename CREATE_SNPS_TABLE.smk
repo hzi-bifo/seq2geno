@@ -72,15 +72,22 @@ rule all_snps_table:
         source deactivate
         """
 
+
 rule compute_flatcounts:
     input:
-        cov_f='{TMP_D}/{strain}/{mapper}/st_mapping.coverage'
+        STAMPY_SAM= temp('{TMP_D}/{strain}/{mapper}/st_paired.sam')
     output:
-        flt_f='{TMP_D}/{strain}/{mapper}/st_variant.flatcount'
+        flt_f='{TMP_D}/{strain}/{mapper}/st_variant.flatcount',
+        sin_f='{TMP_D}/{strain}/{mapper}/st_variant.sin',
+        art_f='{TMP_D}/{strain}/{mapper}/st_variant.art'
     params:
-        script_f="lib/bam_cov2flatcount.py" 
+        script_f="lib/sam2art.pl"
     shell:
-       'python {params[script_f]} -in_f {input[cov_f]} -out_f {output[flt_f]}'
+        """
+        sam2art.pl -s 2 -p -4 {input.STAMPY_SAM} > {output.art_f} 
+        sam2art.pl -s 2 -l -p -4 {input.STAMPY_SAM} > {output.sin_f}
+        sam2art.pl -f -s 2 -p {input.STAMPY_SAM} > {output.flt_f}
+        """
 
 rule count_cov:
     input:
