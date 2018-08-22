@@ -1,0 +1,136 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	all_snps_list
+	4	compute_flatcounts
+	1	covert_snps_table
+	1	create_dict_file
+	4	for_tab_copy_files
+	1	nonsyn_snps_table
+	1	syn_snps_table
+	14
+
+[Tue Aug 21 17:17:26 2018]
+rule compute_flatcounts:
+    input: tmp/F1659/bwa/st_paired.sam
+    output: tmp/F1659/bwa/st_variant.fltcnt, tmp/F1659/bwa/st_variant.sin, tmp/F1659/bwa/st_variant.art
+    jobid: 5
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Tue Aug 21 17:19:06 2018]
+Finished job 5.
+1 of 14 steps (7%) done
+
+[Tue Aug 21 17:19:06 2018]
+rule compute_flatcounts:
+    input: tmp/CH2500/bwa/st_paired.sam
+    output: tmp/CH2500/bwa/st_variant.fltcnt, tmp/CH2500/bwa/st_variant.sin, tmp/CH2500/bwa/st_variant.art
+    jobid: 13
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+[Tue Aug 21 17:20:17 2018]
+Finished job 13.
+2 of 14 steps (14%) done
+
+[Tue Aug 21 17:20:17 2018]
+rule compute_flatcounts:
+    input: tmp/CH2522/bwa/st_paired.sam
+    output: tmp/CH2522/bwa/st_variant.fltcnt, tmp/CH2522/bwa/st_variant.sin, tmp/CH2522/bwa/st_variant.art
+    jobid: 8
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+[Tue Aug 21 17:21:27 2018]
+Finished job 8.
+3 of 14 steps (21%) done
+
+[Tue Aug 21 17:21:27 2018]
+rule compute_flatcounts:
+    input: tmp/CH2502/bwa/st_paired.sam
+    output: tmp/CH2502/bwa/st_variant.fltcnt, tmp/CH2502/bwa/st_variant.sin, tmp/CH2502/bwa/st_variant.art
+    jobid: 12
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+[Tue Aug 21 17:22:36 2018]
+Finished job 12.
+4 of 14 steps (29%) done
+
+[Tue Aug 21 17:22:36 2018]
+rule for_tab_copy_files:
+    input: tmp/CH2502/bwa/st_variant.fltcnt, tmp/CH2502/bwa/st_variant.snp-vcf
+    output: CH2502.flatcount, CH2502.flt.vcf
+    jobid: 11
+    wildcards: strain=CH2502
+
+[Tue Aug 21 17:22:36 2018]
+Finished job 11.
+5 of 14 steps (36%) done
+
+[Tue Aug 21 17:22:36 2018]
+rule for_tab_copy_files:
+    input: tmp/CH2522/bwa/st_variant.fltcnt, tmp/CH2522/bwa/st_variant.snp-vcf
+    output: CH2522.flatcount, CH2522.flt.vcf
+    jobid: 10
+    wildcards: strain=CH2522
+
+[Tue Aug 21 17:22:36 2018]
+Finished job 10.
+6 of 14 steps (43%) done
+
+[Tue Aug 21 17:22:36 2018]
+rule for_tab_copy_files:
+    input: tmp/F1659/bwa/st_variant.fltcnt, tmp/F1659/bwa/st_variant.snp-vcf
+    output: F1659.flatcount, F1659.flt.vcf
+    jobid: 7
+    wildcards: strain=F1659
+
+[Tue Aug 21 17:22:37 2018]
+Finished job 7.
+7 of 14 steps (50%) done
+
+[Tue Aug 21 17:22:37 2018]
+rule for_tab_copy_files:
+    input: tmp/CH2500/bwa/st_variant.fltcnt, tmp/CH2500/bwa/st_variant.snp-vcf
+    output: CH2500.flatcount, CH2500.flt.vcf
+    jobid: 6
+    wildcards: strain=CH2500
+
+[Tue Aug 21 17:22:37 2018]
+Finished job 6.
+8 of 14 steps (57%) done
+
+[Tue Aug 21 17:22:37 2018]
+rule create_dict_file:
+    input: CH2500.flt.vcf, CH2502.flt.vcf, CH2522.flt.vcf, F1659.flt.vcf, CH2500.flatcount, CH2502.flatcount, CH2522.flatcount, F1659.flatcount
+    output: dict.txt
+    jobid: 9
+
+[Tue Aug 21 17:22:37 2018]
+Finished job 9.
+9 of 14 steps (64%) done
+
+[Tue Aug 21 17:22:37 2018]
+rule all_snps_list:
+    input: tmp/CH2500/bwa/st_variant.fltcnt, tmp/CH2502/bwa/st_variant.fltcnt, tmp/CH2522/bwa/st_variant.fltcnt, tmp/F1659/bwa/st_variant.fltcnt, CH2500.flt.vcf, CH2502.flt.vcf, CH2522.flt.vcf, F1659.flt.vcf, dict.txt, Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab
+    output: /DNA_Pool1_final.tab
+    jobid: 4
+
+    [Tue Aug 21 17:27:54 2018]
+    Error in rule all_snps_list:
+        jobid: 4
+        output: /DNA_Pool1_final.tab
+
+RuleException:
+CalledProcessError in line 118 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk:
+Command ' set -euo pipefail;  
+        source activate py27
+        python snps_original_methods/mutation_table.py  -f dict.txt         -a Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab         -o /DNA_Pool1_final.tab
+        source deactivate ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk", line 118, in __rule_all_snps_list
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-08-21T171721.256073.snakemake.log

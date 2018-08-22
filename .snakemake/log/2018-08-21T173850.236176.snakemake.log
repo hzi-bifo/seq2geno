@@ -1,0 +1,45 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	all_snps_list
+	1	covert_snps_table
+	1	nonsyn_snps_table
+	1	syn_snps_table
+	5
+
+[Tue Aug 21 17:38:55 2018]
+rule all_snps_list:
+    input: CH2500.flatcount, CH2502.flatcount, CH2522.flatcount, F1659.flatcount, CH2500.flt.vcf, CH2502.flt.vcf, CH2522.flt.vcf, F1659.flt.vcf, dict.txt, Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab
+    output: tmp/DNA_Pool1_final.tab
+    jobid: 4
+
+[Tue Aug 21 17:43:10 2018]
+Finished job 4.
+1 of 5 steps (20%) done
+
+[Tue Aug 21 17:43:10 2018]
+rule syn_snps_table:
+    input: tmp/DNA_Pool1_final.tab, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.gbk
+    output: /syn_SNPs.tab
+    jobid: 2
+
+    [Tue Aug 21 17:43:12 2018]
+    Error in rule syn_snps_table:
+        jobid: 2
+        output: /syn_SNPs.tab
+
+RuleException:
+CalledProcessError in line 29 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk:
+Command ' set -euo pipefail;  
+        source activate py27
+        python snps_original_methods/Snp2Amino.edit.py -f tmp/DNA_Pool1_final.tab -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.gbk         -n syn         -o /syn_SNPs.tab 
+        source deactivate ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk", line 29, in __rule_syn_snps_table
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-08-21T173850.236176.snakemake.log

@@ -1,0 +1,7 @@
+Building DAG of jobs...
+InputFunctionException in line 87 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk:
+KeyError: 'the label [st_variant] is not in the [index]'
+Wildcards:
+TMP_D=tmp/tmp/CH2502/bwa
+strain=st_variant
+mapper=bwa

@@ -1,6 +1,6 @@
 tmp_d: 'tmp'
-result_d: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results'
-working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4'
+result_d: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results'
+working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5'
 
 ###### external executives
 stampy_exe: '/home/thkuo/bin/stampy-1.0.23/stampy.py'
@@ -18,17 +18,17 @@ cores: 16
 
 ##### files
 #### sample wise
-samples: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/samples.tsv'
+samples: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/samples.tsv'
 #### only one
-reference_sequence: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa'
-reference_annotation: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.gbk'
+reference_sequence: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa'
+reference_annotation: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.gbk'
 ##roary_gpa:
-tree: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/Paeru.nwk'
-gpa_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/gpa.tab'
-syn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/syn_snps.tab'
-nonsyn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/nonsyn_snps.tab'
-expr_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/expr.tab'
-indel_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/results/annot.tab'
+tree: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/Paeru.nwk'
+gpa_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/gpa.tab'
+syn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/syn_snps.tab'
+nonsyn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/nonsyn_snps.tab'
+expr_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/expr.tab'
+indel_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/annot.tab'
 ##pheno_table: 
 ##ml_markdown:
 
