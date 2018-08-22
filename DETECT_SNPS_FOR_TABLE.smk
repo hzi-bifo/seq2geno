@@ -18,8 +18,8 @@ rule for_tab_create_vcf:
         BAM="{TMP_D}/{strain}/{mapper}/st_sorted.bam",
         BAM_INDEX="{TMP_D}/{strain}/{mapper}/st_sorted.bam.bai"
     output:
-        bcf_out=temp("{TMP_D}/{strain}/{mapper}/st_vcf.bcf")
-        vcf_out=temp("{TMP_D}/{strain}/{mapper}/st_vcf.flt.vcf")
+        bcf_out=temp("{TMP_D}/{strain}/{mapper}/st_vcf.bcf"),
+        vcf_out=temp("{TMP_D}/{strain}/{mapper}/st_variant.snp-vcf")
 #        vcf_gz="{TMP_D}/{strain}/{mapper}/st_vcf.gz"
     params: 
         VCFUTIL_EXE='lib/vcfutils.pl',
@@ -28,8 +28,10 @@ rule for_tab_create_vcf:
         
     shell:
         """
+        source activate Ariane_dna
         samtools mpileup -uf {input.REF} {input.BAM} | bcftools view -bvcg - > {output.bcf_out}
-        bcftools view {output.bcf_out} | {params.VCFUTILS} varFilter -d {params.minDepth} > {output.vcf_out}
+        bcftools view {output.bcf_out} | {params.VCFUTIL_EXE} varFilter -d {params.minDepth} > {output.vcf_out}
+        source deactivate
         """ 
 
 rule for_tab_sort_bam:
@@ -40,8 +42,10 @@ rule for_tab_sort_bam:
         sorted_bam_index=temp("{TMP_D}/{strain}/{mapper}/st_sorted.bam.bai")
     shell:
         """
+        source activate Ariane_dna
         bamtools sort -in {input} -out {output[sorted_bam]}
         samtools index {output[sorted_bam]}
+        source deactivate
         """
 
 rule for_tab_sam2bam:
@@ -53,8 +57,10 @@ rule for_tab_sam2bam:
         CORES=CORES
     shell:
         """
+        source activate Ariane_dna
         samtools view -bS -@ {params.CORES} \
         {input.STAMPY_SAM} > {output.STAMPY_BAM}
+        source deactivate
         """
 
 rule for_tab_stampy_remapping:
@@ -75,6 +81,7 @@ rule for_tab_stampy_remapping:
         -g {params.REF_PREFIX} -h {params.REF_PREFIX} \
         -t{params.CORES}  --bamkeepgoodreads -M  {input[BWA_BAM]}\
         > {output.STAMPY_SAM}
+        source deactivate
         """
 
 rule for_tab_paired_read_bwa_mapping:

@@ -1,0 +1,78 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	all_snps_list
+	4	compute_flatcounts
+	1	covert_snps_table
+	1	create_dict_file
+	4	for_tab_copy_vcf
+	4	for_tab_create_vcf
+	3	for_tab_paired_read_bwa_mapping
+	4	for_tab_sam2bam
+	4	for_tab_sort_bam
+	3	for_tab_stampy_remapping
+	1	nonsyn_snps_table
+	1	syn_snps_table
+	32
+
+[Tue Aug 21 15:18:52 2018]
+rule for_tab_sam2bam:
+    input: tmp/F1659/bwa/st_paired.sam
+    output: tmp/F1659/bwa/st_paired.bam
+    jobid: 34
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Tue Aug 21 15:18:58 2018]
+Finished job 34.
+1 of 32 steps (3%) done
+
+[Tue Aug 21 15:18:58 2018]
+rule compute_flatcounts:
+    input: tmp/F1659/bwa/st_paired.sam
+    output: tmp/F1659/bwa/st_variant.flatcount, tmp/F1659/bwa/st_variant.sin, tmp/F1659/bwa/st_variant.art
+    jobid: 10
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Tue Aug 21 15:20:34 2018]
+Finished job 10.
+2 of 32 steps (6%) done
+
+[Tue Aug 21 15:20:34 2018]
+rule for_tab_sort_bam:
+    input: tmp/F1659/bwa/st_paired.bam
+    output: tmp/F1659/bwa/st_sorted.bam, tmp/F1659/bwa/st_sorted.bam.bai
+    jobid: 30
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Tue Aug 21 15:23:11 2018]
+Finished job 30.
+3 of 32 steps (9%) done
+
+[Tue Aug 21 15:23:11 2018]
+rule for_tab_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/F1659/bwa/st_sorted.bam, tmp/F1659/bwa/st_sorted.bam.bai
+    output: tmp/F1659/bwa/st_vcf.bcf, tmp/F1659/bwa/st_variant.snp-vcf
+    jobid: 21
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+    [Tue Aug 21 15:23:12 2018]
+    Error in rule for_tab_create_vcf:
+        jobid: 21
+        output: tmp/F1659/bwa/st_vcf.bcf, tmp/F1659/bwa/st_variant.snp-vcf
+
+RuleException:
+CalledProcessError in line 30 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk:
+Command ' set -euo pipefail;  
+        samtools mpileup -uf /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/F1659/bwa/st_sorted.bam | bcftools view -bvcg - > tmp/F1659/bwa/st_vcf.bcf
+        bcftools view tmp/F1659/bwa/st_vcf.bcf | lib/vcfutils.pl varFilter -d 0 > tmp/F1659/bwa/st_variant.snp-vcf ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk", line 30, in __rule_for_tab_create_vcf
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Removing output files of failed job for_tab_create_vcf since they might be corrupted:
+tmp/F1659/bwa/st_vcf.bcf
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-08-21T151850.712730.snakemake.log

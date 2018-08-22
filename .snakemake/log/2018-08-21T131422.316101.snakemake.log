@@ -1,0 +1,369 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	all
+	1	all_snps_table
+	4	compute_flatcounts
+	1	covert_snps_table
+	1	create_dict_file
+	4	for_tab_copy_vcf
+	4	for_tab_create_vcf
+	4	for_tab_paired_read_bwa_mapping
+	4	for_tab_sam2bam
+	4	for_tab_sort_bam
+	4	for_tab_stampy_remapping
+	1	syn_snps_table
+	33
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_paired_read_bwa_mapping:
+    input: data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/F1659/bwa/dna1.bwa.sai, tmp/F1659/bwa/dna2.bwa.sai, tmp/F1659/bwa/dna.bwa.bam
+    jobid: 28
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/F1659_1.fq.gz         > tmp/F1659/bwa/dna1.bwa.sai
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/F1659_2.fq.gz         > tmp/F1659/bwa/dna2.bwa.sai 
+
+        bwa sampe /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/F1659/bwa/dna1.bwa.sai tmp/F1659/bwa/dna2.bwa.sai         data/strains/dna/F1659_1.fq.gz data/strains/dna/F1659_2.fq.gz |         samtools view -bS -@ 16         > tmp/F1659/bwa/dna.bwa.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2522_1.fq.gz, data/strains/dna/CH2522_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2522/bwa/dna1.bwa.sai, tmp/CH2522/bwa/dna2.bwa.sai, tmp/CH2522/bwa/dna.bwa.bam
+    jobid: 31
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2522_1.fq.gz         > tmp/CH2522/bwa/dna1.bwa.sai
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2522_2.fq.gz         > tmp/CH2522/bwa/dna2.bwa.sai 
+
+        bwa sampe /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/CH2522/bwa/dna1.bwa.sai tmp/CH2522/bwa/dna2.bwa.sai         data/strains/dna/CH2522_1.fq.gz data/strains/dna/CH2522_2.fq.gz |         samtools view -bS -@ 16         > tmp/CH2522/bwa/dna.bwa.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2500/bwa/dna1.bwa.sai, tmp/CH2500/bwa/dna2.bwa.sai, tmp/CH2500/bwa/dna.bwa.bam
+    jobid: 30
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2500_1.fq.gz         > tmp/CH2500/bwa/dna1.bwa.sai
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2500_2.fq.gz         > tmp/CH2500/bwa/dna2.bwa.sai 
+
+        bwa sampe /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/CH2500/bwa/dna1.bwa.sai tmp/CH2500/bwa/dna2.bwa.sai         data/strains/dna/CH2500_1.fq.gz data/strains/dna/CH2500_2.fq.gz |         samtools view -bS -@ 16         > tmp/CH2500/bwa/dna.bwa.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2502_1.fq.gz, data/strains/dna/CH2502_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2502/bwa/dna1.bwa.sai, tmp/CH2502/bwa/dna2.bwa.sai, tmp/CH2502/bwa/dna.bwa.bam
+    jobid: 32
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2502_1.fq.gz         > tmp/CH2502/bwa/dna1.bwa.sai
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2502_2.fq.gz         > tmp/CH2502/bwa/dna2.bwa.sai 
+
+        bwa sampe /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/CH2502/bwa/dna1.bwa.sai tmp/CH2502/bwa/dna2.bwa.sai         data/strains/dna/CH2502_1.fq.gz data/strains/dna/CH2502_2.fq.gz |         samtools view -bS -@ 16         > tmp/CH2502/bwa/dna.bwa.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, tmp/CH2502/bwa/dna.bwa.bam
+    output: tmp/CH2502/bwa/st_paired.sam
+    jobid: 24
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+        source activate py27
+        /home/thkuo/bin/stampy-1.0.23/stampy.py         -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa -h /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa         -t16  --bamkeepgoodreads -M  tmp/CH2502/bwa/dna.bwa.bam        > tmp/CH2502/bwa/st_paired.sam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, tmp/CH2522/bwa/dna.bwa.bam
+    output: tmp/CH2522/bwa/st_paired.sam
+    jobid: 23
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+        source activate py27
+        /home/thkuo/bin/stampy-1.0.23/stampy.py         -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa -h /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa         -t16  --bamkeepgoodreads -M  tmp/CH2522/bwa/dna.bwa.bam        > tmp/CH2522/bwa/st_paired.sam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, tmp/F1659/bwa/dna.bwa.bam
+    output: tmp/F1659/bwa/st_paired.sam
+    jobid: 16
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+        source activate py27
+        /home/thkuo/bin/stampy-1.0.23/stampy.py         -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa -h /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa         -t16  --bamkeepgoodreads -M  tmp/F1659/bwa/dna.bwa.bam        > tmp/F1659/bwa/st_paired.sam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.sthash, tmp/CH2500/bwa/dna.bwa.bam
+    output: tmp/CH2500/bwa/st_paired.sam
+    jobid: 22
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+        source activate py27
+        /home/thkuo/bin/stampy-1.0.23/stampy.py         -g /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa -h /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa         -t16  --bamkeepgoodreads -M  tmp/CH2500/bwa/dna.bwa.bam        > tmp/CH2500/bwa/st_paired.sam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sam2bam:
+    input: tmp/F1659/bwa/st_paired.sam
+    output: tmp/F1659/bwa/st_paired.bam
+    jobid: 27
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+        samtools view -bS -@ 16         tmp/F1659/bwa/st_paired.sam > tmp/F1659/bwa/st_paired.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule compute_flatcounts:
+    input: tmp/CH2500/bwa/st_paired.sam
+    output: tmp/CH2500/bwa/st_variant.flatcount, tmp/CH2500/bwa/st_variant.sin, tmp/CH2500/bwa/st_variant.art
+    jobid: 9
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+        sam2art.pl -s 2 -p -4 tmp/CH2500/bwa/st_paired.sam > tmp/CH2500/bwa/st_variant.art 
+        sam2art.pl -s 2 -l -p -4 tmp/CH2500/bwa/st_paired.sam > tmp/CH2500/bwa/st_variant.sin
+        sam2art.pl -f -s 2 -p tmp/CH2500/bwa/st_paired.sam > tmp/CH2500/bwa/st_variant.flatcount
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule compute_flatcounts:
+    input: tmp/F1659/bwa/st_paired.sam
+    output: tmp/F1659/bwa/st_variant.flatcount, tmp/F1659/bwa/st_variant.sin, tmp/F1659/bwa/st_variant.art
+    jobid: 6
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+        sam2art.pl -s 2 -p -4 tmp/F1659/bwa/st_paired.sam > tmp/F1659/bwa/st_variant.art 
+        sam2art.pl -s 2 -l -p -4 tmp/F1659/bwa/st_paired.sam > tmp/F1659/bwa/st_variant.sin
+        sam2art.pl -f -s 2 -p tmp/F1659/bwa/st_paired.sam > tmp/F1659/bwa/st_variant.flatcount
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sam2bam:
+    input: tmp/CH2500/bwa/st_paired.sam
+    output: tmp/CH2500/bwa/st_paired.bam
+    jobid: 29
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+        samtools view -bS -@ 16         tmp/CH2500/bwa/st_paired.sam > tmp/CH2500/bwa/st_paired.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sam2bam:
+    input: tmp/CH2502/bwa/st_paired.sam
+    output: tmp/CH2502/bwa/st_paired.bam
+    jobid: 33
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+        samtools view -bS -@ 16         tmp/CH2502/bwa/st_paired.sam > tmp/CH2502/bwa/st_paired.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule compute_flatcounts:
+    input: tmp/CH2522/bwa/st_paired.sam
+    output: tmp/CH2522/bwa/st_variant.flatcount, tmp/CH2522/bwa/st_variant.sin, tmp/CH2522/bwa/st_variant.art
+    jobid: 10
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+        sam2art.pl -s 2 -p -4 tmp/CH2522/bwa/st_paired.sam > tmp/CH2522/bwa/st_variant.art 
+        sam2art.pl -s 2 -l -p -4 tmp/CH2522/bwa/st_paired.sam > tmp/CH2522/bwa/st_variant.sin
+        sam2art.pl -f -s 2 -p tmp/CH2522/bwa/st_paired.sam > tmp/CH2522/bwa/st_variant.flatcount
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule compute_flatcounts:
+    input: tmp/CH2502/bwa/st_paired.sam
+    output: tmp/CH2502/bwa/st_variant.flatcount, tmp/CH2502/bwa/st_variant.sin, tmp/CH2502/bwa/st_variant.art
+    jobid: 11
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+        sam2art.pl -s 2 -p -4 tmp/CH2502/bwa/st_paired.sam > tmp/CH2502/bwa/st_variant.art 
+        sam2art.pl -s 2 -l -p -4 tmp/CH2502/bwa/st_paired.sam > tmp/CH2502/bwa/st_variant.sin
+        sam2art.pl -f -s 2 -p tmp/CH2502/bwa/st_paired.sam > tmp/CH2502/bwa/st_variant.flatcount
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sam2bam:
+    input: tmp/CH2522/bwa/st_paired.sam
+    output: tmp/CH2522/bwa/st_paired.bam
+    jobid: 26
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+        samtools view -bS -@ 16         tmp/CH2522/bwa/st_paired.sam > tmp/CH2522/bwa/st_paired.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sort_bam:
+    input: tmp/F1659/bwa/st_paired.bam
+    output: tmp/F1659/bwa/st_sorted.bam, tmp/F1659/bwa/st_sorted.bam.bai
+    jobid: 15
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+        bamtools sort -in tmp/F1659/bwa/st_paired.bam -out tmp/F1659/bwa/st_sorted.bam
+        samtools index tmp/F1659/bwa/st_sorted.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sort_bam:
+    input: tmp/CH2500/bwa/st_paired.bam
+    output: tmp/CH2500/bwa/st_sorted.bam, tmp/CH2500/bwa/st_sorted.bam.bai
+    jobid: 21
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+        bamtools sort -in tmp/CH2500/bwa/st_paired.bam -out tmp/CH2500/bwa/st_sorted.bam
+        samtools index tmp/CH2500/bwa/st_sorted.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sort_bam:
+    input: tmp/CH2502/bwa/st_paired.bam
+    output: tmp/CH2502/bwa/st_sorted.bam, tmp/CH2502/bwa/st_sorted.bam.bai
+    jobid: 25
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+        bamtools sort -in tmp/CH2502/bwa/st_paired.bam -out tmp/CH2502/bwa/st_sorted.bam
+        samtools index tmp/CH2502/bwa/st_sorted.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_sort_bam:
+    input: tmp/CH2522/bwa/st_paired.bam
+    output: tmp/CH2522/bwa/st_sorted.bam, tmp/CH2522/bwa/st_sorted.bam.bai
+    jobid: 13
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+        bamtools sort -in tmp/CH2522/bwa/st_paired.bam -out tmp/CH2522/bwa/st_sorted.bam
+        samtools index tmp/CH2522/bwa/st_sorted.bam
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/CH2522/bwa/st_sorted.bam, tmp/CH2522/bwa/st_sorted.bam.bai
+    output: tmp/CH2522/bwa/st_vcf.bcf, tmp/CH2522/bwa/st_variant.snp-vcf
+    jobid: 4
+    wildcards: TMP_D=tmp, strain=CH2522, mapper=bwa
+
+
+        samtools mpileup -uf /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/CH2522/bwa/st_sorted.bam | bcftools view -bvcg - > tmp/CH2522/bwa/st_vcf.bcf
+        bcftools view tmp/CH2522/bwa/st_vcf.bcf | lib/vcfutils.pl varFilter -d 0 > tmp/CH2522/bwa/st_variant.snp-vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/CH2502/bwa/st_sorted.bam, tmp/CH2502/bwa/st_sorted.bam.bai
+    output: tmp/CH2502/bwa/st_vcf.bcf, tmp/CH2502/bwa/st_variant.snp-vcf
+    jobid: 12
+    wildcards: TMP_D=tmp, strain=CH2502, mapper=bwa
+
+
+        samtools mpileup -uf /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/CH2502/bwa/st_sorted.bam | bcftools view -bvcg - > tmp/CH2502/bwa/st_vcf.bcf
+        bcftools view tmp/CH2502/bwa/st_vcf.bcf | lib/vcfutils.pl varFilter -d 0 > tmp/CH2502/bwa/st_variant.snp-vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/CH2500/bwa/st_sorted.bam, tmp/CH2500/bwa/st_sorted.bam.bai
+    output: tmp/CH2500/bwa/st_vcf.bcf, tmp/CH2500/bwa/st_variant.snp-vcf
+    jobid: 8
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+
+        samtools mpileup -uf /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/CH2500/bwa/st_sorted.bam | bcftools view -bvcg - > tmp/CH2500/bwa/st_vcf.bcf
+        bcftools view tmp/CH2500/bwa/st_vcf.bcf | lib/vcfutils.pl varFilter -d 0 > tmp/CH2500/bwa/st_variant.snp-vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/F1659/bwa/st_sorted.bam, tmp/F1659/bwa/st_sorted.bam.bai
+    output: tmp/F1659/bwa/st_vcf.bcf, tmp/F1659/bwa/st_variant.snp-vcf
+    jobid: 5
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+
+        samtools mpileup -uf /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/F1659/bwa/st_sorted.bam | bcftools view -bvcg - > tmp/F1659/bwa/st_vcf.bcf
+        bcftools view tmp/F1659/bwa/st_vcf.bcf | lib/vcfutils.pl varFilter -d 0 > tmp/F1659/bwa/st_variant.snp-vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_copy_vcf:
+    input: tmp/CH2500/bwa/st_variant.snp-vcf
+    output: CH2500.flt.vcf
+    jobid: 19
+    wildcards: strain=CH2500
+
+
+        ln -s tmp/CH2500/bwa/st_variant.snp-vcf CH2500.flt.vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_copy_vcf:
+    input: tmp/F1659/bwa/st_variant.snp-vcf
+    output: F1659.flt.vcf
+    jobid: 17
+    wildcards: strain=F1659
+
+
+        ln -s tmp/F1659/bwa/st_variant.snp-vcf F1659.flt.vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_copy_vcf:
+    input: tmp/CH2522/bwa/st_variant.snp-vcf
+    output: CH2522.flt.vcf
+    jobid: 20
+    wildcards: strain=CH2522
+
+
+        ln -s tmp/CH2522/bwa/st_variant.snp-vcf CH2522.flt.vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule for_tab_copy_vcf:
+    input: tmp/CH2502/bwa/st_variant.snp-vcf
+    output: CH2502.flt.vcf
+    jobid: 18
+    wildcards: strain=CH2502
+
+
+        ln -s tmp/CH2502/bwa/st_variant.snp-vcf CH2502.flt.vcf
+        
+
+[Tue Aug 21 13:14:23 2018]
+rule create_dict_file:
+    input: CH2500.flt.vcf, CH2502.flt.vcf, CH2522.flt.vcf, F1659.flt.vcf
+    output: dict.txt
+    jobid: 7
+
+RuleException in line 66 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk:
+'Params' object has no attribute 'STRAINS'
