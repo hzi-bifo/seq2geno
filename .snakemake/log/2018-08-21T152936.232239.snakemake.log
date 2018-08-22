@@ -1,0 +1,62 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	all_snps_list
+	3	compute_flatcounts
+	1	covert_snps_table
+	1	create_dict_file
+	4	for_tab_copy_vcf
+	4	for_tab_create_vcf
+	3	for_tab_paired_read_bwa_mapping
+	3	for_tab_sam2bam
+	3	for_tab_sort_bam
+	3	for_tab_stampy_remapping
+	1	nonsyn_snps_table
+	1	syn_snps_table
+	29
+
+[Tue Aug 21 15:29:39 2018]
+rule for_tab_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, tmp/F1659/bwa/st_sorted.bam, tmp/F1659/bwa/st_sorted.bam.bai
+    output: tmp/F1659/bwa/st_vcf.bcf, tmp/F1659/bwa/st_variant.snp-vcf
+    jobid: 14
+    wildcards: TMP_D=tmp, strain=F1659, mapper=bwa
+
+[Tue Aug 21 15:42:02 2018]
+Finished job 14.
+1 of 29 steps (3%) done
+
+[Tue Aug 21 15:42:02 2018]
+rule for_tab_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: tmp/CH2500/bwa/dna1.bwa.sai, tmp/CH2500/bwa/dna2.bwa.sai, tmp/CH2500/bwa/dna.bwa.bam
+    jobid: 25
+    wildcards: TMP_D=tmp, strain=CH2500, mapper=bwa
+
+    [Tue Aug 21 15:42:38 2018]
+    Error in rule for_tab_paired_read_bwa_mapping:
+        jobid: 25
+        output: tmp/CH2500/bwa/dna1.bwa.sai, tmp/CH2500/bwa/dna2.bwa.sai, tmp/CH2500/bwa/dna.bwa.bam
+
+RuleException:
+CalledProcessError in line 103 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk:
+Command ' set -euo pipefail;  
+        source activate Ariane_dna
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2500_1.fq.gz         > tmp/CH2500/bwa/dna1.bwa.sai
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/CH2500_2.fq.gz         > tmp/CH2500/bwa/dna2.bwa.sai 
+
+        bwa sampe /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v4/data/reference/RefCln_UCBPP-PA14.fa tmp/CH2500/bwa/dna1.bwa.sai tmp/CH2500/bwa/dna2.bwa.sai         data/strains/dna/CH2500_1.fq.gz data/strains/dna/CH2500_2.fq.gz |         samtools view -bS -@ 16         > tmp/CH2500/bwa/dna.bwa.bam
+        source deactivate ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk", line 103, in __rule_for_tab_paired_read_bwa_mapping
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Removing output files of failed job for_tab_paired_read_bwa_mapping since they might be corrupted:
+tmp/CH2500/bwa/dna1.bwa.sai, tmp/CH2500/bwa/dna2.bwa.sai, tmp/CH2500/bwa/dna.bwa.bam
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-08-21T152936.232239.snakemake.log

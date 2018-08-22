@@ -1,0 +1,4 @@
+SyntaxError:
+Not all output, log and benchmark files of rule rna_sam2bam contain the same wildcards. This is crucial though, in order to avoid that two or more jobs write to the same file.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/INTERFACE.smk", line 23, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_EXPR_TABLE.smk", line 54, in <module>

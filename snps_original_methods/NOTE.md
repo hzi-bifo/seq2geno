@@ -12,8 +12,13 @@ Pool1.protocol
 		samtools mpileup -uf $reference $prefix.bam | bcftools view -bvcg
 		bcftools view $prefix.raw.bcf | vcfutils.pl varFilter -d $mindepth > $prefix.flt.vcf
 	mutation_table.py
+		-f dict.txt -a /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab -o DNA-Pool1.tab
+		- dict.txt: prefix of ".flt.vcf" (the file some_line+".flt.vcf")
+		- .flt.vcf: generated above		
+		- Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab: to be deprecated
 	Snp2Amino.py
-	art2cov.py
+		-f DNA-Pool1.tab -g /data3/reference_sequences/Pseudomonas_aeruginosa_PA14_ncRNA.gbk -o DNA_Pool1_final.tab
+		- DNA-Pool1.tab: created by mutation_table.py
 
 == my_stampy_pipeline_PE ==
 	
