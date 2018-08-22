@@ -11,8 +11,8 @@ def covert_snp_data(f, out_f, strains):
 
     # 
     sub_df= df[strains]
-    sub_df.replace('.*\w+.*', '1', inplace= True)
-    sub_df.replace('^\W$', '0', inplace= True)
+    sub_df.replace('.*\w+.*', '1', regex= True, inplace= True)
+    sub_df.replace('^\W$', '0', regex= True, inplace= True)
 
     # print output
     sub_df= sub_df.transpose()

@@ -9,7 +9,7 @@
 rule covert_snps_table:
     input:
         non_syn_output= os.path.join(TMP_D, 'non-syn_SNPs.tab'),
-        syn_output= os.path.join(TMP_D, '/syn_SNPs.tab')
+        syn_output= os.path.join(TMP_D, 'syn_SNPs.tab')
     output: 
         config['nonsyn_snps_table'],
         config['syn_snps_table']
@@ -19,56 +19,109 @@ rule covert_snps_table:
 
 rule syn_snps_table:
     input:
-        all_snps_tab=os.path.join(TMP_D, '/all_SNPs.tsv'),
+        snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1_final.tab')),
         ref_gbk=config['reference_annotation']
-#    output: config['syn_snps_table']
     output:
-        syn_output= os.path.join(TMP_D, '/syn_SNPs.tab')
-        
+        syn_output= os.path.join(TMP_D, 'syn_SNPs.tab')
     params:
-        script_f='lib/Snp2Amino.v2.py'
+        script_f='snps_original_methods/Snp2Amino.edit.py'
     shell:
         """
         source activate py27
-        python {params[script_f]} -f {input[all_snps_tab]} -g {input[ref_gbk]} \
-        -n all -o {output}
+        python {params.script_f} -f {input.snps_list} -g {input.ref_gbk} \
+        -n syn \
+        -o {output.syn_output} 
         source deactivate
         """
 
 rule nonsyn_snps_table:
     input:
-        all_snps_tab=os.path.join(TMP_D, '/all_SNPs.tsv'),
+        snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1_final.tab')),
         ref_gbk=config['reference_annotation']
-#    output: config['nonsyn_snps_table']
     output: 
-        non_syn_output= os.path.join(TMP_D, '/non-syn_SNPs.tab')
+        non_syn_output= os.path.join(TMP_D, 'non-syn_SNPs.tab'),
     params:
-        script_f='lib/Snp2Amino.v2.py'
+        script_f='snps_original_methods/Snp2Amino.edit.py'
     shell:
         """
         source activate py27
-        python {params[script_f]} -f {input[all_snps_tab]} -g {input[ref_gbk]} \
-        -n non-syn -o {output} 
+        python {params.script_f} -f {input.snps_list} -g {input.ref_gbk} \
+        -n non-syn \
+        -o {output.non_syn_output} 
         source deactivate
         """
 
 rule all_snps_table:
     input:
-        flt_files=expand('{TMP_D}/{strain}/{mapper}/st_variant.flatcount', 
-            TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
-        snp_vcf_files=expand("{TMP_D}/{strain}/{mapper}/st_variant.snp-vcf", 
-            TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
-        dict_f='strain_list',
-        anno_f='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
-    output: 
-        all_snps_tab=os.path.join(TMP_D, '/all_SNPs.tsv'),
+        snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1_final.tab')),
+        ref_gbk=config['reference_annotation']
+    output:
+        all_snps_tab=os.path.join(TMP_D, 'all_SNPs.tsv')
     params:
-        script_f='lib/mutation_table.v5.py'
+        script_f='snps_original_methods/Snp2Amino.edit.py'
     shell:
         """
         source activate py27
-        python {params[script_f]}  -f {input[dict_f]} \
-        -a {input[anno_f]} -o {output[all_snps_tab]}
+        python {params.script_f} -f {input.snps_list} -g {input.ref_gbk} \
+        -o {output.all_snps_tab} 
+        source deactivate
+        """
+
+rule for_tab_copy_files:
+    ## duplicate everyone to create 'STRAIN.flt.vcf' and 'STRAIN.flatcount'
+    input: 
+        flatcount_file=lambda wildcards: os.path.join(TMP_D, wildcards.strain, SOFTWARE['mapper'], 'st_variant.fltcnt'),
+        snp_vcf_file=lambda wildcards: os.path.join(TMP_D, wildcards.strain, SOFTWARE['mapper'], 'st_variant.snp-vcf')
+    output:
+        flatcount=temp("{strain}.flatcount"),
+        flt_vcf=temp("{strain}.flt.vcf")
+    shell:
+        """
+        ln -s {input.snp_vcf_file} {output.flt_vcf}
+        ln -s {input.flatcount_file} {output.flatcount}
+        """
+
+rule create_dict_file: 
+    input: 
+        flt_vcf_files=expand("{strain}.flt.vcf", 
+            strain=STRAINS),
+        flatcount_files=expand("{strain}.flatcount", 
+            strain=STRAINS)
+    output:
+        dict_file= 'dict.txt'
+    params:
+        strains=STRAINS
+    shell:
+        """
+        echo {input.flt_vcf_files}| \
+        sed 's/\.flt\.vcf\W*/\\n/g'| \
+        grep '\w' > {output.dict_file}
+        """
+
+rule all_snps_list:
+    input:
+        #flt_files=expand('{TMP_D}/{strain}/{mapper}/st_variant.fltcnt', 
+        #    TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
+        #snp_vcf_files=expand("{TMP_D}/{strain}/{mapper}/st_variant.snp-vcf", 
+        #    TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
+        flt_files=expand("{strain}.flatcount", 
+            strain=STRAINS),
+        flt_vcf_files=expand("{strain}.flt.vcf", 
+            strain=STRAINS),
+        dict_f='dict.txt',
+        anno_f='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
+    output: 
+#        all_snps_tab=os.path.join(TMP_D, '/all_SNPs.tsv'),
+        snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1_final.tab'))
+    params:
+        #script_f='lib/mutation_table.v5.py'
+        script_f='snps_original_methods/mutation_table.py'
+    shell:
+        """
+        source activate py27
+        python {params.script_f}  -f {input.dict_f} \
+        -a {input.anno_f} \
+        -o {output.snps_list}
         source deactivate
         """
 
@@ -77,16 +130,16 @@ rule compute_flatcounts:
     input:
         STAMPY_SAM= temp('{TMP_D}/{strain}/{mapper}/st_paired.sam')
     output:
-        flt_f='{TMP_D}/{strain}/{mapper}/st_variant.flatcount',
+        flt_f='{TMP_D}/{strain}/{mapper}/st_variant.fltcnt',
         sin_f='{TMP_D}/{strain}/{mapper}/st_variant.sin',
         art_f='{TMP_D}/{strain}/{mapper}/st_variant.art'
     params:
         script_f="lib/sam2art.pl"
     shell:
         """
-        sam2art.pl -s 2 -p -4 {input.STAMPY_SAM} > {output.art_f} 
-        sam2art.pl -s 2 -l -p -4 {input.STAMPY_SAM} > {output.sin_f}
-        sam2art.pl -f -s 2 -p {input.STAMPY_SAM} > {output.flt_f}
+        {params.script_f} -s 2 -p -4 {input.STAMPY_SAM} > {output.art_f} 
+        {params.script_f} -s 2 -l -p -4 {input.STAMPY_SAM} > {output.sin_f}
+        {params.script_f} -f -s 2 -p {input.STAMPY_SAM} > {output.flt_f}
         """
 
 rule count_cov:
@@ -96,7 +149,7 @@ rule count_cov:
         cov_f='{TMP_D}/{strain}/{mapper}/st_mapping.coverage'
     shell:
         'samtools depth -a {input[bam_f]} > {output[cov_f]};'
-
+'''
 rule filter_vcf:
     input:
         vcf_gz="{TMP_D}/{strain}/{mapper}/st_vcf.gz",
@@ -108,3 +161,4 @@ rule filter_vcf:
         vcftools --gzvcf {input[vcf_gz]} --remove-indels --recode \
         --recode-INFO-all --stdout > {output[snp_vcf_f]}
         """
+'''
