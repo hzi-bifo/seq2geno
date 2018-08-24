@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 107 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_EXPR_TABLE.smk:
+Missing input files for rule convert_to_sin:
+tmp/CH2522/rna_sorted.rmdup.sam
