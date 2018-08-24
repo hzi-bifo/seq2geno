@@ -2,189 +2,251 @@ digraph snakemake_dag {
     graph[bgcolor=white, margin=0];
     node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
     edge[penwidth=2, color=grey];
-	0[label = "all", color = "0.51 0.6 0.85", style="rounded"];
-	1[label = "covert_snps_table", color = "0.02 0.6 0.85", style="rounded"];
-	2[label = "compute_gpa_table", color = "0.27 0.6 0.85", style="rounded"];
-	3[label = "find_best_tree", color = "0.63 0.6 0.85", style="rounded"];
-	4[label = "create_and_make_expr_table", color = "0.32 0.6 0.85", style="rounded"];
-	5[label = "create_indel_table", color = "0.42 0.6 0.85", style="rounded"];
-	6[label = "nonsyn_snps_table", color = "0.04 0.6 0.85", style="rounded"];
-	7[label = "syn_snps_table", color = "0.38 0.6 0.85", style="rounded"];
-	8[label = "compute_gpa_raw_table\ngene_sorter: roary", color = "0.44 0.6 0.85", style="rounded"];
-	9[label = "postprocess_alignment", color = "0.21 0.6 0.85", style="rounded"];
-	10[label = "write_dict_file", color = "0.08 0.6 0.85", style="rounded"];
-	11[label = "expand_by_family", color = "0.53 0.6 0.85", style="rounded,dotted"];
-	12[label = "all_snps_table", color = "0.25 0.6 0.85", style="rounded"];
-	13[label = "duplicate_gffs", color = "0.23 0.6 0.85", style="rounded"];
-	14[label = "duplicate_gffs", color = "0.23 0.6 0.85", style="rounded"];
-	15[label = "duplicate_gffs", color = "0.23 0.6 0.85", style="rounded"];
-	16[label = "duplicate_gffs", color = "0.23 0.6 0.85", style="rounded"];
-	17[label = "create_coding_regions_aln", color = "0.48 0.6 0.85", style="rounded"];
-	18[label = "gene_counts", color = "0.10 0.6 0.85", style="rounded"];
-	19[label = "gene_counts", color = "0.10 0.6 0.85", style="rounded"];
-	20[label = "gene_counts", color = "0.10 0.6 0.85", style="rounded"];
-	21[label = "gene_counts", color = "0.10 0.6 0.85", style="rounded"];
-	22[label = "vcf_to_indels_per_fam", color = "0.36 0.6 0.85", style="rounded,dotted"];
-	23[label = "compute_flatcounts", color = "0.13 0.6 0.85", style="rounded"];
-	24[label = "filter_vcf", color = "0.46 0.6 0.85", style="rounded"];
-	25[label = "compute_flatcounts", color = "0.13 0.6 0.85", style="rounded"];
-	26[label = "filter_vcf", color = "0.46 0.6 0.85", style="rounded"];
-	27[label = "filter_vcf", color = "0.46 0.6 0.85", style="rounded"];
-	28[label = "filter_vcf", color = "0.46 0.6 0.85", style="rounded"];
-	29[label = "compute_flatcounts", color = "0.13 0.6 0.85", style="rounded"];
-	30[label = "compute_flatcounts", color = "0.13 0.6 0.85", style="rounded"];
-	31[label = "create_gff\nannotator: prokka", color = "0.17 0.6 0.85", style="rounded"];
-	32[label = "create_gff\nannotator: prokka", color = "0.17 0.6 0.85", style="rounded"];
-	33[label = "create_gff\nannotator: prokka", color = "0.17 0.6 0.85", style="rounded"];
-	34[label = "create_gff\nannotator: prokka", color = "0.17 0.6 0.85", style="rounded"];
-	35[label = "create_consensus_sequence", color = "0.19 0.6 0.85", style="rounded"];
-	36[label = "create_consensus_sequence", color = "0.19 0.6 0.85", style="rounded"];
-	37[label = "create_consensus_sequence", color = "0.19 0.6 0.85", style="rounded"];
-	38[label = "create_consensus_sequence", color = "0.19 0.6 0.85", style="rounded"];
-	39[label = "convert_to_sin\nTMP_D: tmp", color = "0.65 0.6 0.85", style="rounded"];
-	40[label = "convert_to_sin\nTMP_D: tmp", color = "0.65 0.6 0.85", style="rounded"];
-	41[label = "convert_to_sin\nTMP_D: tmp", color = "0.65 0.6 0.85", style="rounded"];
-	42[label = "convert_to_sin\nTMP_D: tmp", color = "0.65 0.6 0.85", style="rounded"];
-	43[label = "aln_to_vcf_per_fam", color = "0.61 0.6 0.85", style="rounded,dotted"];
-	44[label = "count_cov", color = "0.55 0.6 0.85", style="rounded"];
-	45[label = "create_vcf", color = "0.06 0.6 0.85", style="rounded"];
-	46[label = "index_vcf", color = "0.11 0.6 0.85", style="rounded"];
-	47[label = "count_cov", color = "0.55 0.6 0.85", style="rounded"];
-	48[label = "index_vcf", color = "0.11 0.6 0.85", style="rounded"];
-	49[label = "create_vcf", color = "0.06 0.6 0.85", style="rounded"];
-	50[label = "index_vcf", color = "0.11 0.6 0.85", style="rounded"];
-	51[label = "create_vcf", color = "0.06 0.6 0.85", style="rounded"];
-	52[label = "create_vcf", color = "0.06 0.6 0.85", style="rounded"];
-	53[label = "index_vcf", color = "0.11 0.6 0.85", style="rounded"];
-	54[label = "count_cov", color = "0.55 0.6 0.85", style="rounded"];
-	55[label = "count_cov", color = "0.55 0.6 0.85", style="rounded"];
-	56[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2522", color = "0.50 0.6 0.85", style="rounded"];
-	57[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: F1659", color = "0.50 0.6 0.85", style="rounded"];
-	58[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2500", color = "0.50 0.6 0.85", style="rounded"];
-	59[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2502", color = "0.50 0.6 0.85", style="rounded"];
-	60[label = "create_ref_target_seqs\nTMP_D: tmp", color = "0.59 0.6 0.85", style="rounded"];
-	61[label = "rna_mapping\nsample: F1659", color = "0.00 0.6 0.85", style="rounded"];
-	62[label = "rna_mapping\nsample: CH2500", color = "0.00 0.6 0.85", style="rounded"];
-	63[label = "rna_mapping\nsample: CH2502", color = "0.00 0.6 0.85", style="rounded"];
-	64[label = "rna_mapping\nsample: CH2522", color = "0.00 0.6 0.85", style="rounded"];
-	65[label = "sort_gene_family\nfam: ...", color = "0.30 0.6 0.85", style="rounded"];
-	66[label = "sort_bam", color = "0.34 0.6 0.85", style="rounded"];
-	67[label = "sort_bam", color = "0.34 0.6 0.85", style="rounded"];
-	68[label = "load_reference", color = "0.29 0.6 0.85", style="rounded,dashed"];
-	69[label = "sort_bam", color = "0.34 0.6 0.85", style="rounded"];
-	70[label = "sort_bam", color = "0.34 0.6 0.85", style="rounded"];
-	71[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: F1659", color = "0.57 0.6 0.85", style="rounded"];
-	72[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2500", color = "0.57 0.6 0.85", style="rounded"];
-	73[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2502", color = "0.57 0.6 0.85", style="rounded"];
-	74[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2522", color = "0.57 0.6 0.85", style="rounded"];
+	0[label = "all", color = "0.35 0.6 0.85", style="rounded"];
+	1[label = "find_best_tree", color = "0.41 0.6 0.85", style="rounded"];
+	2[label = "create_and_make_expr_table", color = "0.14 0.6 0.85", style="rounded"];
+	3[label = "create_indel_table", color = "0.18 0.6 0.85", style="rounded"];
+	4[label = "covert_snps_table", color = "0.46 0.6 0.85", style="rounded"];
+	5[label = "compute_gpa_table", color = "0.34 0.6 0.85", style="rounded"];
+	6[label = "postprocess_alignment", color = "0.38 0.6 0.85", style="rounded"];
+	7[label = "write_dict_file", color = "0.20 0.6 0.85", style="rounded"];
+	8[label = "expand_by_family", color = "0.01 0.6 0.85", style="rounded,dotted"];
+	9[label = "nonsyn_snps_table", color = "0.29 0.6 0.85", style="rounded"];
+	10[label = "syn_snps_table", color = "0.08 0.6 0.85", style="rounded"];
+	11[label = "compute_gpa_raw_table\ngene_sorter: roary", color = "0.03 0.6 0.85", style="rounded"];
+	12[label = "create_coding_regions_aln", color = "0.12 0.6 0.85", style="rounded"];
+	13[label = "gene_counts", color = "0.65 0.6 0.85", style="rounded"];
+	14[label = "gene_counts", color = "0.65 0.6 0.85", style="rounded"];
+	15[label = "gene_counts", color = "0.65 0.6 0.85", style="rounded"];
+	16[label = "gene_counts", color = "0.65 0.6 0.85", style="rounded"];
+	17[label = "vcf_to_indels_per_fam", color = "0.19 0.6 0.85", style="rounded,dotted"];
+	18[label = "all_snps_list", color = "0.52 0.6 0.85", style="rounded"];
+	19[label = "duplicate_gffs", color = "0.11 0.6 0.85", style="rounded"];
+	20[label = "duplicate_gffs", color = "0.11 0.6 0.85", style="rounded"];
+	21[label = "duplicate_gffs", color = "0.11 0.6 0.85", style="rounded"];
+	22[label = "duplicate_gffs", color = "0.11 0.6 0.85", style="rounded"];
+	23[label = "create_consensus_sequence", color = "0.39 0.6 0.85", style="rounded"];
+	24[label = "create_consensus_sequence", color = "0.39 0.6 0.85", style="rounded"];
+	25[label = "create_consensus_sequence", color = "0.39 0.6 0.85", style="rounded"];
+	26[label = "create_consensus_sequence", color = "0.39 0.6 0.85", style="rounded"];
+	27[label = "convert_to_sin", color = "0.50 0.6 0.85", style="rounded"];
+	28[label = "convert_to_sin", color = "0.50 0.6 0.85", style="rounded"];
+	29[label = "convert_to_sin", color = "0.50 0.6 0.85", style="rounded"];
+	30[label = "convert_to_sin", color = "0.50 0.6 0.85", style="rounded"];
+	31[label = "aln_to_vcf_per_fam", color = "0.31 0.6 0.85", style="rounded,dotted"];
+	32[label = "for_tab_copy_files", color = "0.10 0.6 0.85", style="rounded"];
+	33[label = "for_tab_copy_files", color = "0.10 0.6 0.85", style="rounded"];
+	34[label = "create_dict_file", color = "0.45 0.6 0.85", style="rounded"];
+	35[label = "for_tab_copy_files", color = "0.10 0.6 0.85", style="rounded"];
+	36[label = "for_tab_copy_files", color = "0.10 0.6 0.85", style="rounded"];
+	37[label = "create_gff\nannotator: prokka", color = "0.48 0.6 0.85", style="rounded"];
+	38[label = "create_gff\nannotator: prokka", color = "0.48 0.6 0.85", style="rounded"];
+	39[label = "create_gff\nannotator: prokka", color = "0.48 0.6 0.85", style="rounded"];
+	40[label = "create_gff\nannotator: prokka", color = "0.48 0.6 0.85", style="rounded"];
+	41[label = "index_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	42[label = "create_ref_target_seqs\nTMP_D: tmp", color = "0.56 0.6 0.85", style="rounded"];
+	43[label = "create_vcf", color = "0.27 0.6 0.85", style="rounded"];
+	44[label = "create_vcf", color = "0.27 0.6 0.85", style="rounded"];
+	45[label = "index_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	46[label = "create_vcf", color = "0.27 0.6 0.85", style="rounded"];
+	47[label = "index_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	48[label = "create_vcf", color = "0.27 0.6 0.85", style="rounded"];
+	49[label = "index_vcf", color = "0.59 0.6 0.85", style="rounded"];
+	50[label = "rna_sam2bam", color = "0.30 0.6 0.85", style="rounded"];
+	51[label = "rna_sam2bam", color = "0.30 0.6 0.85", style="rounded"];
+	52[label = "rna_sam2bam", color = "0.30 0.6 0.85", style="rounded"];
+	53[label = "rna_sam2bam", color = "0.30 0.6 0.85", style="rounded"];
+	54[label = "sort_gene_family\nfam: ...", color = "0.16 0.6 0.85", style="rounded"];
+	55[label = "compute_flatcounts", color = "0.04 0.6 0.85", style="rounded"];
+	56[label = "for_tab_create_vcf", color = "0.15 0.6 0.85", style="rounded"];
+	57[label = "for_tab_create_vcf", color = "0.15 0.6 0.85", style="rounded"];
+	58[label = "compute_flatcounts", color = "0.04 0.6 0.85", style="rounded"];
+	59[label = "for_tab_create_vcf", color = "0.15 0.6 0.85", style="rounded"];
+	60[label = "compute_flatcounts", color = "0.04 0.6 0.85", style="rounded"];
+	61[label = "for_tab_create_vcf", color = "0.15 0.6 0.85", style="rounded"];
+	62[label = "compute_flatcounts", color = "0.04 0.6 0.85", style="rounded"];
+	63[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: F1659", color = "0.26 0.6 0.85", style="rounded"];
+	64[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2522", color = "0.26 0.6 0.85", style="rounded"];
+	65[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2500", color = "0.26 0.6 0.85", style="rounded"];
+	66[label = "create_assembly\nTMP_D: tmp\nassembler: spades\nstrain: CH2502", color = "0.26 0.6 0.85", style="rounded"];
+	67[label = "sort_bam", color = "0.61 0.6 0.85", style="rounded"];
+	68[label = "load_reference", color = "0.63 0.6 0.85", style="rounded,dashed"];
+	69[label = "sort_bam", color = "0.61 0.6 0.85", style="rounded"];
+	70[label = "sort_bam", color = "0.61 0.6 0.85", style="rounded"];
+	71[label = "sort_bam", color = "0.61 0.6 0.85", style="rounded"];
+	72[label = "for_expr_stampy_remapping", color = "0.05 0.6 0.85", style="rounded"];
+	73[label = "for_expr_stampy_remapping", color = "0.05 0.6 0.85", style="rounded"];
+	74[label = "for_expr_stampy_remapping", color = "0.05 0.6 0.85", style="rounded"];
+	75[label = "for_expr_stampy_remapping", color = "0.05 0.6 0.85", style="rounded"];
+	76[label = "for_tab_stampy_remapping", color = "0.60 0.6 0.85", style="rounded"];
+	77[label = "for_tab_sort_bam", color = "0.33 0.6 0.85", style="rounded"];
+	78[label = "for_tab_sort_bam", color = "0.33 0.6 0.85", style="rounded"];
+	79[label = "for_tab_stampy_remapping", color = "0.60 0.6 0.85", style="rounded"];
+	80[label = "for_tab_sort_bam", color = "0.33 0.6 0.85", style="rounded"];
+	81[label = "for_tab_stampy_remapping", color = "0.60 0.6 0.85", style="rounded"];
+	82[label = "for_tab_sort_bam", color = "0.33 0.6 0.85", style="rounded"];
+	83[label = "for_tab_stampy_remapping", color = "0.60 0.6 0.85", style="rounded"];
+	84[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2500", color = "0.07 0.6 0.85", style="rounded"];
+	85[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: F1659", color = "0.07 0.6 0.85", style="rounded"];
+	86[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2502", color = "0.07 0.6 0.85", style="rounded"];
+	87[label = "paired_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2522", color = "0.07 0.6 0.85", style="rounded"];
+	88[label = "rna_mapping_bwa\nTMP_D: tmp\nstrain: CH2500", color = "0.57 0.6 0.85", style="rounded"];
+	89[label = "rna_mapping_bwa\nTMP_D: tmp\nstrain: F1659", color = "0.57 0.6 0.85", style="rounded"];
+	90[label = "rna_mapping_bwa\nTMP_D: tmp\nstrain: CH2502", color = "0.57 0.6 0.85", style="rounded"];
+	91[label = "rna_mapping_bwa\nTMP_D: tmp\nstrain: CH2522", color = "0.57 0.6 0.85", style="rounded"];
+	92[label = "for_tab_paired_read_bwa_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: F1659", color = "0.49 0.6 0.85", style="rounded"];
+	93[label = "for_tab_sam2bam", color = "0.37 0.6 0.85", style="rounded"];
+	94[label = "for_tab_sam2bam", color = "0.37 0.6 0.85", style="rounded"];
+	95[label = "for_tab_paired_read_bwa_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2500", color = "0.49 0.6 0.85", style="rounded"];
+	96[label = "for_tab_sam2bam", color = "0.37 0.6 0.85", style="rounded"];
+	97[label = "for_tab_paired_read_bwa_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2502", color = "0.49 0.6 0.85", style="rounded"];
+	98[label = "for_tab_sam2bam", color = "0.37 0.6 0.85", style="rounded"];
+	99[label = "for_tab_paired_read_bwa_mapping\nTMP_D: tmp\nmapper: bwa\nstrain: CH2522", color = "0.49 0.6 0.85", style="rounded"];
 	1 -> 0
 	2 -> 0
 	3 -> 0
 	4 -> 0
 	5 -> 0
 	6 -> 1
-	7 -> 1
-	8 -> 2
-	9 -> 3
+	7 -> 2
+	8 -> 3
+	9 -> 4
 	10 -> 4
 	11 -> 5
 	12 -> 6
-	12 -> 7
-	13 -> 8
-	14 -> 8
-	15 -> 8
-	16 -> 8
-	17 -> 9
+	13 -> 7
+	14 -> 7
+	15 -> 7
+	16 -> 7
+	17 -> 8
+	18 -> 9
 	18 -> 10
-	19 -> 10
-	20 -> 10
-	21 -> 10
+	19 -> 11
+	20 -> 11
+	21 -> 11
 	22 -> 11
 	23 -> 12
 	24 -> 12
 	25 -> 12
 	26 -> 12
-	27 -> 12
-	28 -> 12
-	29 -> 12
-	30 -> 12
-	31 -> 13
-	32 -> 14
-	33 -> 15
-	34 -> 16
-	35 -> 17
-	36 -> 17
-	37 -> 17
-	38 -> 17
-	39 -> 18
-	40 -> 19
-	41 -> 20
-	42 -> 21
-	43 -> 22
-	44 -> 23
+	27 -> 13
+	28 -> 14
+	29 -> 15
+	30 -> 16
+	31 -> 17
+	32 -> 18
+	33 -> 18
+	34 -> 18
+	35 -> 18
+	36 -> 18
+	37 -> 19
+	38 -> 20
+	39 -> 21
+	40 -> 22
+	41 -> 23
+	42 -> 23
+	43 -> 23
+	42 -> 24
+	44 -> 24
 	45 -> 24
-	46 -> 24
+	42 -> 25
+	46 -> 25
 	47 -> 25
+	42 -> 26
 	48 -> 26
 	49 -> 26
 	50 -> 27
-	51 -> 27
-	52 -> 28
-	53 -> 28
-	54 -> 29
-	55 -> 30
-	56 -> 31
-	57 -> 32
+	51 -> 28
+	52 -> 29
+	53 -> 30
+	54 -> 31
+	55 -> 32
+	56 -> 32
+	57 -> 33
 	58 -> 33
-	59 -> 34
-	45 -> 35
-	46 -> 35
+	33 -> 34
+	32 -> 34
+	35 -> 34
+	36 -> 34
+	59 -> 35
 	60 -> 35
-	53 -> 36
-	52 -> 36
-	60 -> 36
-	60 -> 37
-	50 -> 37
-	51 -> 37
-	60 -> 38
-	48 -> 38
-	49 -> 38
-	61 -> 39
-	62 -> 40
-	63 -> 41
-	64 -> 42
-	65 -> 43
-	66 -> 44
-	67 -> 45
-	68 -> 45
-	45 -> 46
-	69 -> 47
-	49 -> 48
-	68 -> 49
-	70 -> 49
-	51 -> 50
-	66 -> 51
-	68 -> 51
-	69 -> 52
-	68 -> 52
-	52 -> 53
-	70 -> 54
-	67 -> 55
+	61 -> 36
+	62 -> 36
+	63 -> 37
+	64 -> 38
+	65 -> 39
+	66 -> 40
+	43 -> 41
+	67 -> 43
+	68 -> 43
+	69 -> 44
+	68 -> 44
+	44 -> 45
+	70 -> 46
+	68 -> 46
+	46 -> 47
+	71 -> 48
+	68 -> 48
+	48 -> 49
+	72 -> 50
+	73 -> 51
+	74 -> 52
+	75 -> 53
+	37 -> 54
+	38 -> 54
+	39 -> 54
+	40 -> 54
+	11 -> 54
+	76 -> 55
+	77 -> 56
+	68 -> 56
+	78 -> 57
+	68 -> 57
+	79 -> 58
+	80 -> 59
+	68 -> 59
+	81 -> 60
+	82 -> 61
 	68 -> 61
-	68 -> 62
-	68 -> 63
-	68 -> 64
-	31 -> 65
-	34 -> 65
-	8 -> 65
-	33 -> 65
-	32 -> 65
-	71 -> 66
-	72 -> 67
-	73 -> 69
-	74 -> 70
-	68 -> 71
+	83 -> 62
+	84 -> 67
+	85 -> 69
+	86 -> 70
+	87 -> 71
 	68 -> 72
+	88 -> 72
 	68 -> 73
+	89 -> 73
 	68 -> 74
+	90 -> 74
+	68 -> 75
+	91 -> 75
+	68 -> 76
+	92 -> 76
+	93 -> 77
+	94 -> 78
+	68 -> 79
+	95 -> 79
+	96 -> 80
+	97 -> 81
+	68 -> 81
+	98 -> 82
+	99 -> 83
+	68 -> 83
+	68 -> 84
+	68 -> 85
+	68 -> 86
+	68 -> 87
+	68 -> 88
+	68 -> 89
+	68 -> 90
+	68 -> 91
+	68 -> 92
+	76 -> 93
+	79 -> 94
+	68 -> 95
+	81 -> 96
+	68 -> 97
+	83 -> 98
+	68 -> 99
 }            
