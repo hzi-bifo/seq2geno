@@ -1,0 +1,35 @@
+#!/usr/bin/csh -f
+#align illumina reads using stampy and art-file for visualization
+
+set prefix  = $1	# used to name the different output files
+set infile  = $2	# name of input fastq file containing the left end reads 
+set reffiles = $3	# path and prefix of reference genome files
+set annofile = $4	# path to annotation file
+set Rannofile = $5	# path to annotation file for R
+
+set indexref  = $reffiles
+set hashref   = $reffiles
+set bwaopt    = "-q10 $reffiles"
+set annotation = $annofile
+set Rannotation = $Rannofile
+#set indexref  = "/data/reference_sequences/Pseudomonas_aeruginosa_PA14"
+#set hashref   = "/data/reference_sequences/Pseudomonas_aeruginosa_PA14"
+#set bwaopt    = "-q10 /data/reference_sequences/Pseudomonas_aeruginosa_PA14.fasta"
+#set annotation = "/data/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011.tab"
+#set annotation = "/data/reference_sequences/Pseudomonas_aeruginosa_PA14_annotation_pseudomonas_com_07_2011.tab"
+
+### Mapping with stampy ###
+/usr/local/stampy.py --bwaoptions="$bwaopt" -g $indexref -h $hashref -M $infile > $prefix.sam
+
+### writing profiles ###
+sam2art.pl -s 2 $prefix.sam > $prefix.art
+sam2art.pl -s 2 -l $prefix.sam > $prefix.sin
+sam2art.pl -f -s 2 $prefix.sam > $prefix.flatcount
+
+### counting genes ###
+art2genecount.pl -b -a $prefix.sin -t tab -r $annotation > $prefix.rpg
+
+### mapping statistics ###
+sam_statistics.pl -r $prefix.sam > $prefix.stats
+genes_statistics.R $prefix.rpg $Rannotation $prefix.stats $prefix
+

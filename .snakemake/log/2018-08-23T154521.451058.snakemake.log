@@ -1,0 +1,44 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	convert_to_sin
+	1	create_and_make_expr_table
+	3	for_expr_stampy_remapping
+	4	gene_counts
+	3	rna_mapping_bwa
+	4	rna_sam2bam
+	1	write_dict_file
+	21
+
+[Thu Aug 23 15:45:24 2018]
+rule rna_sam2bam:
+    input: tmp/F1659/stampy/rna.sam
+    output: tmp/F1659/stampy/rna.bam, tmp/F1659/rna_sorted.bam, tmp/F1659/rna_sorted.rmdup.sam, tmp/F1659/rna_sorted.rmdup.bam
+    jobid: 23
+    wildcards: TMP_D=tmp, strain=F1659
+
+    [Thu Aug 23 15:48:48 2018]
+    Error in rule rna_sam2bam:
+        jobid: 23
+        output: tmp/F1659/stampy/rna.bam, tmp/F1659/rna_sorted.bam, tmp/F1659/rna_sorted.rmdup.sam, tmp/F1659/rna_sorted.rmdup.bam
+
+RuleException:
+CalledProcessError in line 55 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_EXPR_TABLE.smk:
+Command ' set -euo pipefail;  
+        source activate Ariane_dna
+        samtools view -bS tmp/F1659/stampy/rna.sam > tmp/F1659/stampy/rna.bam
+        samtools sort tmp/F1659/stampy/rna.bam > tmp/F1659/rna_sorted.bam
+        samtools rmdup -s tmp/F1659/rna_sorted.bam tmp/F1659/rna_sorted.rmdup.bam
+        samtools view -h tmp/F1659/rna_sorted.rmdup.bam > tmp/F1659/rna_sorted.rmdup.sam 
+        source deactivate ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_EXPR_TABLE.smk", line 55, in __rule_rna_sam2bam
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Removing output files of failed job rna_sam2bam since they might be corrupted:
+tmp/F1659/stampy/rna.bam, tmp/F1659/rna_sorted.bam
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-08-23T154521.451058.snakemake.log
