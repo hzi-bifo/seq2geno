@@ -1,14 +1,14 @@
 rule rna_mapping_bwa:
     input:
-        FQ=lambda wildcards: SAMPLES_DF.loc[wildcards.sample, 'rna_reads'],
+        FQ=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'rna_reads'],
         REF=REF_FA,
         REF_STAMPY_INDEX1=REF_FA+".stidx",
         REF_STAMPY_INDEX2=REF_FA+".sthash",
         REF_BWA_INDEX1=REF_FA+".bwt",
         REF_BWA_INDEX2=REF_FA+".fai"
     output:
-        S_BWA_SAI= temp('{TMP_D}/{sample}/{mapper}/rna.bwa.sai'),
-        S_BWA_BAM= temp('{TMP_D}/{sample}/{mapper}/rna.bwa.bam')
+        S_BWA_SAI= temp('{TMP_D}/{strain}/bwa/rna.sai'),
+        S_BWA_BAM= temp('{TMP_D}/{strain}/bwa/rna.bam')
 
     params:
         BWA_OPT='-q10',
@@ -26,9 +26,9 @@ rule for_expr_stampy_remapping:
     input:
         REF_STAMPY_INDEX=REF_FA+".stidx",
         REF_INDEXDICT=REF_FA+".sthash",
-        BWA_BAM= '{TMP_D}/{sample}/{mapper}/rna.bwa.bam'
+        BWA_BAM= '{TMP_D}/{strain}/bwa/rna.bam'
     output:
-        STAMPY_SAM= temp('{TMP_D}/{sample}/{mapper}/rna.stampy.sam')
+        STAMPY_SAM= temp('{TMP_D}/{strain}/stampy/rna.sam')
     params:
         CORES=CORES,
         REF_PREFIX=REF_FA,
@@ -45,20 +45,27 @@ rule for_expr_stampy_remapping:
 
 rule rna_sam2bam:
     input:
-        STAMPY_SAM= '{TMP_D}/{sample}/{mapper}/rna.stampy.sam'
+        STAMPY_SAM= '{TMP_D}/{strain}/stampy/rna.sam'
     output:
-        BAM=temp('{TMP_D}/{sample}/{mapper}/rna_sorted.bam'),
-        RMDUP_SAM=temp('{TMP_D}/{sample}/{mapper}/rna_sorted.rmdup.sam'),
-        RMDUP_BAM=temp('{TMP_D}/{sample}/{mapper}/rna_sorted.rmdup.bam')
+        STAMPY_BAM=temp('{TMP_D}/{strain}/stampy/rna.bam'),
+        BAM=temp('{TMP_D}/{strain}/rna_sorted.bam'),
+        RMDUP_SAM=temp('{TMP_D}/{strain}/rna_sorted.rmdup.sam'),
+        RMDUP_BAM=temp('{TMP_D}/{strain}/rna_sorted.rmdup.bam')
+    params:
+        BAM_FILE_PREFIX='rna_sorted',
+        CMPR_LVL=9,
+        CORES=CORES
     shell:
         """
         source activate Ariane_dna
-        samtools view -bS {input.STAMPY_SAM} |\
-        samtools sort > {output.BAM}
+        samtools view -bS {input.STAMPY_SAM} > {output.STAMPY_BAM}
+        samtools sort -@ {params.CORES} -l {params.CMPR_LVL} {output.STAMPY_BAM} \
+    {wildcards.TMP_D}/{wildcards.strain}/{params.BAM_FILE_PREFIX}
         samtools rmdup -s {output.BAM} {output[RMDUP_BAM]}
         samtools view -h {output.RMDUP_BAM} > {output.RMDUP_SAM} 
         source deactivate
         """ 
+
 '''
 rule rna_mapping:
     input:
@@ -73,9 +80,9 @@ rule rna_mapping:
         REF_PREFIX=REF_FA,
         STAMPY=STAMPY_EXE,
     output:
-        RMDUP_SAM=temp(TMP_D+'/{sample}/rna_sorted.rmdup.sam'),
-        BAM=temp(TMP_D+'/{sample}/rna_sorted.bam'),
-        RMDUP_BAM=temp(TMP_D+'/{sample}/rna_sorted.rmdup.bam')
+        RMDUP_SAM=temp('{TMP_D}/{strain}/rna_sorted.rmdup.sam'),
+        BAM=temp('{TMP_D}/{strain}/rna_sorted.bam'),
+        RMDUP_BAM=temp('{TMP_D}/{strain}/rna_sorted.rmdup.bam')
     #threads: 16
     shell:
        # 'samtools view -bS {input} |samtools sort | samtools rmdup -s |samtools view -h > {output} '
@@ -94,35 +101,37 @@ rule rna_mapping:
         source deactivate
         """
 '''
+
 rule convert_to_art:
     input: 
-        '{TMP_D}/{sample}/rna_sorted.rmdup.sam'
+        '{TMP_D}/{strain}/rna_sorted.rmdup.sam'
     output:
-        temp('{TMP_D}/{sample}/rna_sorted.rmdup.art')
+        temp('{TMP_D}/{strain}/rna_sorted.rmdup.art')
     params:
-        SAM2ART=config['sam2art_exe']
+        SAM2ART='lib/sam2art.pl'
     shell:
         '{params[SAM2ART]} -s 2 {input} > {output} '
 
 rule convert_to_sin:
     input: 
-        '{TMP_D}/{sample}/rna_sorted.rmdup.sam'
+        '{TMP_D}/{strain}/rna_sorted.rmdup.sam'
     output:
-        temp('{TMP_D}/{sample}/rna_sorted.rmdup.sin')
+        temp('{TMP_D}/{strain}/rna_sorted.rmdup.sin')
     params:
-        SAM2ART=config['sam2art_exe']
+        SAM2ART='lib/sam2art.pl'
     shell:
         '{params[SAM2ART]} -s 2 -l {input} > {output} '
 
 rule convert_to_flatcount:
     input: 
-        '{TMP_D}/{sample}/rna_sorted.rmdup.sam'
+        '{TMP_D}/{strain}/rna_sorted.rmdup.sam'
     output:
-        temp('{TMP_D}/{sample}/rna_sorted.rmdup.flatcount')
+        temp('{TMP_D}/{strain}/rna_sorted.rmdup.flatcount')
     params:
-        SAM2ART=config['sam2art_exe']
+        SAM2ART='lib/sam2art.pl'
     shell:
         '{params[SAM2ART]} -f -s 2 {input} > {output} '
+
 '''
 rule make_annot_tab:
     input: 
@@ -130,37 +139,115 @@ rule make_annot_tab:
     output:
         ANNO_F='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
 '''
+
 rule gene_counts:
     input:
-        SIN_F='{TMP_D}/{sample}/rna_sorted.rmdup.sin'
+        SIN_F='{TMP_D}/{strain}/rna_sorted.rmdup.sin'
     output:
-        RPG_F='{TMP_D}/{sample}/rna_sorted.rmdup.rpg'
+        RPG_F='{TMP_D}/{strain}/rna_sorted.rmdup.rpg'
     params:
-        ART2GENECOUNT=config['art2genecount_exe'], 
+        ART2GENECOUNT='expr_original_methods/art2genecount.pl', 
         ANNO_F='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
     shell:
-        '{params[ART2GENECOUNT]} -b -a {input[SIN_F]} -t tab '
-        '-r {params[ANNO_F]} > {output[RPG_F]}'
+        """
+        {params[ART2GENECOUNT]} -b -a {input[SIN_F]} -t tab \
+        -r {params[ANNO_F]} > {output[RPG_F]}
+        """
+
+rule for_expr_sam_stats:
+    input:
+        '{TMP_D}/{strain}/rna_sorted.rmdup.sam'
+    output:
+        STATS='{TMP_D}/{strain}/rna_sorted.rmdup.stats'
+    params:
+        script_f= 'expr_original_methods/sam_statistics.pl'
+    shell:
+        """
+        {params.script_f} -r {input} > {output.STATS}
+        """
+
+rule for_expr_rstats:
+    input:
+        RPG_F='{TMP_D}/{strain}/rna_sorted.rmdup.rpg',
+        STATS='{TMP_D}/{strain}/rna_sorted.rmdup.stats',
+        ANNO_F='Pseudomonas_aeruginosa_PA14_12genes_R_annotation'
+    output:
+        RSTATS='{TMP_D}/{strain}/rna_sorted.rmdup.rstats'
+    params:
+        script_f='expr_original_methods/genes_statistics.R'
+    shell:
+        """
+        {params.script_f} {input.RPG_F} {input.STATS} \
+        {wildcards.TMP_D}/{wildcards.strain}/rna_sorted.rmdup
+        """
+
+rule for_expr_copy_files:
+    input:
+        art_f=lambda wildcards: os.path.join(TMP_D, wildcards.strain, 'rna_sorted.rmdup.art'),
+        rstat_file=lambda wildcards: os.path.join(TMP_D, wildcards.strain, 'rna_sorted.rmdup.rstats')
+    output:
+        art_tmp_f=temp("{strain}.art"),
+        rstat_tmp_f= temp("{strain}.rstats")
+    shell:
+        """
+        ln -s {input.art_F} {output.art_tmp_f}
+        ln -s {input.rstat_F} {output.rstat_tmp_f}
+        """
+
+rule for_expr_create_dict:
+    input:
+        art_tmp_files=expand("{strain}.art", strain=STRAINS),
+        rstat_tmp_files=expand("{strain}.rstats", strain=STRAINS)
+    output:
+        rna_dict_f='rna_dict.txt' 
+    shell:
+        """
+        echo {input.art_tmp_files}| \
+        sed 's/\.flt\.vcf\W*/\\n/g'| \
+        grep '\w' > {output.rna_dict_file}
+        """
+
+rule for_expr_art2coverage:
+    input:
+        art_tmp_files=expand("{strain}.art", 
+            strain=STRAINS),
+        rstat_tmp_files=expand("{strain}.rstats", 
+            strain=STRAINS),
+        rna_dict_f='rna_dict.txt' 
+    output:
+        '{TMP_D}/coverage_cut1.txt'
+    params:
+        script_f='expr_original_methods/art2cov.py'
+    shell:
+        """
+        {params.script_f} \
+        -f {input.rna_dict_f} -s SE -c 1 \
+        -o {output}
+        """
 
 rule write_dict_file:
     input:
-        RPG_FILES=expand('{TMP_D}/{sample}/rna_sorted.rmdup.rpg', sample= STRAINS,
-            TMP_D= TMP_D)
+        RPG_FILES=expand('{TMP_D}/{strain}/rna_sorted.rmdup.rpg',
+strain=STRAINS, TMP_D= TMP_D)
     output:
-        dict_f= TMP_D+'/rpg_dict'
-    run:
-        out_f= output.dict_f
-        out_fh= open(out_f, 'w')
-        out_fh.write('name\tpath\n')
-        for n in range(len(input.RPG_FILES)):
-            out_fh.write('{}\t{}\n'.format(STRAINS[n], input.RPG_FILES[n]))
-        out_fh.close()
+        rpg_dict_f= TMP_D+'/rpg_dict'
+    params:
+        tmp_d= TMP_D,
+        strains= STRAINS,
+        target_filename='rna_sorted.rmdup.rpg'
+    shell:
+        """
+        echo 'name  path' > {output.rpg_dict_f}
+        ls {params.tmp_d}/*/{params.target_filename}|\
+        awk -v pwd=$PWD \
+        -F"/" '{{print $2"\t"pwd"/"$0}}' >> {output.rpg_dict_f}
+        """
 
 rule create_and_make_expr_table:
     input:
-        dict_f= TMP_D+'/rpg_dict'
+        rpg_dict_f= TMP_D+'/rpg_dict'
     output:
         expr_table=config['expr_table']
     params:
         ANNO_F='Pseudomonas_aeruginosa_PA14_12genes_R_annotation'
-    script: 'collect_rpg_data.R'
+    script: 'lib/collect_rpg_data.R'

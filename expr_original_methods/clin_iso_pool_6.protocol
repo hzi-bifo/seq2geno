@@ -1,0 +1,146 @@
+#######################################################
+#########ScriptSeq_pool 6 with clinical isolates#######
+#######################################################
+                 ##15.06.15##MOS14##
+
+
+CH5362
+CH5432
+CH5066
+CH5159
+CH5174
+CH5182
+CH2502
+CH5206
+CH4891
+CH2639
+CH4443
+CH4446
+ZG5044412
+CH2678
+CH5596
+CH5621
+CH2500
+CH2685
+CH2707
+CH2690
+CH2698
+CH3462
+CH2724
+CH2829
+CH2830
+CH2848
+
+
+gunzip CH* ZG*
+
+
+#############################################################################################################################################
+#Mapping against PA14 (new reference genome for new stampy version)#
+
+my_stampy_pipeline CH5362 CH5362.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5362.log&
+my_stampy_pipeline CH5432 CH5432.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5432.log&
+my_stampy_pipeline CH5066 CH5066.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5066.log&
+my_stampy_pipeline CH5159 CH5159.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5159.log&
+my_stampy_pipeline CH5174 CH5174.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5174.log&
+my_stampy_pipeline CH5182 CH5182.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5182.log&
+my_stampy_pipeline CH2502 CH2502.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2502.log&
+my_stampy_pipeline CH5206 CH5206.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5206.log&
+my_stampy_pipeline CH4891 CH4891.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH4891.log&
+my_stampy_pipeline CH2639 CH2639.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2639.log&
+my_stampy_pipeline CH4443 CH4443.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH4443.log&
+my_stampy_pipeline CH4446 CH4446.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH4446.log&
+my_stampy_pipeline ZG5044412 ZG5044412.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> ZG5044412.log&
+my_stampy_pipeline CH2678 CH2678.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2678.log&
+my_stampy_pipeline CH5596 CH5596.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5596.log&
+my_stampy_pipeline CH5621 CH5621.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5621.log&
+my_stampy_pipeline CH2500 CH2500.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2500.log&
+my_stampy_pipeline CH2685 CH2685.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2685.log&
+my_stampy_pipeline CH2707 CH2707.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2707.log&
+my_stampy_pipeline CH2690 CH2690.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2690.log&
+my_stampy_pipeline CH2698 CH2698.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2698.log&
+my_stampy_pipeline CH3462 CH3462.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3462.log&
+my_stampy_pipeline CH2724 CH2724.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2724.log&
+my_stampy_pipeline CH2829 CH2829.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2829.log&
+my_stampy_pipeline CH2830 CH2830.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2830.log&
+my_stampy_pipeline CH2848 CH2848.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2848.log&
+
+
+
+
+
+my_stampy_pipeline CH5362 CH5362.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5362.log&
+my_stampy_pipeline CH5432 CH5432.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5432.log&
+my_stampy_pipeline CH5066 CH5066.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5066.log&
+my_stampy_pipeline CH5159 CH5159.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5159.log&
+my_stampy_pipeline CH5174 CH5174.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5174.log&
+my_stampy_pipeline CH5182 CH5182.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5182.log&
+my_stampy_pipeline CH2502 CH2502.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2502.log&
+my_stampy_pipeline CH5206 CH5206.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5206.log&
+my_stampy_pipeline CH4891 CH4891.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH4891.log&
+my_stampy_pipeline CH2639 CH2639.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2639.log&
+my_stampy_pipeline CH4443 CH4443.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH4443.log&
+my_stampy_pipeline CH4446 CH4446.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH4446.log&
+my_stampy_pipeline ZG5044412 ZG5044412.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> ZG5044412.log&
+my_stampy_pipeline CH2678 CH2678.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2678.log&
+my_stampy_pipeline CH5596 CH5596.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5596.log&
+my_stampy_pipeline CH5621 CH5621.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH5621.log&
+my_stampy_pipeline CH2500 CH2500.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2500.log&
+my_stampy_pipeline CH2685 CH2685.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2685.log&
+my_stampy_pipeline CH2707 CH2707.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2707.log&
+my_stampy_pipeline CH2690 CH2690.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2690.log&
+my_stampy_pipeline CH2698 CH2698.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2698.log&
+my_stampy_pipeline CH3462 CH3462.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH3462.log&
+my_stampy_pipeline CH2724 CH2724.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2724.log&
+my_stampy_pipeline CH2829 CH2829.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2829.log&
+my_stampy_pipeline CH2830 CH2830.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2830.log&
+my_stampy_pipeline CH2848 CH2848.fastq /data3/reference_sequences/stampy-references/new_stampy-references/Pseudomonas_aeruginosa_PA14.fasta /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab /data3/reference_sequences/Pseudomonas_aeruginosa/PA14/Pseudomonas_aeruginosa_PA14_12genes_R_annotation 2> CH2848.log&
+
+
+
+############################
+## 16.06.15 ##
+## Coverage berechnen_Mos14 ##
+
+art2cov.py
+
+dictionary.txt Datei erstellen mit allen Stamm-Bezeichnungen 
+
+Dann python /data3/scripts/art2cov.py -s SE laufen lassen
+Output: coverage_cut2.txt
+
+python /data3/scripts/art2cov.py -s SE -c 1 -o coverage_cut1.txt 		# min. 1 read
+
+Position = min. 1 reads
+Coverage= min. 2 reads (bei default Einstellung)
+
+# SNP_Pipeline #
+my_samtools_SNP_pipeline CH5362 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5432 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5066 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5159 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5174 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5182 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2502 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5206 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH4891 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2639 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH4443 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH4446 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline ZG5044412 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2678 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5596 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH5621 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2500 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2685 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2707 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2690 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2698 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH3462 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2724 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 0 &
+my_samtools_SNP_pipeline CH2829 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 1 &
+my_samtools_SNP_pipeline CH2830 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 2 &
+my_samtools_SNP_pipeline CH2848 /data3/reference_sequences/stampy-references/Pseudomonas_aeruginosa_PA14.fasta 3 &
+
+
+

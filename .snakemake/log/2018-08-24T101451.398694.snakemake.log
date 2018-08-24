@@ -1,0 +1,223 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	4	convert_to_sin
+	1	create_and_make_expr_table
+	3	for_expr_stampy_remapping
+	4	gene_counts
+	3	rna_mapping_bwa
+	4	rna_sam2bam
+	1	write_dict_file
+	21
+
+[Fri Aug 24 10:14:53 2018]
+rule rna_sam2bam:
+    input: tmp/F1659/stampy/rna.sam
+    output: tmp/F1659/stampy/rna.bam, tmp/F1659/rna_sorted.bam, tmp/F1659/rna_sorted.rmdup.sam, tmp/F1659/rna_sorted.rmdup.bam
+    jobid: 22
+    wildcards: TMP_D=tmp, strain=F1659
+
+[Fri Aug 24 10:21:19 2018]
+Finished job 22.
+1 of 21 steps (5%) done
+
+[Fri Aug 24 10:21:19 2018]
+rule convert_to_sin:
+    input: tmp/F1659/rna_sorted.rmdup.sam
+    output: tmp/F1659/rna_sorted.rmdup.sin
+    jobid: 13
+    wildcards: TMP_D=tmp, strain=F1659
+
+[Fri Aug 24 10:21:41 2018]
+Finished job 13.
+2 of 21 steps (10%) done
+
+[Fri Aug 24 10:21:41 2018]
+rule gene_counts:
+    input: tmp/F1659/rna_sorted.rmdup.sin
+    output: tmp/F1659/rna_sorted.rmdup.rpg
+    jobid: 8
+    wildcards: TMP_D=tmp, strain=F1659
+
+[Fri Aug 24 10:21:50 2018]
+Finished job 8.
+3 of 21 steps (14%) done
+
+[Fri Aug 24 10:21:50 2018]
+rule rna_mapping_bwa:
+    input: data/strains/rna/CH2522.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/CH2522/bwa/rna.sai, tmp/CH2522/bwa/rna.bam
+    jobid: 46
+    wildcards: TMP_D=tmp, strain=CH2522
+
+[Fri Aug 24 10:24:33 2018]
+Finished job 46.
+4 of 21 steps (19%) done
+
+[Fri Aug 24 10:24:33 2018]
+rule for_expr_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.sthash, tmp/CH2522/bwa/rna.bam
+    output: tmp/CH2522/stampy/rna.sam
+    jobid: 33
+    wildcards: TMP_D=tmp, strain=CH2522
+
+[Fri Aug 24 10:53:00 2018]
+Finished job 33.
+5 of 21 steps (24%) done
+
+[Fri Aug 24 10:53:00 2018]
+rule rna_sam2bam:
+    input: tmp/CH2522/stampy/rna.sam
+    output: tmp/CH2522/stampy/rna.bam, tmp/CH2522/rna_sorted.bam, tmp/CH2522/rna_sorted.rmdup.sam, tmp/CH2522/rna_sorted.rmdup.bam
+    jobid: 21
+    wildcards: TMP_D=tmp, strain=CH2522
+
+[Fri Aug 24 10:58:03 2018]
+Finished job 21.
+6 of 21 steps (29%) done
+
+[Fri Aug 24 10:58:03 2018]
+rule convert_to_sin:
+    input: tmp/CH2522/rna_sorted.rmdup.sam
+    output: tmp/CH2522/rna_sorted.rmdup.sin
+    jobid: 12
+    wildcards: TMP_D=tmp, strain=CH2522
+
+[Fri Aug 24 10:58:17 2018]
+Finished job 12.
+7 of 21 steps (33%) done
+
+[Fri Aug 24 10:58:17 2018]
+rule rna_mapping_bwa:
+    input: data/strains/rna/CH2502.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/CH2502/bwa/rna.sai, tmp/CH2502/bwa/rna.bam
+    jobid: 48
+    wildcards: TMP_D=tmp, strain=CH2502
+
+[Fri Aug 24 11:00:31 2018]
+Finished job 48.
+8 of 21 steps (38%) done
+
+[Fri Aug 24 11:00:31 2018]
+rule for_expr_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.sthash, tmp/CH2502/bwa/rna.bam
+    output: tmp/CH2502/stampy/rna.sam
+    jobid: 35
+    wildcards: TMP_D=tmp, strain=CH2502
+
+[Fri Aug 24 11:23:07 2018]
+Finished job 35.
+9 of 21 steps (43%) done
+
+[Fri Aug 24 11:23:07 2018]
+rule rna_sam2bam:
+    input: tmp/CH2502/stampy/rna.sam
+    output: tmp/CH2502/stampy/rna.bam, tmp/CH2502/rna_sorted.bam, tmp/CH2502/rna_sorted.rmdup.sam, tmp/CH2502/rna_sorted.rmdup.bam
+    jobid: 23
+    wildcards: TMP_D=tmp, strain=CH2502
+
+[Fri Aug 24 11:27:15 2018]
+Finished job 23.
+10 of 21 steps (48%) done
+
+[Fri Aug 24 11:27:15 2018]
+rule convert_to_sin:
+    input: tmp/CH2502/rna_sorted.rmdup.sam
+    output: tmp/CH2502/rna_sorted.rmdup.sin
+    jobid: 14
+    wildcards: TMP_D=tmp, strain=CH2502
+
+[Fri Aug 24 11:27:27 2018]
+Finished job 14.
+11 of 21 steps (52%) done
+
+[Fri Aug 24 11:27:27 2018]
+rule rna_mapping_bwa:
+    input: data/strains/rna/CH2500.fastq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.sthash, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.bwt, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.fai
+    output: tmp/CH2500/bwa/rna.sai, tmp/CH2500/bwa/rna.bam
+    jobid: 45
+    wildcards: TMP_D=tmp, strain=CH2500
+
+[Fri Aug 24 11:28:53 2018]
+Finished job 45.
+12 of 21 steps (57%) done
+
+[Fri Aug 24 11:28:53 2018]
+rule for_expr_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.fa.sthash, tmp/CH2500/bwa/rna.bam
+    output: tmp/CH2500/stampy/rna.sam
+    jobid: 32
+    wildcards: TMP_D=tmp, strain=CH2500
+
+[Fri Aug 24 11:43:40 2018]
+Finished job 32.
+13 of 21 steps (62%) done
+
+[Fri Aug 24 11:43:40 2018]
+rule rna_sam2bam:
+    input: tmp/CH2500/stampy/rna.sam
+    output: tmp/CH2500/stampy/rna.bam, tmp/CH2500/rna_sorted.bam, tmp/CH2500/rna_sorted.rmdup.sam, tmp/CH2500/rna_sorted.rmdup.bam
+    jobid: 20
+    wildcards: TMP_D=tmp, strain=CH2500
+
+[Fri Aug 24 11:46:29 2018]
+Finished job 20.
+14 of 21 steps (67%) done
+
+[Fri Aug 24 11:46:29 2018]
+rule convert_to_sin:
+    input: tmp/CH2500/rna_sorted.rmdup.sam
+    output: tmp/CH2500/rna_sorted.rmdup.sin
+    jobid: 11
+    wildcards: TMP_D=tmp, strain=CH2500
+
+[Fri Aug 24 11:46:40 2018]
+Finished job 11.
+15 of 21 steps (71%) done
+
+[Fri Aug 24 11:46:40 2018]
+rule gene_counts:
+    input: tmp/CH2522/rna_sorted.rmdup.sin
+    output: tmp/CH2522/rna_sorted.rmdup.rpg
+    jobid: 7
+    wildcards: TMP_D=tmp, strain=CH2522
+
+[Fri Aug 24 11:46:48 2018]
+Finished job 7.
+16 of 21 steps (76%) done
+
+[Fri Aug 24 11:46:48 2018]
+rule gene_counts:
+    input: tmp/CH2502/rna_sorted.rmdup.sin
+    output: tmp/CH2502/rna_sorted.rmdup.rpg
+    jobid: 9
+    wildcards: TMP_D=tmp, strain=CH2502
+
+[Fri Aug 24 11:46:55 2018]
+Finished job 9.
+17 of 21 steps (81%) done
+
+[Fri Aug 24 11:46:55 2018]
+rule gene_counts:
+    input: tmp/CH2500/rna_sorted.rmdup.sin
+    output: tmp/CH2500/rna_sorted.rmdup.rpg
+    jobid: 6
+    wildcards: TMP_D=tmp, strain=CH2500
+
+[Fri Aug 24 11:47:02 2018]
+Finished job 6.
+18 of 21 steps (86%) done
+
+[Fri Aug 24 11:47:02 2018]
+rule write_dict_file:
+    input: tmp/CH2500/rna_sorted.rmdup.rpg, tmp/CH2502/rna_sorted.rmdup.rpg, tmp/CH2522/rna_sorted.rmdup.rpg, tmp/F1659/rna_sorted.rmdup.rpg
+    output: tmp/rpg_dict
+    jobid: 3
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-08-24T101451.398694.snakemake.log
