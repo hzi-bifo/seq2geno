@@ -67,7 +67,8 @@ if 'genes_list' in snakemake.input:
         target_families= [l.strip() for l in
             open(snakemake.input['genes_list'],'r')]
 
-list_fh= open(snakemake.output['aln_list'], 'w')
+## The list is replaced with the 'dynamic' function of snakemake
+#list_fh= open(snakemake.output['aln_list'], 'w')
 for k in target_families:
     out_fasta= os.path.join(snakemake.params['TMP_D'], k+'.fa')
     out_aln= os.path.join(snakemake.params['TMP_D'], k+'.aln')
@@ -83,6 +84,6 @@ for k in target_families:
             globalpair= True, input= '"'+out_fasta+'"')
     with open(out_aln, 'w') as out_fh:
         out_fh.write('\n'.join(aln()))
-    list_fh.write('{}\n'.format(out_aln))
+#    list_fh.write('{}\n'.format(out_aln))
    
-list_fh.close()
+#list_fh.close()

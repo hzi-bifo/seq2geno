@@ -1,0 +1,20 @@
+import snakemake
+import os
+import argparse
+
+parser = argparse.ArgumentParser(
+        description='Seq2Geno: the pipline tool '
+            'for genomic features computation')
+parser.add_argument('--input', dest='conf_f', type= str,
+    help='the config file', default= '')
+args = parser.parse_args()
+
+
+w_dir=os.path.abspath('.')
+print('working path= {}'.format(w_dir))
+seq2geno_dir=os.path.dirname(os.path.realpath(__file__))
+print('bin path= {}'.format(seq2geno_dir))
+print('config file= {}'.format(args.conf_f))
+snakemake.snakemake(snakefile=os.path.join(seq2geno_dir, 'lib/main.smk'),
+    configfile= (None if args.conf_f != '' else args.conf_f),
+    dryrun=True, workdir= w_dir)
