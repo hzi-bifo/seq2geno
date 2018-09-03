@@ -100,10 +100,9 @@ rule create_dict_file:
 
 rule all_snps_list:
     input:
-        #flt_files=expand('{TMP_D}/{strain}/{mapper}/st_variant.fltcnt', 
-        #    TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
-        #snp_vcf_files=expand("{TMP_D}/{strain}/{mapper}/st_variant.snp-vcf", 
-        #    TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
+        ## the exact files should also be, so they cannot be deleted before 
+        flatcount_file=expand(os.path.join(TMP_D, '{strain}', SOFTWARE['mapper'], 'st_variant.fltcnt'), strain=STRAINS),
+        snp_vcf_file=expand(os.path.join(TMP_D, '{strain}', SOFTWARE['mapper'], 'st_variant.snp-vcf'), strain=STRAINS),
         flt_files=expand("{strain}.flatcount", 
             strain=STRAINS),
         flt_vcf_files=expand("{strain}.flt.vcf", 
@@ -128,7 +127,7 @@ rule all_snps_list:
 
 rule compute_flatcounts:
     input:
-        STAMPY_SAM= temp('{TMP_D}/{strain}/{mapper}/st_paired.sam')
+        STAMPY_SAM= '{TMP_D}/{strain}/{mapper}/st_paired.sam'
     output:
         flt_f='{TMP_D}/{strain}/{mapper}/st_variant.fltcnt',
         sin_f='{TMP_D}/{strain}/{mapper}/st_variant.sin',

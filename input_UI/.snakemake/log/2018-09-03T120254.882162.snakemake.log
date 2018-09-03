@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 5 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/test/lib/main.smk:
+Missing input files for rule some_process:
+files.txt
