@@ -3,16 +3,7 @@ library('mnormt')
 library('ape')
 library('ggtree')
 
-read_seq2geno.tab<-function(f, na.value= NA){
-    mat<- <- data.matrix(read.table(f, 
-        sep= '\t', header= T, check.names= F, 
-        stringsAsFactors= F, row.names= 1))
-    if (any(is.na(mat))){
-	quit()
-    }else{
-      return(mat)
-    }
-}
+source('seq2geno.MatIO.R')
 
 #args= commandArgs(trailingOnly= TRUE)
 #tree_f<- args[1]
