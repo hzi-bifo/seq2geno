@@ -1,3 +1,4 @@
+'''
 rule find_best_tree:
     input:
         one_big_var_aln=TMP_D+'/OneBig.var.aln'
@@ -15,15 +16,36 @@ rule find_best_tree:
         -m GTRGAMMA -s {input} -n {params[PREFIX]} -p 1 -N 1 
         cp {params[RAXML_OUTDIR]}/RAxML_bestTree.{params[PREFIX]} {output}
         """
-
+'''
+rule find_best_tree:
+    input:
+        one_big_var_aln=TMP_D+'/OneBig.var.aln'
+    output:
+        tree=config['tree']
+    params:
+        FASTTREE_BIN='FastTreeMP',
+        FASTTREE_OPT='-gtr -gamma -nt -quiet'
+    shell:
+        """
+        {params.FASTTREE_BIN} {params.FASTTREE_OPT} <{input}>\
+        {output.tree}
+        """
+    
 rule postprocess_alignment:
     ## Remove the invariant sites
     input:
         one_big_aln='{TMP_D}/OneBig.aln'
     output:
         one_big_var_aln='{TMP_D}/OneBig.var.aln'
+    params:
+        TRIMAL_BIN='trimal',
+        TRIMAL_OPT='-st 1 -gt 1 -complementary'
     shell:
-        "trimal -st 1 -gt 1 -complementary -in {input} -out {output}"
+        """
+        {params.TRIMAL_BIN} {params.TRIMAL_OPT} \
+        -in {input.one_big_aln} \
+        -out {output.one_big_var_aln}
+        """
 
 rule create_coding_regions_aln:
     ## Sort sequences by gene family, align each family, and concatenate the

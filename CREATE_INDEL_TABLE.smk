@@ -49,18 +49,18 @@ rule vcf_to_indels_per_fam:
 
 rule expand_by_family:
     input:
-        dynamic(os.path.join(TMP_D, 'extracted_proteins_nt', '{fam}_indels.txt'))        
+        FAM_INDELS_FILES=dynamic(os.path.join(TMP_D, 'extracted_proteins_nt', '{fam}_indels.txt'))        
     output:
         indel_list= os.path.join(TMP_D, 'indel.list')
-    shell:
-        """
-        echo \'{input}\' | sed \'s/ /\\n/g\' > {output}
-        """
+    run:
+        out_fh=open(output.indel_list, 'w')
+        out_fh.write("\n".join(input.FAM_INDELS_FILES))
+        out_fh.close()
 
 rule create_indel_table:
     input:
         indel_list= os.path.join(TMP_D, 'indel.list')
     output:
         annot_f=config['indel_table'],
-        indel_stat_f='indels_stats.txt',
+        indel_stat_f='indels_stats.txt'
     script: 'lib/indel_detection/generate_indel_features.py'
