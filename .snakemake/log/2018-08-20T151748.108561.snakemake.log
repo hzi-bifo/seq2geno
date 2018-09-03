@@ -1,7 +1,0 @@
-Building DAG of jobs...
-InputFunctionException in line 42 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk:
-KeyError: 'the label [reference] is not in the [index]'
-Wildcards:
-TMP_D=tmp
-strain=CH2522
-mapper=bwa

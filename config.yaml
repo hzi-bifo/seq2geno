@@ -1,5 +1,5 @@
-tmp_d: 'tmp'
-result_d: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results'
+#tmp_d: 'tmp'
+#result_d: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results'
 working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5'
 
 ###### external executives
@@ -7,8 +7,8 @@ stampy_exe: '/home/thkuo/bin/stampy-1.0.23/stampy.py'
 #raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS'
 #raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS-AVX2'
 raxml_exe: 'raxmlHPC-PTHREADS-AVX2'
-art2genecount_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/art2genecount.pl'
-sam2art_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/sam2art.pl'
+#art2genecount_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/art2genecount.pl'
+#sam2art_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/sam2art.pl'
 
 software:
   mapper: 'bwa'
