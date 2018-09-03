@@ -11,17 +11,13 @@ read_seq2geno.tab<-function(f, na.value= NA){
     mat<- <- data.matrix(read.table(f, 
         sep= '\t', header= T, check.names= F, 
         stringsAsFactors= F, row.names= 1))
-    return(mat)
-}
-
-check_seq2geno.tab<-function(f){
-    mat<- <- data.matrix(read.table(f, 
-        sep= '\t', header= T, check.names= F, 
-        stringsAsFactors= F, row.names= 1))
     if (any(is.na(mat))){
 	quit()
+    }else{
+      return(mat)
     }
 }
+
 
 expr_f<- '' # expression levels
 target_strains<- c() # flat list from snakemake
@@ -34,14 +30,12 @@ lfc_cutoff<-1
 #####
 ### The input matrix
 ### check if it in line with the feature table rules (refer to github issues and the scripts)
-check_seq2_geno.tab(expr_f)
 rpg_mat<- read_seq2geno.tab(expr_f, )
 rpg_mat<- rpg_mat[target_strains, ]
 
 #####
 ### classes
 #samples_f<- '../data/pheno_table_CLSI_S-vs-R.txt'
-check_seq2_geno.tab(samples_f)
 samples_df<- read_Seq2geno.tab(samples_f, na.value= '')
 #colnames(samples_df)<- c('Tob', 'Cef', 'Cip', 'Mer', 'Col')
 #samples_df[samples_df == 1]<- 'Resistant'
