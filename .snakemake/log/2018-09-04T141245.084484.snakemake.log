@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	compress_feat_table
+	1	create_indel_table
+	3
+
+[Tue Sep  4 14:12:54 2018]
+rule create_indel_table:
+    input: seq2geno_temp/indel.list
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/annot.tab, indels_stats.txt
+    jobid: 6
+
+    [Tue Sep  4 14:12:55 2018]
+    Error in rule create_indel_table:
+        jobid: 6
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results/annot.tab, indels_stats.txt
+
+RuleException:
+CalledProcessError in line 66 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_INDEL_TABLE.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/seq2geno/bin/python /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/lib/indel_detection/.snakemake.l_nizyjf.generate_indel_features.py ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_INDEL_TABLE.smk", line 66, in __rule_create_indel_table
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-09-04T141245.084484.snakemake.log
