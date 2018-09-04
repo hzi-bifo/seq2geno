@@ -1,0 +1,22 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	aln_to_vcf_per_fam
+	1	compress_feat_table
+	1	create_indel_table
+	1	expand_by_family
+	1	sort_gene_family
+	1	vcf_to_indels_per_fam
+	7
+
+[Tue Sep  4 14:09:25 2018]
+rule sort_gene_family:
+    input: seq2geno_temp/roary/gene_presence_absence.csv, seq2geno_temp/CH2500/spades/prokka/de_novo.ffn, seq2geno_temp/CH2502/spades/prokka/de_novo.ffn, seq2geno_temp/CH2522/spades/prokka/de_novo.ffn, seq2geno_temp/F1659/spades/prokka/de_novo.ffn, seq2geno_temp/ESP088/spades/prokka/de_novo.ffn, seq2geno_temp/MHH15083/spades/prokka/de_novo.ffn
+    output: seq2geno_temp/extracted_proteins_nt/{*}.aln (dynamic)
+    jobid: 94
+
+Subsequent jobs will be added dynamically depending on the output of this job

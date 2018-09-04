@@ -49,24 +49,25 @@ for l in open(fam_f, 'r'):
     for ortho in orthologues:
         fam_dict[ortho]= gene
 '''
-## obtain sequence information, sort them by family, and format the seqeuences
+## sort by family 
+## The values are arrays, which includes two elements: strain name as fasta
+## header and its sequence
 seq_dict= {}
-for strain in files:
-    records_dict= SeqIO.to_dict(SeqIO.parse(files[strain], seq_format))
-    # extract the seqeunce and format it
-    seq_series= sub_fam_df[strain].apply(lambda x:
-            '\n'.join(['>'+strain, textwrap.fill(str(records_dict[x].seq),
-                width= 60), '']) if x in records_dict else
-            '\n'.join(['>'+strain,'']))
-    seq_dict[strain]= seq_series
-seq_df= pd.DataFrame(data=seq_dict) # strains in columns
-seq_df=seq_df.T # strains in rows
-print(seq_df.shape)
+for s in files:
+    records_dict= SeqIO.to_dict(SeqIO.parse(files[s], seq_format))
+    for seq_id in [x for x in records_dict.keys() if x in fam_dict] :
+        key= fam_dict[seq_id] # gene family
+        if not (key in seq_dict):
+            seq_dict[key]= []
+        seq_str=str(records_dict[seq_id].seq) if (seq_id in records_dict) else
+        ''
+        seq_dict[key].append('>'+s) # formated in fasta
+        seq_dict[key].append(textwrap.fill(seq_str, 
+            width= 60)) # formated in fasta
 
 alignments= []
 ## target families
-#target_families= seq_dict.keys()
-target_families= seq_df.columns.values.tolist()
+target_families= seq_dict.keys()
 if 'genes_list' in snakemake.input:
     if os.path.exists(snakemake.input['genes_list']):
         target_families= [l.strip() for l in
@@ -81,8 +82,7 @@ for k in target_families:
     out_aln= re.sub('([^\w_\-\/\.])', r'\\\1', out_aln)
     alignments.append(out_aln)
     with open(out_fasta, 'w') as out_fh:
-        out_fh.write('\n'.join(seq_df[k].values.tolist()))
-        #out_fh.write('\n'.join(seq_dict[k]))
+        out_fh.write('\n'.join(seq_dict[k]))
 #    print(out_fasta)
 #    print(out_aln)
     
