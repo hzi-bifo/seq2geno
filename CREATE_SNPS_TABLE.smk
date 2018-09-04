@@ -98,6 +98,15 @@ rule create_dict_file:
         grep '\w' > {output.dict_file}
         """
 
+rule for_tab_compute_annot_file:
+    input:
+        ref_gbk=config['reference_annotation']
+    output:
+        anno_f=temp('annotations_for_snps.tab')
+    params:
+        species= config['species']
+    script:'lib/create_dict_for_snps.py'
+
 rule all_snps_list:
     input:
         ## the exact files should also be, so they cannot be deleted before 
@@ -108,7 +117,8 @@ rule all_snps_list:
         flt_vcf_files=expand("{strain}.flt.vcf", 
             strain=STRAINS),
         dict_f='dict.txt',
-        anno_f='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
+        #anno_f='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
+        anno_f='annotations_for_snps.tab'
     output: 
 #        all_snps_tab=os.path.join(TMP_D, '/all_SNPs.tsv'),
         snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1_final.tab'))
