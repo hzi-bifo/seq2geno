@@ -1,5 +1,4 @@
-#tmp_d: 'tmp'
-#result_d: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/results'
+species: 'Paeruginosa'
 working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5'
 
 ###### external executives
