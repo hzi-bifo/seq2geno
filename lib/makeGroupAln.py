@@ -32,11 +32,14 @@ illegal_pattern= '[^\w_\-\.]'
 fam_df['Gene']=fam_df['Gene'].str.replace(illegal_pattern, '-')
 fam_df.set_index('Gene', inplace=True)
 # reshape the data
+## The paralogues in the roary output are separated, so we don't need to count
+## them
 sub_fam_df= fam_df[fam_df['No. isolates']>min_samples][snakemake.params['STRAINS']]
 sub_fam_df['gene']= pd.Series(sub_fam_df.index.tolist(), index= sub_fam_df.index)
 sub_fam_longdf= pd.melt(sub_fam_df, id_vars=['gene'])
 sub_fam_longdf= sub_fam_longdf[pd.notnull(sub_fam_longdf.value)]
 print(sub_fam_longdf.shape)
+## gene name -> gene family
 fam_dict= {sub_fam_longdf.value.tolist()[n]: sub_fam_longdf.gene.tolist()[n]
         for n in range(sub_fam_longdf.shape[0])}
 '''
@@ -46,28 +49,31 @@ for l in open(fam_f, 'r'):
     for ortho in orthologues:
         fam_dict[ortho]= gene
 '''
-## sort by family 
-## the values are arrays, in which the odd ones are strain names and the even ones are sequences
+## obtain sequence information, sort them by family, and format the seqeuences
 seq_dict= {}
-for s in files:
-    records_dict= SeqIO.to_dict(SeqIO.parse(files[s], seq_format))
-    for seq_id in [x for x in records_dict.keys() if x in fam_dict] :
-        key= fam_dict[seq_id] 
-        if not (key in seq_dict):
-            seq_dict[key]= []
-        seq_dict[key].append('>'+s) # formated in fasta
-        seq_dict[key].append(textwrap.fill(str(records_dict[seq_id].seq), 
-            width= 60)) # formated in fasta
+for strain in files:
+    records_dict= SeqIO.to_dict(SeqIO.parse(files[strain], seq_format))
+    # extract the seqeunce and format it
+    seq_series= sub_fam_df[strain].apply(lambda x:
+            '\n'.join(['>'+strain, textwrap.fill(str(records_dict[x].seq),
+                width= 60), '']) if x in records_dict else
+            '\n'.join(['>'+strain,'']))
+    seq_dict[strain]= seq_series
+seq_df= pd.DataFrame(data=seq_dict) # strains in columns
+seq_df=seq_df.T # strains in rows
+print(seq_df.shape)
 
 alignments= []
 ## target families
-target_families= seq_dict.keys()
+#target_families= seq_dict.keys()
+target_families= seq_df.columns.values.tolist()
 if 'genes_list' in snakemake.input:
     if os.path.exists(snakemake.input['genes_list']):
         target_families= [l.strip() for l in
             open(snakemake.input['genes_list'],'r')]
 
-list_fh= open(snakemake.output['aln_list'], 'w')
+## The list is replaced with the 'dynamic' function of snakemake
+#list_fh= open(snakemake.output['aln_list'], 'w')
 for k in target_families:
     out_fasta= os.path.join(snakemake.params['TMP_D'], k+'.fa')
     out_aln= os.path.join(snakemake.params['TMP_D'], k+'.aln')
@@ -75,7 +81,8 @@ for k in target_families:
     out_aln= re.sub('([^\w_\-\/\.])', r'\\\1', out_aln)
     alignments.append(out_aln)
     with open(out_fasta, 'w') as out_fh:
-        out_fh.write('\n'.join(seq_dict[k]))
+        out_fh.write('\n'.join(seq_df[k].values.tolist()))
+        #out_fh.write('\n'.join(seq_dict[k]))
 #    print(out_fasta)
 #    print(out_aln)
     
@@ -83,6 +90,6 @@ for k in target_families:
             globalpair= True, input= '"'+out_fasta+'"')
     with open(out_aln, 'w') as out_fh:
         out_fh.write('\n'.join(aln()))
-    list_fh.write('{}\n'.format(out_aln))
+#    list_fh.write('{}\n'.format(out_aln))
    
-list_fh.close()
+#list_fh.close()

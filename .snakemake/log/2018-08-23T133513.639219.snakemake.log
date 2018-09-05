@@ -1,4 +1,0 @@
-IndentationError in line 197 of <tokenize>:
-unindent does not match any outer indentation level (<tokenize>, line 197)
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/INTERFACE.smk", line 23, in <module>
-  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/tokenize.py", line 578, in _tokenize
