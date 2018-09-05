@@ -12,7 +12,7 @@
 #dict_file	<- args[1]	# File containing the sample dictionary
 #anno_file	<- args[2]	# annotations of genes
 dict_file	<- snakemake@input[['rpg_dict_f']]	# File containing the sample dictionary
-anno_file	<- snakemake@params[['ANNO_F']]	# annotations of genes
+anno_file	<- snakemake@input[['anno_f']]	# annotations of genes
 out_file	<- snakemake@output[['expr_table']]
 print(dict_file)
 

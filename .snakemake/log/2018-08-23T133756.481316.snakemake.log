@@ -1,4 +1,0 @@
-WildcardError in line 224 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_EXPR_TABLE.smk:
-No values given for wildcard 'strain'.
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/INTERFACE.smk", line 23, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_EXPR_TABLE.smk", line 224, in <module>

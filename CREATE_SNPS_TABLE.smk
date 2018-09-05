@@ -98,18 +98,27 @@ rule create_dict_file:
         grep '\w' > {output.dict_file}
         """
 
+rule for_tab_compute_annot_file:
+    input:
+        ref_gbk=config['reference_annotation']
+    output:
+        anno_f=temp('annotations_for_snps.tab')
+    params:
+        species= config['species']
+    script:'lib/create_dict_for_snps.py'
+
 rule all_snps_list:
     input:
-        #flt_files=expand('{TMP_D}/{strain}/{mapper}/st_variant.fltcnt', 
-        #    TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
-        #snp_vcf_files=expand("{TMP_D}/{strain}/{mapper}/st_variant.snp-vcf", 
-        #    TMP_D=TMP_D, strain=STRAINS, mapper= SOFTWARE['mapper']),
+        ## the exact files should also be, so they cannot be deleted before 
+        flatcount_file=expand(os.path.join(TMP_D, '{strain}', SOFTWARE['mapper'], 'st_variant.fltcnt'), strain=STRAINS),
+        snp_vcf_file=expand(os.path.join(TMP_D, '{strain}', SOFTWARE['mapper'], 'st_variant.snp-vcf'), strain=STRAINS),
         flt_files=expand("{strain}.flatcount", 
             strain=STRAINS),
         flt_vcf_files=expand("{strain}.flt.vcf", 
             strain=STRAINS),
         dict_f='dict.txt',
-        anno_f='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
+        #anno_f='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
+        anno_f='annotations_for_snps.tab'
     output: 
 #        all_snps_tab=os.path.join(TMP_D, '/all_SNPs.tsv'),
         snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1_final.tab'))
@@ -128,7 +137,7 @@ rule all_snps_list:
 
 rule compute_flatcounts:
     input:
-        STAMPY_SAM= temp('{TMP_D}/{strain}/{mapper}/st_paired.sam')
+        STAMPY_SAM= '{TMP_D}/{strain}/{mapper}/st_paired.sam'
     output:
         flt_f='{TMP_D}/{strain}/{mapper}/st_variant.fltcnt',
         sin_f='{TMP_D}/{strain}/{mapper}/st_variant.sin',

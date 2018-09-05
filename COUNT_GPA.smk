@@ -9,15 +9,18 @@ rule compute_gpa_raw_table:
         roary_gpa_rtab='{TMP_D}/{gene_sorter}/gene_presence_absence.Rtab'
     params:
         #roary_outdir="{TMP_D}/roary",
+        ROARY_BIN='roary',
         cores=CORES
     shell:
         ## remove the roary folder created by snakemake first. 
         ## Otherwise, roary would create another and put all the output files in another automatically created folder
         """
+
         rm -r {wildcards.TMP_D}/{wildcards.gene_sorter}
-        roary -b \"blastp -qcov_hsp_perc 95 \" \
+        {params.ROARY_BIN} -b \"blastp -qcov_hsp_perc 95 \" \
         -f {wildcards.TMP_D}/{wildcards.gene_sorter} -v -p \
         {params.cores} -g 100000 {input[gffs]}
+
         """
 
 rule duplicate_gffs:
@@ -33,7 +36,7 @@ rule duplicate_gffs:
         
 rule create_gff:
     input:
-        assembly="{TMP_D}/{strain}/{assembler}/assem.fa"
+        assembly="{TMP_D}/{strain}/{assembler}/scaffolds.fasta"
     output:
         ffn_output="{TMP_D}/{strain}/{assembler}/{annotator}/de_novo.ffn",## required by the indel table
         gff_output="{TMP_D}/{strain}/{assembler}/{annotator}/de_novo.gff"
@@ -45,9 +48,11 @@ rule create_gff:
         cores=CORES
     shell:
         """
+
         prokka --cpus {params.cores} --force --prefix {params.anno_prefix} \
         --locustag {wildcards.strain} \
         --outdir {wildcards.TMP_D}/{wildcards.strain}/{wildcards.assembler}/{wildcards.annotator} {input[assembly]}
+
         """
 #        "cp {params.anno_outdir}/{params.anno_out} {output[gff]}"
 '''
