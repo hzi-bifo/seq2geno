@@ -1,10 +1,6 @@
 #!/usr/bin/Rscript
 
 # convert the table of roary gpa (.csv) to a fasta of gpa
-library('phytools')
-library('ape')
-
-
 load_data_matrix<- function(pa_f){
   ## with pheatmap
   # read the table

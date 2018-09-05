@@ -1,0 +1,4 @@
+WildcardError in line 105 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk:
+No values given for wildcard 'strain'.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/MAIN.smk", line 24, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/CREATE_SNPS_TABLE.smk", line 105, in <module>

@@ -1,0 +1,29 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	for_tab_compute_annot_file
+	2
+
+[Tue Sep  4 16:43:13 2018]
+rule for_tab_compute_annot_file:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/data/reference/RefCln_UCBPP-PA14.gbk
+    output: annotations_for_snps.tab
+    jobid: 1
+
+[Tue Sep  4 16:43:16 2018]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Tue Sep  4 16:43:16 2018]
+localrule all:
+    input: annotations_for_snps.tab
+    jobid: 0
+
+[Tue Sep  4 16:43:16 2018]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/.snakemake/log/2018-09-04T164312.057251.snakemake.log

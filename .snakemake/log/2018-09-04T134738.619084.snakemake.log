@@ -1,0 +1,29 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	sort_gene_family
+	2
+
+[Tue Sep  4 13:47:42 2018]
+rule sort_gene_family:
+    input: seq2geno_temp/roary/gene_presence_absence.csv, seq2geno_temp/CH2500/spades/prokka/de_novo.ffn, seq2geno_temp/CH2502/spades/prokka/de_novo.ffn, seq2geno_temp/CH2522/spades/prokka/de_novo.ffn, seq2geno_temp/F1659/spades/prokka/de_novo.ffn, seq2geno_temp/ESP088/spades/prokka/de_novo.ffn, seq2geno_temp/MHH15083/spades/prokka/de_novo.ffn
+    output: seq2geno_temp/extracted_proteins_nt/{*}.aln (dynamic)
+    jobid: 1
+
+Subsequent jobs will be added dynamically depending on the output of this job
+Terminating processes on user request, this might take some time.
+    [Tue Sep  4 13:49:07 2018]
+    Error in rule sort_gene_family:
+        jobid: 1
+        output: seq2geno_temp/extracted_proteins_nt/{*}.aln (dynamic)
+
+RuleException:
+CalledProcessError in line 42 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/test.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/seq2geno/bin/python /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/lib/.snakemake.kmz09leq.makeGroupAln.py ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/test.smk", line 42, in __rule_sort_gene_family
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Cancelling snakemake on user request.
