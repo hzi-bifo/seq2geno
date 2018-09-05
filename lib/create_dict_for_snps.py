@@ -19,18 +19,18 @@ acc= rec.id
 sequence_type= 'Chromosome'
 
 with open(out_f, 'w') as out_fh:
-    header_line= '@'+'|'.join([species_strain, acc, chr_len])
-    columns=['@Strain', 'Refseq_Accession', 'Replicon', 'Locus_Tag', 'Feature_Type',
-    'Start', 'Stop', 'Strand', 'Gene_Name']
-    out_fh.write(header_line+'\n')
+    columns=['locus', 'PA14_ID', 'PAO1_ID', 'length', 'gene_name', 'type',
+    'PseudoCAP', 'Localization', 'Start', 'End']
     out_fh.write('\t'.join(columns)+'\n')
 
-    target_feature= 'gene'
-    for fea in [fea for fea in rec.features if fea.type == target_feature]:
+
+    for fea in [fea for fea in rec.features if ((fea.type == 'gene') or
+        (not (re.search('RNA', fea.type) is None)))]:
         if not ('locus_tag' in fea.qualifiers):
             continue
+        ## be careful about the coordinates
         d=[species_strain, acc, sequence_type, fea.qualifiers['locus_tag'][0],
-                target_feature, str(fea.location.start), str(fea.location.end),
+                fea.type, str(fea.location.start+1), str(fea.location.end),
                 '+' if fea.strand == 1 else '-', fea.qualifiers['name'][0] if
                 'name' in fea.qualifiers else '.']
         out_fh.write('\t'.join(d)+'\n')
