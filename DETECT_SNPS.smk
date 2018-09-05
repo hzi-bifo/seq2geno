@@ -26,7 +26,9 @@ rule create_vcf:
         CORES=CORES
     shell:
         """
-        freebayes-parallel <(fasta_generate_regions.py {input[REF_FA_INDEX]} 100000) {params[CORES]} -f {input[REF]} {input[BAM]} | \
+        freebayes-parallel <(fasta_generate_regions.py \
+        {input[REF_FA_INDEX]} 100000) {params[CORES]} \
+        -p 1 -f {input[REF]} {input[BAM]} | \
         bgzip -c > {output[vcf_gz]}
         """ 
 

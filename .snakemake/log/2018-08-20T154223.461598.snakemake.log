@@ -1,6 +1,0 @@
-Building DAG of jobs...
-InputFunctionException in line 62 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/DETECT_SNPS_FOR_TABLE.smk:
-KeyError: 'the label [bwa] is not in the [index]'
-Wildcards:
-TMP_D=tmp/F1659
-strain=bwa
