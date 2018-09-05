@@ -141,17 +141,20 @@ rule make_annot_tab:
 '''
 
 rule gene_counts:
+    # The required anno file is different from
+    # the others in this expression pipeline
     input:
-        SIN_F='{TMP_D}/{strain}/rna_sorted.rmdup.sin'
+        SIN_F='{TMP_D}/{strain}/rna_sorted.rmdup.sin',
+        anno_f=temp('annotations_for_snps.tab') 
     output:
         RPG_F='{TMP_D}/{strain}/rna_sorted.rmdup.rpg'
     params:
-        ART2GENECOUNT='expr_original_methods/art2genecount.pl', 
-        ANNO_F='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
+        ART2GENECOUNT='expr_original_methods/art2genecount.pl'
+#        ANNO_F='Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
     shell:
         """
-        {params[ART2GENECOUNT]} -b -a {input[SIN_F]} -t tab \
-        -r {params[ANNO_F]} > {output[RPG_F]}
+        {params.ART2GENECOUNT} -b -a {input.SIN_F} -t tab \
+        -r {input.anno_f} > {output.RPG_F}
         """
 
 rule for_expr_sam_stats:
@@ -170,14 +173,14 @@ rule for_expr_rstats:
     input:
         RPG_F='{TMP_D}/{strain}/rna_sorted.rmdup.rpg',
         STATS='{TMP_D}/{strain}/rna_sorted.rmdup.stats',
-        ANNO_F='Pseudomonas_aeruginosa_PA14_12genes_R_annotation'
+        anno_f=temp('annotations_for_expr.tab')
     output:
         RSTATS='{TMP_D}/{strain}/rna_sorted.rmdup.rstats'
     params:
         script_f='expr_original_methods/genes_statistics.R'
     shell:
         """
-        {params.script_f} {input.RPG_F} {input.STATS} \
+        {params.script_f} {input.RPG_F} {input.anno_f} {input.STATS} \
         {wildcards.TMP_D}/{wildcards.strain}/rna_sorted.rmdup
         """
 
@@ -243,11 +246,17 @@ strain=STRAINS, TMP_D= TMP_D)
         -F"/" '{{print $2"\t"pwd"/"$0}}' >> {output.rpg_dict_f}
         """
 
+rule for_expr_create_annot:
+    input:
+        ref_gbk=config['reference_annotation']
+    output:
+        anno_f=temp('annotations_for_expr.tab')
+    script:'create_dict_for_expr.py'
+
 rule create_and_make_expr_table:
     input:
-        rpg_dict_f= TMP_D+'/rpg_dict'
+        rpg_dict_f= TMP_D+'/rpg_dict',
+        anno_f=temp('annotations_for_expr.tab')
     output:
         expr_table=config['expr_table']
-    params:
-        ANNO_F='Pseudomonas_aeruginosa_PA14_12genes_R_annotation'
     script: 'lib/collect_rpg_data.R'
