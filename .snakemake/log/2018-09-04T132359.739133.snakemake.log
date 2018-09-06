@@ -1,3 +1,0 @@
-NameError in line 17 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/test.smk:
-name 'CORES' is not defined
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/test.smk", line 17, in <module>
