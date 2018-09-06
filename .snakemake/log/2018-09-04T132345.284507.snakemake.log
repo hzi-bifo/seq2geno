@@ -1,3 +1,0 @@
-NameError in line 3 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/test.smk:
-name 'TMP_D' is not defined
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v5/test.smk", line 3, in <module>
