@@ -1,0 +1,34 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	all
+	1	create_and_make_expr_table
+	1	create_salmon_ref_index
+	1	for_salmon_extract_cds_seqs
+	10	gene_counts_by_salmon
+	14
+
+[Fri Sep  7 15:30:19 2018]
+rule for_salmon_extract_cds_seqs:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/data/reference/RefCln_UCBPP-PA14.gbk
+    output: seq2geno_temp/reference.cds.fa
+    jobid: 13
+    wildcards: TMP_D=seq2geno_temp
+
+[Fri Sep  7 15:30:19 2018]
+rule create_salmon_ref_index:
+    input: seq2geno_temp/reference.cds.fa
+    output: seq2geno_temp/salmon_index
+    jobid: 12
+    wildcards: TMP_D=seq2geno_temp
+
+
+[Fri Sep  7 15:30:19 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/F2097.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/F2097/salmon
+    jobid: 11
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+RuleException in line 48 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/CREATE_EXPR_TABLE.salmon.smk:
+'InputFiles' object has no attribute 'REF_SALMON_INDEX'

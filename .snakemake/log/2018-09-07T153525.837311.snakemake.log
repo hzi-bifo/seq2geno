@@ -1,0 +1,45 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_and_make_expr_table
+	1	create_salmon_ref_index
+	1	for_salmon_extract_cds_seqs
+	10	gene_counts_by_salmon
+	14
+
+[Fri Sep  7 15:35:28 2018]
+rule for_salmon_extract_cds_seqs:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/data/reference/RefCln_UCBPP-PA14.gbk
+    output: seq2geno_temp/reference.cds.fa
+    jobid: 13
+    wildcards: TMP_D=seq2geno_temp
+
+[Fri Sep  7 15:35:32 2018]
+Finished job 13.
+1 of 14 steps (7%) done
+
+[Fri Sep  7 15:35:32 2018]
+rule create_salmon_ref_index:
+    input: seq2geno_temp/reference.cds.fa
+    output: seq2geno_temp/salmon_index
+    jobid: 12
+    wildcards: TMP_D=seq2geno_temp
+
+    [Fri Sep  7 15:35:32 2018]
+    Error in rule create_salmon_ref_index:
+        jobid: 12
+        output: seq2geno_temp/salmon_index
+
+RuleException:
+CalledProcessError in line 11 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/CREATE_EXPR_TABLE.salmon.smk:
+Command ' set -euo pipefail;  
+        salmon index -t seq2geno_temp/reference.cds.fa -i         seq2geno_temp/salmon_index ' returned non-zero exit status 127.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/CREATE_EXPR_TABLE.salmon.smk", line 11, in __rule_create_salmon_ref_index
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-07T153525.837311.snakemake.log
