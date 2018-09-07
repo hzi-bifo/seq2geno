@@ -1,0 +1,144 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_and_make_expr_table
+	1	create_salmon_ref_index
+	10	gene_counts_by_salmon
+	13
+
+[Fri Sep  7 15:37:10 2018]
+rule create_salmon_ref_index:
+    input: seq2geno_temp/reference.cds.fa
+    output: seq2geno_temp/salmon_index
+    jobid: 12
+    wildcards: TMP_D=seq2geno_temp
+
+Removing temporary output file seq2geno_temp/reference.cds.fa.
+[Fri Sep  7 15:37:30 2018]
+Finished job 12.
+1 of 13 steps (8%) done
+
+[Fri Sep  7 15:37:30 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/F1659.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/F1659/salmon
+    jobid: 2
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep  7 15:38:05 2018]
+Finished job 2.
+2 of 13 steps (15%) done
+
+[Fri Sep  7 15:38:05 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/CH2522.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/CH2522/salmon
+    jobid: 5
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+[Fri Sep  7 15:38:35 2018]
+Finished job 5.
+3 of 13 steps (23%) done
+
+[Fri Sep  7 15:38:35 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/MHH15103.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/MHH15103/salmon
+    jobid: 3
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+[Fri Sep  7 15:39:03 2018]
+Finished job 3.
+4 of 13 steps (31%) done
+
+[Fri Sep  7 15:39:03 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/MHH14911.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/MHH14911/salmon
+    jobid: 4
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+[Fri Sep  7 15:39:30 2018]
+Finished job 4.
+5 of 13 steps (38%) done
+
+[Fri Sep  7 15:39:30 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/F2167.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/F2167/salmon
+    jobid: 8
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+[Fri Sep  7 15:39:56 2018]
+Finished job 8.
+6 of 13 steps (46%) done
+
+[Fri Sep  7 15:39:56 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/CH2502.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/CH2502/salmon
+    jobid: 9
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+[Fri Sep  7 15:40:24 2018]
+Finished job 9.
+7 of 13 steps (54%) done
+
+[Fri Sep  7 15:40:24 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/MHH15083.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/MHH15083/salmon
+    jobid: 6
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+[Fri Sep  7 15:40:49 2018]
+Finished job 6.
+8 of 13 steps (62%) done
+
+[Fri Sep  7 15:40:49 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/F2097.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/F2097/salmon
+    jobid: 11
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+[Fri Sep  7 15:41:12 2018]
+Finished job 11.
+9 of 13 steps (69%) done
+
+[Fri Sep  7 15:41:12 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/CH2500.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/CH2500/salmon
+    jobid: 7
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Fri Sep  7 15:41:32 2018]
+Finished job 7.
+10 of 13 steps (77%) done
+
+[Fri Sep  7 15:41:32 2018]
+rule gene_counts_by_salmon:
+    input: data/strains/rna/ESP088.fastq.gz, seq2geno_temp/salmon_index
+    output: seq2geno_temp/ESP088/salmon
+    jobid: 10
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+Removing temporary output file seq2geno_temp/salmon_index.
+[Fri Sep  7 15:41:51 2018]
+Finished job 10.
+11 of 13 steps (85%) done
+
+[Fri Sep  7 15:41:51 2018]
+rule create_and_make_expr_table:
+    input: seq2geno_temp/CH2500/salmon, seq2geno_temp/CH2502/salmon, seq2geno_temp/CH2522/salmon, seq2geno_temp/F1659/salmon, seq2geno_temp/ESP088/salmon, seq2geno_temp/MHH15083/salmon, seq2geno_temp/F2167/salmon, seq2geno_temp/F2097/salmon, seq2geno_temp/MHH14911/salmon, seq2geno_temp/MHH15103/salmon
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/expr.tab
+    jobid: 1
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-07T153709.313468.snakemake.log

@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	create_and_make_expr_table
+	2
+
+[Fri Sep  7 15:43:12 2018]
+rule create_and_make_expr_table:
+    input: seq2geno_temp/CH2500/salmon, seq2geno_temp/CH2502/salmon, seq2geno_temp/CH2522/salmon, seq2geno_temp/F1659/salmon, seq2geno_temp/ESP088/salmon, seq2geno_temp/MHH15083/salmon, seq2geno_temp/F2167/salmon, seq2geno_temp/F2097/salmon, seq2geno_temp/MHH14911/salmon, seq2geno_temp/MHH15103/salmon
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/expr.tab
+    jobid: 1
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-07T154310.941913.snakemake.log

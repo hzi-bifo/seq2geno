@@ -1,0 +1,4 @@
+TypeError in line 8 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/CREATE_EXPR_TABLE.salmon.smk:
+directory() missing 1 required positional argument: 'value'
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 25, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/CREATE_EXPR_TABLE.salmon.smk", line 8, in <module>
