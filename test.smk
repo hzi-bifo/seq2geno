@@ -1,36 +1,31 @@
 import pandas as pd
 import os
 import re
+def parse_samples(f):
+    samples_df= pd.read_csv(f, sep= '\t', header=0, dtype=
+str).set_index("strain",drop=False)
+    print(samples_df)
+    if samples_df.isna().any(axis=None) :
+        exit('ERROR: NA values found in the samples table')
+        
+    samples_df['rna_reads']= samples_df['rna_reads'].apply(lambda x:
+        re.split('\s*,\s*', x))
+    samples_df['dna_reads']= samples_df['dna_reads'].apply(lambda x:
+        re.split('\s*,\s*', x))
+    
+    ## detect the number of reads files
+    samples_df['rna_reads_layout']= samples_df['rna_reads'].apply(lambda x: len(x))
+    samples_df['dna_reads_layout']= samples_df['dna_reads'].apply(lambda x: len(x))
+
+    ## validate
+    if ((samples_df['rna_reads_layout'].apply(lambda x: not (x in [1,2])).any())
+| (samples_df['dna_reads_layout'].apply(lambda x: not (x in [1,2])).any())):
+        exit('ERROR: Unusual number of reads detected')
+
+    return(samples_df)
+    
 configfile: "config.yaml"
-SAMPLES_DF=pd.read_table(config["samples"], sep= '\t', header= 0).set_index("strain", drop=False)
+SAMPLES_DF=parse_samples(config["samples"])
 STRAINS=SAMPLES_DF['strain'].tolist()
-REF_FA=config['reference_sequence']
-REF_GBK=config['reference_annotation']
-#TMP_D=(config['tmp_d'] if re.search('\w', config['tmp_d']) else '.')
-TMP_D='seq2geno_temp'
-CORES=config['cores']
-STAMPY_EXE=config['stampy_exe']
-RAXML_EXE=config['raxml_exe']
-#RESULT_D=config['result_d']
-RESULT_D='seq2geno'
-#SOFTWARE={'mapper': 'bwa'}
-SOFTWARE= config['software']
-SOFTWARE['annotator']= 'prokka'
-SOFTWARE['gene_sorter']= 'roary'
+
 print(SAMPLES_DF)
-print(SOFTWARE)
-
-include: "CREATE_INDEL_TABLE.smk"
-include: "CREATE_SNPS_TABLE.smk"
-include: "CREATE_EXPR_TABLE.salmon.smk"
-include: "CREATE_GPA_TABLE.smk"
-include: "COUNT_GPA.smk"
-include: "CONSTRUCT_ASSEMBLY.smk"
-include: "MAKE_CONS.smk"
-include: "INFER_TREE.smk"
-include: "DETECT_SNPS.smk"
-include: "DETECT_SNPS_FOR_TABLE.smk"
-
-rule all:
-    input:
-        config['expr_table']
