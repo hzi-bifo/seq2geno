@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	10	index_vcf
+	10	ng_rename_sample_in_vcf
+	21
+
+[Tue Sep 11 16:53:51 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/CH2522/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/CH2522/stampy/vcf.gz
+    jobid: 16
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+    [Tue Sep 11 16:53:53 2018]
+    Error in rule ng_rename_sample_in_vcf:
+        jobid: 16
+        output: seq2geno_temp/CH2522/stampy/vcf.gz
+
+RuleException:
+CalledProcessError in line 36 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_DETECT_VARS.smk:
+Command ' set -euo pipefail;  
+        picard RenameSampleInVcf I=seq2geno_temp/CH2522/stampy/unnamed_vcf.gz  O=seq2geno_temp/CH2522/stampy/vcf.gz  NEW_SAMPLE_NAME=CH2522 ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_DETECT_VARS.smk", line 36, in __rule_ng_rename_sample_in_vcf
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-11T165349.381426.snakemake.log
