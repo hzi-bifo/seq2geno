@@ -1,0 +1,250 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	10	index_vcf
+	10	ng_rename_sample_in_vcf
+	21
+
+[Tue Sep 11 17:04:03 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/CH2522/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/CH2522/stampy/vcf.gz
+    jobid: 11
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+Removing temporary output file seq2geno_temp/CH2522/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:04:13 2018]
+Finished job 11.
+1 of 21 steps (5%) done
+
+[Tue Sep 11 17:04:13 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/MHH15083/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/MHH15083/stampy/vcf.gz
+    jobid: 14
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+Removing temporary output file seq2geno_temp/MHH15083/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:04:22 2018]
+Finished job 14.
+2 of 21 steps (10%) done
+
+[Tue Sep 11 17:04:22 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/CH2502/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/CH2502/stampy/vcf.gz
+    jobid: 15
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+Removing temporary output file seq2geno_temp/CH2502/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:04:31 2018]
+Finished job 15.
+3 of 21 steps (14%) done
+
+[Tue Sep 11 17:04:31 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/ESP088/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/ESP088/stampy/vcf.gz
+    jobid: 13
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+Removing temporary output file seq2geno_temp/ESP088/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:04:41 2018]
+Finished job 13.
+4 of 21 steps (19%) done
+
+[Tue Sep 11 17:04:41 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/F2167/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/F2167/stampy/vcf.gz
+    jobid: 17
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+Removing temporary output file seq2geno_temp/F2167/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:04:48 2018]
+Finished job 17.
+5 of 21 steps (24%) done
+
+[Tue Sep 11 17:04:48 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/F2097/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/F2097/stampy/vcf.gz
+    jobid: 19
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+Removing temporary output file seq2geno_temp/F2097/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:04:56 2018]
+Finished job 19.
+6 of 21 steps (29%) done
+
+[Tue Sep 11 17:04:56 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/F1659/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/F1659/stampy/vcf.gz
+    jobid: 12
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+Removing temporary output file seq2geno_temp/F1659/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:05:03 2018]
+Finished job 12.
+7 of 21 steps (33%) done
+
+[Tue Sep 11 17:05:03 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/MHH14911/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/MHH14911/stampy/vcf.gz
+    jobid: 20
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+Removing temporary output file seq2geno_temp/MHH14911/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:05:10 2018]
+Finished job 20.
+8 of 21 steps (38%) done
+
+[Tue Sep 11 17:05:10 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/MHH15103/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/MHH15103/stampy/vcf.gz
+    jobid: 18
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+Removing temporary output file seq2geno_temp/MHH15103/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:05:17 2018]
+Finished job 18.
+9 of 21 steps (43%) done
+
+[Tue Sep 11 17:05:17 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/CH2500/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/CH2500/stampy/vcf.gz
+    jobid: 16
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/unnamed_vcf.gz.
+[Tue Sep 11 17:05:20 2018]
+Finished job 16.
+10 of 21 steps (48%) done
+
+[Tue Sep 11 17:05:20 2018]
+rule index_vcf:
+    input: seq2geno_temp/CH2522/stampy/vcf.gz
+    output: seq2geno_temp/CH2522/stampy/vcf.gz.tbi
+    jobid: 1
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+[Tue Sep 11 17:05:20 2018]
+Finished job 1.
+11 of 21 steps (52%) done
+
+[Tue Sep 11 17:05:20 2018]
+rule index_vcf:
+    input: seq2geno_temp/MHH15083/stampy/vcf.gz
+    output: seq2geno_temp/MHH15083/stampy/vcf.gz.tbi
+    jobid: 4
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+[Tue Sep 11 17:05:21 2018]
+Finished job 4.
+12 of 21 steps (57%) done
+
+[Tue Sep 11 17:05:21 2018]
+rule index_vcf:
+    input: seq2geno_temp/CH2502/stampy/vcf.gz
+    output: seq2geno_temp/CH2502/stampy/vcf.gz.tbi
+    jobid: 5
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+[Tue Sep 11 17:05:22 2018]
+Finished job 5.
+13 of 21 steps (62%) done
+
+[Tue Sep 11 17:05:22 2018]
+rule index_vcf:
+    input: seq2geno_temp/ESP088/stampy/vcf.gz
+    output: seq2geno_temp/ESP088/stampy/vcf.gz.tbi
+    jobid: 3
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Tue Sep 11 17:05:22 2018]
+Finished job 3.
+14 of 21 steps (67%) done
+
+[Tue Sep 11 17:05:22 2018]
+rule index_vcf:
+    input: seq2geno_temp/F2167/stampy/vcf.gz
+    output: seq2geno_temp/F2167/stampy/vcf.gz.tbi
+    jobid: 7
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+[Tue Sep 11 17:05:23 2018]
+Finished job 7.
+15 of 21 steps (71%) done
+
+[Tue Sep 11 17:05:23 2018]
+rule index_vcf:
+    input: seq2geno_temp/F2097/stampy/vcf.gz
+    output: seq2geno_temp/F2097/stampy/vcf.gz.tbi
+    jobid: 9
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+[Tue Sep 11 17:05:23 2018]
+Finished job 9.
+16 of 21 steps (76%) done
+
+[Tue Sep 11 17:05:23 2018]
+rule index_vcf:
+    input: seq2geno_temp/F1659/stampy/vcf.gz
+    output: seq2geno_temp/F1659/stampy/vcf.gz.tbi
+    jobid: 2
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Tue Sep 11 17:05:24 2018]
+Finished job 2.
+17 of 21 steps (81%) done
+
+[Tue Sep 11 17:05:24 2018]
+rule index_vcf:
+    input: seq2geno_temp/MHH14911/stampy/vcf.gz
+    output: seq2geno_temp/MHH14911/stampy/vcf.gz.tbi
+    jobid: 10
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+[Tue Sep 11 17:05:24 2018]
+Finished job 10.
+18 of 21 steps (86%) done
+
+[Tue Sep 11 17:05:24 2018]
+rule index_vcf:
+    input: seq2geno_temp/MHH15103/stampy/vcf.gz
+    output: seq2geno_temp/MHH15103/stampy/vcf.gz.tbi
+    jobid: 8
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+[Tue Sep 11 17:05:25 2018]
+Finished job 8.
+19 of 21 steps (90%) done
+
+[Tue Sep 11 17:05:25 2018]
+rule index_vcf:
+    input: seq2geno_temp/CH2500/stampy/vcf.gz
+    output: seq2geno_temp/CH2500/stampy/vcf.gz.tbi
+    jobid: 6
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Tue Sep 11 17:05:25 2018]
+Finished job 6.
+20 of 21 steps (95%) done
+
+[Tue Sep 11 17:05:25 2018]
+localrule all:
+    input: seq2geno_temp/CH2500/stampy/vcf.gz.tbi, seq2geno_temp/CH2502/stampy/vcf.gz.tbi, seq2geno_temp/CH2522/stampy/vcf.gz.tbi, seq2geno_temp/F1659/stampy/vcf.gz.tbi, seq2geno_temp/ESP088/stampy/vcf.gz.tbi, seq2geno_temp/MHH15083/stampy/vcf.gz.tbi, seq2geno_temp/F2167/stampy/vcf.gz.tbi, seq2geno_temp/F2097/stampy/vcf.gz.tbi, seq2geno_temp/MHH14911/stampy/vcf.gz.tbi, seq2geno_temp/MHH15103/stampy/vcf.gz.tbi
+    jobid: 0
+
+[Tue Sep 11 17:05:25 2018]
+Finished job 0.
+21 of 21 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-11T170401.828277.snakemake.log
