@@ -17,7 +17,7 @@ cores: 16
 
 ##### files
 #### sample wise
-samples: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.samples'
+samples: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/samples.tsv'
 #### only one
 reference_sequence: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa'
 reference_annotation: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.gbk'

@@ -1,0 +1,754 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	10	index_vcf
+	10	ng_create_vcf
+	10	ng_paired_read_bwa_mapping
+	10	ng_sam2bam
+	10	ng_sort_bam
+	10	ng_stampy_remapping
+	61
+
+[Mon Sep 10 11:20:44 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/F1659/stampy/bwa1.sai, seq2geno_temp/F1659/stampy/bwa2.sai, seq2geno_temp/F1659/stampy/pre_bwa.bam
+    jobid: 59
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+Removing temporary output file seq2geno_temp/F1659/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/F1659/stampy/bwa2.sai.
+[Mon Sep 10 11:28:10 2018]
+Finished job 59.
+1 of 61 steps (2%) done
+
+[Mon Sep 10 11:28:10 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/F1659/stampy/pre_bwa.bam
+    output: seq2geno_temp/F1659/stampy/remap.sam
+    jobid: 49
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+Removing temporary output file seq2geno_temp/F1659/stampy/pre_bwa.bam.
+[Mon Sep 10 12:05:24 2018]
+Finished job 49.
+2 of 61 steps (3%) done
+
+[Mon Sep 10 12:05:24 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/F1659/stampy/remap.sam
+    output: seq2geno_temp/F1659/stampy/remap.bam
+    jobid: 39
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+Removing temporary output file seq2geno_temp/F1659/stampy/remap.sam.
+[Mon Sep 10 12:06:48 2018]
+Finished job 39.
+3 of 61 steps (5%) done
+
+[Mon Sep 10 12:06:48 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/F1659/stampy/remap.bam
+    output: seq2geno_temp/F1659/stampy/remap_sorted.bam, seq2geno_temp/F1659/stampy/remap_sorted.bam.bai
+    jobid: 29
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+Removing temporary output file seq2geno_temp/F1659/stampy/remap.bam.
+[Mon Sep 10 12:20:45 2018]
+Finished job 29.
+4 of 61 steps (7%) done
+
+[Mon Sep 10 12:20:45 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/F1659/stampy/remap_sorted.bam, seq2geno_temp/F1659/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/F1659/stampy/vcf.gz
+    jobid: 19
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+Removing temporary output file seq2geno_temp/F1659/stampy/remap_sorted.bam.
+Removing temporary output file seq2geno_temp/F1659/stampy/remap_sorted.bam.bai.
+[Mon Sep 10 12:26:59 2018]
+Finished job 19.
+5 of 61 steps (8%) done
+
+[Mon Sep 10 12:26:59 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/F2167_1.fq.gz, data/strains/dna/F2167_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/F2167/stampy/bwa1.sai, seq2geno_temp/F2167/stampy/bwa2.sai, seq2geno_temp/F2167/stampy/pre_bwa.bam
+    jobid: 54
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+Removing temporary output file seq2geno_temp/F2167/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/F2167/stampy/bwa2.sai.
+[Mon Sep 10 12:35:00 2018]
+Finished job 54.
+6 of 61 steps (10%) done
+
+[Mon Sep 10 12:35:00 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/F2167/stampy/pre_bwa.bam
+    output: seq2geno_temp/F2167/stampy/remap.sam
+    jobid: 44
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+Removing temporary output file seq2geno_temp/F2167/stampy/pre_bwa.bam.
+[Mon Sep 10 13:03:00 2018]
+Finished job 44.
+7 of 61 steps (11%) done
+
+[Mon Sep 10 13:03:00 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/F2167/stampy/remap.sam
+    output: seq2geno_temp/F2167/stampy/remap.bam
+    jobid: 34
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+Removing temporary output file seq2geno_temp/F2167/stampy/remap.sam.
+[Mon Sep 10 13:04:21 2018]
+Finished job 34.
+8 of 61 steps (13%) done
+
+[Mon Sep 10 13:04:21 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/F2167/stampy/remap.bam
+    output: seq2geno_temp/F2167/stampy/remap_sorted.bam, seq2geno_temp/F2167/stampy/remap_sorted.bam.bai
+    jobid: 24
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+Removing temporary output file seq2geno_temp/F2167/stampy/remap.bam.
+[Mon Sep 10 13:18:27 2018]
+Finished job 24.
+9 of 61 steps (15%) done
+
+[Mon Sep 10 13:18:27 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/F2167/stampy/remap_sorted.bam, seq2geno_temp/F2167/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/F2167/stampy/vcf.gz
+    jobid: 14
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+Removing temporary output file seq2geno_temp/F2167/stampy/remap_sorted.bam.bai.
+Removing temporary output file seq2geno_temp/F2167/stampy/remap_sorted.bam.
+[Mon Sep 10 13:24:31 2018]
+Finished job 14.
+10 of 61 steps (16%) done
+
+[Mon Sep 10 13:24:31 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/MHH15083_1.fq.gz, data/strains/dna/MHH15083_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/MHH15083/stampy/bwa1.sai, seq2geno_temp/MHH15083/stampy/bwa2.sai, seq2geno_temp/MHH15083/stampy/pre_bwa.bam
+    jobid: 51
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+Removing temporary output file seq2geno_temp/MHH15083/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/MHH15083/stampy/bwa2.sai.
+[Mon Sep 10 13:31:31 2018]
+Finished job 51.
+11 of 61 steps (18%) done
+
+[Mon Sep 10 13:31:31 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/MHH15083/stampy/pre_bwa.bam
+    output: seq2geno_temp/MHH15083/stampy/remap.sam
+    jobid: 41
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+Removing temporary output file seq2geno_temp/MHH15083/stampy/pre_bwa.bam.
+[Mon Sep 10 14:02:46 2018]
+Finished job 41.
+12 of 61 steps (20%) done
+
+[Mon Sep 10 14:02:46 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/MHH15083/stampy/remap.sam
+    output: seq2geno_temp/MHH15083/stampy/remap.bam
+    jobid: 31
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+Removing temporary output file seq2geno_temp/MHH15083/stampy/remap.sam.
+[Mon Sep 10 14:04:03 2018]
+Finished job 31.
+13 of 61 steps (21%) done
+
+[Mon Sep 10 14:04:03 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/MHH15083/stampy/remap.bam
+    output: seq2geno_temp/MHH15083/stampy/remap_sorted.bam, seq2geno_temp/MHH15083/stampy/remap_sorted.bam.bai
+    jobid: 21
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+Removing temporary output file seq2geno_temp/MHH15083/stampy/remap.bam.
+[Mon Sep 10 14:17:35 2018]
+Finished job 21.
+14 of 61 steps (23%) done
+
+[Mon Sep 10 14:17:35 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/MHH15083/stampy/remap_sorted.bam, seq2geno_temp/MHH15083/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/MHH15083/stampy/vcf.gz
+    jobid: 11
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+Removing temporary output file seq2geno_temp/MHH15083/stampy/remap_sorted.bam.bai.
+Removing temporary output file seq2geno_temp/MHH15083/stampy/remap_sorted.bam.
+[Mon Sep 10 14:23:58 2018]
+Finished job 11.
+15 of 61 steps (25%) done
+
+[Mon Sep 10 14:23:58 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/F2097_1.fq.gz, data/strains/dna/F2097_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/F2097/stampy/bwa1.sai, seq2geno_temp/F2097/stampy/bwa2.sai, seq2geno_temp/F2097/stampy/pre_bwa.bam
+    jobid: 55
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+Removing temporary output file seq2geno_temp/F2097/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/F2097/stampy/bwa2.sai.
+[Mon Sep 10 14:30:48 2018]
+Finished job 55.
+16 of 61 steps (26%) done
+
+[Mon Sep 10 14:30:48 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/F2097/stampy/pre_bwa.bam
+    output: seq2geno_temp/F2097/stampy/remap.sam
+    jobid: 45
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+Removing temporary output file seq2geno_temp/F2097/stampy/pre_bwa.bam.
+[Mon Sep 10 14:56:27 2018]
+Finished job 45.
+17 of 61 steps (28%) done
+
+[Mon Sep 10 14:56:27 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/F2097/stampy/remap.sam
+    output: seq2geno_temp/F2097/stampy/remap.bam
+    jobid: 35
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+Removing temporary output file seq2geno_temp/F2097/stampy/remap.sam.
+[Mon Sep 10 14:57:35 2018]
+Finished job 35.
+18 of 61 steps (30%) done
+
+[Mon Sep 10 14:57:35 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/F2097/stampy/remap.bam
+    output: seq2geno_temp/F2097/stampy/remap_sorted.bam, seq2geno_temp/F2097/stampy/remap_sorted.bam.bai
+    jobid: 25
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+Removing temporary output file seq2geno_temp/F2097/stampy/remap.bam.
+[Mon Sep 10 15:09:37 2018]
+Finished job 25.
+19 of 61 steps (31%) done
+
+[Mon Sep 10 15:09:37 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/F2097/stampy/remap_sorted.bam, seq2geno_temp/F2097/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/F2097/stampy/vcf.gz
+    jobid: 15
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+Removing temporary output file seq2geno_temp/F2097/stampy/remap_sorted.bam.
+Removing temporary output file seq2geno_temp/F2097/stampy/remap_sorted.bam.bai.
+[Mon Sep 10 15:15:08 2018]
+Finished job 15.
+20 of 61 steps (33%) done
+
+[Mon Sep 10 15:15:08 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/MHH14911_1.fq.gz, data/strains/dna/MHH14911_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/MHH14911/stampy/bwa1.sai, seq2geno_temp/MHH14911/stampy/bwa2.sai, seq2geno_temp/MHH14911/stampy/pre_bwa.bam
+    jobid: 56
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+Removing temporary output file seq2geno_temp/MHH14911/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/MHH14911/stampy/bwa2.sai.
+[Mon Sep 10 15:20:55 2018]
+Finished job 56.
+21 of 61 steps (34%) done
+
+[Mon Sep 10 15:20:55 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/MHH14911/stampy/pre_bwa.bam
+    output: seq2geno_temp/MHH14911/stampy/remap.sam
+    jobid: 46
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+Removing temporary output file seq2geno_temp/MHH14911/stampy/pre_bwa.bam.
+[Mon Sep 10 15:43:06 2018]
+Finished job 46.
+22 of 61 steps (36%) done
+
+[Mon Sep 10 15:43:06 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/MHH14911/stampy/remap.sam
+    output: seq2geno_temp/MHH14911/stampy/remap.bam
+    jobid: 36
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+Removing temporary output file seq2geno_temp/MHH14911/stampy/remap.sam.
+[Mon Sep 10 15:43:55 2018]
+Finished job 36.
+23 of 61 steps (38%) done
+
+[Mon Sep 10 15:43:55 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/MHH14911/stampy/remap.bam
+    output: seq2geno_temp/MHH14911/stampy/remap_sorted.bam, seq2geno_temp/MHH14911/stampy/remap_sorted.bam.bai
+    jobid: 26
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+Removing temporary output file seq2geno_temp/MHH14911/stampy/remap.bam.
+[Mon Sep 10 15:51:04 2018]
+Finished job 26.
+24 of 61 steps (39%) done
+
+[Mon Sep 10 15:51:05 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/MHH14911/stampy/remap_sorted.bam, seq2geno_temp/MHH14911/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/MHH14911/stampy/vcf.gz
+    jobid: 16
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+Removing temporary output file seq2geno_temp/MHH14911/stampy/remap_sorted.bam.
+Removing temporary output file seq2geno_temp/MHH14911/stampy/remap_sorted.bam.bai.
+[Mon Sep 10 15:55:26 2018]
+Finished job 16.
+25 of 61 steps (41%) done
+
+[Mon Sep 10 15:55:26 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/ESP088_1.fq.gz, data/strains/dna/ESP088_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/ESP088/stampy/bwa1.sai, seq2geno_temp/ESP088/stampy/bwa2.sai, seq2geno_temp/ESP088/stampy/pre_bwa.bam
+    jobid: 60
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+Removing temporary output file seq2geno_temp/ESP088/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/ESP088/stampy/bwa2.sai.
+[Mon Sep 10 16:00:16 2018]
+Finished job 60.
+26 of 61 steps (43%) done
+
+[Mon Sep 10 16:00:16 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/ESP088/stampy/pre_bwa.bam
+    output: seq2geno_temp/ESP088/stampy/remap.sam
+    jobid: 50
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+Removing temporary output file seq2geno_temp/ESP088/stampy/pre_bwa.bam.
+[Mon Sep 10 16:23:40 2018]
+Finished job 50.
+27 of 61 steps (44%) done
+
+[Mon Sep 10 16:23:40 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/ESP088/stampy/remap.sam
+    output: seq2geno_temp/ESP088/stampy/remap.bam
+    jobid: 40
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+Removing temporary output file seq2geno_temp/ESP088/stampy/remap.sam.
+[Mon Sep 10 16:24:28 2018]
+Finished job 40.
+28 of 61 steps (46%) done
+
+[Mon Sep 10 16:24:28 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/ESP088/stampy/remap.bam
+    output: seq2geno_temp/ESP088/stampy/remap_sorted.bam, seq2geno_temp/ESP088/stampy/remap_sorted.bam.bai
+    jobid: 30
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+Removing temporary output file seq2geno_temp/ESP088/stampy/remap.bam.
+[Mon Sep 10 16:32:59 2018]
+Finished job 30.
+29 of 61 steps (48%) done
+
+[Mon Sep 10 16:32:59 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/ESP088/stampy/remap_sorted.bam, seq2geno_temp/ESP088/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/ESP088/stampy/vcf.gz
+    jobid: 20
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+Removing temporary output file seq2geno_temp/ESP088/stampy/remap_sorted.bam.bai.
+Removing temporary output file seq2geno_temp/ESP088/stampy/remap_sorted.bam.
+[Mon Sep 10 16:36:55 2018]
+Finished job 20.
+30 of 61 steps (49%) done
+
+[Mon Sep 10 16:36:55 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/CH2500/stampy/bwa1.sai, seq2geno_temp/CH2500/stampy/bwa2.sai, seq2geno_temp/CH2500/stampy/pre_bwa.bam
+    jobid: 52
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/CH2500/stampy/bwa2.sai.
+[Mon Sep 10 16:41:39 2018]
+Finished job 52.
+31 of 61 steps (51%) done
+
+[Mon Sep 10 16:41:39 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/CH2500/stampy/pre_bwa.bam
+    output: seq2geno_temp/CH2500/stampy/remap.sam
+    jobid: 42
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/pre_bwa.bam.
+[Mon Sep 10 17:04:45 2018]
+Finished job 42.
+32 of 61 steps (52%) done
+
+[Mon Sep 10 17:04:45 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/CH2500/stampy/remap.sam
+    output: seq2geno_temp/CH2500/stampy/remap.bam
+    jobid: 32
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/remap.sam.
+[Mon Sep 10 17:05:33 2018]
+Finished job 32.
+33 of 61 steps (54%) done
+
+[Mon Sep 10 17:05:33 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/CH2500/stampy/remap.bam
+    output: seq2geno_temp/CH2500/stampy/remap_sorted.bam, seq2geno_temp/CH2500/stampy/remap_sorted.bam.bai
+    jobid: 22
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/remap.bam.
+[Mon Sep 10 17:11:54 2018]
+Finished job 22.
+34 of 61 steps (56%) done
+
+[Mon Sep 10 17:11:54 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/CH2500/stampy/remap_sorted.bam, seq2geno_temp/CH2500/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/CH2500/stampy/vcf.gz
+    jobid: 12
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/remap_sorted.bam.bai.
+Removing temporary output file seq2geno_temp/CH2500/stampy/remap_sorted.bam.
+[Mon Sep 10 17:14:28 2018]
+Finished job 12.
+35 of 61 steps (57%) done
+
+[Mon Sep 10 17:14:28 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2522_1.fq.gz, data/strains/dna/CH2522_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/CH2522/stampy/bwa1.sai, seq2geno_temp/CH2522/stampy/bwa2.sai, seq2geno_temp/CH2522/stampy/pre_bwa.bam
+    jobid: 57
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+Removing temporary output file seq2geno_temp/CH2522/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/CH2522/stampy/bwa2.sai.
+[Mon Sep 10 17:18:59 2018]
+Finished job 57.
+36 of 61 steps (59%) done
+
+[Mon Sep 10 17:18:59 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/CH2522/stampy/pre_bwa.bam
+    output: seq2geno_temp/CH2522/stampy/remap.sam
+    jobid: 47
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+Removing temporary output file seq2geno_temp/CH2522/stampy/pre_bwa.bam.
+[Mon Sep 10 17:38:31 2018]
+Finished job 47.
+37 of 61 steps (61%) done
+
+[Mon Sep 10 17:38:31 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/CH2522/stampy/remap.sam
+    output: seq2geno_temp/CH2522/stampy/remap.bam
+    jobid: 37
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+Removing temporary output file seq2geno_temp/CH2522/stampy/remap.sam.
+[Mon Sep 10 17:39:10 2018]
+Finished job 37.
+38 of 61 steps (62%) done
+
+[Mon Sep 10 17:39:10 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/CH2522/stampy/remap.bam
+    output: seq2geno_temp/CH2522/stampy/remap_sorted.bam, seq2geno_temp/CH2522/stampy/remap_sorted.bam.bai
+    jobid: 27
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+Removing temporary output file seq2geno_temp/CH2522/stampy/remap.bam.
+[Mon Sep 10 17:44:59 2018]
+Finished job 27.
+39 of 61 steps (64%) done
+
+[Mon Sep 10 17:44:59 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/CH2522/stampy/remap_sorted.bam, seq2geno_temp/CH2522/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/CH2522/stampy/vcf.gz
+    jobid: 17
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+Removing temporary output file seq2geno_temp/CH2522/stampy/remap_sorted.bam.bai.
+Removing temporary output file seq2geno_temp/CH2522/stampy/remap_sorted.bam.
+[Mon Sep 10 17:50:13 2018]
+Finished job 17.
+40 of 61 steps (66%) done
+
+[Mon Sep 10 17:50:13 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2502_1.fq.gz, data/strains/dna/CH2502_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/CH2502/stampy/bwa1.sai, seq2geno_temp/CH2502/stampy/bwa2.sai, seq2geno_temp/CH2502/stampy/pre_bwa.bam
+    jobid: 53
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+Removing temporary output file seq2geno_temp/CH2502/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/CH2502/stampy/bwa2.sai.
+[Mon Sep 10 17:54:19 2018]
+Finished job 53.
+41 of 61 steps (67%) done
+
+[Mon Sep 10 17:54:19 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/CH2502/stampy/pre_bwa.bam
+    output: seq2geno_temp/CH2502/stampy/remap.sam
+    jobid: 43
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+Removing temporary output file seq2geno_temp/CH2502/stampy/pre_bwa.bam.
+[Mon Sep 10 18:10:12 2018]
+Finished job 43.
+42 of 61 steps (69%) done
+
+[Mon Sep 10 18:10:12 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/CH2502/stampy/remap.sam
+    output: seq2geno_temp/CH2502/stampy/remap.bam
+    jobid: 33
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+Removing temporary output file seq2geno_temp/CH2502/stampy/remap.sam.
+[Mon Sep 10 18:10:47 2018]
+Finished job 33.
+43 of 61 steps (70%) done
+
+[Mon Sep 10 18:10:47 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/CH2502/stampy/remap.bam
+    output: seq2geno_temp/CH2502/stampy/remap_sorted.bam, seq2geno_temp/CH2502/stampy/remap_sorted.bam.bai
+    jobid: 23
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+Removing temporary output file seq2geno_temp/CH2502/stampy/remap.bam.
+[Mon Sep 10 18:16:08 2018]
+Finished job 23.
+44 of 61 steps (72%) done
+
+[Mon Sep 10 18:16:08 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/CH2502/stampy/remap_sorted.bam, seq2geno_temp/CH2502/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/CH2502/stampy/vcf.gz
+    jobid: 13
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+Removing temporary output file seq2geno_temp/CH2502/stampy/remap_sorted.bam.bai.
+Removing temporary output file seq2geno_temp/CH2502/stampy/remap_sorted.bam.
+[Mon Sep 10 18:19:55 2018]
+Finished job 13.
+45 of 61 steps (74%) done
+
+[Mon Sep 10 18:19:55 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/MHH15103_1.fq.gz, data/strains/dna/MHH15103_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/MHH15103/stampy/bwa1.sai, seq2geno_temp/MHH15103/stampy/bwa2.sai, seq2geno_temp/MHH15103/stampy/pre_bwa.bam
+    jobid: 58
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+Removing temporary output file seq2geno_temp/MHH15103/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/MHH15103/stampy/bwa2.sai.
+[Mon Sep 10 18:24:03 2018]
+Finished job 58.
+46 of 61 steps (75%) done
+
+[Mon Sep 10 18:24:04 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/MHH15103/stampy/pre_bwa.bam
+    output: seq2geno_temp/MHH15103/stampy/remap.sam
+    jobid: 48
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+Removing temporary output file seq2geno_temp/MHH15103/stampy/pre_bwa.bam.
+[Mon Sep 10 18:41:36 2018]
+Finished job 48.
+47 of 61 steps (77%) done
+
+[Mon Sep 10 18:41:36 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/MHH15103/stampy/remap.sam
+    output: seq2geno_temp/MHH15103/stampy/remap.bam
+    jobid: 38
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+Removing temporary output file seq2geno_temp/MHH15103/stampy/remap.sam.
+[Mon Sep 10 18:42:10 2018]
+Finished job 38.
+48 of 61 steps (79%) done
+
+[Mon Sep 10 18:42:10 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/MHH15103/stampy/remap.bam
+    output: seq2geno_temp/MHH15103/stampy/remap_sorted.bam, seq2geno_temp/MHH15103/stampy/remap_sorted.bam.bai
+    jobid: 28
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+Removing temporary output file seq2geno_temp/MHH15103/stampy/remap.bam.
+[Mon Sep 10 18:47:02 2018]
+Finished job 28.
+49 of 61 steps (80%) done
+
+[Mon Sep 10 18:47:02 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/MHH15103/stampy/remap_sorted.bam, seq2geno_temp/MHH15103/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/MHH15103/stampy/vcf.gz
+    jobid: 18
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+Removing temporary output file seq2geno_temp/MHH15103/stampy/remap_sorted.bam.bai.
+Removing temporary output file seq2geno_temp/MHH15103/stampy/remap_sorted.bam.
+[Mon Sep 10 18:49:59 2018]
+Finished job 18.
+50 of 61 steps (82%) done
+
+[Mon Sep 10 18:49:59 2018]
+rule index_vcf:
+    input: seq2geno_temp/CH2522/stampy/vcf.gz
+    output: seq2geno_temp/CH2522/stampy/vcf.gz.tbi
+    jobid: 7
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+[Mon Sep 10 18:50:00 2018]
+Finished job 7.
+51 of 61 steps (84%) done
+
+[Mon Sep 10 18:50:00 2018]
+rule index_vcf:
+    input: seq2geno_temp/MHH15083/stampy/vcf.gz
+    output: seq2geno_temp/MHH15083/stampy/vcf.gz.tbi
+    jobid: 1
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+[Mon Sep 10 18:50:01 2018]
+Finished job 1.
+52 of 61 steps (85%) done
+
+[Mon Sep 10 18:50:01 2018]
+rule index_vcf:
+    input: seq2geno_temp/CH2502/stampy/vcf.gz
+    output: seq2geno_temp/CH2502/stampy/vcf.gz.tbi
+    jobid: 3
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+[Mon Sep 10 18:50:02 2018]
+Finished job 3.
+53 of 61 steps (87%) done
+
+[Mon Sep 10 18:50:02 2018]
+rule index_vcf:
+    input: seq2geno_temp/ESP088/stampy/vcf.gz
+    output: seq2geno_temp/ESP088/stampy/vcf.gz.tbi
+    jobid: 10
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Mon Sep 10 18:50:02 2018]
+Finished job 10.
+54 of 61 steps (89%) done
+
+[Mon Sep 10 18:50:02 2018]
+rule index_vcf:
+    input: seq2geno_temp/F2167/stampy/vcf.gz
+    output: seq2geno_temp/F2167/stampy/vcf.gz.tbi
+    jobid: 4
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+[Mon Sep 10 18:50:03 2018]
+Finished job 4.
+55 of 61 steps (90%) done
+
+[Mon Sep 10 18:50:03 2018]
+rule index_vcf:
+    input: seq2geno_temp/F2097/stampy/vcf.gz
+    output: seq2geno_temp/F2097/stampy/vcf.gz.tbi
+    jobid: 5
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+[Mon Sep 10 18:50:04 2018]
+Finished job 5.
+56 of 61 steps (92%) done
+
+[Mon Sep 10 18:50:04 2018]
+rule index_vcf:
+    input: seq2geno_temp/F1659/stampy/vcf.gz
+    output: seq2geno_temp/F1659/stampy/vcf.gz.tbi
+    jobid: 9
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Mon Sep 10 18:50:04 2018]
+Finished job 9.
+57 of 61 steps (93%) done
+
+[Mon Sep 10 18:50:04 2018]
+rule index_vcf:
+    input: seq2geno_temp/MHH14911/stampy/vcf.gz
+    output: seq2geno_temp/MHH14911/stampy/vcf.gz.tbi
+    jobid: 6
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+[Mon Sep 10 18:50:05 2018]
+Finished job 6.
+58 of 61 steps (95%) done
+
+[Mon Sep 10 18:50:05 2018]
+rule index_vcf:
+    input: seq2geno_temp/MHH15103/stampy/vcf.gz
+    output: seq2geno_temp/MHH15103/stampy/vcf.gz.tbi
+    jobid: 8
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+[Mon Sep 10 18:50:05 2018]
+Finished job 8.
+59 of 61 steps (97%) done
+
+[Mon Sep 10 18:50:05 2018]
+rule index_vcf:
+    input: seq2geno_temp/CH2500/stampy/vcf.gz
+    output: seq2geno_temp/CH2500/stampy/vcf.gz.tbi
+    jobid: 2
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Mon Sep 10 18:50:06 2018]
+Finished job 2.
+60 of 61 steps (98%) done
+
+[Mon Sep 10 18:50:06 2018]
+localrule all:
+    input: seq2geno_temp/CH2500/stampy/vcf.gz.tbi, seq2geno_temp/CH2502/stampy/vcf.gz.tbi, seq2geno_temp/CH2522/stampy/vcf.gz.tbi, seq2geno_temp/F1659/stampy/vcf.gz.tbi, seq2geno_temp/ESP088/stampy/vcf.gz.tbi, seq2geno_temp/MHH15083/stampy/vcf.gz.tbi, seq2geno_temp/F2167/stampy/vcf.gz.tbi, seq2geno_temp/F2097/stampy/vcf.gz.tbi, seq2geno_temp/MHH14911/stampy/vcf.gz.tbi, seq2geno_temp/MHH15103/stampy/vcf.gz.tbi
+    jobid: 0
+
+[Mon Sep 10 18:50:06 2018]
+Finished job 0.
+61 of 61 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-10T112042.372926.snakemake.log
