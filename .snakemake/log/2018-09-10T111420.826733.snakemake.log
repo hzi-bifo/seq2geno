@@ -1,0 +1,41 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	10	index_vcf
+	10	ng_create_vcf
+	10	ng_paired_read_bwa_mapping
+	10	ng_sam2bam
+	10	ng_sort_bam
+	10	ng_stampy_remapping
+	61
+
+[Mon Sep 10 11:14:21 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/F1659/stampy/bwa1.sai, seq2geno_temp/F1659/stampy/bwa2.sai, seq2geno_temp/F1659/stampy/pre_bwa.bam
+    jobid: 52
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+Terminating processes on user request, this might take some time.
+    [Mon Sep 10 11:20:31 2018]
+    Error in rule ng_paired_read_bwa_mapping:
+        jobid: 52
+        output: seq2geno_temp/F1659/stampy/bwa1.sai, seq2geno_temp/F1659/stampy/bwa2.sai, seq2geno_temp/F1659/stampy/pre_bwa.bam
+
+RuleException:
+CalledProcessError in line 114 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_DETECT_VARS.smk:
+Command ' set -euo pipefail;  
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/F1659_1.fq.gz         > seq2geno_temp/F1659/stampy/bwa1.sai
+
+        bwa aln -q10 -t16 /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa data/strains/dna/F1659_2.fq.gz         > seq2geno_temp/F1659/stampy/bwa2.sai 
+
+        bwa sampe /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa seq2geno_temp/F1659/stampy/bwa1.sai seq2geno_temp/F1659/stampy/bwa2.sai         data/strains/dna/F1659_1.fq.gz data/strains/dna/F1659_2.fq.gz |         samtools view -bS -@ 16         > seq2geno_temp/F1659/stampy/pre_bwa.bam ' died with <Signals.SIGINT: 2>.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_DETECT_VARS.smk", line 114, in __rule_ng_paired_read_bwa_mapping
+  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Removing output files of failed job ng_paired_read_bwa_mapping since they might be corrupted:
+seq2geno_temp/F1659/stampy/bwa1.sai, seq2geno_temp/F1659/stampy/bwa2.sai, seq2geno_temp/F1659/stampy/pre_bwa.bam
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-10T111420.826733.snakemake.log
