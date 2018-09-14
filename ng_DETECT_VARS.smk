@@ -1,14 +1,5 @@
 #####
 # Two-stage mapping with stampy
-rule index_vcf:
-    input:
-        vcf_gz="{TMP_D}/{strain}/stampy/vcf.gz"
-    output:
-        vcf_gz_index= "{TMP_D}/{strain}/stampy/vcf.gz.tbi"
-    shell:
-        """
-        tabix -p vcf {input.vcf_gz}
-        """
 '''
 ### In Ariane's workflow, the criteria was zero and thus not needed here.
 
@@ -27,19 +18,47 @@ rule filter_vcf:
         source deactivate
         """ 
 '''
+
 rule ng_rename_sample_in_vcf:
     input:
-        raw_vcf_gz=temp("{TMP_D}/{strain}/stampy/unnamed_vcf.gz")
+        raw_vcf_gz="{TMP_D}/{strain}/stampy/unnamed_vcf.gz"
     output:
-        vcf_gz="{TMP_D}/{strain}/stampy/vcf.gz"
+        vcf_gz="{TMP_D}/{strain}/stampy/vcf.gz",
+        vcf_gz_index= "{TMP_D}/{strain}/stampy/vcf.gz.tbi"
+    params:
+        picard_bin='picard RenameSampleInVcf',
+        tabix_bin= 'tabix'
     shell:
         """
-        tabix -p vcf {input.raw_vcf_gz}
-        picard RenameSampleInVcf I={input.raw_vcf_gz} \
+        {params.picard_bin} I={input.raw_vcf_gz} \
  O={output.vcf_gz} \
  NEW_SAMPLE_NAME={wildcards.strain}
+        {params.tabix_bin} -p vcf {output.vcf_gz}
         """
-        
+
+rule ng_create_multi_sample_vcf:
+    input:    
+        REF=REF_FA,
+        REF_FA_INDEX=REF_FA+".fai",
+        BAM=lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam') for strain in STRAINS],
+        BAM_INDEX= lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam.bai') for strain in STRAINS]
+    output:
+        multisample_vcf_gz=temp("{TMP_D}/stampy/multisample_vcf.gz"),
+        multisample_vcf_gz_index=temp("{TMP_D}/stampy/multisample_vcf.gz.tbi")
+    params: 
+        CORES=CORES,
+        bgzip_bin= 'bgzip',
+        tabix_bin= 'tabix',
+        frbayes_bin= 'freebayes-parallel',
+        regions_generator_bin='fasta_generate_regions.py' 
+    shell:
+        """
+        {params.frbayes_bin} <({params.regions_generator_bin} \
+        {input.REF_FA_INDEX} 100000) {params.CORES} \
+        -p 1 -f {input.REF} {input.BAM} | \
+        {params.bgzip_bin} -c > {output.multisample_vcf_gz}
+        {params.tabix_bin} -p vcf {output.multisample_vcf_gz}
+        """
 
 rule ng_create_vcf:
     input:
@@ -48,15 +67,21 @@ rule ng_create_vcf:
         BAM="{TMP_D}/{strain}/stampy/remap_sorted.bam",
         BAM_INDEX="{TMP_D}/{strain}/stampy/remap_sorted.bam.bai"
     output:
-        raw_vcf_gz=temp("{TMP_D}/{strain}/stampy/unnamed_vcf.gz")
+        raw_vcf_gz=temp("{TMP_D}/{strain}/stampy/unnamed_vcf.gz"),
+        raw_vcf_gz_index=temp("{TMP_D}/{strain}/stampy/unnamed_vcf.gz.tbi")
     params: 
-        CORES=CORES
+        CORES=CORES,
+        bgzip_bin= 'bgzip',
+        tabix_bin= 'tabix',
+        frbayes_bin= 'freebayes-parallel',
+        regions_generator_bin='fasta_generate_regions.py' 
     shell:
         """
-        freebayes-parallel <(fasta_generate_regions.py \
+        {params.frbayes_bin} <({params.regions_generator_bin} \
         {input.REF_FA_INDEX} 100000) {params.CORES} \
         -p 1 -f {input.REF} {input.BAM} | \
-        bgzip -c > {output.raw_vcf_gz}
+        {params.bgzip_bin} -c > {output.raw_vcf_gz}
+        {params.tabix_bin} -p vcf {output.raw_vcf_gz}
         """ 
 
 rule ng_sort_bam:
@@ -65,12 +90,13 @@ rule ng_sort_bam:
     output:
         sorted_bam=temp("{TMP_D}/{strain}/stampy/remap_sorted.bam"),
         sorted_bam_index=temp("{TMP_D}/{strain}/stampy/remap_sorted.bam.bai")
+    params:
+        bamtools_bin='bamtools',
+        samtools_bin='samtools'
     shell:
         """
-        source activate Ariane_dna
         bamtools sort -in {input} -out {output[sorted_bam]}
         samtools index {output[sorted_bam]}
-        source deactivate
         """
 
 rule ng_sam2bam:
@@ -132,7 +158,8 @@ rule ng_paired_read_bwa_mapping:
         bwa aln {params.BWA_OPT} -t{params.CORES} {input[REF]} {input[FQ2]} \
         > {output[P_BWA_SAI2]} 
 
-        bwa sampe {input[REF]} {output[P_BWA_SAI1]} {output[P_BWA_SAI2]} \
+        bwa sampe -r '@RG\\tID:foo\\tSM:bar' \
+        {input[REF]} {output[P_BWA_SAI1]} {output[P_BWA_SAI2]} \
         {input[FQ1]} {input[FQ2]} | \
         samtools view -bS -@ {params.CORES} \
         > {output[BWA_BAM]}
