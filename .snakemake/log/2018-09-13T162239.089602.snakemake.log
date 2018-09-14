@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	all
+	1	ng_create_coding_region_bed
+	1	ng_mask_by_coding_regions
+	1	ng_multi_sample_vcf
+	4
+
+[Thu Sep 13 16:22:42 2018]
+rule ng_create_coding_region_bed:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.gbk
+    output: seq2geno_temp/ref.coding.bed
+    jobid: 2
+    wildcards: TMP_D=seq2geno_temp
+
+[Thu Sep 13 16:22:42 2018]
+rule ng_multi_sample_vcf:
+    input: seq2geno_temp/CH2500/stampy/vcf.gz, seq2geno_temp/CH2502/stampy/vcf.gz, seq2geno_temp/CH2522/stampy/vcf.gz, seq2geno_temp/F1659/stampy/vcf.gz, seq2geno_temp/ESP088/stampy/vcf.gz, seq2geno_temp/MHH15083/stampy/vcf.gz, seq2geno_temp/F2167/stampy/vcf.gz, seq2geno_temp/F2097/stampy/vcf.gz, seq2geno_temp/MHH14911/stampy/vcf.gz, seq2geno_temp/MHH15103/stampy/vcf.gz
+    output: seq2geno_temp/multi_sample_vcf.gz, seq2geno_temp/multi_sample_vcf.gz.tbi
+    jobid: 3
+    wildcards: TMP_D=seq2geno_temp
+
+
+[Thu Sep 13 16:22:42 2018]
+rule ng_mask_by_coding_regions:
+    input: seq2geno_temp/multi_sample_vcf.gz, seq2geno_temp/ref.coding.bed
+    output: seq2geno_temp/multi_sample_vcf.coding.gz, seq2geno_temp/multi_sample_vcf.coding.gz.tbi, seq2geno_temp/multi_sample_vcf.igr.gz, seq2geno_temp/multi_sample_vcf.igr.gz.tbi
+    jobid: 1
+    wildcards: TMP_D=seq2geno_temp
+
+RuleException in line 4 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_MASK_VARS.smk:
+'InputFiles' object has no attribute 'vcf_gz'
