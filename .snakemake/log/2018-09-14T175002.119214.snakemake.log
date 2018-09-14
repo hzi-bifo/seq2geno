@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	ng_create_multi_sample_vcf
+	10	ng_paired_read_bwa_mapping
+	10	ng_sam2bam
+	10	ng_sort_bam
+	10	ng_stampy_remapping
+	42
+
+[Fri Sep 14 17:50:06 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/F1659/stampy/bwa1.sai, seq2geno_temp/F1659/stampy/bwa2.sai, seq2geno_temp/F1659/stampy/pre_bwa.bam
+    jobid: 33
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep 14 17:55:21 2018]
+Finished job 33.
+1 of 42 steps (2%) done
+
+[Fri Sep 14 17:55:22 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/F1659/stampy/pre_bwa.bam
+    output: seq2geno_temp/F1659/stampy/remap.sam
+    jobid: 23
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+

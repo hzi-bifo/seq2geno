@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	ng_paired_read_bwa_mapping
+	2
+
+[Fri Sep 14 16:36:39 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/CH2500/stampy/bwa1.sai, seq2geno_temp/CH2500/stampy/bwa2.sai, seq2geno_temp/CH2500/stampy/pre_bwa.bam
+    jobid: 1
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/bwa1.sai.
+Removing temporary output file seq2geno_temp/CH2500/stampy/bwa2.sai.
+[Fri Sep 14 16:41:02 2018]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Fri Sep 14 16:41:02 2018]
+localrule all:
+    input: seq2geno_temp/CH2500/stampy/pre_bwa.bam
+    jobid: 0
+
+Removing temporary output file seq2geno_temp/CH2500/stampy/pre_bwa.bam.
+[Fri Sep 14 16:41:02 2018]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-14T163638.215166.snakemake.log

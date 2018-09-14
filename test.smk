@@ -20,13 +20,16 @@ SOFTWARE['gene_sorter']= 'roary'
 print(SAMPLES_DF)
 print(SOFTWARE)
 
+include: "ng_MASK_VARS.smk"
+include: "ng_MERGE_VARS.smk"
 include: "ng_DETECT_VARS.smk"
 #include: "ng_CREATE_EXPR_TABLE.smk"
 
 rule all:
     input:
-       expand('{TMP_D}/{strain}/stampy/vcf.gz.tbi', TMP_D=TMP_D,
-strain=STRAINS)
+        os.path.join(TMP_D, 'stampy', 'multisample_vcf.gz')
+#        coding_vcf_gz=os.path.join(TMP_D, "multi_sample_vcf.coding.gz"),
+#        igr_vcf_gz=os.path.join(TMP_D, "multi_sample_vcf.igr.gz")
 
 rule compress_feat_table:
     input: 

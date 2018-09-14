@@ -1,0 +1,270 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	ng_create_coding_region_bed
+	3	ng_create_vcf
+	1	ng_mask_coding_regions
+	1	ng_mask_intergenic_regions
+	1	ng_multi_sample_vcf
+	3	ng_paired_read_bwa_mapping
+	3	ng_rename_sample_in_vcf
+	3	ng_sam2bam
+	3	ng_sort_bam
+	3	ng_stampy_remapping
+	23
+
+[Fri Sep 14 10:43:57 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/F1659_1.fq.gz, data/strains/dna/F1659_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/F1659/stampy/bwa1.sai, seq2geno_temp/F1659/stampy/bwa2.sai, seq2geno_temp/F1659/stampy/pre_bwa.bam
+    jobid: 61
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep 14 10:51:31 2018]
+Finished job 61.
+1 of 23 steps (4%) done
+
+[Fri Sep 14 10:51:31 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/F1659/stampy/pre_bwa.bam
+    output: seq2geno_temp/F1659/stampy/remap.sam
+    jobid: 51
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep 14 11:29:35 2018]
+Finished job 51.
+2 of 23 steps (9%) done
+
+[Fri Sep 14 11:29:35 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/F1659/stampy/remap.sam
+    output: seq2geno_temp/F1659/stampy/remap.bam
+    jobid: 41
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep 14 11:30:50 2018]
+Finished job 41.
+3 of 23 steps (13%) done
+
+[Fri Sep 14 11:30:50 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/F1659/stampy/remap.bam
+    output: seq2geno_temp/F1659/stampy/remap_sorted.bam, seq2geno_temp/F1659/stampy/remap_sorted.bam.bai
+    jobid: 31
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep 14 11:48:04 2018]
+Finished job 31.
+4 of 23 steps (17%) done
+
+[Fri Sep 14 11:48:04 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/F1659/stampy/remap_sorted.bam, seq2geno_temp/F1659/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/F1659/stampy/unnamed_vcf.gz, seq2geno_temp/F1659/stampy/unnamed_vcf.gz.tbi
+    jobid: 21
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep 14 11:54:31 2018]
+Finished job 21.
+5 of 23 steps (22%) done
+
+[Fri Sep 14 11:54:31 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/F1659/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/F1659/stampy/vcf.gz, seq2geno_temp/F1659/stampy/vcf.gz.tbi
+    jobid: 11
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Fri Sep 14 11:54:41 2018]
+Finished job 11.
+6 of 23 steps (26%) done
+
+[Fri Sep 14 11:54:41 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/ESP088_1.fq.gz, data/strains/dna/ESP088_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/ESP088/stampy/bwa1.sai, seq2geno_temp/ESP088/stampy/bwa2.sai, seq2geno_temp/ESP088/stampy/pre_bwa.bam
+    jobid: 58
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Fri Sep 14 11:59:27 2018]
+Finished job 58.
+7 of 23 steps (30%) done
+
+[Fri Sep 14 11:59:27 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/ESP088/stampy/pre_bwa.bam
+    output: seq2geno_temp/ESP088/stampy/remap.sam
+    jobid: 48
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Fri Sep 14 12:23:02 2018]
+Finished job 48.
+8 of 23 steps (35%) done
+
+[Fri Sep 14 12:23:02 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/ESP088/stampy/remap.sam
+    output: seq2geno_temp/ESP088/stampy/remap.bam
+    jobid: 38
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Fri Sep 14 12:23:51 2018]
+Finished job 38.
+9 of 23 steps (39%) done
+
+[Fri Sep 14 12:23:51 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/ESP088/stampy/remap.bam
+    output: seq2geno_temp/ESP088/stampy/remap_sorted.bam, seq2geno_temp/ESP088/stampy/remap_sorted.bam.bai
+    jobid: 28
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Fri Sep 14 12:33:03 2018]
+Finished job 28.
+10 of 23 steps (43%) done
+
+[Fri Sep 14 12:33:04 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/ESP088/stampy/remap_sorted.bam, seq2geno_temp/ESP088/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/ESP088/stampy/unnamed_vcf.gz, seq2geno_temp/ESP088/stampy/unnamed_vcf.gz.tbi
+    jobid: 18
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Fri Sep 14 12:36:58 2018]
+Finished job 18.
+11 of 23 steps (48%) done
+
+[Fri Sep 14 12:36:58 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/ESP088/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/ESP088/stampy/vcf.gz, seq2geno_temp/ESP088/stampy/vcf.gz.tbi
+    jobid: 8
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Fri Sep 14 12:37:07 2018]
+Finished job 8.
+12 of 23 steps (52%) done
+
+[Fri Sep 14 12:37:07 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/CH2500_1.fq.gz, data/strains/dna/CH2500_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/CH2500/stampy/bwa1.sai, seq2geno_temp/CH2500/stampy/bwa2.sai, seq2geno_temp/CH2500/stampy/pre_bwa.bam
+    jobid: 56
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Fri Sep 14 12:41:34 2018]
+Finished job 56.
+13 of 23 steps (57%) done
+
+[Fri Sep 14 12:41:34 2018]
+rule ng_stampy_remapping:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.stidx, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.sthash, seq2geno_temp/CH2500/stampy/pre_bwa.bam
+    output: seq2geno_temp/CH2500/stampy/remap.sam
+    jobid: 46
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Fri Sep 14 13:01:54 2018]
+Finished job 46.
+14 of 23 steps (61%) done
+
+[Fri Sep 14 13:01:54 2018]
+rule ng_sam2bam:
+    input: seq2geno_temp/CH2500/stampy/remap.sam
+    output: seq2geno_temp/CH2500/stampy/remap.bam
+    jobid: 36
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Fri Sep 14 13:02:33 2018]
+Finished job 36.
+15 of 23 steps (65%) done
+
+[Fri Sep 14 13:02:33 2018]
+rule ng_sort_bam:
+    input: seq2geno_temp/CH2500/stampy/remap.bam
+    output: seq2geno_temp/CH2500/stampy/remap_sorted.bam, seq2geno_temp/CH2500/stampy/remap_sorted.bam.bai
+    jobid: 26
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Fri Sep 14 13:08:59 2018]
+Finished job 26.
+16 of 23 steps (70%) done
+
+[Fri Sep 14 13:09:00 2018]
+rule ng_create_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/CH2500/stampy/remap_sorted.bam, seq2geno_temp/CH2500/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/CH2500/stampy/unnamed_vcf.gz, seq2geno_temp/CH2500/stampy/unnamed_vcf.gz.tbi
+    jobid: 16
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Fri Sep 14 13:11:40 2018]
+Finished job 16.
+17 of 23 steps (74%) done
+
+[Fri Sep 14 13:11:40 2018]
+rule ng_rename_sample_in_vcf:
+    input: seq2geno_temp/CH2500/stampy/unnamed_vcf.gz
+    output: seq2geno_temp/CH2500/stampy/vcf.gz, seq2geno_temp/CH2500/stampy/vcf.gz.tbi
+    jobid: 6
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Fri Sep 14 13:11:43 2018]
+Finished job 6.
+18 of 23 steps (78%) done
+
+[Fri Sep 14 13:11:44 2018]
+rule ng_multi_sample_vcf:
+    input: seq2geno_temp/CH2500/stampy/vcf.gz, seq2geno_temp/CH2502/stampy/vcf.gz, seq2geno_temp/CH2522/stampy/vcf.gz, seq2geno_temp/F1659/stampy/vcf.gz, seq2geno_temp/ESP088/stampy/vcf.gz, seq2geno_temp/MHH15083/stampy/vcf.gz, seq2geno_temp/F2167/stampy/vcf.gz, seq2geno_temp/F2097/stampy/vcf.gz, seq2geno_temp/MHH14911/stampy/vcf.gz, seq2geno_temp/MHH15103/stampy/vcf.gz
+    output: seq2geno_temp/multi_sample_vcf.gz, seq2geno_temp/multi_sample_vcf.gz.tbi
+    jobid: 3
+    wildcards: TMP_D=seq2geno_temp
+
+[Fri Sep 14 13:12:03 2018]
+Finished job 3.
+19 of 23 steps (83%) done
+
+[Fri Sep 14 13:12:03 2018]
+rule ng_create_coding_region_bed:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.gbk
+    output: seq2geno_temp/ref.coding.bed
+    jobid: 4
+    wildcards: TMP_D=seq2geno_temp
+
+[Fri Sep 14 13:12:10 2018]
+Finished job 4.
+20 of 23 steps (87%) done
+
+[Fri Sep 14 13:12:10 2018]
+rule ng_mask_coding_regions:
+    input: seq2geno_temp/multi_sample_vcf.gz, seq2geno_temp/ref.coding.bed
+    output: seq2geno_temp/multi_sample_vcf.coding.gz, seq2geno_temp/multi_sample_vcf.coding.gz.tbi
+    jobid: 2
+    wildcards: TMP_D=seq2geno_temp
+
+[Fri Sep 14 13:12:18 2018]
+Finished job 2.
+21 of 23 steps (91%) done
+
+[Fri Sep 14 13:12:18 2018]
+rule ng_mask_intergenic_regions:
+    input: seq2geno_temp/multi_sample_vcf.gz, seq2geno_temp/ref.coding.bed
+    output: seq2geno_temp/multi_sample_vcf.igr.gz, seq2geno_temp/multi_sample_vcf.igr.gz.tbi
+    jobid: 1
+    wildcards: TMP_D=seq2geno_temp
+
+[Fri Sep 14 13:12:21 2018]
+Finished job 1.
+22 of 23 steps (96%) done
+
+[Fri Sep 14 13:12:21 2018]
+localrule all:
+    input: seq2geno_temp/multi_sample_vcf.coding.gz, seq2geno_temp/multi_sample_vcf.igr.gz
+    jobid: 0
+
+[Fri Sep 14 13:12:21 2018]
+Finished job 0.
+23 of 23 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-14T104352.598401.snakemake.log
