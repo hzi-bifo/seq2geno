@@ -27,7 +27,7 @@ include: "ng_DETECT_VARS.smk"
 
 rule all:
     input:
-        os.path.join(TMP_D, 'stampy', 'multisample_vcf.gz')
+        os.path.join(TMP_D, 'freebayes', 'multisample_vcf.gz')
 #        coding_vcf_gz=os.path.join(TMP_D, "multi_sample_vcf.coding.gz"),
 #        igr_vcf_gz=os.path.join(TMP_D, "multi_sample_vcf.igr.gz")
 
