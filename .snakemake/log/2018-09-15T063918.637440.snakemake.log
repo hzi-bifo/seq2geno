@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	all
+	1	ng_create_multi_sample_vcf
+	3	ng_paired_read_bwa_mapping
+	3	ng_sam2bam
+	3	ng_sort_bam
+	3	ng_stampy_remapping
+	14
+
+[Sat Sep 15 06:39:20 2018]
+rule ng_paired_read_bwa_mapping:
+    input: data/strains/dna/MHH15083_1.fq.gz, data/strains/dna/MHH15083_2.fq.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.bwt
+    output: seq2geno_temp/MHH15083/stampy/bwa1.sai, seq2geno_temp/MHH15083/stampy/bwa2.sai, seq2geno_temp/MHH15083/stampy/pre_bwa.bam
+    jobid: 12
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+RuleException in line 139 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_DETECT_VARS.smk:
+'Wildcards' object has no attribute 'STRAIN'

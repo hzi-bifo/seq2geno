@@ -43,8 +43,8 @@ rule ng_create_multi_sample_vcf:
         BAM=lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam') for strain in STRAINS],
         BAM_INDEX= lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam.bai') for strain in STRAINS]
     output:
-        multisample_vcf_gz=temp("{TMP_D}/stampy/multisample_vcf.gz"),
-        multisample_vcf_gz_index=temp("{TMP_D}/stampy/multisample_vcf.gz.tbi")
+        multisample_vcf_gz=temp("{TMP_D}/freebayes/multisample_vcf.gz"),
+        multisample_vcf_gz_index=temp("{TMP_D}/freebayes/multisample_vcf.gz.tbi")
     params: 
         CORES=CORES,
         bgzip_bin= 'bgzip',
@@ -129,8 +129,9 @@ rule ng_stampy_remapping:
         """
         source activate py27
         {params[STAMPY]} \
+        --readgroup=ID:{wildcards.strain},SM:{wildcards.strain}\
         -g {params.REF_PREFIX} -h {params.REF_PREFIX} \
-        -t{params.CORES}  --bamkeepgoodreads -M  {input[BWA_BAM]}\
+        -t{params.CORES}  --bamkeepgoodreads -M  {input.BWA_BAM}\
         > {output.STAMPY_SAM}
         source deactivate
         """
@@ -158,11 +159,11 @@ rule ng_paired_read_bwa_mapping:
         bwa aln {params.BWA_OPT} -t{params.CORES} {input[REF]} {input[FQ2]} \
         > {output[P_BWA_SAI2]} 
 
-        bwa sampe -r '@RG\\tID:foo\\tSM:bar' \
-        {input[REF]} {output[P_BWA_SAI1]} {output[P_BWA_SAI2]} \
-        {input[FQ1]} {input[FQ2]} | \
+        bwa sampe -r '@RG\\tID:{wildcards.strain}\\tSM:{wildcards.strain}' \
+        {input.REF} {output.P_BWA_SAI1} {output.P_BWA_SAI2} \
+        {input.FQ1} {input.FQ2} | \
         samtools view -bS -@ {params.CORES} \
-        > {output[BWA_BAM]}
+        > {output.BWA_BAM}
         """
 '''
 rule for_tab_load_reference:
