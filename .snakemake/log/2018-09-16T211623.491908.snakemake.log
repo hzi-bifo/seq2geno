@@ -1,0 +1,29 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	compress_feat_table
+	1	vcf_to_snp_tables
+	4
+
+[Sun Sep 16 21:16:31 2018]
+rule vcf_to_snp_tables:
+    input: seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.igr.gz, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.gbk
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab
+    jobid: 4
+
+Terminating processes on user request, this might take some time.
+    [Sun Sep 16 21:16:40 2018]
+    Error in rule vcf_to_snp_tables:
+        jobid: 4
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab
+
+RuleException:
+CalledProcessError in line 22 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_CREATE_SNPS_TABLE.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/ng_seq2geno/bin/python /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/lib/.snakemake.dh0tmcig.vcf_to_feat_table.py ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_CREATE_SNPS_TABLE.smk", line 22, in __rule_vcf_to_snp_tables
+  File "/home/thkuo/miniconda3/envs/ng_seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-16T211623.491908.snakemake.log

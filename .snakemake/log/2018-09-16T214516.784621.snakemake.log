@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	compress_feat_table
+	3
+
+[Sun Sep 16 21:45:24 2018]
+rule compress_feat_table:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_GROUPS, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_NON-RDNT
+    jobid: 1
+    wildcards: prefix=/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab
+
+    [Sun Sep 16 21:45:43 2018]
+    Error in rule compress_feat_table:
+        jobid: 1
+        output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_GROUPS, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_NON-RDNT
+
+RuleException:
+CalledProcessError in line 16 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_COMPRESS_FEAT_TABLE.smk:
+Command ' set -euo pipefail;  /home/thkuo/miniconda3/envs/ng_seq2geno/bin/python /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/lib/.snakemake.jrkzg045.featCompress.py ' returned non-zero exit status 1.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_COMPRESS_FEAT_TABLE.smk", line 16, in __rule_compress_feat_table
+  File "/home/thkuo/miniconda3/envs/ng_seq2geno/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-16T214516.784621.snakemake.log

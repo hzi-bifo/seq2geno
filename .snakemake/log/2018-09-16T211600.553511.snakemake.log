@@ -1,0 +1,3 @@
+SyntaxError in line 10 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_CREATE_SNPS_TABLE.smk:
+EOF in multi-line statement (ng_CREATE_SNPS_TABLE.smk, line 10)
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 26, in <module>

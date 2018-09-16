@@ -153,8 +153,8 @@ coding_vcf=snakemake.input['coding_vcf_gz']
 igr_vcf=snakemake.input['igr_vcf_gz'] 
 strains= snakemake.params['strains']
 bcftools_bin= snakemake.params['bcftools_bin']
-syn_out= snakemake.output['syn_feat_tab']
-nonsyn_out=snakemake.output['nonsyn_feat_tab']
+syn_out= snakemake.output['syn_snps_table']
+nonsyn_out=snakemake.output['nonsyn_snps_table']
 
 
 #####
@@ -176,9 +176,8 @@ for fea in features:
     start= int(re.sub('\W','',str(fea.location.start+1)))
     end= int(re.sub('\W','', str(fea.location.end)))
     coord_str= '{}:{}-{}'.format(chromosome, start, end)
-    bcftools_cmd= [bcftools_bin, '-r', coord_str, coding_vcf]
-    regional_vars= subprocess.run(bcftools_cmd,
-            stdout=subprocess.PIPE) 
+    bcftools_cmd= [bcftools_bin, 'filter', '-r', coord_str, coding_vcf]
+    regional_vars= subprocess.run(bcftools_cmd, stdout=subprocess.PIPE) 
     regional_vars_df= parse_bcftools_output(regional_vars)
     regional_ref_seq= rec.seq[fea.location.start:fea.location.end]
 
