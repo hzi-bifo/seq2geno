@@ -1,0 +1,3 @@
+WorkflowError in line 24 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk:
+Failed to open /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_MERGE_VARS.smk.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 24, in <module>

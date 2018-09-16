@@ -1,50 +1,20 @@
-#####
-# Two-stage mapping with stampy
 '''
-### In Ariane's workflow, the criteria was zero and thus not needed here.
+Purpose:
+Call population variants with freebayes
 
-rule filter_vcf:
-
-    params: 
-        VCFUTIL_EXE='lib/vcfutils.pl',
-        minDepth= 0,
-        CORES=CORES
-        
-    shell:
-        """
-        source activate Ariane_dna
-        samtools mpileup -uf {input.REF} {input.BAM} | bcftools view -bvcg - > {output.bcf_out}
-        bcftools view {output.bcf_out} | {params.VCFUTIL_EXE} varFilter -d {params.minDepth} > {output.vcf_out}
-        source deactivate
-        """ 
+Output:
+    multisample_vcf_gz="{TMP_D}/freebayes/multisample.vcf.gz"),
 '''
-
-rule ng_rename_sample_in_vcf:
-    input:
-        raw_vcf_gz="{TMP_D}/{strain}/stampy/unnamed_vcf.gz"
-    output:
-        vcf_gz="{TMP_D}/{strain}/stampy/vcf.gz",
-        vcf_gz_index= "{TMP_D}/{strain}/stampy/vcf.gz.tbi"
-    params:
-        picard_bin='picard RenameSampleInVcf',
-        tabix_bin= 'tabix'
-    shell:
-        """
-        {params.picard_bin} I={input.raw_vcf_gz} \
- O={output.vcf_gz} \
- NEW_SAMPLE_NAME={wildcards.strain}
-        {params.tabix_bin} -p vcf {output.vcf_gz}
-        """
-
-rule ng_create_multi_sample_vcf:
+    
+rule ng_detect_var_for_pop:
     input:    
         REF=REF_FA,
         REF_FA_INDEX=REF_FA+".fai",
         BAM=lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam') for strain in STRAINS],
         BAM_INDEX= lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam.bai') for strain in STRAINS]
     output:
-        multisample_vcf_gz=temp("{TMP_D}/freebayes/multisample_vcf.gz"),
-        multisample_vcf_gz_index=temp("{TMP_D}/freebayes/multisample_vcf.gz.tbi")
+        multisample_raw_vcf_gz="{TMP_D}/freebayes/multisample_raw.vcf.gz",
+        multisample_raw_vcf_gz_index="{TMP_D}/freebayes/multisample_raw.vcf.gz.tbi"
     params: 
         CORES=CORES,
         bgzip_bin= 'bgzip',
@@ -56,33 +26,9 @@ rule ng_create_multi_sample_vcf:
         {params.frbayes_bin} <({params.regions_generator_bin} \
         {input.REF_FA_INDEX} 100000) {params.CORES} \
         -p 1 -f {input.REF} {input.BAM} | \
-        {params.bgzip_bin} -c > {output.multisample_vcf_gz}
-        {params.tabix_bin} -p vcf {output.multisample_vcf_gz}
+        {params.bgzip_bin} -c > {output.multisample_raw_vcf_gz}
+        {params.tabix_bin} -p vcf {output.multisample_raw_vcf_gz}
         """
-
-rule ng_create_vcf:
-    input:
-        REF=REF_FA,
-        REF_FA_INDEX=REF_FA+".fai",
-        BAM="{TMP_D}/{strain}/stampy/remap_sorted.bam",
-        BAM_INDEX="{TMP_D}/{strain}/stampy/remap_sorted.bam.bai"
-    output:
-        raw_vcf_gz=temp("{TMP_D}/{strain}/stampy/unnamed_vcf.gz"),
-        raw_vcf_gz_index=temp("{TMP_D}/{strain}/stampy/unnamed_vcf.gz.tbi")
-    params: 
-        CORES=CORES,
-        bgzip_bin= 'bgzip',
-        tabix_bin= 'tabix',
-        frbayes_bin= 'freebayes-parallel',
-        regions_generator_bin='fasta_generate_regions.py' 
-    shell:
-        """
-        {params.frbayes_bin} <({params.regions_generator_bin} \
-        {input.REF_FA_INDEX} 100000) {params.CORES} \
-        -p 1 -f {input.REF} {input.BAM} | \
-        {params.bgzip_bin} -c > {output.raw_vcf_gz}
-        {params.tabix_bin} -p vcf {output.raw_vcf_gz}
-        """ 
 
 rule ng_sort_bam:
     input:
