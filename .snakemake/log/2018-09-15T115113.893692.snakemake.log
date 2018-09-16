@@ -1,0 +1,39 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	all
+	1	ng_create_coding_region_bed
+	1	ng_create_multi_sample_vcf
+	1	ng_mask_coding_regions
+	1	ng_mask_intergenic_regions
+	1	split_multi_allelic_sites
+	6
+
+[Sat Sep 15 11:51:17 2018]
+rule ng_create_multi_sample_vcf:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai, seq2geno_temp/CH2500/stampy/remap_sorted.bam, seq2geno_temp/ESP088/stampy/remap_sorted.bam, seq2geno_temp/MHH15083/stampy/remap_sorted.bam, seq2geno_temp/CH2500/stampy/remap_sorted.bam.bai, seq2geno_temp/ESP088/stampy/remap_sorted.bam.bai, seq2geno_temp/MHH15083/stampy/remap_sorted.bam.bai
+    output: seq2geno_temp/freebayes/multisample_raw.vcf.gz, seq2geno_temp/freebayes/multisample_raw.vcf.gz.tbi
+    jobid: 5
+    wildcards: TMP_D=seq2geno_temp
+
+
+        freebayes-parallel <(fasta_generate_regions.py         /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa.fai 100000) 16         -p 1 -f /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa seq2geno_temp/CH2500/stampy/remap_sorted.bam seq2geno_temp/ESP088/stampy/remap_sorted.bam seq2geno_temp/MHH15083/stampy/remap_sorted.bam |         bgzip -c > seq2geno_temp/freebayes/multisample_raw.vcf.gz
+        tabix -p vcf seq2geno_temp/freebayes/multisample_raw.vcf.gz
+        
+
+[Sat Sep 15 11:51:17 2018]
+rule ng_create_coding_region_bed:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.gbk
+    output: seq2geno_temp/freebayes/ref.coding.bed
+    jobid: 4
+    wildcards: TMP_D=seq2geno_temp
+
+[Sat Sep 15 11:51:17 2018]
+rule split_multi_allelic_sites:
+    input: seq2geno_temp/freebayes/multisample_raw.vcf.gz, seq2geno_temp/freebayes/multisample_raw.vcf.gz.tbi
+    output: seq2geno_temp/freebayes/multisample.vcf.gz, seq2geno_temp/freebayes/multisample.vcf.gz.tbi
+    jobid: 3
+    wildcards: TMP_D=seq2geno_temp
+
+RuleException in line 10 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_PROCESS_VCF.smk:
+'OutputFiles' object has no attribute 'multisample_vcf_gz'
