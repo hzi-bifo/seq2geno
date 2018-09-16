@@ -8,18 +8,20 @@ import pandas as pd
 import sys
 
 def check_input(df):
-    ## check if the features (only 1/0) are binary and contain no NA values
-    check_df= df.fillna('NA')
-    outcome= True if ((check_df != '1') & (check_df != '0')).sum().sum() == 0 else False
+    ## Valid values are '1', '0', 'NA'
+    ## check if the features contain non-determined value
+    check_df= df.fillna('.')
+    outcome= True if ((check_df != '1') & (check_df != '0') & (check_df != 'NA')).sum().sum() == 0 else False
     if not outcome:
-        sys.exit("File unrecognizable: only '1' and '0' are acceptable and shouldn't contain NA values")
+        sys.exit("File unrecognizable: only 'NA', '1', and '0' are acceptable")
 
 f=snakemake.input[0]
 group_out_f= snakemake.output['GROUPS']
 comp_out_f= snakemake.output['NONRDNT']
 
 ## read table
-df= pd.read_csv(f, sep= '\t', header= 0, index_col= 0, dtype= 'str')
+df= pd.read_csv(f, sep= '\t', header= 0, index_col= 0, dtype= 'str', na_values=
+        [''], keep_default_na= False)
 check_input(df)
 
 ## group the features
