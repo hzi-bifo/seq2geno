@@ -1,0 +1,41 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	compress_feat_table
+	3
+
+[Sun Sep 16 22:07:50 2018]
+rule compress_feat_table:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_GROUPS, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_NON-RDNT
+    jobid: 1
+    wildcards: prefix=/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab
+
+[Sun Sep 16 22:08:12 2018]
+Finished job 1.
+1 of 3 steps (33%) done
+
+[Sun Sep 16 22:08:12 2018]
+rule compress_feat_table:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab
+    output: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab_GROUPS, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab_NON-RDNT
+    jobid: 4
+    wildcards: prefix=/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab
+
+[Sun Sep 16 22:08:31 2018]
+Finished job 4.
+2 of 3 steps (67%) done
+
+[Sun Sep 16 22:08:31 2018]
+localrule all:
+    input: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/expr.tab, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_GROUPS, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab_NON-RDNT, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab_GROUPS, /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab_NON-RDNT
+    jobid: 0
+
+[Sun Sep 16 22:08:31 2018]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-16T220742.014806.snakemake.log
