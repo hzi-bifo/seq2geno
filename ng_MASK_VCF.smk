@@ -1,5 +1,10 @@
 '''
-Mask variants by coding regions
+Purpose:
+For the multi-sample vcf, ,ask variants by coding regions
+
+Output:
+        igr_vcf_gz= "{TMP_D}/freebayes/multisample.vcf.igr.gz",
+        coding_vcf_gz="{TMP_D}/freebayes/multisample.vcf.coding.gz",
 '''
 
 def create_bed3_string(fea, chromosome):
@@ -22,11 +27,11 @@ def create_bed3_string(fea, chromosome):
 
 rule ng_mask_intergenic_regions:
     input:
-        all_vcf_gz='{TMP_D}/multi_sample_vcf.gz',
-        coding_bed_out=temp('{TMP_D}/ref.coding.bed')
+        all_vcf_gz='{TMP_D}/freebayes/multisample.vcf.gz',
+        coding_bed_out=temp('{TMP_D}/freebayes/ref.coding.bed')
     output:
-        igr_vcf_gz= "{TMP_D}/multi_sample_vcf.igr.gz",
-        igr_vcf_gz_index= "{TMP_D}/multi_sample_vcf.igr.gz.tbi"
+        igr_vcf_gz= "{TMP_D}/freebayes/multisample.vcf.igr.gz",
+        igr_vcf_gz_index= "{TMP_D}/freebayes/multisample.vcf.igr.gz.tbi"
     params:
         bedtools_bin= 'bedtools intersect',
         bgzip_bin= 'bgzip',
@@ -40,11 +45,11 @@ rule ng_mask_intergenic_regions:
 
 rule ng_mask_coding_regions:
     input:
-        all_vcf_gz='{TMP_D}/multi_sample_vcf.gz',
-        coding_bed_out=temp('{TMP_D}/ref.coding.bed')
+        all_vcf_gz='{TMP_D}/freebayes/multisample.vcf.gz',
+        coding_bed_out=temp('{TMP_D}/freebayes/ref.coding.bed')
     output:
-        coding_vcf_gz="{TMP_D}/multi_sample_vcf.coding.gz",
-        coding_vcf_gz_index="{TMP_D}/multi_sample_vcf.coding.gz.tbi",
+        coding_vcf_gz="{TMP_D}/freebayes/multisample.vcf.coding.gz",
+        coding_vcf_gz_index="{TMP_D}/freebayes/multisample.vcf.coding.gz.tbi",
     params:
         bedtools_bin= 'bedtools intersect',
         bgzip_bin= 'bgzip',
@@ -60,7 +65,7 @@ rule ng_create_coding_region_bed:
     input:
         ref_gbk=REF_GBK
     output:
-        coding_bed_out=temp('{TMP_D}/ref.coding.bed')
+        coding_bed_out=temp('{TMP_D}/freebayes/ref.coding.bed')
     run:
         from Bio import SeqIO
         rec= SeqIO.read(open(input.ref_gbk, 'r', encoding='windows-1252'), 'gb')
