@@ -251,7 +251,7 @@ rule for_expr_create_annot:
         ref_gbk=config['reference_annotation']
     output:
         anno_f=temp('annotations_for_expr.tab')
-    script:'create_dict_for_expr.py'
+    script:'lib/create_dict_for_expr.py'
 
 rule create_and_make_expr_table:
     input:
