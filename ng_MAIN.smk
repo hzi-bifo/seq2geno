@@ -20,17 +20,19 @@ SOFTWARE['gene_sorter']= 'roary'
 print(SAMPLES_DF)
 print(SOFTWARE)
 
-include: "CREATE_INDEL_TABLE.smk"
-include: "CREATE_SNPS_TABLE.smk"
-include: "CREATE_EXPR_TABLE.salmon.smk"
-include: "CREATE_GPA_TABLE.smk"
-include: "COUNT_GPA.smk"
-include: "CONSTRUCT_ASSEMBLY.smk"
-include: "MAKE_CONS.smk"
-include: "INFER_TREE.smk"
-include: "DETECT_SNPS.smk"
-include: "DETECT_SNPS_FOR_TABLE.smk"
+include: "ng_DETECT_VARS.smk"
+include: "ng_PROCESS_VCF.smk"
+include: "ng_MASK_VCF.smk"
+include: "ng_CREATE_SNPS_TABLE.smk"
+include: "ng_COMPRESS_FEAT_TABLE.smk"
+include: "ng_CREATE_EXPR_TABLE.smk"
 
 rule all:
     input:
-        config['expr_table']
+        config['expr_table'],
+        config['syn_snps_table'],
+        config['syn_snps_table']+'_GROUPS',
+        config['syn_snps_table']+'_NON-RDNT',
+        config['nonsyn_snps_table'],
+        config['nonsyn_snps_table']+'_GROUPS',
+        config['nonsyn_snps_table']+'_NON-RDNT'
