@@ -148,13 +148,14 @@ def parse_bcftools_output(bcftools_out):
     vcf_like_df=create_vcf_dataframe(bcftools_out_str.split('\n'))
     return(vcf_like_df)
 
-gbk_f= snakemake.input['ref_gbk']
-coding_vcf=snakemake.input['coding_vcf_gz']
-igr_vcf=snakemake.input['igr_vcf_gz'] 
-strains= snakemake.params['strains']
-bcftools_bin= snakemake.params['bcftools_bin']
-syn_out= snakemake.output['syn_snps_table']
-nonsyn_out=snakemake.output['nonsyn_snps_table']
+gbk_f= '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.gbk'
+coding_vcf='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/seq2geno_temp/freebayes/multisample.vcf.coding.gz'
+igr_vcf='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/seq2geno_temp/freebayes/multisample.vcf.igr.gz'
+strains= ['CH2522', 'CH2500', 'MHH14911', 'MHH15083', 'F1659', 'MHH15103',
+        'F2167', 'CH2502', 'F2097', 'ESP088']
+bcftools_bin= 'bcftools'
+syn_out= 'syn_test.tab'
+nonsyn_out= 'nonsyn_test.tab'
 
 
 #####
@@ -177,7 +178,8 @@ for fea in features:
     end= int(re.sub('\W','', str(fea.location.end)))
     coord_str= '{}:{}-{}'.format(chromosome, start, end)
     bcftools_cmd= [bcftools_bin, 'filter', '-r', coord_str, coding_vcf]
-    regional_vars= subprocess.run(bcftools_cmd, stdout=subprocess.PIPE) 
+    regional_vars= subprocess.run(bcftools_cmd,
+            stdout=subprocess.PIPE) 
     regional_vars_df= parse_bcftools_output(regional_vars)
     regional_ref_seq= rec.seq[fea.location.start:fea.location.end]
 
