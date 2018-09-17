@@ -173,6 +173,7 @@ for fea in features:
     # mask variants by coding regions
     gene_name=fea.qualifiers['name'][0] if 'name' in fea.qualifiers else '.'
     gene_id=fea.qualifiers['locus_tag'][0] if 'locus_tag' in fea.qualifiers else '.'
+    # be careful about the coordinates (i.e. 1-baed vs 0-based)
     start= int(re.sub('\W','',str(fea.location.start+1)))
     end= int(re.sub('\W','', str(fea.location.end)))
     coord_str= '{}:{}-{}'.format(chromosome, start, end)
@@ -229,6 +230,7 @@ if igr_snps_df.shape[0] > 0:
 #####
 ## clean and print the results
 #####
+## syn mutants include those in the intergenic regions
 syn_bin_tab= pd.concat([syn_bin_tab, igr_snps_bin_tab], axis= 1, join= 'outer')
 syn_bin_tab=syn_bin_tab.loc[strains, :].fillna('NA')
 nonsyn_bin_tab=nonsyn_bin_tab.loc[strains, :].fillna('NA')
