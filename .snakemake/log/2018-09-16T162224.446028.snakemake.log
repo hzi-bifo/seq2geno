@@ -1,4 +1,0 @@
-TokenError in line 26 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk:
-('EOF in multi-line statement', (23, 0))
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 26, in <module>
-  File "/home/thkuo/miniconda3/envs/ng_seq2geno/lib/python3.6/tokenize.py", line 595, in _tokenize
