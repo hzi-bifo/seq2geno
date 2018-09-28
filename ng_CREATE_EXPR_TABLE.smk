@@ -74,7 +74,7 @@ rule for_salmon_extract_cds_seqs:
         REF_SALMON_INDEX_INPUT= temp("{TMP_D}/reference.cds.fa")
     params:
         fea_type='gene',
-        name_field= 'locus_Tag'
+        name_field= 'locus_tag'
     run:
         from Bio import SeqIO
         from Bio.SeqRecord import SeqRecord
