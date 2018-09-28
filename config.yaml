@@ -13,7 +13,7 @@ software:
   mapper: 'bwa'
   assembler: 'spades'
 
-cores: 22
+cores: 16 
 
 ##### files
 #### sample wise

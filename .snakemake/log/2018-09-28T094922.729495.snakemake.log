@@ -1,0 +1,4 @@
+WildcardError in line 37 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_INFER_TREE.smk:
+No values given for wildcard 'strain'.
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_MAIN.smk", line 23, in <module>
+  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_INFER_TREE.smk", line 37, in <module>
