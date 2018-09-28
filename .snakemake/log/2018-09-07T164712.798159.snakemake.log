@@ -1,7 +1,0 @@
-AttributeError in line 9 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk:
-'float' object has no attribute 'split'
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 24, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 9, in parse_samples
-  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/site-packages/pandas/core/series.py", line 3194, in apply
-  File "pandas/_libs/src/inference.pyx", line 1472, in pandas._libs.lib.map_infer
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 9, in <lambda>

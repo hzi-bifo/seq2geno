@@ -1,5 +1,0 @@
-SystemExit in line 9 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk:
-NA values included in the samples table
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 27, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 9, in parse_samples
-  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/_sitebuiltins.py", line 26, in __call__

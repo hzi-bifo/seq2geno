@@ -1,3 +1,0 @@
-SyntaxError in line 12 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_PROCESS_VCF.smk:
-EOF in multi-line statement (ng_PROCESS_VCF.smk, line 12)
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 24, in <module>

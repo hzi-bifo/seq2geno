@@ -1,3 +1,0 @@
-SyntaxError in line 16 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_DETECT_VARS.smk:
-EOF in multi-line statement (ng_DETECT_VARS.smk, line 16)
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 23, in <module>
