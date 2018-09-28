@@ -1,0 +1,129 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	10	create_consensus_sequence
+	11
+
+[Mon Sep 24 16:18:12 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/F2167/cons.fa
+    jobid: 8
+    wildcards: TMP_D=seq2geno_temp, strain=F2167
+
+[Mon Sep 24 16:18:44 2018]
+Finished job 8.
+1 of 11 steps (9%) done
+
+[Mon Sep 24 16:18:44 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/MHH15083/cons.fa
+    jobid: 7
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15083
+
+[Mon Sep 24 16:19:17 2018]
+Finished job 7.
+2 of 11 steps (18%) done
+
+[Mon Sep 24 16:19:17 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/CH2500/cons.fa
+    jobid: 9
+    wildcards: TMP_D=seq2geno_temp, strain=CH2500
+
+[Mon Sep 24 16:19:49 2018]
+Finished job 9.
+3 of 11 steps (27%) done
+
+[Mon Sep 24 16:19:49 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/MHH14911/cons.fa
+    jobid: 3
+    wildcards: TMP_D=seq2geno_temp, strain=MHH14911
+
+[Mon Sep 24 16:20:21 2018]
+Finished job 3.
+4 of 11 steps (36%) done
+
+[Mon Sep 24 16:20:21 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/MHH15103/cons.fa
+    jobid: 1
+    wildcards: TMP_D=seq2geno_temp, strain=MHH15103
+
+[Mon Sep 24 16:20:53 2018]
+Finished job 1.
+5 of 11 steps (45%) done
+
+[Mon Sep 24 16:20:53 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/ESP088/cons.fa
+    jobid: 2
+    wildcards: TMP_D=seq2geno_temp, strain=ESP088
+
+[Mon Sep 24 16:21:25 2018]
+Finished job 2.
+6 of 11 steps (55%) done
+
+[Mon Sep 24 16:21:25 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/CH2502/cons.fa
+    jobid: 6
+    wildcards: TMP_D=seq2geno_temp, strain=CH2502
+
+[Mon Sep 24 16:21:57 2018]
+Finished job 6.
+7 of 11 steps (64%) done
+
+[Mon Sep 24 16:21:57 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/CH2522/cons.fa
+    jobid: 4
+    wildcards: TMP_D=seq2geno_temp, strain=CH2522
+
+[Mon Sep 24 16:22:30 2018]
+Finished job 4.
+8 of 11 steps (73%) done
+
+[Mon Sep 24 16:22:30 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/F2097/cons.fa
+    jobid: 10
+    wildcards: TMP_D=seq2geno_temp, strain=F2097
+
+[Mon Sep 24 16:23:02 2018]
+Finished job 10.
+9 of 11 steps (82%) done
+
+[Mon Sep 24 16:23:02 2018]
+rule create_consensus_sequence:
+    input: seq2geno_temp/reference.target_regions.fa, seq2geno_temp/freebayes/multisample.vcf.coding.gz, seq2geno_temp/freebayes/multisample.vcf.coding.gz.tbi
+    output: seq2geno_temp/F1659/cons.fa
+    jobid: 5
+    wildcards: TMP_D=seq2geno_temp, strain=F1659
+
+[Mon Sep 24 16:23:34 2018]
+Finished job 5.
+10 of 11 steps (91%) done
+
+[Mon Sep 24 16:23:34 2018]
+localrule all:
+    input: seq2geno_temp/CH2500/cons.fa, seq2geno_temp/CH2502/cons.fa, seq2geno_temp/CH2522/cons.fa, seq2geno_temp/F1659/cons.fa, seq2geno_temp/ESP088/cons.fa, seq2geno_temp/MHH15083/cons.fa, seq2geno_temp/F2167/cons.fa, seq2geno_temp/F2097/cons.fa, seq2geno_temp/MHH14911/cons.fa, seq2geno_temp/MHH15103/cons.fa
+    jobid: 0
+
+[Mon Sep 24 16:23:34 2018]
+Finished job 0.
+11 of 11 steps (100%) done
+Complete log: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/.snakemake/log/2018-09-24T161805.338472.snakemake.log

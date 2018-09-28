@@ -20,6 +20,8 @@ SOFTWARE['gene_sorter']= 'roary'
 print(SAMPLES_DF)
 print(SOFTWARE)
 
+include: "ng_INFER_TREE.smk"
+include: "ng_MAKE_CONS.smk"
 include: "ng_DETECT_VARS.smk"
 include: "ng_PROCESS_VCF.smk"
 include: "ng_MASK_VCF.smk"
@@ -29,6 +31,8 @@ include: "ng_CREATE_EXPR_TABLE.smk"
 
 rule all:
     input:
+        config['tree']
+'''
         config['expr_table'],
         config['syn_snps_table'],
         config['syn_snps_table']+'_GROUPS',
@@ -36,3 +40,4 @@ rule all:
         config['nonsyn_snps_table'],
         config['nonsyn_snps_table']+'_GROUPS',
         config['nonsyn_snps_table']+'_NON-RDNT'
+'''

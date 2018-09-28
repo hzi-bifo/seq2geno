@@ -6,4 +6,4 @@
 cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7
 source activate ng_seq2geno
 
-snakemake --notemp --snakefile=test.smk
+snakemake --notemp --snakefile=ng_MAIN.smk
