@@ -13,7 +13,11 @@ software:
   mapper: 'bwa'
   assembler: 'spades'
 
+<<<<<<< HEAD
 cores: 16 
+=======
+cores: 22
+>>>>>>> 34a99652488439fc7c9af0fa9c8ceb3cfc128396
 
 ##### files
 #### sample wise

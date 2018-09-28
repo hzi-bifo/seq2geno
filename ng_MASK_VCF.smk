@@ -49,7 +49,11 @@ rule ng_mask_coding_regions:
         coding_bed_out=temp('{TMP_D}/freebayes/ref.coding.bed')
     output:
         coding_vcf_gz="{TMP_D}/freebayes/multisample.vcf.coding.gz",
+<<<<<<< HEAD
         coding_vcf_gz_index="{TMP_D}/freebayes/multisample.vcf.coding.gz.tbi"
+=======
+        coding_vcf_gz_index="{TMP_D}/freebayes/multisample.vcf.coding.gz.tbi",
+>>>>>>> 34a99652488439fc7c9af0fa9c8ceb3cfc128396
     params:
         bedtools_bin= 'bedtools intersect',
         bgzip_bin= 'bgzip',
