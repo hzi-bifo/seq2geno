@@ -1,4 +1,0 @@
-NameError in line 8 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk:
-name 'samples' is not defined
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 27, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 8, in parse_samples
