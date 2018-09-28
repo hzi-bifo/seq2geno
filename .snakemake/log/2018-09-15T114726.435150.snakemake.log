@@ -1,4 +1,0 @@
-CreateRuleException in line 10 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_PROCESS_VCF.smk:
-The name split_multi_allelic_sites is already used by another rule
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 24, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_PROCESS_VCF.smk", line 10, in <module>

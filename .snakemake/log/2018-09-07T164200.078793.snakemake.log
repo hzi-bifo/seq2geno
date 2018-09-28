@@ -1,5 +1,0 @@
-ValueError in line 17 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk:
-The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 23, in <module>
-  File "/net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/test.smk", line 17, in parse_samples
-  File "/home/thkuo/miniconda3/envs/seq2geno/lib/python3.6/site-packages/pandas/core/generic.py", line 1576, in __nonzero__

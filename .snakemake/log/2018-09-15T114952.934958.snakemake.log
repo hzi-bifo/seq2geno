@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 28 of /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/ng_MASK_VCF.smk:
-Missing input files for rule ng_mask_intergenic_regions:
-seq2geno_temp/freebayes/multisample_vcf.gz
