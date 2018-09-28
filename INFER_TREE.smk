@@ -1,22 +1,3 @@
-'''
-rule find_best_tree:
-    input:
-        one_big_var_aln=TMP_D+'/OneBig.var.aln'
-    output:
-        tree=config['tree']
-    params:
-        RAXML= RAXML_EXE,
-        PREFIX= 'OneBig.var',
-        RESULT_D= RESULT_D,
-        RAXML_OUTDIR= RESULT_D,
-       	CORES= CORES
-    shell:
-        """
-        {params[RAXML]} -T {params[CORES]} -w {params[RAXML_OUTDIR]} \
-        -m GTRGAMMA -s {input} -n {params[PREFIX]} -p 1 -N 1 
-        cp {params[RAXML_OUTDIR]}/RAxML_bestTree.{params[PREFIX]} {output}
-        """
-'''
 rule find_best_tree:
     input:
         one_big_var_aln=TMP_D+'/OneBig.var.aln'
