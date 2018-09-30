@@ -31,7 +31,7 @@ rule duplicate_gffs:
         gff_output_copy=temp("{TMP_D}/{strain}/{assembler}/{annotator}/{strain}.gff")
     shell:
         """
-        cp {input[gff_output]} {output[gff_output_copy]}
+        ln -fs {input[gff_output]} {output[gff_output_copy]}
         """
         
 rule create_gff:

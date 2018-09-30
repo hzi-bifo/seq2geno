@@ -20,6 +20,7 @@ SOFTWARE['gene_sorter']= 'roary'
 print(SAMPLES_DF)
 print(SOFTWARE)
 
+include: "LOAD_REFERENCE.smk"
 include: "CREATE_INDEL_TABLE.smk"
 include: "CREATE_SNPS_TABLE.smk"
 include: "CREATE_EXPR_TABLE.smk"
@@ -33,18 +34,18 @@ include: "DETECT_SNPS_FOR_TABLE.smk"
 
 rule all:
     input:
-        config['syn_snps_table'],
-        config['syn_snps_table']+'_GROUPS',
-        config['syn_snps_table']+'_NON-RDNT',
+        config['all_snps_table'],
+        config['all_snps_table']+'_GROUPS',
+        config['all_snps_table']+'_NON-RDNT',
         config['nonsyn_snps_table'],
         config['nonsyn_snps_table']+'_GROUPS',
         config['nonsyn_snps_table']+'_NON-RDNT',
-        config['indel_table'],
-        config['indel_table']+'_GROUPS',
-        config['indel_table']+'_NON-RDNT',
-        config['gpa_table'],
-        config['gpa_table']+'_GROUPS',
-        config['gpa_table']+'_NON-RDNT',
+#        config['indel_table'],
+#        config['indel_table']+'_GROUPS',
+#        config['indel_table']+'_NON-RDNT',
+#        config['gpa_table'],
+#        config['gpa_table']+'_GROUPS',
+#        config['gpa_table']+'_NON-RDNT',
         config['expr_table'],
         config['tree']
         

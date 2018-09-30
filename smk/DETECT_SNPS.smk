@@ -6,9 +6,9 @@
 
 rule index_vcf:
     input:
-        vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz"
+        vcf_gz="{TMP_D}/{strain}/freebayes/vcf.gz"
     output:
-        vcf_gz_index= "{TMP_D}/{strain}/{mapper}/vcf.gz.tbi"
+        vcf_gz_index= "{TMP_D}/{strain}/freebayes/vcf.gz.tbi"
     shell:
         """
         tabix -p vcf {input[vcf_gz]}
@@ -18,10 +18,10 @@ rule create_vcf:
     input:
         REF=REF_FA,
         REF_FA_INDEX=REF_FA+".fai",
-        BAM="{TMP_D}/{strain}/{mapper}/sorted.bam",
-        BAM_INDEX="{TMP_D}/{strain}/{mapper}/sorted.bam.bai"
+        BAM="{TMP_D}/{strain}/bwa/tr_sorted.bam",
+        BAM_INDEX="{TMP_D}/{strain}/bwa/tr_sorted.bam.bai"
     output:
-        vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz"
+        vcf_gz="{TMP_D}/{strain}/freebayes/vcf.gz"
     params: 
         CORES=CORES
     shell:
@@ -34,10 +34,10 @@ rule create_vcf:
 
 rule sort_bam:
     input:
-        paired_bam="{TMP_D}/{strain}/{mapper}/paired.bam"
+        paired_bam="{TMP_D}/{strain}/bwa/tr_paired.bam"
     output:
-        sorted_bam=temp("{TMP_D}/{strain}/{mapper}/sorted.bam"),
-        sorted_bam_index=temp("{TMP_D}/{strain}/{mapper}/sorted.bam.bai")
+        sorted_bam=temp("{TMP_D}/{strain}/bwa/tr_sorted.bam"),
+        sorted_bam_index=temp("{TMP_D}/{strain}/bwa/tr_sorted.bam.bai")
     shell:
         """
         bamtools sort -in {input} -out {output[sorted_bam]}
@@ -51,30 +51,9 @@ rule paired_mapping:
         READS2=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads2'],
         REF_INDEX=REF_FA+".bwt"
     output:
-        paired_bam=temp("{TMP_D}/{strain}/{mapper}/paired.bam")
+        paired_bam=temp("{TMP_D}/{strain}/bwa/tr_paired.bam")
     shell:
         """
         bwa mem -v 2 -M -t {CORES} {input[REF]} {input[READS1]} {input[READS2]}|\
         samtools view -b -@ {CORES} > {output[0]}
         """
-
-rule load_reference:
-    input:
-        REF_FA=REF_FA
-    output:
-        temp(REF_FA+".fai"),
-        temp(REF_FA+".bwt"),
-        temp(REF_FA+".stidx"),
-        temp(REF_FA+".sthash")
-    params:
-        STAMPY=STAMPY_EXE
-    shell:
-        """
-        samtools faidx {input[REF_FA]}
-        bwa index {input}
-        source activate py27
-        {params[STAMPY]} -G {input} {input}
-        {params[STAMPY]} -g {input} -H {input}
-        source deactivate
-        """
-
