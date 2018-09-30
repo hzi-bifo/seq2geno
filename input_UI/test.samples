@@ -1,5 +1,0 @@
-strain	dna_reads	rna_reads
-strain 1	fq1,fq2	r-fq1
-strain 2	fq3	r-fq3
-strain 3	fq5,     fq6	r-fq5,r-fq6
-
