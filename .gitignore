@@ -1,3 +1,5 @@
+vcf_test/
+rename_rg_test/
 consensus_test/
 .snakemake/
 .ori_backup/
