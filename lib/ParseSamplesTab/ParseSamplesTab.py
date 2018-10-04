@@ -35,7 +35,7 @@ def exclude_rule(x):
     return(outcome)
 
 
-def read_samtab(f, reads_source= 'dna'):
+def read_sampletab(f, reads_source= 'dna'):
     #f= 'test.samples'
     #reads_source= 'dna'
 
