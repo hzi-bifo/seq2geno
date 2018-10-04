@@ -52,22 +52,27 @@ RESULT_D='seq2geno'
 SOFTWARE= {}
 SOFTWARE['annotator']= 'prokka'
 SOFTWARE['gene_sorter']= 'roary'
+SOFTWARE['epr_quantifior']= 'salmon'
 
+include: "ng_CREATE_EXPR_TABLE.test.smk" 
+'''
 required_smk=["ng_INFER_TREE.smk", "ng_MAKE_CONS.smk", 
 "ng_DETECT_VARS.smk",
-"ng_DETECT_VARS.test.smk",
 "ng_PROCESS_VCF.smk", "ng_MASK_VCF.smk", "ng_CREATE_SNPS_TABLE.smk",
 "ng_COMPRESS_FEAT_TABLE.smk", "ng_CREATE_EXPR_TABLE.smk", "LOAD_REFERENCE.smk"]
 for smk in required_smk:
     include: os.path.join('./', smk)
+'''
 
 rule all:
     input:
-        config['tree']
-        config['expr_table'],
+        config['expr_table']
+'''
         config['syn_snps_table'],
         config['syn_snps_table']+'_GROUPS',
         config['syn_snps_table']+'_NON-RDNT',
         config['nonsyn_snps_table'],
         config['nonsyn_snps_table']+'_GROUPS',
-        config['nonsyn_snps_table']+'_NON-RDNT'
+        config['nonsyn_snps_table']+'_NON-RDNT',
+        config['tree'],
+'''

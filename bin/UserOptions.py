@@ -56,17 +56,17 @@ def main():
     ## outputs
     output_arg= parser.add_argument_group('outputs')
     output_arg.add_argument('--tree', nargs= '?', dest='tree',
-            default= '',  type= str, help='the output tree file')
+            default= 'seq2geno_phy.nwk',  type= str, help='the output tree file')
     output_arg.add_argument('--gpa', nargs= '?', dest='gpa_table',
-            default= '',  type= str, help='the output gene pres/abs table')
+            default= 'seq2geno_gpa.mat',  type= str, help='the output gene pres/abs table')
     output_arg.add_argument('--s-snp', nargs= '?', dest='syn_snps_table',
-            default= '',  type= str, help='the output syn SNPs table')
+            default= 'seq2geno_s-snp.mat',  type= str, help='the output syn SNPs table')
     output_arg.add_argument('--ns-snp', nargs= '?', dest='nonsyn_snps_table',
-            default= '',  type= str, help='the output non-syn SNPs table')
+            default= 'seq2geno_ns-snp.mat',  type= str, help='the output non-syn SNPs table')
     output_arg.add_argument('--expr', nargs= '?', dest='expr_table',
-            default= '',  type= str, help='the output expression table')
+            default= 'seq2geno_expr.mat',  type= str, help='the output expression table')
     output_arg.add_argument('--ind', nargs= '?', dest='indel_table',
-            default= '',  type= str, help='the output indel table')
+            default= 'seq2geno_indel.mat',  type= str, help='the output indel table')
 
     ## software
     sw_arg= parser.add_argument_group('software')

@@ -32,33 +32,69 @@ s in params.strains}
             na_rep= 'NA', 
             header=True, index= True)
 
-rule gene_counts_by_salmon:
+rule redirect_salmon_result:
     input:
-        FQ=lambda wildcards: RNA_READS[wildcards.strain],
-        REF_SALMON_INDEX_DIR= temp(directory("{TMP_D}/salmon_index"))
-    output:
+        SALMON_RAW_OUTPUT= lambda wildcards:
+            '{}/{}/salmon.{}'.format(
+            wildcards.TMP_D, wildcards.strain, '1' if
+            (len(RNA_READS[wildcards.strain]) == 1) else '2')
+    output: 
         SALMON_OUTPUT= directory('{TMP_D}/{strain}/salmon')
+    shell:
+        '''
+        mv {input.SALMON_RAW_OUTPUT} {output.SALMON_OUTPUT}
+        '''
+
+rule gene_counts_paired_by_salmon:
+    input:
+        FQ1=lambda wildcards: RNA_READS[wildcards.strain][0],
+        FQ2=lambda wildcards: RNA_READS[wildcards.strain][1],
+        REF_SALMON_INDEX_DIR= "{TMP_D}/salmon_index"
+    output:
+        SALMON_RAW_OUTPUT= directory('{TMP_D}/{strain}/salmon.2')
     params:
         cores=CORES,
-        salmon_bin= 'salmon'
+        salmon_bin= SOFTWARE['epr_quantifior']
     shell:
         """
         source activate salmon_env
         {params.salmon_bin} quant -i {input.REF_SALMON_INDEX_DIR} \
-        --gcBias \
-        -l A -r {input.FQ} \
-        -p {params.cores} \
-        -o {output.SALMON_OUTPUT}
+    --gcBias \
+    -l A \
+    -1 {input.FQ1} \
+    -2 {input.FQ2} \
+    -p {params.cores} \
+    -o {output.SALMON_RAW_OUTPUT}
+        source deactivate
+        """
+
+rule gene_counts_single_by_salmon:
+    input:
+        FQ=lambda wildcards: RNA_READS[wildcards.strain][0],
+        REF_SALMON_INDEX_DIR= "{TMP_D}/salmon_index"
+    output:
+        SALMON_RAW_OUTPUT= directory('{TMP_D}/{strain}/salmon.1')
+    params:
+        cores=CORES,
+        salmon_bin= SOFTWARE['epr_quantifior']
+    shell:
+        """
+        source activate salmon_env
+        {params.salmon_bin} quant -i {input.REF_SALMON_INDEX_DIR} \
+    --gcBias \
+    -l A -r {input.FQ} \
+    -p {params.cores} \
+    -o {output.SALMON_RAW_OUTPUT}
         source deactivate
         """
 
 rule for_salmon_create_ref_index:
     input:
-        REF_SALMON_INDEX_INPUT= temp("{TMP_D}/reference.cds.fa")
+        REF_SALMON_INDEX_INPUT= "{TMP_D}/reference.cds.fa"
     output:
         REF_SALMON_INDEX_DIR= temp(directory("{TMP_D}/salmon_index"))
     params: 
-        salmon_bin= 'salmon'
+        salmon_bin= SOFTWARE['epr_quantifior']
     shell:
         """
         source activate salmon_env
