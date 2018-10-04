@@ -17,6 +17,6 @@ rule vcf_to_snp_tables:
         syn_snps_table= config['syn_snps_table'],
         nonsyn_snps_table= config['nonsyn_snps_table']
     params:
-        strains= STRAINS,
+        strains= DNA_READS.index.values.tolist(),
         bcftools_bin= 'bcftools'
     script: 'lib/vcf_to_feat_table.py'

@@ -9,11 +9,11 @@ Output:
 rule create_and_make_expr_table:
     input :
         SALMON_OUTPUTS= expand(directory('{TMP_D}/{strain}/salmon'),
-TMP_D=TMP_D, strain= STRAINS)
+TMP_D=TMP_D, strain= RNA_READS.index.values.tolist())
     output:
         expr_table=config['expr_table']
     params:
-        strains= STRAINS,
+        strains= RNA_READS.index.values.tolist(),
         tmp_d= TMP_D,
         salmon_raw_output= 'quant.sf'
     run:
@@ -34,7 +34,7 @@ s in params.strains}
 
 rule gene_counts_by_salmon:
     input:
-        FQ=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'rna_reads'],
+        FQ=lambda wildcards: RNA_READS[wildcards.strain],
         REF_SALMON_INDEX_DIR= temp(directory("{TMP_D}/salmon_index"))
     output:
         SALMON_OUTPUT= directory('{TMP_D}/{strain}/salmon')

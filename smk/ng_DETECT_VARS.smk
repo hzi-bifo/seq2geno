@@ -10,8 +10,9 @@ rule ng_detect_var_for_pop:
     input:    
         REF=REF_FA,
         REF_FA_INDEX=REF_FA+".fai",
-        BAM=lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam') for strain in STRAINS],
-        BAM_INDEX= lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam.bai') for strain in STRAINS]
+        BAM=lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy',
+'remap_sorted.bam') for strain in DNA_READS.index.values.tolist()],
+        BAM_INDEX= lambda wildcards: [os.path.join(wildcards.TMP_D, strain, 'stampy', 'remap_sorted.bam.bai') for strain in DNA_READS.index.values.tolist()]
     output:
         multisample_raw_vcf_gz="{TMP_D}/freebayes/multisample_raw.vcf.gz",
         multisample_raw_vcf_gz_index="{TMP_D}/freebayes/multisample_raw.vcf.gz.tbi"
@@ -82,19 +83,68 @@ rule ng_stampy_remapping:
         source deactivate
         """
 
+rule ng_redirect_bwa_result:
+    '''
+    The switch to determine which workflow (single or paired reads) to go
+    '''
+    input:
+        BWA_RAW_BAM=
+            lambda wildcards: '{}/{}/stampy/pre_bwa.{}.bam'.format(
+            wildcards.TMP_D, wildcards.strain, '1' if
+            (len(DNA_READS[wildcards.strain]) == 1) else '2')
+    output:
+        BWA_BAM= '{TMP_D}/{strain}/stampy/pre_bwa.bam'
+    shell:
+        '''
+        mv {input.BWA_RAW_BAM} {output.BWA_BAM}
+        '''
+
+rule ng_single_read_bwa_mapping:
+    input:
+        FQ1=lambda wildcards: DNA_READS[wildcards.strain][0],
+        REF=REF_FA,
+        REF_BWA_INDEX=REF_FA+".fai",
+        REF_BWA_INDEXDICT=REF_FA+".bwt"
+    output:
+        P_BWA_SAI1= temp('{TMP_D}/{strain}/stampy/bwa1.sai'),
+        BWA_BAM= temp('{TMP_D}/{strain}/stampy/pre_bwa.1.bam')
+
+    params:
+        bwa_exe= 'bwa',
+        samtools_exe= 'samtools',
+        result_dir= lambda wildcards: os.path.join(wildcards.TMP_D,
+wildcards.strain, 'strain'),
+        BWA_OPT='-q10',
+        CORES=CORES 
+    shell:
+        """
+        bwa aln {params.BWA_OPT} -t{params.CORES} {input[REF]} {input[FQ1]} \
+        > {output[P_BWA_SAI1]}
+
+        bwa samse -r '@RG\\tID:{wildcards.strain}\\tSM:{wildcards.strain}' \
+        {input.REF} {output.P_BWA_SAI1} \
+        {input.FQ1} | \
+        samtools view -bS -@ {params.CORES} \
+        > {output.BWA_BAM}
+        """
+
 rule ng_paired_read_bwa_mapping:
     input:
-        FQ1=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads1'],
-        FQ2=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads2'],
+        FQ1=lambda wildcards: DNA_READS[wildcards.strain][0],
+        FQ2=lambda wildcards: DNA_READS[wildcards.strain][1],
         REF=REF_FA,
         REF_BWA_INDEX=REF_FA+".fai",
         REF_BWA_INDEXDICT=REF_FA+".bwt"
     output:
         P_BWA_SAI1= temp('{TMP_D}/{strain}/stampy/bwa1.sai'),
         P_BWA_SAI2= temp('{TMP_D}/{strain}/stampy/bwa2.sai'),
-        BWA_BAM= temp('{TMP_D}/{strain}/stampy/pre_bwa.bam')
+        BWA_BAM= temp('{TMP_D}/{strain}/stampy/pre_bwa.2.bam')
 
     params:
+        bwa_exe= 'bwa',
+        samtools_exe= 'samtools',
+        result_dir= lambda wildcards: os.path.join(wildcards.TMP_D,
+wildcards.strain, 'strain'),
         BWA_OPT='-q10',
         CORES=CORES 
     shell:
@@ -111,24 +161,3 @@ rule ng_paired_read_bwa_mapping:
         samtools view -bS -@ {params.CORES} \
         > {output.BWA_BAM}
         """
-'''
-rule for_tab_load_reference:
-    input:
-        REF_FA=REF_FA
-    output:
-        temp(REF_FA+".fai"),
-        temp(REF_FA+".bwt"),
-        temp(REF_FA+".stidx"),
-        temp(REF_FA+".sthash")
-    params:
-        STAMPY=STAMPY_EXE
-    shell:
-        """
-        samtools faidx {input[REF_FA]}
-        bwa index {input}
-        source activate py27
-        {params[STAMPY]} -G {input} {input}
-        {params[STAMPY]} -g {input} -H {input}
-        source deactivate
-        """
-'''

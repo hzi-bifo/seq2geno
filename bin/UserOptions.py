@@ -12,10 +12,9 @@ Output:
 import snakemake
 import os
 import argparse
-import yaml
 
 
-def read_user_arguments():
+def main():
     parser = argparse.ArgumentParser(
             description='Seq2Geno: the pipline tool '
                 'for genomic features computation')
@@ -24,16 +23,21 @@ def read_user_arguments():
         version='v.Beta')
     ## functions
     functions_arg= parser.add_argument_group('functions')
-    functions_arg.add_argument('-w', dest='wd', type= str, 
+    functions_arg.add_argument('-w', dest='workdir', type= str, 
         default= os.getcwd(),
         help='set the working directory, where the relative paths are counted')
+    functions_arg.add_argument('--use-ng', dest= 'ng', action= 'store_true',
+        help='use the faster next-generation version')
     functions_arg.add_argument('-c', dest='comp', action= 'store_true',
         help='compress binary features by pattern')
     functions_arg.add_argument('-d', action= 'store_true',
         help='check software dependencies')
-    functions_arg.add_argument('--dry-run', action= 'store_true',
+    functions_arg.add_argument('--dry-run', dest= 'dryrun', action= 'store_true',
         help='dry run the processes')
-
+    functions_arg.add_argument('--keep_temp', dest= 'notemp', action= 'store_true',
+        help='do not clean all the intermediate files generated in the process')
+    functions_arg.add_argument('--cores', dest= 'cores', default= 1,
+        help='number of cpus')
 
     ## reference
     ref_arg= parser.add_argument_group('reference')
@@ -51,32 +55,30 @@ def read_user_arguments():
 
     ## outputs
     output_arg= parser.add_argument_group('outputs')
-    output_arg.add_argument('--tree', nargs= '?', dest='tr',
+    output_arg.add_argument('--tree', nargs= '?', dest='tree',
             default= '',  type= str, help='the output tree file')
-    output_arg.add_argument('--gpa', nargs= '?', dest='gpa',
+    output_arg.add_argument('--gpa', nargs= '?', dest='gpa_table',
             default= '',  type= str, help='the output gene pres/abs table')
-    output_arg.add_argument('--s-snp', nargs= '?', dest='s-snp',
+    output_arg.add_argument('--s-snp', nargs= '?', dest='syn_snps_table',
             default= '',  type= str, help='the output syn SNPs table')
-    output_arg.add_argument('--ns-snp', nargs= '?', dest='ns-snp',
+    output_arg.add_argument('--ns-snp', nargs= '?', dest='nonsyn_snps_table',
             default= '',  type= str, help='the output non-syn SNPs table')
-    output_arg.add_argument('--expr', nargs= '?', dest='xpr',
+    output_arg.add_argument('--expr', nargs= '?', dest='expr_table',
             default= '',  type= str, help='the output expression table')
-    output_arg.add_argument('--ind', nargs= '?', dest='ind',
+    output_arg.add_argument('--ind', nargs= '?', dest='indel_table',
             default= '',  type= str, help='the output indel table')
+
+    ## software
+    sw_arg= parser.add_argument_group('software')
+    sw_arg.add_argument('--stampy', dest='stampy_exe', type= str,
+        help='user-defined version of stampy', 
+        default= None)
+    sw_arg.add_argument('--raxml', dest='raxml_exe', type= str,
+        help='user-defined version of raxml',
+        default= None)
 
     args = parser.parse_args()
     return(args)
-
-def create_yaml_f(args, config_f):
-    config_fh= open(config_f, 'w')
-    yaml.dump(vars(args), config_fh, default_flow_style= False)
-    config_fh.close()
-
-def main():
-    args= read_user_arguments()
-    config_f= 'test.yaml'
-    create_yaml_f(args, config_f)
-    return(args, config_f)
 
 '''
 ## output the config file (yaml format)
