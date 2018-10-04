@@ -54,7 +54,7 @@ SOFTWARE['annotator']= 'prokka'
 SOFTWARE['gene_sorter']= 'roary'
 SOFTWARE['epr_quantifior']= 'salmon'
 
-include: "ng_CREATE_EXPR_TABLE.test.smk" 
+include: "DETECT_SNPS_FOR_TABLE.test.smk" 
 '''
 required_smk=["ng_INFER_TREE.smk", "ng_MAKE_CONS.smk", 
 "ng_DETECT_VARS.smk",
@@ -66,8 +66,10 @@ for smk in required_smk:
 
 rule all:
     input:
-        config['expr_table']
+        expand('{TMP_D}/{strain}/stampy/dna_for_tab.sam', TMP_D= TMP_D, strain=
+DNA_READS.index.values.tolist())
 '''
+        config['expr_table'],
         config['syn_snps_table'],
         config['syn_snps_table']+'_GROUPS',
         config['syn_snps_table']+'_NON-RDNT',

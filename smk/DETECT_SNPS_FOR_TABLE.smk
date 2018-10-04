@@ -43,7 +43,7 @@ bcftools view -bvcg \
 
 rule for_tab_sam2bam:
     input:
-        STAMPY_SAM= temp('{TMP_D}/{strain}/stampy/tab_dna.sam')
+        STAMPY_SAM= temp('{TMP_D}/{strain}/stampy/dna_for_tab.sam')
     output:
         bam= temp('{TMP_D}/{strain}/stampy/tab_dna.bam'),
         bam_index=temp("{TMP_D}/{strain}/stampy/tab_dna.bam.bai")
@@ -63,9 +63,9 @@ wildcards.strain, 'stampy', 'tab_dna')
 
 rule for_snps_convert_to_art:
     input: 
-        STAMPY_SAM='{TMP_D}/{strain}/stampy/tab_dna.sam'
+        STAMPY_SAM='{TMP_D}/{strain}/stampy/dna_for_tab.sam'
     output:
-        ART=temp('{TMP_D}/{strain}/dna.art')
+        ART=temp('{TMP_D}/{strain}/dna_for_tab.art')
     params:
         SAM2ART='lib/expr/sam2art.pl'
     shell:
@@ -73,9 +73,9 @@ rule for_snps_convert_to_art:
 
 rule for_snps_convert_to_sin:
     input: 
-        STAMPY_SAM='{TMP_D}/{strain}/stampy/tab_dna.sam'
+        STAMPY_SAM='{TMP_D}/{strain}/stampy/dna_for_tab.sam'
     output:
-        SIN=temp('{TMP_D}/{strain}/dna.sin')
+        SIN=temp('{TMP_D}/{strain}/dna_for_tab.sin')
     params:
         SAM2ART='lib/expr/sam2art.pl'
     shell:
@@ -83,23 +83,35 @@ rule for_snps_convert_to_sin:
 
 rule for_snps_convert_to_flatcount:
     input: 
-        STAMPY_SAM='{TMP_D}/{strain}/stampy/tab_dna.sam'
+        STAMPY_SAM='{TMP_D}/{strain}/stampy/dna_for_tab.sam'
     output:
-        FLTCNT=temp('{TMP_D}/{strain}/dna.flatcount')
+        FLTCNT=temp('{TMP_D}/{strain}/dna_for_tab.flatcount')
     params:
         SAM2ART='lib/expr/sam2art.pl'
     shell:
         '{params.SAM2ART} -f -s 2 -p {input.STAMPY_SAM}  > {output} '
 
-rule for_tab_stampy_mapping:
+rule for_tab_redirect_stampy_result:
     input:
-        FQ1=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads1'],
-        FQ2=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads2'],
+        STAMPY_RAW_SAM=
+            lambda wildcards: '{}/{}/stampy/dna_for_tab.{}.sam'.format(
+            wildcards.TMP_D, wildcards.strain, '1' if
+            (len(DNA_READS[wildcards.strain]) == 1) else '2')
+    output:
+        STAMPY_SAM='{TMP_D}/{strain}/stampy/dna_for_tab.sam'
+    shell:
+        '''
+        mv {input.STAMPY_RAW_SAM} {output.STAMPY_SAM}
+        '''        
+
+rule for_tab_stampy_single_mapping:
+    input:
+        FQ1=lambda wildcards: DNA_READS[wildcards.strain][0],
         REF=REF_FA,
         REF_BWA_INDEX=REF_FA+".fai",
         REF_BWA_INDEXDICT=REF_FA+".bwt"
     output:
-        STAMPY_SAM= temp('{TMP_D}/{strain}/stampy/tab_dna.sam')
+        STAMPY_RAW_SAM= temp('{TMP_D}/{strain}/stampy/dna_for_tab.1.sam')
     params:
         CORES=CORES,
         REF_PREFIX=REF_FA,
@@ -110,6 +122,29 @@ rule for_tab_stampy_mapping:
         {params.STAMPY} --bwaoptions=\"-q10 {input.REF}\" \
 -g {params.REF_PREFIX} \
 -h {params.REF_PREFIX} \
--M {input.FQ1} {input.FQ2} > {output.STAMPY_SAM} 
+-M {input.FQ1} > {output.STAMPY_RAW_SAM} 
+        source deactivate
+        """
+
+rule for_tab_stampy_paired_mapping:
+    input:
+        FQ1=lambda wildcards: DNA_READS[wildcards.strain][0],
+        FQ2=lambda wildcards: DNA_READS[wildcards.strain][1],
+        REF=REF_FA,
+        REF_BWA_INDEX=REF_FA+".fai",
+        REF_BWA_INDEXDICT=REF_FA+".bwt"
+    output:
+        STAMPY_RAW_SAM= temp('{TMP_D}/{strain}/stampy/dna_for_tab.2.sam')
+    params:
+        CORES=CORES,
+        REF_PREFIX=REF_FA,
+        STAMPY=STAMPY_EXE
+    shell:
+        """
+        source activate Ariane_dna
+        {params.STAMPY} --bwaoptions=\"-q10 {input.REF}\" \
+-g {params.REF_PREFIX} \
+-h {params.REF_PREFIX} \
+-M {input.FQ1} {input.FQ2} > {output.STAMPY_RAW_SAM} 
         source deactivate
         """

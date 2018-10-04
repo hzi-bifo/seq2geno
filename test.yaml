@@ -2,11 +2,11 @@ comp: false
 cores: '20'
 d: false
 dna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/samples.3.dna.tsv
-dryrun: true
+dryrun: false
 expr_table: seq2geno_expr.mat
 gpa_table: seq2geno_gpa.mat
 indel_table: seq2geno_indel.mat
-ng: true
+ng: false
 nonsyn_snps_table: seq2geno_ns-snp.mat
 notemp: true
 raxml_exe: null
