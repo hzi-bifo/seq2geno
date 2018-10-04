@@ -44,6 +44,7 @@ if __name__== '__main__':
         configfile=config_f,
         workdir= args.workdir,
         dryrun= args.dryrun,
+        printshellcmds= args.dryrun,
         notemp= args.notemp
         )
 
