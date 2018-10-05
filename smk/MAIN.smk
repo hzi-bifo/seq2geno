@@ -51,11 +51,12 @@ config['raxml_exe'])
 
 
 include: "LOAD_REFERENCE.smk"
-include: "CREATE_INDEL_TABLE.smk"
+include: "DETECT_SNPS_FOR_TABLE.smk"
+include: "CREATE_EXPR_TABLE.test.smk"
 rule all:
     input:
-        expand('{TMP_D}/{strain}/stampy/dna_for_tab.sam', 
-        TMP_D=TMP_D, strain= DNA_READS.index.values.tolist())
+        expand('{TMP_D}/{strain}/stampy/rna.sam', TMP_D=TMP_D, strain=
+RNA_READS.index.values.tolist())
 '''
 include: "LOAD_REFERENCE.smk"
 include: "CREATE_INDEL_TABLE.smk"
