@@ -1,12 +1,13 @@
 rule create_and_make_expr_table:
     input:
-        RPG_FILES=expand('{TMP_D}/{strain}/rna.rpg', strain=STRAINS, TMP_D=
-TMP_D)
+        RPG_FILES=expand('{TMP_D}/{strain}/rna.rpg', 
+        strain=RNA_READS.index.values.tolist(), 
+        TMP_D=TMP_D)
     output:
         expr_table=config['expr_table']
     params:
         tmp_d= TMP_D,
-        strains= STRAINS
+        strains= RNA_READS.index.values.tolist()
     run:
         import pandas as pd
         import re
@@ -42,7 +43,7 @@ rule for_expr_rstats:
 
 rule for_expr_create_annot:
     input:
-        ref_gbk=config['reference_annotation']
+        ref_gbk=config['ref_gbk']
     output:
         R_anno_f=temp('{TMP_D}/R_annotations.tab')
     script:'lib/create_R_anno.py'
@@ -107,10 +108,22 @@ rule convert_to_flatcount:
     shell:
         '{params.SAM2ART} -f -s 2 {input.STAMPY_SAM}  > {output} '
 
-
-rule rna_mapping:
+rule rna_redirect_stampy_result:
     input:
-        FQ=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'rna_reads'],
+        STAMPY_RAW_SAM=
+            lambda wildcards: '{}/{}/stampy/rna.{}.sam'.format(
+            wildcards.TMP_D, wildcards.strain, '1' if
+            (len(RNA_READS[wildcards.strain]) == 1) else '2')
+    output:
+        STAMPY_SAM='{TMP_D}/{strain}/stampy/rna.sam'
+    shell:
+        '''
+        mv {input.STAMPY_RAW_SAM} {output.STAMPY_SAM}
+        '''
+
+rule rna_single_mapping:
+    input:
+        FQ=lambda wildcards: RNA_READS[wildcards.strain][0],
         REF=REF_FA,
         REF_STAMPY_INDEX1=REF_FA+".stidx",
         REF_STAMPY_INDEX2=REF_FA+".sthash",
@@ -121,17 +134,39 @@ rule rna_mapping:
         REF_PREFIX=REF_FA,
         STAMPY=STAMPY_EXE
     output:
-        STAMPY_SAM= temp('{TMP_D}/{strain}/stampy/rna.sam')
-    #threads: 16
+        STAMPY_RAW_SAM= temp('{TMP_D}/{strain}/stampy/rna.1.sam')
     shell:
-       # 'samtools view -bS {input} |samtools sort | samtools rmdup -s |samtools view -h > {output} '
-        #"source activate Ariane_dna; source activate py27;" ## needs to be dealt with wrappers
         """
         source activate Ariane_dna
         {params[STAMPY]} --bwaoptions=\"-q10 {input[REF]}\" \
 -g {params.REF_PREFIX} \
 -h {params.REF_PREFIX} \
--M {input.FQ} > {output.STAMPY_SAM} 
+-M {input.FQ} > {output.STAMPY_RAW_SAM} 
+        source deactivate
+        """
+
+rule rna_paired_mapping:
+    input:
+        FQ1=lambda wildcards: RNA_READS[wildcards.strain][0],
+        FQ2=lambda wildcards: RNA_READS[wildcards.strain][1],
+        REF=REF_FA,
+        REF_STAMPY_INDEX1=REF_FA+".stidx",
+        REF_STAMPY_INDEX2=REF_FA+".sthash",
+        REF_BWA_INDEX1=REF_FA+".bwt",
+        REF_BWA_INDEX2=REF_FA+".fai"
+    params:
+        CORES=CORES,
+        REF_PREFIX=REF_FA,
+        STAMPY=STAMPY_EXE
+    output:
+        STAMPY_RAW_SAM= temp('{TMP_D}/{strain}/stampy/rna.2.sam')
+    shell:
+        """
+        source activate Ariane_dna
+        {params[STAMPY]} --bwaoptions=\"-q10 {input[REF]}\" \
+-g {params.REF_PREFIX} \
+-h {params.REF_PREFIX} \
+-M {input.FQ1} {input.FQ2} > {output.STAMPY_RAW_SAM} 
         source deactivate
         """
 
