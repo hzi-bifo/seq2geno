@@ -8,7 +8,7 @@ gpa_table: seq2geno_gpa.mat
 indel_table: seq2geno_indel.mat
 ng: false
 nonsyn_snps_table: seq2geno_ns-snp.mat
-notemp: true
+notemp: false
 raxml_exe: null
 ref_fa: data/reference/RefCln_UCBPP-PA14.fa
 ref_gbk: data/reference/RefCln_UCBPP-PA14.gbk
