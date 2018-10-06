@@ -4,9 +4,8 @@
 #$ -l h_vmem=100G
 
 cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7
-source activate ng_seq2geno
+source activate seq2geno
 ./bin/main.py \
---keep_temp \
 --cores 20  \
 --ref-fa data/reference/RefCln_UCBPP-PA14.fa \
 --ref-gbk data/reference/RefCln_UCBPP-PA14.gbk \

@@ -52,10 +52,11 @@ config['raxml_exe'])
 
 include: "LOAD_REFERENCE.smk"
 include: "DETECT_SNPS_FOR_TABLE.smk"
-include: "CREATE_EXPR_TABLE.test.smk"
+include: "CREATE_EXPR_TABLE.smk"
+include: "DETECT_SNPS.smk"
 rule all:
     input:
-        expand('{TMP_D}/{strain}/stampy/rna.sam', TMP_D=TMP_D, strain=
+        expand('{TMP_D}/{strain}/bwa/tr_bwa.bam', TMP_D=TMP_D, strain=
 RNA_READS.index.values.tolist())
 '''
 include: "LOAD_REFERENCE.smk"
