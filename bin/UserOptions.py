@@ -13,6 +13,26 @@ import snakemake
 import os
 import argparse
 
+def is_default_file(f):
+    def_value= '-'
+    return (True if f == def_value else False)
+
+def option_rules(args):
+    outcome= True
+    msg= []
+    # needing at least one data
+    if all([is_default_file(f) for f in [args.dna_reads, args.rna_reads]]):
+        outcome= False
+        msg.append('no input data given')
+
+    # differential expression analysis depends on the expression table
+    if any(is_default_file(f) for f in [args.dif_xpr, args.expr_table,
+        args.phe_table]):
+        outcome= False
+        msg.append('no expression levels table or phenotype table specified for the differential expression analysis')
+
+    if not outcome:
+        exit('\n'.join(msg))
 
 def main():
     parser = argparse.ArgumentParser(
@@ -30,14 +50,25 @@ def main():
         help='use the faster next-generation version')
     functions_arg.add_argument('-c', dest='comp', action= 'store_true',
         help='compress binary features by pattern')
-    functions_arg.add_argument('-d', action= 'store_true',
-        help='check software dependencies')
     functions_arg.add_argument('--dry-run', dest= 'dryrun', action= 'store_true',
         help='dry run the processes')
     functions_arg.add_argument('--keep_temp', dest= 'notemp', action= 'store_true',
         help='do not clean all the intermediate files generated in the process')
     functions_arg.add_argument('--cores', dest= 'cores', default= 1,
         help='number of cpus')
+
+    ## differential expression
+    dif_xpr_arg= parser.add_argument_group('differential expression analysis')
+    dif_xpr_arg.add_argument('-dx', dest='dif_xpr', action= 'store_true',
+        help=
+        '''
+        detect differentially expressed genes using DESeq2 (Dependency:
+        --expr_table, --phe_table)
+        ''')
+    dif_xpr_arg.add_argument('--dif_xpr_alpha', dest= 'dif_xpr_alpha', 
+            default= 0.05, help='the alpha cutoff')
+    dif_xpr_arg.add_argument('--dif_xpr_lfc', dest= 'dif_xpr_lfc',
+            default= 0, help='the log fold-change cutoff')
 
     ## reference
     ref_arg= parser.add_argument_group('reference')
@@ -49,24 +80,32 @@ def main():
     ## samples
     sam_arg= parser.add_argument_group('samples')
     sam_arg.add_argument('--dna-reads', dest='dna_reads', type= str,
-        help='list of samples and dna sequencing reads', default= '', required=True)
+        help='list of samples and dna sequencing reads', default= '-')
     sam_arg.add_argument('--rna-reads', dest='rna_reads', type= str,
-        help='list of samples and rna sequencing reads', default= '', required=True)
+        help='list of samples and rna sequencing reads', default= '-')
+    sam_arg.add_argument('--pheno', dest='phe_table', type= str,
+        help='list of sample pheno types', default= '-')
 
     ## outputs
     output_arg= parser.add_argument_group('outputs')
     output_arg.add_argument('--tree', nargs= '?', dest='tree',
-            default= 'seq2geno_phy.nwk',  type= str, help='the output tree file')
+            default= 'NA',
+            type= str, help='the output tree file')
     output_arg.add_argument('--gpa', nargs= '?', dest='gpa_table',
-            default= 'seq2geno_gpa.mat',  type= str, help='the output gene pres/abs table')
+            default= 'NA',
+            type= str, help='the output gene pres/abs table')
     output_arg.add_argument('--s-snp', nargs= '?', dest='syn_snps_table',
-            default= 'seq2geno_s-snp.mat',  type= str, help='the output syn SNPs table')
+            default= 'NA',
+            type= str, help='the output syn SNPs table')
     output_arg.add_argument('--ns-snp', nargs= '?', dest='nonsyn_snps_table',
-            default= 'seq2geno_ns-snp.mat',  type= str, help='the output non-syn SNPs table')
+            default= 'NA',
+            type= str, help='the output non-syn SNPs table')
     output_arg.add_argument('--expr', nargs= '?', dest='expr_table',
-            default= 'seq2geno_expr.mat',  type= str, help='the output expression table')
+            default= 'NA',
+            type= str, help='the output expression table')
     output_arg.add_argument('--ind', nargs= '?', dest='indel_table',
-            default= 'seq2geno_indel.mat',  type= str, help='the output indel table')
+            default= 'NA',
+            type= str, help='the output indel table')
 
     ## software
     sw_arg= parser.add_argument_group('software')
@@ -78,6 +117,8 @@ def main():
         default= None)
 
     args = parser.parse_args()
+    option_rules(args)
+
     return(args)
 
 '''

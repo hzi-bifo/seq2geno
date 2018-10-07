@@ -41,6 +41,7 @@ REF_GBK=config['ref_gbk']
 
 #####
 # the other paths
+LIB_D= config['seq2geno_lib_dir']
 TMP_D='seq2geno_temp'
 CORES=config['cores']
 STAMPY_EXE=(os.path.join(config['seq2geno_lib_dir'], 
@@ -54,20 +55,19 @@ SOFTWARE['annotator']= 'prokka'
 SOFTWARE['gene_sorter']= 'roary'
 SOFTWARE['epr_quantifior']= 'salmon'
 
-include: "DETECT_SNPS_FOR_TABLE.test.smk" 
+include: "ng_CREATE_EXPR_TABLE.smk"
+include: "DIF_XPR_ANALYSIS.smk"
 '''
 required_smk=["ng_INFER_TREE.smk", "ng_MAKE_CONS.smk", 
 "ng_DETECT_VARS.smk",
 "ng_PROCESS_VCF.smk", "ng_MASK_VCF.smk", "ng_CREATE_SNPS_TABLE.smk",
 "ng_COMPRESS_FEAT_TABLE.smk", "ng_CREATE_EXPR_TABLE.smk", "LOAD_REFERENCE.smk"]
 for smk in required_smk:
-    include: os.path.join('./', smk)
+    include:  smk
 '''
-
 rule all:
     input:
-        expand('{TMP_D}/{strain}/stampy/dna_for_tab.sam', TMP_D= TMP_D, strain=
-DNA_READS.index.values.tolist())
+        config['expr_table']
 '''
         config['expr_table'],
         config['syn_snps_table'],

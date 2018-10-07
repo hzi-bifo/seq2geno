@@ -60,6 +60,7 @@ rule gene_counts_paired_by_salmon:
         source activate salmon_env
         {params.salmon_bin} quant -i {input.REF_SALMON_INDEX_DIR} \
     --gcBias \
+    --sigDigits 0 \
     -l A \
     -1 {input.FQ1} \
     -2 {input.FQ2} \
@@ -83,6 +84,7 @@ rule gene_counts_single_by_salmon:
         {params.salmon_bin} quant -i {input.REF_SALMON_INDEX_DIR} \
     --gcBias \
     -l A -r {input.FQ} \
+    --sigDigits 0 \
     -p {params.cores} \
     -o {output.SALMON_RAW_OUTPUT}
         source deactivate

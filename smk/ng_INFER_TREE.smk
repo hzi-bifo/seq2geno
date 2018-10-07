@@ -11,7 +11,7 @@ rule find_best_tree:
         """
         export OMP_NUM_THREADS={params.fasttree_cores}
         {params.fasttree_bin} {params.fasttree_opt} \
-<{input}>\
+< {input.one_big_var_aln} >\
 {output.tree}
         """
     
