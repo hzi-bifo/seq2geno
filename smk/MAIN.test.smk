@@ -44,7 +44,7 @@ REF_GBK=config['ref_gbk']
 LIB_D= config['seq2geno_lib_dir']
 TMP_D='seq2geno_temp'
 CORES=config['cores']
-STAMPY_EXE=(os.path.join(config['seq2geno_lib_dir'],
+STAMPY_EXE=(os.path.join(config['seq2geno_lib_dir'], 
 'stampy-1.0.23','stampy.py') if config['stampy_exe'] is None else
 config['stampy_exe'])
 RAXML_EXE=('raxmlHPC-PTHREADS-SSE3' if config['raxml_exe'] is None else
@@ -52,21 +52,22 @@ config['raxml_exe'])
 
 
 include: "LOAD_REFERENCE.smk"
-include: "CREATE_INDEL_TABLE.smk"
-include: "CREATE_SNPS_TABLE.smk"
-include: "CREATE_EXPR_TABLE.smk"
-include: "CREATE_GPA_TABLE.smk"
-include: "COUNT_GPA.smk"
-include: "CONSTRUCT_ASSEMBLY.smk"
-include: "MAKE_CONS.smk"
-include: "INFER_TREE.smk"
-include: "DETECT_SNPS.smk"
-include: "DETECT_SNPS_FOR_TABLE.smk"
+#include: "CREATE_INDEL_TABLE.smk"
+#include: "CREATE_SNPS_TABLE.smk"
+#include: "CREATE_EXPR_TABLE.smk"
+#include: "CREATE_GPA_TABLE.smk"
+#include: "COUNT_GPA.smk"
+#include: "CONSTRUCT_ASSEMBLY.smk"
+#include: "MAKE_CONS.smk"
+#include: "INFER_TREE.smk"
+#include: "DETECT_SNPS.smk"
+#include: "DETECT_SNPS_FOR_TABLE.smk"
 include: "DIF_XPR_ANALYSIS.smk"
-
 
 rule all:
     input:
+        os.path.join(TMP_D, 'deseq2')
+'''
         config['expr_table'],
         config['syn_snps_table'],
         config['syn_snps_table']+'_GROUPS',
@@ -74,4 +75,5 @@ rule all:
         config['nonsyn_snps_table'],
         config['nonsyn_snps_table']+'_GROUPS',
         config['nonsyn_snps_table']+'_NON-RDNT',
-        config['tree'],
+        config['tree']
+'''
