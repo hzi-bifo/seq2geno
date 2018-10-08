@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 '''
 It is an interface, or convertor, to pass the users requests that were already
 parsed by the main script to the snakemake rules. It determines all the
