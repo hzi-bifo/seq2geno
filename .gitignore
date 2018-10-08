@@ -1,3 +1,5 @@
+snakemake_Test/
+.smk_backup/
 tmp/
 pre_bwa.bam
 tmp/CH2500/bwa.sorted.bam

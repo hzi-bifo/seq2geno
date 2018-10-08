@@ -1,0 +1,16 @@
+Rule:
+A rule is a function encapsulated in a folder, 
+where (1) the script snakemake rule and (2) its external script (.py/.R) are located. 
+The external scripts may further need some other scripts, which are typically shared.
+These scripts are not under the same directory. Instead, they are in a shared library.
+Nothing will be written in the rule folders. 
+
+Recipe:
+A recipe is a snakemake script to execute a workflow. 
+Basically, the scripts has only the function "include", because the order of rules should be 
+computed by snakemake.
+
+Book:
+A book is a tool set where all the functions are mounted. It determines the recipes based on the
+required output. It describes the environment, which includes the materials that will be required by 
+the rules and the paths. It is the universe of variable space where the attached rules can search. 
