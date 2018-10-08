@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 '''
 It is an interface, or convertor, to pass the users requests that were already
 parsed by the main script to the snakemake rules. It determines all the
@@ -70,6 +71,7 @@ rule all:
     input:
         os.path.join(TMP_D, 'fastAnc') if config['c_ancrec'] else ''
 '''
+        config['tree'],
         config['expr_table'],
         config['syn_snps_table'],
         config['syn_snps_table']+'_GROUPS',
@@ -77,5 +79,4 @@ rule all:
         config['nonsyn_snps_table'],
         config['nonsyn_snps_table']+'_GROUPS',
         config['nonsyn_snps_table']+'_NON-RDNT',
-        config['tree'],
 '''

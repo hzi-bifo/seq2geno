@@ -161,3 +161,4 @@ wildcards.strain, 'strain'),
         samtools view -bS -@ {params.CORES} \
         > {output.BWA_BAM}
         """
+
