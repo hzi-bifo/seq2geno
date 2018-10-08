@@ -70,6 +70,16 @@ def main():
     dif_xpr_arg.add_argument('--dif_xpr_lfc', dest= 'dif_xpr_lfc',
             default= 0, help='the log fold-change cutoff')
 
+    ## ancestral reconstruction of expression levels
+    cont_ancrec_arg= parser.add_argument_group('ancestral reconstruction of '\
+            'continuous states')
+    cont_ancrec_arg.add_argument('-cac', dest='c_ancrec', action= 'store_true',
+        help=
+        '''
+        reconstruct the expression levels along phylogeny using
+        phytools::fastAnc (Dependency: --expr_table, --tree)
+        ''')
+
     ## reference
     ref_arg= parser.add_argument_group('reference')
     ref_arg.add_argument('--ref-fa', dest='ref_fa', type= str,

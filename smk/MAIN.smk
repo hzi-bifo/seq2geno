@@ -63,6 +63,7 @@ include: "INFER_TREE.smk"
 include: "DETECT_SNPS.smk"
 include: "DETECT_SNPS_FOR_TABLE.smk"
 include: "DIF_XPR_ANALYSIS.smk"
+include: "CONT_ANC_RECONS.smk"
 
 
 rule all:

@@ -3,22 +3,21 @@ library('mnormt')
 library('ape')
 library('ggtree')
 
-source('seq2geno.MatIO.R')
-
-#args= commandArgs(trailingOnly= TRUE)
-#tree_f<- args[1]
-#data_f<- args[2]## two columns: names of taxon and observed values
-#out_prefix<- args[3]
+#####
+### read the input options
+lib_dir= snakemake@params[['lib_dir']]
+source(file.path(lib_dir, 'seq2geno.MatIO.R'))
 
 tree_f<- snakemake@input[['tree_f']]
 data_f<- snakemake@input[['data_f']]
-out_prefix<- snakemake@output[[1]]
+out_dir<- snakemake@output[['output_dir']]
 
 
 tree<- read.newick(tree_f)
 data<- as.data.frame(read_seq2geno.tab(data_f))# species in rows
 genes<- colnames(data)
 
+#####
 ## check the tree
 ## tips without value
 target_spe<- intersect(tree$tip.label, rownames(data))
@@ -54,10 +53,20 @@ edges<- as.matrix(tr_info[tr_info$isTip, c('label', 'parent')])
 edges<-rbind(edges, as.matrix(tr_info[! tr_info$isTip, c('node', 'parent')]))# column 1: nodes; column2: parents
 edge_out<- out[edges[,1], ]-out[edges[,2], ]
 
+#####
+### print results
+dir.create(out_dir, showWarnings = FALSE)
+
 out<- round(out, digits = 3)
 edge_out<- round(edge_out, digits = 3)
-write.table(out, file= out_prefix, quote= FALSE, sep= '\t')
-write.table(edge_out, file= paste0(out_prefix, '.edge'), quote= FALSE, sep= '\t')
-write.table(edges, file= paste0(out_prefix, '.parents'), quote= FALSE, row.names = FALSE, sep= '\t')
+
+out_node_f<- file.path(out_dir, paste(data_f, 'recons_node.mat', sep= '.'))
+write.table(out, file= out_node_f, quote= FALSE, sep= '\t')
+out_edge_f<- file.path(out_dir, paste(data_f, 'recons_edge.mat', sep= '.'))
+write.table(edge_out, file= out_edge_f, quote= FALSE, sep= '\t')
+out_parent_f<-file.path(out_dir, paste(data_f, 'parent-to-child.tsv', sep= '.')) 
+write.table(edges, file= out_parent_f, quote= FALSE, row.names = FALSE, sep= '\t')
+
+out_id_f<-file.path(out_dir, paste(tree_f, 'node_id', sep= '.')) 
 tree$node.label<- internal_nodes
-write.tree(phy = tree, file = paste0(out_prefix, '.annotatedTree'))
+write.tree(phy = tree, file = out_id_f)
