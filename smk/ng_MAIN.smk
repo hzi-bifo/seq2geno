@@ -57,6 +57,7 @@ SOFTWARE['epr_quantifior']= 'salmon'
 
 include: "ng_CREATE_EXPR_TABLE.smk"
 include: "DIF_XPR_ANALYSIS.smk"
+include: "CONT_ANC_RECONS.smk"
 '''
 required_smk=["ng_INFER_TREE.smk", "ng_MAKE_CONS.smk", 
 "ng_DETECT_VARS.smk",
@@ -67,7 +68,7 @@ for smk in required_smk:
 '''
 rule all:
     input:
-        config['expr_table']
+        os.path.join(TMP_D, 'fastAnc') if config['c_ancrec'] else ''
 '''
         config['expr_table'],
         config['syn_snps_table'],

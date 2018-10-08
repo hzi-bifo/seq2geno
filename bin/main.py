@@ -30,8 +30,7 @@ if __name__== '__main__':
 
     # Determine which version to use (ori or ng)
     main_smk= os.path.join(seq2geno_smk_dir, 
-            #('ng_MAIN.smk' if args.ng else 'MAIN.smk'))
-            ('ng_MAIN.smk' if args.ng else 'MAIN.test.smk'))
+            ('ng_MAIN.smk' if args.ng else 'MAIN.smk'))
 
     # run the workflow
     import snakemake

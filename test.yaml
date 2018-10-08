@@ -1,14 +1,15 @@
+c_ancrec: true
 comp: false
 cores: '20'
 dif_xpr: true
 dif_xpr_alpha: 0.05
 dif_xpr_lfc: 0
 dna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/samples.3.dna.tsv
-dryrun: false
+dryrun: true
 expr_table: results/expr.edit.tab
 gpa_table: NA
 indel_table: NA
-ng: false
+ng: true
 nonsyn_snps_table: NA
 notemp: true
 phe_table: data/strains/pheno/phenotypes.edit.mat
@@ -21,5 +22,5 @@ seq2geno_lib_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_v
 seq2geno_smk_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/smk
 stampy_exe: null
 syn_snps_table: NA
-tree: NA
+tree: results/Paeru.nwk
 workdir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7
