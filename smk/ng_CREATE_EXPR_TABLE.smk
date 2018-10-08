@@ -82,11 +82,11 @@ rule gene_counts_single_by_salmon:
         """
         source activate salmon_env
         {params.salmon_bin} quant -i {input.REF_SALMON_INDEX_DIR} \
-    --gcBias \
-    -l A -r {input.FQ} \
-    --sigDigits 0 \
-    -p {params.cores} \
-    -o {output.SALMON_RAW_OUTPUT}
+--gcBias \
+-l A -r {input.FQ} \
+--sigDigits 0 \
+-p {params.cores} \
+-o {output.SALMON_RAW_OUTPUT}
         source deactivate
         """
 
