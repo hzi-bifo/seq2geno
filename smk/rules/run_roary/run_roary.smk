@@ -1,6 +1,7 @@
 rule run_roary:
     input:
-        expand(TMP_D+"/annotations/{strain}/{strain}.gff", strain= STRAINS)
+        expand(TMP_D+"/annotations/{strain}/{strain}.gff", strain=
+DNA_READS.index.values.tolist())
     output:
         TMP_D+'/roary/gene_presence_absence.csv'
     shell:

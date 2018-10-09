@@ -1,13 +1,13 @@
 rule create_dict_file: 
     input: 
         flt_vcf_files=expand("{strain}.flt.vcf", 
-            strain=STRAINS),
+            strain=DNA_READS.index.values.tolist()),
         flatcount_files=expand("{strain}.flatcount", 
-            strain=STRAINS)
+            strain=DNA_READS.index.values.tolist())
     output:
         dict_file= temp(os.path.join(TMP_D, 'dict.txt'))
     params:
-        strains=STRAINS
+        strains=DNA_READS.index.values.tolist()
     shell:
         """
         echo {input.flt_vcf_files}| \

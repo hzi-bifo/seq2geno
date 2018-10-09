@@ -3,9 +3,9 @@ rule covert_snps_table:
         non_syn_output= os.path.join(TMP_D, 'non-syn_SNPs.tab'),
         syn_output= os.path.join(TMP_D, 'all_SNPs.tab')
     output: 
-        config['nonsyn_snps_table'],
-        config['all_snps_table']
+        NONSYN_SNPS_OUT,
+        SYN_SNPS_OUT
     params:
-        strains= STRAINS
+        strains=DNA_READS.index.values.tolist()
     script: 'collect_snps_data.py'
 

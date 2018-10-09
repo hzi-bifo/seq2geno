@@ -1,10 +1,10 @@
-rule create_and_make_expr_table:
+rule create_expr_table:
     input:
         RPG_FILES=expand('{TMP_D}/{strain}/rna.rpg', 
         strain=RNA_READS.index.values.tolist(), 
         TMP_D=TMP_D)
     output:
-        expr_table=config['expr_table']
+        expr_table=EXPR_OUT
     params:
         tmp_d= TMP_D,
         strains= RNA_READS.index.values.tolist()

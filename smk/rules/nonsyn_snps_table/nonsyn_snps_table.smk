@@ -1,7 +1,7 @@
 rule nonsyn_snps_table:
     input:
         snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1.tab')),
-        ref_gbk=config['reference_annotation']
+        ref_gbk=REF_GBK
     output: 
         non_syn_output= os.path.join(TMP_D, 'non-syn_SNPs.tab')
     params:

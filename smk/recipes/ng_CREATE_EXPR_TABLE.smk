@@ -1,0 +1,6 @@
+include: os.path.join(RULE_LIB_DIR, 'create_and_make_expr_table', 'create_and_make_expr_table.smk')
+include: os.path.join(RULE_LIB_DIR, 'redirect_salmon_result', 'redirect_salmon_result.smk')
+include: os.path.join(RULE_LIB_DIR, 'gene_counts_paired_by_salmon', 'gene_counts_paired_by_salmon.smk')
+include: os.path.join(RULE_LIB_DIR, 'gene_counts_single_by_salmon', 'gene_counts_single_by_salmon.smk')
+include: os.path.join(RULE_LIB_DIR, 'for_salmon_create_ref_index', 'for_salmon_create_ref_index.smk')
+include: os.path.join(RULE_LIB_DIR, 'for_salmon_extract_cds_seqs', 'for_salmon_extract_cds_seqs.smk')

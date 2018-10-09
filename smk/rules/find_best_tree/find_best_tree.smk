@@ -2,7 +2,7 @@ rule find_best_tree:
     input:
         one_big_var_aln=TMP_D+'/phylogeny/OneBig.var.aln'
     output:
-        tree=config['tree']
+        tree= TREE_OUT
     params:
         fasttree_cores= CORES,
         fasttree_bin='FastTreeMP',
