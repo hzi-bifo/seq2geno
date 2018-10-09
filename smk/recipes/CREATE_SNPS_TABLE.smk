@@ -1,0 +1,7 @@
+include: os.path.join(RULE_LIB_DIR, 'covert_snps_table', 'covert_snps_table.smk')
+include: os.path.join(RULE_LIB_DIR, 'nonsyn_snps_table', 'nonsyn_snps_table.smk')
+include: os.path.join(RULE_LIB_DIR, 'all_snps_table', 'all_snps_table.smk')
+include: os.path.join(RULE_LIB_DIR, 'all_snps_list', 'all_snps_list.smk')
+include: os.path.join(RULE_LIB_DIR, 'for_tab_compute_annot_file', 'for_tab_compute_annot_file.smk')
+include: os.path.join(RULE_LIB_DIR, 'create_dict_file', 'create_dict_file.smk')
+include: os.path.join(RULE_LIB_DIR, 'for_tab_copy_files', 'for_tab_copy_files.smk')

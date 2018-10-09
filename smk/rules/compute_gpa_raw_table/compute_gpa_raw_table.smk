@@ -1,6 +1,8 @@
 rule compute_gpa_raw_table:
     input:
-        gffs=lambda wildcards: [os.path.join(wildcards.TMP_D, strain, SOFTWARE['assembler'], SOFTWARE['annotator'], strain+'.gff') for strain in STRAINS]
+        gffs=lambda wildcards: [os.path.join(wildcards.TMP_D, strain,
+SOFTWARE['assembler'], SOFTWARE['annotator'], strain+'.gff') for strain in
+DNA_READS.index.values.tolist()]
     output:
         roary_gpa="{TMP_D}/{gene_sorter}/gene_presence_absence.csv",
         roary_gpa_rtab='{TMP_D}/{gene_sorter}/gene_presence_absence.Rtab'

@@ -1,10 +1,10 @@
 rule for_tab_compute_annot_file:
     input:
-        ref_gbk=config['reference_annotation']
+        ref_gbk=REF_GBK
     output:
         anno_f=temp('annotations_for_snps.tab')
     params:
-        species= config['species']
+        species= DNA_READS.index.values.tolist()
     script:'create_dict_for_snps.py'
 
 

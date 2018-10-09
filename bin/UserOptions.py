@@ -15,7 +15,7 @@ import argparse
 
 def is_default_file(f):
     def_value= '-'
-    return (True if f == def_value else False)
+    return (True if f is None else False)
 
 def option_rules(args):
     outcome= True
@@ -41,44 +41,33 @@ def main():
 
     parser.add_argument('-v', action= 'version', 
         version='v.Beta')
+
     ## functions
     functions_arg= parser.add_argument_group('functions')
-    functions_arg.add_argument('-w', dest='workdir', type= str, 
+    functions_arg.add_argument('--wd', dest='workdir', type= str, 
         default= os.getcwd(),
         help='set the working directory, where the relative paths are counted')
-    functions_arg.add_argument('--use-ng', dest= 'ng', action= 'store_true',
+    functions_arg.add_argument('--ng', dest= 'ng', action= 'store_true',
         help='use the faster next-generation version')
-    functions_arg.add_argument('-c', dest='comp', action= 'store_true',
+    functions_arg.add_argument('--cmpr', dest='cmpr', action= 'store_true',
         help='compress binary features by pattern')
-    functions_arg.add_argument('--dry-run', dest= 'dryrun', action= 'store_true',
+    functions_arg.add_argument('--dryrun', dest= 'dryrun', action= 'store_true',
         help='dry run the processes')
-    functions_arg.add_argument('--keep_temp', dest= 'notemp', action= 'store_true',
-        help='do not clean all the intermediate files generated in the process')
+    functions_arg.add_argument('--keeptemp', dest= 'notemp', action= 'store_true',
+        help='do not clean the intermediate files generated in the process')
     functions_arg.add_argument('--cores', dest= 'cores', default= 1,
         help='number of cpus')
 
-    ## differential expression
-    dif_xpr_arg= parser.add_argument_group('differential expression analysis')
-    dif_xpr_arg.add_argument('-dx', dest='dif_xpr', action= 'store_true',
-        help=
-        '''
-        detect differentially expressed genes using DESeq2 (Dependency:
-        --expr_table, --phe_table)
-        ''')
-    dif_xpr_arg.add_argument('--dif_xpr_alpha', dest= 'dif_xpr_alpha', 
-            default= 0.05, help='the alpha cutoff')
-    dif_xpr_arg.add_argument('--dif_xpr_lfc', dest= 'dif_xpr_lfc',
-            default= 0, help='the log fold-change cutoff')
 
-    ## ancestral reconstruction of expression levels
-    cont_ancrec_arg= parser.add_argument_group('ancestral reconstruction of '\
-            'continuous states')
-    cont_ancrec_arg.add_argument('-cac', dest='c_ancrec', action= 'store_true',
-        help=
-        '''
-        reconstruct the expression levels along phylogeny using
-        phytools::fastAnc (Dependency: --expr_table, --tree)
-        ''')
+    ## software
+    sw_arg= parser.add_argument_group('software')
+    sw_arg.add_argument('--stampy', dest='stampy_exe', type= str,
+        help='user-defined version of stampy', 
+        default= None)
+    sw_arg.add_argument('--raxml', dest='raxml_exe', type= str,
+        help='user-defined version of raxml',
+        default= None)
+
 
     ## reference
     ref_arg= parser.add_argument_group('reference')
@@ -99,35 +88,56 @@ def main():
     ## outputs
     output_arg= parser.add_argument_group('outputs')
     output_arg.add_argument('--tree', nargs= '?', dest='tree',
-            default= 'NA',
+            default= None,
             type= str, help='the output tree file')
     output_arg.add_argument('--gpa', nargs= '?', dest='gpa_table',
-            default= 'NA',
+            default= None,
             type= str, help='the output gene pres/abs table')
     output_arg.add_argument('--s-snp', nargs= '?', dest='syn_snps_table',
-            default= 'NA',
+            default= None,
             type= str, help='the output syn SNPs table')
     output_arg.add_argument('--ns-snp', nargs= '?', dest='nonsyn_snps_table',
-            default= 'NA',
+            default= None,
             type= str, help='the output non-syn SNPs table')
     output_arg.add_argument('--expr', nargs= '?', dest='expr_table',
-            default= 'NA',
+            default= None,
             type= str, help='the output expression table')
     output_arg.add_argument('--ind', nargs= '?', dest='indel_table',
-            default= 'NA',
+            default= None,
             type= str, help='the output indel table')
 
-    ## software
-    sw_arg= parser.add_argument_group('software')
-    sw_arg.add_argument('--stampy', dest='stampy_exe', type= str,
-        help='user-defined version of stampy', 
-        default= None)
-    sw_arg.add_argument('--raxml', dest='raxml_exe', type= str,
-        help='user-defined version of raxml',
-        default= None)
+    ## differential expression
+    dif_xpr_arg= parser.add_argument_group('differential expression analysis')
+    dif_xpr_arg.add_argument('--dx', dest='dif', action= 'store_true',
+        help=
+        '''
+        detect differentially expressed genes using DESeq2 (Dependency:
+        --expr_table, --phe_table)
+        ''')
+    dif_xpr_arg.add_argument('--dif_alpha', dest= 'dif_alpha', 
+            default= 0.05, help='the alpha cutoff')
+    dif_xpr_arg.add_argument('--dif_lfc', dest= 'dif_lfc',
+            default= 0, help='the log fold-change cutoff')
+    dif_xpr_arg.add_argument('--dif_out', dest= 'dif_out',
+            default= 'difxpr', help='the output folder for analysis results')
 
+    ## ancestral reconstruction of expression levels
+    cont_ancrec_arg= parser.add_argument_group('ancestral reconstruction of '\
+            'continuous states')
+    cont_ancrec_arg.add_argument('--c_ac', dest='c_ac', action= 'store_true',
+        help=
+        '''
+        reconstruct the expression levels along phylogeny using
+        phytools::fastAnc (Dependency: --expr_table, --tree)
+        ''')
+    cont_ancrec_arg.add_argument('--c_ac_out', dest= 'c_ac_out',
+            default= 'cont_ancrec', 
+            help='the output folder for expression level reconstruction')
+  
+    ######
+    #####
     args = parser.parse_args()
-    option_rules(args)
+#    option_rules(args)
 
     return(args)
 

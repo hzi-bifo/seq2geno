@@ -1,0 +1,7 @@
+include: os.path.join(RULE_LIB_DIR, 'compute_gpa_raw_table', 'compute_gpa_raw_table.smk')
+include: os.path.join(RULE_LIB_DIR, 'duplicate_gffs', 'duplicate_gffs.smk')
+include: os.path.join(RULE_LIB_DIR, 'create_gff', 'create_gff.smk')
+include: os.path.join(RULE_LIB_DIR, 'convert_gpa_table', 'convert_gpa_table.smk')
+include: os.path.join(RULE_LIB_DIR, 'run_roary', 'run_roary.smk')
+include: os.path.join(RULE_LIB_DIR, 'run_prokka', 'run_prokka.smk')
+include: os.path.join(RULE_LIB_DIR, 'make_assembly', 'make_assembly.smk')
