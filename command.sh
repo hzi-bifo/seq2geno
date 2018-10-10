@@ -4,8 +4,9 @@
 #$ -l h_vmem=100G
 
 cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged
-source activate seq2geno
+#source activate seq2geno
 ./bin/main.py \
+  --ng\
   --c_ac \
   --dx \
   --dryrun \

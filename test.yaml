@@ -11,7 +11,7 @@ dryrun: true
 expr_table: results/expr.edit.tab
 gpa_table: null
 indel_table: null
-ng: false
+ng: true
 nonsyn_snps_table: null
 notemp: true
 phe_table: data/strains/pheno/phenotypes.edit.mat
