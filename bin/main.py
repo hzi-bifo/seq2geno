@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 import os
-
+import subprocess
 
 def create_yaml_f(args, config_f):
     import yaml
@@ -31,6 +31,10 @@ if __name__== '__main__':
     # Determine which version to use (ori or ng)
     main_smk= os.path.join(seq2geno_smk_dir, 
             ('ng_MAIN.smk' if args.ng else 'MAIN.smk'))
+
+    # load the main environment
+    main_env= 'ng_seq2geno' if args.ng else 'seq2geno'
+    load_env_cmd= ['source', 'activate', main_env]
 
     # run the workflow
     import snakemake
