@@ -111,8 +111,8 @@ for r in recipes:
 # Determine the outputs to compute
 possible_targets= [user_opt['tree'], user_opt['gpa_table'],
     user_opt['nonsyn_snps_table'], user_opt['syn_snps_table'],
-    user_opt['expr_table'],user_opt['indel_table'], user_opt['dif_out'],
-    user_opt['c_ac_out']]
+    user_opt['expr_table'],user_opt['indel_table']]
+print(possible_targets)
 targets= [f for f in possible_targets if not(f is None)]
 
 if user_opt['dif']:
@@ -121,6 +121,9 @@ if user_opt['c_ac']:
     targets.append(user_opt['c_ac_out'])
 if user_opt['cmpr']:
     targets= targets+[f+'_NON-RDNT' for f in passible_targets if not(f is None)]
+
+for f in sorted(targets):
+    print(f)
 '''    
 #####
 # lauch the workflow
