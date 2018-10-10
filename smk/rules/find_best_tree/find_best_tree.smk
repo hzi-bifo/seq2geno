@@ -1,17 +1,13 @@
 rule find_best_tree:
     input:
-        one_big_var_aln=TMP_D+'/phylogeny/OneBig.var.aln'
+        one_big_var_aln=TMP_D+'/OneBig.var.aln'
     output:
-        tree= TREE_OUT
+        tree=TREE_OUT
     params:
-        fasttree_cores= CORES,
-        fasttree_bin='FastTreeMP',
-        fasttree_opt='-gtr -gamma -nt -quiet'
+        FASTTREE_BIN='FastTreeMP',
+        FASTTREE_OPT='-gtr -gamma -nt -quiet'
     shell:
         """
-        export OMP_NUM_THREADS={params.fasttree_cores}
-        {params.fasttree_bin} {params.fasttree_opt} \
-< {input.one_big_var_aln} >\
-{output.tree}
+        {params.FASTTREE_BIN} {params.FASTTREE_OPT} <{input}>\
+        {output.tree}
         """
-    

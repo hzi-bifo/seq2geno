@@ -109,7 +109,7 @@ possible_targets= [user_opt['tree'], user_opt['gpa_table'],
     user_opt['nonsyn_snps_table'], user_opt['syn_snps_table'],
     user_opt['expr_table'],user_opt['indel_table'], user_opt['dif_out'],
     user_opt['c_ac_out']]
-targets= [f for f in passible_targets if not(f is None)]
+targets= [f for f in possible_targets if not(f is None)]
 
 if user_opt['dif']:
     targets.append(user_opt['dif_out'])

@@ -17,12 +17,23 @@ import pandas as pd
 import os
 import re
 import sys
+import random
+import string
+
+def random_filename():
+    '''
+    For generating an unique filename that fills in the rules, although it won't
+be really created. 
+    '''
+    n= 12
+    f= ''.join(random.choice(string.ascii_uppercase + string.digits) for x in
+range(n))
+    return(f)
 
 #####
 # config
 # the config file is already one of the api argument
-# the values are passed to here and should not be seen directly by the 
-# subsequent processes
+# No subsequent rule is allowed to access the config variables
 user_opt= config
 config= None
 
@@ -37,6 +48,8 @@ import ParseSamplesTab as pst
 DNA_READS= pst.read_sampletab(user_opt['dna_reads'])
 # rna
 RNA_READS= pst.read_sampletab(user_opt['rna_reads'])
+# phenotypes
+PHE_TABLE_F= user_opt['phe_table']
 
 #####
 # reference
@@ -44,45 +57,73 @@ REF_FA=user_opt['ref_fa']
 REF_GBK=user_opt['ref_gbk']
 
 #####
+# The paths below are determined by main instead of the user
+RULE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'rules')
+RECIPE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'recipes')
+
+#####
+# command parameters
+CORES=user_opt['cores']
+DIFXPR_ALPHA=user_opt['dif_alpha']
+DIFXPR_LFC=user_opt['dif_lfc']
+
+#####
 # the other paths
 LIB_D= user_opt['seq2geno_lib_dir']
 TMP_D='seq2geno_temp'
-CORES=user_opt['cores']
-STAMPY_EXE=(os.path.join(user_opt['seq2geno_lib_dir'], 
+STAMPY_EXE=(os.path.join(user_opt['seq2geno_lib_dir'],
 'stampy-1.0.23','stampy.py') if user_opt['stampy_exe'] is None else
 user_opt['stampy_exe'])
 RAXML_EXE=('raxmlHPC-PTHREADS-SSE3' if user_opt['raxml_exe'] is None else
 user_opt['raxml_exe'])
-RESULT_D='seq2geno'
 SOFTWARE= {}
 SOFTWARE['annotator']= 'prokka'
 SOFTWARE['gene_sorter']= 'roary'
 SOFTWARE['epr_quantifior']= 'salmon'
 
 #####
-# recruit recipes
-RULE_LIB_DIR='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/smk/rules'
-RECIPE_LIB_DIR='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/smk/recipes'
+# No rule is allowed to have null input or output
+# Set the variables before the rules are included
+TREE_OUT=random_filename() if user_opt['tree'] is None else user_opt['tree'] 
+GPA_OUT=random_filename() if user_opt['gpa_table'] is None else user_opt['gpa_table']
+NONSYN_SNPS_OUT=random_filename() if user_opt['nonsyn_snps_table'] is None else  user_opt['nonsyn_snps_table']
+SYN_SNPS_OUT=random_filename() if user_opt['syn_snps_table'] is None else  user_opt['syn_snps_table']
+EXPR_OUT=random_filename() if user_opt['expr_table'] is None else  user_opt['expr_table']
+INDEL_OUT=random_filename() if user_opt['indel_table'] is None else  user_opt['indel_table']
+DIF_XPR_OUT=random_filename() if user_opt['dif_out'] is None else  user_opt['dif_out']
+C_ANCREC_OUT=random_filename() if user_opt['c_ac_out'] is None else  user_opt['c_ac_out']
 
-recipes= ["ng_INFER_TREE.smk", "ng_MAKE_CONS.smk", 
-    "ng_DETECT_VARS.smk",
-    "ng_PROCESS_VCF.smk", "ng_MASK_VCF.smk",
-    "ng_CREATE_SNPS_TABLE.smk", "ng_COMPRESS_FEAT_TABLE.smk", 
-    "ng_CREATE_EXPR_TABLE.smk", "LOAD_REFERENCE.smk"]
+#####
+# loading all the recipes
+recipes= ["LOAD_REFERENCE.smk","CONSTRUCT_ASSEMBLY.smk",
+    "CREATE_INDEL_TABLE.smk",
+    "CREATE_GPA_TABLE.smk", "COUNT_GPA.smk", 
+    "ng_INFER_TREE.smk", "ng_MAKE_CONS.smk",
+    "ng_DETECT_VARS.smk","ng_PROCESS_VCF.smk",
+    "ng_MASK_VCF.smk","ng_CREATE_EXPR_TABLE.smk",
+    "ng_CREATE_SNPS_TABLE.smk", "ng_COMPRESS_FEAT_TABLE.smk",
+    "DIF_XPR_ANALYSIS.smk","CONT_ANC_RECONS.smk"]
 
 for r in recipes:
     include: os.path.join(RECIPE_LIB_DIR, r)
 
-##### 
-# determine outputs
+#####
+# Determine the outputs to compute
+possible_targets= [user_opt['tree'], user_opt['gpa_table'],
+    user_opt['nonsyn_snps_table'], user_opt['syn_snps_table'],
+    user_opt['expr_table'],user_opt['indel_table'], user_opt['dif_out'],
+    user_opt['c_ac_out']]
+targets= [f for f in possible_targets if not(f is None)]
+
+if user_opt['dif']:
+    targets.append(user_opt['dif_out'])
+if user_opt['c_ac']:
+    targets.append(user_opt['c_ac_out'])
+if user_opt['cmpr']:
+    targets= targets+[f+'_NON-RDNT' for f in passible_targets if not(f is None)]
+'''    
+#####
+# lauch the workflow
 rule all:
-    input:
-        os.path.join(TMP_D, 'fastAnc') if user_opt['c_ancrec'] else ''
-        user_opt['tree'],
-        user_opt['expr_table'],
-        user_opt['syn_snps_table'],
-        user_opt['syn_snps_table']+'_GROUPS',
-        user_opt['syn_snps_table']+'_NON-RDNT',
-        user_opt['nonsyn_snps_table'],
-        user_opt['nonsyn_snps_table']+'_GROUPS',
-        user_opt['nonsyn_snps_table']+'_NON-RDNT',
+    input: targets
+'''
