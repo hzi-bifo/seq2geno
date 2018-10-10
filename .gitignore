@@ -1,3 +1,4 @@
+data/
 dev_bin/
 snakemake_Test/
 .smk_backup/
