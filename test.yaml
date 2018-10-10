@@ -8,13 +8,13 @@ dif_lfc: 0
 dif_out: difxpr
 dna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.3.dna.tsv
 dryrun: true
-expr_table: results/expr.edit.tab
+expr_table: expr.edit.tab
 gpa_table: null
 indel_table: null
 ng: true
 nonsyn_snps_table: null
 notemp: true
-output_dir: null
+output_dir: results
 phe_table: data/strains/pheno/phenotypes.edit.mat
 raxml_exe: null
 ref_fa: data/reference/RefCln_UCBPP-PA14.fa
@@ -24,6 +24,6 @@ seq2geno_env_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_v
 seq2geno_lib_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/lib
 seq2geno_smk_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/smk
 stampy_exe: null
-syn_snps_table: null
-tree: results/Paeru.nwk
+syn_snps_table: s-syn.tab
+tree: Paeru.nwk
 workdir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged

@@ -1,6 +1,14 @@
 #! /usr/bin/env python
+
+'''
+Purpose:
+    Interact with the user, accept the request, and convert the information
+    to the input for the subsequent snakemake workflow
+'''
+
 import os
 import subprocess
+import sys
 
 def create_yaml_f(args, config_f):
     import yaml
@@ -24,32 +32,20 @@ if __name__== '__main__':
     setattr(args, 'seq2geno_env_dir', seq2geno_lib_dir)
 
     # create the config file
-    config_f= 'test.yaml'
+    config_f= 'config.yaml'
     create_yaml_f(args, config_f)
-    print(args)
 
     # Determine which version to use (ori or ng)
     main_smk= os.path.join(seq2geno_smk_dir, 
             ('ng_MAIN.smk' if args.ng else 'MAIN.smk'))
 
-    # load the main environment
+    # Determine the main environment
     main_env= 'ng_seq2geno' if args.ng else 'seq2geno'
-    load_env_cmd= [os.path.join(seq2geno_home, 'bin', 'BuildEnv'), main_env]
-    subprocess.run(load_env_cmd)
+    main_cmd= [os.path.join(seq2geno_home, 'bin', 'BuildEnv'), 
+            main_env, main_smk,
+            config_f, args.workdir,
+            'T' if args.dryrun else 'F', 
+            'T' if args.notemp else 'F']
 
-    # run the workflow
-    import snakemake
-    snakemake.snakemake(
-        snakefile=os.path.join(seq2geno_home, main_smk),
-        configfile=config_f,
-        unlock= True
-    )
-    snakemake.snakemake(
-        snakefile=os.path.join(seq2geno_home, main_smk),
-        configfile=config_f,
-        workdir= args.workdir,
-        dryrun= args.dryrun,
-        printshellcmds= args.dryrun,
-        notemp= args.notemp
-        )
-
+    # Create the environment, followed by the analysis snakemake workflows
+    subprocess.call(main_cmd)

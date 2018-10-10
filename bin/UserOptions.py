@@ -87,8 +87,16 @@ def main():
     ## outputs
     output_arg= parser.add_argument_group('outputs')
     output_arg.add_argument('--outdir', dest='output_dir',
-            default= None,
+            default= 'seq2geno',
             type= str, help='the output directory')
+    output_arg.add_argument('--geno2pheno', dest='g2p',
+            default= None,
+            type= str, 
+            help=
+            '''
+            specifiy a input filename for geno2pheno analysis and create it if
+            not avaialable
+            ''')
     output_arg.add_argument('--tree', dest='tree',
             default= None,
             type= str, 

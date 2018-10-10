@@ -1,7 +1,7 @@
 rule all_snps_list:
     input:
         ## the exact files should also be, so they cannot be deleted before 
-        flatcount_file=expand(os.path.join(TMP_D, '{strain}', 'dna.flatcount'),
+        flatcount_file=expand(os.path.join(TMP_D, '{strain}', 'dna_for_tab.flatcount'),
 strain=DNA_READS.index.values.tolist()),
         snp_vcf_file=expand(os.path.join(TMP_D, '{strain}', 'samtools',
 'tab_dna.flt.vcf'), strain=DNA_READS.index.values.tolist()),
