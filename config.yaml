@@ -1,34 +1,30 @@
-species: 'Paeruginosa'
-working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7'
-
-###### external executives
-stampy_exe: '/home/thkuo/bin/stampy-1.0.23/stampy.py'
-#raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS'
-#raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS-AVX2'
-raxml_exe: 'raxmlHPC-PTHREADS-AVX2'
-#art2genecount_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/art2genecount.pl'
-#sam2art_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/sam2art.pl'
-
-software:
-  mapper: 'bwa'
-  assembler: 'spades'
-
-cores: 16 
-
-##### files
-#### sample wise
-samples: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/samples.6.tsv'
-#samples: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/samples.3.tsv'
-#### only one
-reference_sequence: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.fa'
-reference_annotation: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/data/reference/RefCln_UCBPP-PA14.gbk'
-##roary_gpa:
-tree: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/Paeru.nwk'
-gpa_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/gpa.tab'
-syn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/syn_snps.tab'
-nonsyn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/nonsyn_snps.tab'
-expr_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/expr.tab'
-indel_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v7/results/annot.tab'
-##pheno_table: 
-##ml_markdown:
-
+c_ac: true
+c_ac_out: cont_ancrec
+cmpr: false
+cores: '20'
+dif: true
+dif_alpha: 0.05
+dif_lfc: 0
+dif_out: difxpr
+dna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.3.dna.tsv
+dryrun: true
+expr_table: expr.edit.tab
+g2p: null
+gpa_table: null
+indel_table: null
+ng: false
+nonsyn_snps_table: null
+notemp: true
+output_dir: results
+phe_table: data/strains/pheno/phenotypes.edit.mat
+raxml_exe: null
+ref_fa: data/reference/RefCln_UCBPP-PA14.fa
+ref_gbk: data/reference/RefCln_UCBPP-PA14.gbk
+rna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.3.rna.tsv
+seq2geno_env_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/lib
+seq2geno_lib_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/lib
+seq2geno_smk_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/smk
+stampy_exe: null
+syn_snps_table: s-syn.tab
+tree: Paeru.nwk
+workdir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged

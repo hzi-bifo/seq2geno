@@ -82,6 +82,14 @@ SOFTWARE['gene_sorter']= 'roary'
 SOFTWARE['epr_quantifior']= 'salmon'
 
 #####
+# add the output directory to the results
+output_keys= ['tree', 'gpa_table', 'nonsyn_snps_table', 'syn_snps_table',
+'expr_table', 'indel_table', 'dif_out', 'c_ac_out']
+for k in output_keys:
+    if not (user_opt[k] is None):
+        user_opt[k]= os.path.join(user_opt['output_dir'], user_opt[k])
+
+#####
 # No rule is allowed to have null input or output
 # Set the variables before the rules are included
 TREE_OUT=random_filename() if user_opt['tree'] is None else user_opt['tree'] 
@@ -112,21 +120,18 @@ for r in recipes:
 possible_targets= [user_opt['tree'], user_opt['gpa_table'],
     user_opt['nonsyn_snps_table'], user_opt['syn_snps_table'],
     user_opt['expr_table'],user_opt['indel_table']]
-print(possible_targets)
-targets= [f for f in possible_targets if not(f is None)]
+targets= [ f for f in possible_targets if not(f is None)]
 
 if user_opt['dif']:
     targets.append(user_opt['dif_out'])
 if user_opt['c_ac']:
     targets.append(user_opt['c_ac_out'])
 if user_opt['cmpr']:
-    targets= targets+[f+'_NON-RDNT' for f in passible_targets if not(f is None)]
+    binary_outputs= [user_opt['gpa_table'],user_opt['indel_table'],
+user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']]
+    targets= targets+[f+'_NON-RDNT' for f in binary_outputs if not(f is None)]
 
-for f in sorted(targets):
-    print(f)
-'''    
 #####
 # lauch the workflow
 rule all:
     input: targets
-'''

@@ -1,7 +1,8 @@
 rule for_tab_copy_files:
     ## duplicate everyone to create 'STRAIN.flt.vcf' and 'STRAIN.flatcount'
     input: 
-        flatcount_file=lambda wildcards: os.path.join(TMP_D, wildcards.strain, 'dna.flatcount'),
+        flatcount_file=lambda wildcards: os.path.join(TMP_D, wildcards.strain,
+'dna_for_tab.flatcount'),
         snp_vcf_file=lambda wildcards: os.path.join(TMP_D, wildcards.strain, 'samtools', 'tab_dna.flt.vcf')
     output:
         flatcount=temp('{strain}.flatcount'),

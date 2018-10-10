@@ -1,2 +1,21 @@
-#!/bin/sh
-source activate $1;
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+# Here the working environment is activated.
+
+env=$1
+snakefile=$2
+configfile=$3
+workdir=$4
+dryrun=$5
+notemp=$6
+
+source activate $env
+
+$DIR'/main.internal.py' \
+  --snakefile $snakefile \
+  --configfile $configfile \
+  --workdir $workdir \
+  --dryrun $dryrun \
+  --notemp $notemp 
