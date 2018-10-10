@@ -34,7 +34,8 @@ if __name__== '__main__':
 
     # load the main environment
     main_env= 'ng_seq2geno' if args.ng else 'seq2geno'
-    load_env_cmd= ['source', 'activate', main_env]
+    load_env_cmd= [os.path.join(seq2geno_home, 'bin', 'BuildEnv'), main_env]
+    subprocess.run(load_env_cmd)
 
     # run the workflow
     import snakemake

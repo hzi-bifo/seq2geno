@@ -9,7 +9,6 @@ Output:
     config file for snakemake
 '''
 
-import snakemake
 import os
 import argparse
 
@@ -87,24 +86,53 @@ def main():
 
     ## outputs
     output_arg= parser.add_argument_group('outputs')
-    output_arg.add_argument('--tree', nargs= '?', dest='tree',
+    output_arg.add_argument('--outdir', dest='output_dir',
             default= None,
-            type= str, help='the output tree file')
-    output_arg.add_argument('--gpa', nargs= '?', dest='gpa_table',
+            type= str, help='the output directory')
+    output_arg.add_argument('--tree', dest='tree',
             default= None,
-            type= str, help='the output gene pres/abs table')
-    output_arg.add_argument('--s-snp', nargs= '?', dest='syn_snps_table',
+            type= str, 
+            help=
+            '''
+            specifiy a tree filename and compute it if not available
+            ''')
+    output_arg.add_argument('--gpa', dest='gpa_table',
             default= None,
-            type= str, help='the output syn SNPs table')
-    output_arg.add_argument('--ns-snp', nargs= '?', dest='nonsyn_snps_table',
+            type= str, 
+            help=
+            '''
+            specifiy a gene pres/abs table filename and compute it if not
+            available
+            ''')
+    output_arg.add_argument('--s-snp', dest='syn_snps_table',
             default= None,
-            type= str, help='the output non-syn SNPs table')
-    output_arg.add_argument('--expr', nargs= '?', dest='expr_table',
+            type= str, 
+            help=
+            '''
+            specifiy a syn SNPs table filename and compute it if not available
+            ''')
+    output_arg.add_argument('--ns-snp', dest='nonsyn_snps_table',
             default= None,
-            type= str, help='the output expression table')
-    output_arg.add_argument('--ind', nargs= '?', dest='indel_table',
+            type= str, 
+            help=
+            '''
+            specifiy the non-syn SNPs filename and compute it if not available
+            ''')
+    output_arg.add_argument('--expr', dest='expr_table',
             default= None,
-            type= str, help='the output indel table')
+            type= str, 
+            help=
+            '''
+            specifiy an expression table filename and compute
+            it if not available
+            ''')
+    output_arg.add_argument('--ind', dest='indel_table',
+            default= None,
+            type= str, 
+            help=
+            '''
+            specifiy an indel table filename and compute it if not available
+            ''')
 
     ## differential expression
     dif_xpr_arg= parser.add_argument_group('differential expression analysis')
@@ -140,65 +168,3 @@ def main():
 #    option_rules(args)
 
     return(args)
-
-'''
-## output the config file (yaml format)
-config_f= 'test.yaml'
-#print(yaml.dump(vars(args), default_flow_style= False))
-'''
-'''
-## create config file
-config_txt=''
-
-samples: {}
-reference_sequence: {}
-reference_annotation: {} 
-tree: {}
-gpa_table: {}
-syn_snps_table: {}
-nonsyn_snps_table: {} 
-expr_table: {}
-indel_table: {}'.format()
-'''
-'''
-w_dir=os.path.abspath('.')
-print('working path= {}'.format(w_dir))
-seq2geno_dir=os.path.dirname(os.path.realpath(__file__))
-print('bin path= {}'.format(seq2geno_dir))
-print('config file= {}'.format(args.conf_f))
-snakemake.snakemake(snakefile=os.path.join(seq2geno_dir, 'lib/main.smk'),
-    configfile= (None if args.conf_f != '' else args.conf_f),
-    dryrun=True, workdir= w_dir)
-
-
-species: 'Paeruginosa'
-working_dir: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6'
-
-###### external executives
-stampy_exe: '/home/thkuo/bin/stampy-1.0.23/stampy.py'
-#raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS'
-#raxml_exe: '/home/thkuo/miniconda3/envs/phypal/bin/raxmlHPC-PTHREADS-AVX2'
-raxml_exe: 'raxmlHPC-PTHREADS-AVX2'
-#art2genecount_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/art2genecount.pl'
-#sam2art_exe: '/net/metagenomics/data/from_moni/old.tzuhao/Paeru/bin/from_SusanneLab/RNA-seq/sam2art.pl'
-
-software:
-  mapper: 'bwa'
-  assembler: 'spades'
-
-cores: 16
-
-##### files
-#### sample wise
-samples: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/data/samples.tsv'
-#### only one
-reference_sequence: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/data/reference/RefCln_UCBPP-PA14.fa'
-reference_annotation: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/data/reference/RefCln_UCBPP-PA14.gbk'
-##roary_gpa:
-tree: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/Paeru.nwk'
-gpa_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/gpa.tab'
-syn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/syn_snps.tab'
-nonsyn_snps_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/nonsyn_snps.tab'
-expr_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/expr.tab'
-indel_table: '/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v6/results/annot.tab'
-'''
