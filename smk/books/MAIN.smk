@@ -74,8 +74,10 @@ TMP_D='seq2geno_temp'
 STAMPY_EXE=(os.path.join(user_opt['seq2geno_lib_dir'],
 'stampy-1.0.23','stampy.py') if user_opt['stampy_exe'] is None else
 user_opt['stampy_exe'])
-RAXML_EXE=('raxmlHPC-PTHREADS-SSE3' if user_opt['raxml_exe'] is None else
-user_opt['raxml_exe'])
+SOFTWARE= {}
+SOFTWARE['annotator']= 'prokka'
+SOFTWARE['assembler']= 'spades'
+SOFTWARE['gene_sorter']= 'roary'
 
 #####
 # add the output directory to the results
