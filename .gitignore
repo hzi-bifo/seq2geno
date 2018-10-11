@@ -1,4 +1,7 @@
-main_test
+geno2pheno_input_test/
+env_Test/
+results/
+main_test/
 data/
 dev_bin/
 snakemake_Test/
