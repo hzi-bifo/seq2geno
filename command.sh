@@ -6,6 +6,8 @@
 cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged
 #source activate seq2geno
 ./bin/main.py \
+  --project test \
+  --ng \
   --c_ac \
   --dx \
   --dryrun \
@@ -17,6 +19,9 @@ cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged
   --rna-reads /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.3.rna.tsv \
   --phe data/strains/pheno/phenotypes.edit.mat \
   --outdir results \
-  --expr expr.edit.tab \
   --tree Paeru.nwk \
-  --s-snp s-syn.tab 
+  --gpa gpa.mat \
+  --ns-snp ns-syn.mat \
+  --s-snp s-syn.mat \
+  --expr expr.edit.tab \
+  --ind indel.mat 

@@ -3,7 +3,7 @@ rule create_assembly:
         READS1=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads1'],
         READS2=lambda wildcards: SAMPLES_DF.loc[wildcards.strain, 'reads2']
     output:
-        assembly="{TMP_D}/{strain}/{assembler}/scaffolds.fasta"
+        assembly="{TMP_D}/{strain}/spades/scaffolds.fasta"
     params:
         cores=CORES,
         assembler_out="scaffolds.fasta",
