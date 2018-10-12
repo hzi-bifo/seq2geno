@@ -7,7 +7,6 @@ cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged
 #source activate seq2geno
 ./bin/main.py \
   --project test \
-  --ng \
   --c_ac \
   --dx \
   --dryrun \
