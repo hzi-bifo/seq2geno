@@ -20,15 +20,11 @@ import sys
 import random
 import string
 
-def random_filename():
-    '''
-    For generating an unique filename that fills in the rules, although it won't
-be really created. 
-    '''
+def assign_internal_variables(user_value):
     n= 12
     f= ''.join(random.choice(string.ascii_uppercase + string.digits) for x in
 range(n))
-    return(f)
+    return(f if user_value is None else user_value)
 
 #####
 # config
@@ -41,15 +37,25 @@ config= None
 # samples
 # the variable 'STRAINS' is deprecated because the dna and rna data may include
 # different samples
-sys.path.insert(0, os.path.join(user_opt['seq2geno_lib_dir'],
-'ParseSamplesTab'))
-import ParseSamplesTab as pst
+#sys.path.insert(0, os.path.join(user_opt['seq2geno_lib_dir'],
+#'ParseSamplesTab'))
+#import ParseSamplesTab as pst
+sys.path.insert(0, user_opt['seq2geno_lib_dir'])
+import InternalVar as iv
+main_vars= iv.reader_for_main()
+main_vars.load_materials(user_opt)
 # dna
-DNA_READS= pst.read_sampletab(user_opt['dna_reads'])
+#DNA_READS= pst.read_sampletab(user_opt['dna_reads'])
+DNA_READS= main_vars.materials.call_dna_reads()
 # rna
-RNA_READS= pst.read_sampletab(user_opt['rna_reads'])
+#RNA_READS= pst.read_sampletab(user_opt['rna_reads'])
+RNA_READS= main_vars.materials.call_rna_reads()
 # phenotypes
-PHE_TABLE_F= user_opt['phe_table']
+#PHE_TABLE_F= user_opt['phe_table']
+PHE_TABLE_F= main_vars.materials.call_phenotype_file()
+print(DNA_READS)
+print(RNA_READS)
+print(PHE_TABLE_F)
 
 #####
 # reference
@@ -91,14 +97,11 @@ for k in output_keys:
 # No rule is allowed to have null input or output
 # Set the variables before the rules are included
 OUT_DIR= user_opt['output_dir']
-TREE_OUT=random_filename() if user_opt['tree'] is None else user_opt['tree'] 
-GPA_OUT=random_filename() if user_opt['gpa_table'] is None else user_opt['gpa_table']
-NONSYN_SNPS_OUT=random_filename() if user_opt['nonsyn_snps_table'] is None else  user_opt['nonsyn_snps_table']
-SYN_SNPS_OUT=random_filename() if user_opt['syn_snps_table'] is None else  user_opt['syn_snps_table']
-EXPR_OUT=random_filename() if user_opt['expr_table'] is None else  user_opt['expr_table']
-INDEL_OUT=random_filename() if user_opt['indel_table'] is None else  user_opt['indel_table']
-DIF_XPR_OUT=random_filename() if user_opt['dif_out'] is None else  user_opt['dif_out']
-C_ANCREC_OUT=random_filename() if user_opt['c_ac_out'] is None else  user_opt['c_ac_out']
+output_opts= ['tree', 'gpa_table', 'nonsyn_snps_table', 'syn_snps_table',
+    'expr_table', 'indel_table', 'dif_out', 'c_ac_out']
+(TREE_OUT, GPA_OUT, NONSYN_SNPS_OUT, SYN_SNPS_OUT, EXPR_OUT, INDEL_OUT,
+DIF_XPR_OUT, C_ANCREC_OUT)= [assign_internal_variables(user_opt[opt]) for opt
+in output_opts]
 
 #####
 # loading all the recipes
@@ -133,6 +136,6 @@ user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']]
 
 #####
 # lauch the workflow
-rule all:
-    input: targets
+#rule all:
+#    input: targets
 

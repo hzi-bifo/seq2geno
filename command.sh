@@ -3,7 +3,7 @@
 #$ -l h_core=20
 #$ -l h_vmem=100G
 
-cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged
+cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9
 #source activate seq2geno
 ./bin/main.py \
   --project test \

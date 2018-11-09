@@ -6,13 +6,13 @@ Input:
 Output:
     A pandas series
 '''
-import pandas as pd
-import re
 
 def parse_list(f, reads_source):
     '''
     Read the file and create a pandas series
     '''
+    import pandas as pd
+    import re
     fh= open(f, 'r')
     files_dict= {}
     for l in fh:
@@ -24,6 +24,7 @@ def parse_list(f, reads_source):
     return(s)
 
 def exclude_rule(x):
+    import re
     outcome= False
 
     # by number of files

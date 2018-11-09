@@ -6,13 +6,13 @@ Input:
 Output:
     A pandas series
 '''
-import pandas as pd
-import re
 
 def parse_list(f, reads_source):
     '''
     Read the file and create a pandas series
     '''
+    import pandas as pd
+    import re
     fh= open(f, 'r')
     files_dict= {}
     for l in fh:
@@ -24,6 +24,7 @@ def parse_list(f, reads_source):
     return(s)
 
 def exclude_rule(x):
+    import re
     outcome= False
 
     # by number of files
@@ -34,11 +35,7 @@ def exclude_rule(x):
         outcome= True
     return(outcome)
 
-
-def read_samtab(f, reads_source= 'dna'):
-    #f= 'test.samples'
-    #reads_source= 'dna'
-
+def read_sampletab(f, reads_source= 'dna'):
     ## parse the file
     s= parse_list(f, reads_source)
 
