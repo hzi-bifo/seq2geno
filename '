@@ -42,8 +42,8 @@ config= None
 #import ParseSamplesTab as pst
 sys.path.insert(0, user_opt['seq2geno_lib_dir'])
 import InternalVar as iv
-main_vars= iv.reader_for_main(user_opt)
-main_vars.load_materials()
+main_vars= iv.reader_for_main()
+main_vars.load_materials(user_opt)
 # dna
 #DNA_READS= pst.read_sampletab(user_opt['dna_reads'])
 DNA_READS= main_vars.materials.call_dna_reads()
@@ -53,25 +53,17 @@ RNA_READS= main_vars.materials.call_rna_reads()
 # phenotypes
 #PHE_TABLE_F= user_opt['phe_table']
 PHE_TABLE_F= main_vars.materials.call_phenotype_file()
-print(main_vars.materials)
 
 #####
 # reference
-main_vars.load_reference()
-#REF_FA=user_opt['ref_fa']
-REF_FA=main_vars.reference.call_ref_seq_file()
-#REF_GBK=user_opt['ref_gbk']
-REF_GBK=main_vars.reference.call_ref_anno_file()
-print(main_vars.reference)
+REF_FA=user_opt['ref_fa']
+REF_FA=
+REF_GBK=user_opt['ref_gbk']
 
 #####
 # The paths below are determined by main instead of the user
-main_vars.load_library()
-#RULE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'rules')
-RULE_LIB_DIR=main_vars.library.find_rules()
-#RECIPE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'recipes')
-RECIPE_LIB_DIR=main_vars.library.find_recipes()
-print(main_vars.library)
+RULE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'rules')
+RECIPE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'recipes')
 
 #####
 # command parameters
@@ -86,17 +78,10 @@ TMP_D='seq2geno_temp'
 STAMPY_EXE=(os.path.join(user_opt['seq2geno_lib_dir'],
 'stampy-1.0.23','stampy.py') if user_opt['stampy_exe'] is None else
 user_opt['stampy_exe'])
-
-import ExternalSoftware as es
-software_pool= es.SoftwarePool()
 SOFTWARE= {}
-#SOFTWARE['annotator']= 'prokka'
-#SOFTWARE['assembler']= 'spades'
-#SOFTWARE['gene_sorter']= 'roary'
-SOFTWARE['annotator']= software_pool.find_software('prokka')
-SOFTWARE['assembler']= software_pool.find_software('spades')
-SOFTWARE['gene_sorter']= software_pool.find_software('roary')
-print(SOFTWARE)
+SOFTWARE['annotator']= 'prokka'
+SOFTWARE['assembler']= 'spades'
+SOFTWARE['gene_sorter']= 'roary'
 
 #####
 # add the output directory to the results

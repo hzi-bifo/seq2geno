@@ -4,7 +4,6 @@ class Samples:
         import os
         import InternalVar.ParseSamplesTab as pst
 
-        self.user_opt= user_opt
         # dna
         self.DNA_READS= pst.read_sampletab(user_opt['dna_reads'])
         self.DNA_READS_NUM= self.DNA_READS.shape[0]
@@ -12,6 +11,7 @@ class Samples:
         self.RNA_READS= pst.read_sampletab(user_opt['rna_reads'])
         # phenotypes
         self.PHE_TABLE_F= user_opt['phe_table']
+
     def __str__(self):
         return('{} dna samples\n{} rna sample\nphenotype file: {}'.format(
             str(self.DNA_READS.shape[0]), 

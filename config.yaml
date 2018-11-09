@@ -14,7 +14,7 @@ gp_kmer: '6'
 gp_md: geno2pheno.md
 gpa_table: gpa.mat
 indel_table: indel.mat
-ng: false
+ng: true
 nonsyn_snps_table: ns-syn.mat
 notemp: true
 output_dir: results
