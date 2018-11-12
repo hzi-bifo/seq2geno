@@ -88,14 +88,15 @@ STAMPY_EXE=(os.path.join(user_opt['seq2geno_lib_dir'],
 user_opt['stampy_exe'])
 
 import ExternalSoftware as es
-software_pool= es.SoftwarePool()
+software_pool= es.SoftwarePool(env_sensitive= True)
 SOFTWARE= {}
 #SOFTWARE['annotator']= 'prokka'
 #SOFTWARE['assembler']= 'spades'
 #SOFTWARE['gene_sorter']= 'roary'
 SOFTWARE['annotator']= software_pool.find_software('prokka')
 SOFTWARE['assembler']= software_pool.find_software('spades')
-SOFTWARE['gene_sorter']= software_pool.find_software('roary')
+SOFTWARE['gene_sorter']= software_pool.find_software('roary', target_dir=
+os.path.join(LIB_D, 'roary-3.8.2'))
 print(SOFTWARE)
 
 #####
