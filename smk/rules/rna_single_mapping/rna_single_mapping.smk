@@ -14,7 +14,7 @@ rule rna_single_mapping:
         STAMPY_RAW_SAM= temp('{TMP_D}/{strain}/stampy/rna.1.sam')
     shell:
         """
-        source activate Ariane_dna
+        source activate old_mapping
         {params[STAMPY]} --bwaoptions=\"-q10 {input[REF]}\" \
 -g {params.REF_PREFIX} \
 -h {params.REF_PREFIX} \

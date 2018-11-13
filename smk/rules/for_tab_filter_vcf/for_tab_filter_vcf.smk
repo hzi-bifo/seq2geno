@@ -8,7 +8,7 @@ rule for_tab_filter_vcf:
         minDepth= 0
     shell:
         """
-        source activate Ariane_dna
+        source activate old_mapping
         bcftools view {input.bcf} |\
         {params.VCFUTIL_EXE} varFilter -d {params.minDepth} > {output.vcf}
         """ 

@@ -7,7 +7,7 @@ rule ng_sam2bam:
         CORES=CORES
     shell:
         """
-        source activate Ariane_dna
+        source activate old_mapping
         samtools view -bS -@ {params.CORES} \
         {input.STAMPY_SAM} > {output.STAMPY_BAM}
         source deactivate

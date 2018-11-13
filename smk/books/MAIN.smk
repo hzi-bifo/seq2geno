@@ -90,13 +90,13 @@ user_opt['stampy_exe'])
 import ExternalSoftware as es
 software_pool= es.SoftwarePool(env_sensitive= True)
 SOFTWARE= {}
-#SOFTWARE['annotator']= 'prokka'
-#SOFTWARE['assembler']= 'spades'
-#SOFTWARE['gene_sorter']= 'roary'
-SOFTWARE['annotator']= software_pool.find_software('prokka')
-SOFTWARE['assembler']= software_pool.find_software('spades')
-SOFTWARE['gene_sorter']= software_pool.find_software('roary', target_dir=
-os.path.join(LIB_D, 'roary-3.8.2'))
+SOFTWARE['annotator']= 'prokka'
+SOFTWARE['assembler']= 'spades'
+SOFTWARE['gene_sorter']= 'roary'
+#SOFTWARE['annotator']= software_pool.find_software('prokka')
+#SOFTWARE['assembler']= software_pool.find_software('spades')
+#SOFTWARE['gene_sorter']= software_pool.find_software('roary', target_dir=
+#os.path.join(LIB_D, 'roary-3.8.2/bin'))
 print(SOFTWARE)
 
 #####
@@ -150,6 +150,8 @@ user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']]
 
 #####
 # lauch the workflow
-#rule all:
+rule all:
+    input: 
+        roary_gpa= TMP_D+'/roary/gene_presence_absence.csv'
 #    input: targets
 

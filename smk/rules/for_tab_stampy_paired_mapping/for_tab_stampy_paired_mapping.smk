@@ -13,7 +13,7 @@ rule for_tab_stampy_paired_mapping:
         STAMPY=STAMPY_EXE
     shell:
         """
-        source activate Ariane_dna
+        source activate old_mapping
         {params.STAMPY} --bwaoptions=\"-q10 {input.REF}\" \
 -g {params.REF_PREFIX} \
 -h {params.REF_PREFIX} \

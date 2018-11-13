@@ -11,7 +11,7 @@ rule for_tab_create_vcf:
         CORES=CORES
     shell:
         """
-        source activate Ariane_dna
+        source activate old_mapping
         samtools mpileup -uf {input.REF} {input.sorted_bam} |\
 bcftools view -bvcg \
 - > {output.bcf}

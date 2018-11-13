@@ -9,7 +9,7 @@ rule for_tab_sam2bam:
 wildcards.strain, 'stampy', 'tab_dna')
     shell:
         """
-        source activate Ariane_dna
+        source activate old_mapping
         samtools view -bS \
 {input.STAMPY_SAM} > {output.bam}
         samtools sort {output.bam} \
