@@ -29,7 +29,7 @@ if __name__== '__main__':
     args= UserOptions.main()
     setattr(args, 'seq2geno_smk_dir', seq2geno_smk_dir)
     setattr(args, 'seq2geno_lib_dir', seq2geno_lib_dir)
-    setattr(args, 'seq2geno_env_dir', seq2geno_lib_dir)
+    setattr(args, 'seq2geno_env_dir', seq2geno_env_dir)
 
     # create the config file
     config_f= 'config.yaml'

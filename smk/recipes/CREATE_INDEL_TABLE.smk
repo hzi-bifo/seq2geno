@@ -3,3 +3,4 @@ include: os.path.join(RULE_LIB_DIR, 'aln_to_vcf_per_fam', 'aln_to_vcf_per_fam.sm
 include: os.path.join(RULE_LIB_DIR, 'vcf_to_indels_per_fam', 'vcf_to_indels_per_fam.smk')
 include: os.path.join(RULE_LIB_DIR, 'expand_by_family', 'expand_by_family.smk')
 include: os.path.join(RULE_LIB_DIR, 'create_indel_table', 'create_indel_table.smk')
+include: os.path.join(RULE_LIB_DIR, 'for_indel_compute_gpa_raw_table', 'for_indel_compute_gpa_raw_table.smk')

@@ -11,7 +11,7 @@ def test_home(d):
         raise Exception(
             'ERROR: The environment variable "SEQ2GENO_HOME" looks incorrect')
 
-home=os.getenv('SEQ2GENO_HOME')
+home=os.environ.get('SEQ2GENO_HOME')
 try:
     test_home(home)
 except Exception as e:
@@ -20,19 +20,20 @@ except Exception as e:
 # the environments
 env_yml_dir= os.path.join(home, 'install', 'env_yaml')
 env_home= os.path.join(home, 'env')
-env_list_f= 'ENV_LIST'
-env_names= [l.strip() for l in open(env_list_f, 'r')]
-print('environments to install:\n\t{}'.format(
-    ' '.join(env_names)))
+env_names_f= 'ENV_LIST'
+env_names= [l.strip() for l in open(env_names_f, 'r')]
 
-for env_name in env_names[1:]:
-    print('installing {}...'.format(env_name))
+for env_name in env_names:
     env_dir= os.path.join(env_home, env_name)
     if not os.path.exists(env_dir):
         os.makedirs(env_dir)
 
-    print(env_dir)
-    print(os.path.exists(env_dir))
+    ## quick test about the environment
+    ## skipped if already there
+    if os.path.exists(os.path.join(env_dir, 'conda-meta')):
+        continue
+    ## install the environment
+    print('installing {}...'.format(env_name))
     conda_cmd= ['conda', 'env', 'create', '-f', 
         os.path.join(env_yml_dir, env_name+'.yaml'),
         '--prefix', 
@@ -44,4 +45,3 @@ for env_name in env_names[1:]:
         subprocess.call(conda_cmd)
     except Exception as e:
         sys.exit('Errors in the installation of env "{}":\n\t{}'.format(env_name, str(e)))
-

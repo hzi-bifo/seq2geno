@@ -1,20 +1,19 @@
 class SoftwarePool:
-    def __init__(self, env_sensitive= True):
+    def __init__(self, env_dir):
         '''
         By turning the sensitivity on, the environmental paths 
         will be updaated every time when searching for sortwares
         '''
         import os
-        self.env_sen= env_sensitive
-        self.env_paths=os.environ.get('PATH') 
+        self.env_dir= env_dir
     def __str__(self):
         return(
-        '{} environmental paths\ninitial environmental paths: {}'.format(
-            'dynamic' if self.env_sen else 'fixed', self.env_paths))
+        'home of environments: {}'.format(
+            self.env_dir))
     def find_software(self, software_name, target_dir= None, 
-            include_env= True) -> str:
+            target_env= None) -> str:
         '''
-        priorty: lib -> PATH (by the environment) 
+        priorty: target_dir -> target_env -> PATH (under seq2geno/ng_seq2geno) 
         '''
         import os
 
@@ -22,12 +21,14 @@ class SoftwarePool:
         # the target path, if specified
         if type(target_dir) is str:
             libpaths= [target_dir]
-        # the environmental paths
-        ## update the environement path?
-        if include_env:
-            env_path= self.env_paths if not self.env_sen else os.environ.get('PATH')
-            env_paths= env_path.split(':')
-            libpaths= libpaths+env_paths
+        # whether it's installed under the env
+        elif type(target_env) is str:
+            libpaths= [os.path.join(self.env_dir, target_env, 'bin')]
+            
+        # the others
+        other_paths_str= os.environ.get('PATH')
+        other_paths= other_paths_str.split(':')
+        libpaths= libpaths+other_paths
 
         # filter by directory
         libpaths=filter(lambda x: os.path.isdir(x), libpaths) 

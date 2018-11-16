@@ -1,3 +1,4 @@
+env/*
 geno2pheno_input_test/
 env_Test/
 results/

@@ -9,11 +9,14 @@ class Library:
     
     def __str__(self):
         return(
-        "Rules@{}\nRecipes@{}".format(self.rulespath, 
-            self.recipespath))
+        "Rules@{}\nRecipes@{}\nLib@{}".format(self.rulespath, 
+            self.recipespath, self.libpath))
 
-    def find_rules(self):
+    def call_rules_path(self):
         return(self.rulespath)
 
-    def find_recipes(self):
+    def call_recipes_path(self):
         return(self.recipespath)
+
+    def call_lib_path(self):
+        return(self.libpath)

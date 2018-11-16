@@ -23,7 +23,7 @@ project: test
 ref_fa: data/reference/RefCln_UCBPP-PA14.fa
 ref_gbk: data/reference/RefCln_UCBPP-PA14.gbk
 rna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.3.rna.tsv
-seq2geno_env_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/lib
+seq2geno_env_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/env
 seq2geno_lib_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/lib
 seq2geno_smk_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/smk
 stampy_exe: null

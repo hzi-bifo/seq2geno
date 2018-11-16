@@ -42,36 +42,36 @@ config= None
 #import ParseSamplesTab as pst
 sys.path.insert(0, user_opt['seq2geno_lib_dir'])
 import InternalVar as iv
-main_vars= iv.reader_for_main(user_opt)
-main_vars.load_materials()
+MAIN_VARS= iv.reader_for_main(user_opt)
+MAIN_VARS.load_materials()
 # dna
 #DNA_READS= pst.read_sampletab(user_opt['dna_reads'])
-DNA_READS= main_vars.materials.call_dna_reads()
+DNA_READS= MAIN_VARS.materials.call_dna_reads()
 # rna
 #RNA_READS= pst.read_sampletab(user_opt['rna_reads'])
-RNA_READS= main_vars.materials.call_rna_reads()
+RNA_READS= MAIN_VARS.materials.call_rna_reads()
 # phenotypes
 #PHE_TABLE_F= user_opt['phe_table']
-PHE_TABLE_F= main_vars.materials.call_phenotype_file()
-print(main_vars.materials)
+PHE_TABLE_F= MAIN_VARS.materials.call_phenotype_file()
+print(MAIN_VARS.materials)
 
 #####
 # reference
-main_vars.load_reference()
+MAIN_VARS.load_reference()
 #REF_FA=user_opt['ref_fa']
-REF_FA=main_vars.reference.call_ref_seq_file()
+REF_FA=MAIN_VARS.reference.call_ref_seq_file()
 #REF_GBK=user_opt['ref_gbk']
-REF_GBK=main_vars.reference.call_ref_anno_file()
-print(main_vars.reference)
+REF_GBK=MAIN_VARS.reference.call_ref_anno_file()
+print(MAIN_VARS.reference)
 
 #####
 # The paths below are determined by main instead of the user
-main_vars.load_library()
+MAIN_VARS.load_library()
 #RULE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'rules')
-RULE_LIB_DIR=main_vars.library.find_rules()
+RULE_LIB_DIR=MAIN_VARS.library.call_rules_path()
 #RECIPE_LIB_DIR=os.path.join(user_opt['seq2geno_smk_dir'], 'recipes')
-RECIPE_LIB_DIR=main_vars.library.find_recipes()
-print(main_vars.library)
+RECIPE_LIB_DIR=MAIN_VARS.library.call_recipes_path()
+print(MAIN_VARS.library)
 
 #####
 # command parameters
@@ -88,7 +88,7 @@ STAMPY_EXE=(os.path.join(user_opt['seq2geno_lib_dir'],
 user_opt['stampy_exe'])
 
 import ExternalSoftware as es
-software_pool= es.SoftwarePool(env_sensitive= True)
+software_pool= es.SoftwarePool(env_dir= user_opt['seq2geno_env_dir'])
 SOFTWARE= {}
 SOFTWARE['annotator']= 'prokka'
 SOFTWARE['assembler']= 'spades'
@@ -98,6 +98,12 @@ SOFTWARE['gene_sorter']= 'roary'
 #SOFTWARE['gene_sorter']= software_pool.find_software('roary', target_dir=
 #os.path.join(LIB_D, 'roary-3.8.2/bin'))
 print(SOFTWARE)
+
+#####
+# the environment manager
+import EnvironmentManager
+ENV_POOL= EnvironmentManager.Pool(user_opt['seq2geno_env_dir'])
+print(ENV_POOL.activate_env_cmd('roary_env'))
 
 #####
 # add the output directory to the results
@@ -152,6 +158,7 @@ user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']]
 # lauch the workflow
 rule all:
     input: 
-        roary_gpa= TMP_D+'/roary/gene_presence_absence.csv'
+#        roary_gpa= TMP_D+'/roary/gene_presence_absence.csv'
+        roary_gpa= TMP_D+'/roary_for_indel/gene_presence_absence.csv'
 #    input: targets
 
