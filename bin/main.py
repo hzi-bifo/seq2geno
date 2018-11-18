@@ -40,7 +40,10 @@ if __name__== '__main__':
             ('ng_MAIN.smk' if args.ng else 'MAIN.smk'))
 
     # Determine the main environment
-    main_env= 'ng_seq2geno' if args.ng else 'seq2geno'
+    #main_env= 'ng_seq2geno' if args.ng else 'seq2geno'
+    main_env= os.path.join(seq2geno_env_dir, 
+            'ng_seq2geno' if args.ng else 'seq2geno')
+    print(main_env)
     main_cmd= [os.path.join(seq2geno_home, 'bin', 'BuildEnv'), 
             main_env, main_smk,
             config_f, args.workdir,
