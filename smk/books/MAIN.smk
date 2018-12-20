@@ -34,6 +34,11 @@ user_opt= config
 config= None
 
 #####
+# project name
+# or species name
+PROJECT= user_opt['project']
+
+#####
 # samples
 # the variable 'STRAINS' is deprecated because the dna and rna data may include
 # different samples
@@ -87,6 +92,7 @@ STAMPY_EXE=(os.path.join(user_opt['seq2geno_lib_dir'],
 'stampy-1.0.23','stampy.py') if user_opt['stampy_exe'] is None else
 user_opt['stampy_exe'])
 
+#####
 import ExternalSoftware as es
 software_pool= es.SoftwarePool(env_dir= user_opt['seq2geno_env_dir'])
 SOFTWARE= {}
@@ -101,9 +107,12 @@ print(SOFTWARE)
 
 #####
 # the environment manager
+import EnvironmentFilesManager
+ENV_FILES_POOL=EnvironmentFilesManager.Pool(user_opt['seq2geno_env_files_dir'])
+#print(ENV_FILES_POOL.find_yaml('roary_env'))
 import EnvironmentManager
 ENV_POOL= EnvironmentManager.Pool(user_opt['seq2geno_env_dir'])
-print(ENV_POOL.activate_env_cmd('roary_env'))
+#print(ENV_POOL.activate_env_cmd('roary_env'))
 
 #####
 # add the output directory to the results
@@ -158,7 +167,16 @@ user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']]
 # lauch the workflow
 rule all:
     input: 
+        user_opt['gpa_table'],
+        user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']
+#        TMP_D+'/CH2502/samtools/tab_dna.flt.vcf'
+#        TMP_D+'/CH2502/dna_for_tab.flatcount',
+#        TMP_D+'/CH2502/stampy/dna_for_tab.sam'
+#        expand('{TMP_D}/{sample}/dna_for_tab.flatcount',
+#            TMP_D= [TMP_D], sample= DNA_READS.index.values.tolist()),
+#        expand('{TMP_D}/{sample}/samtools/tab_dna.flt.vcf', 
+#            TMP_D= [TMP_D], sample= DNA_READS.index.values.tolist())
 #        roary_gpa= TMP_D+'/roary/gene_presence_absence.csv'
-        roary_gpa= TMP_D+'/roary_for_indel/gene_presence_absence.csv'
+#        roary_gpa= TMP_D+'/roary_for_indel/gene_presence_absence.csv'
 #    input: targets
 

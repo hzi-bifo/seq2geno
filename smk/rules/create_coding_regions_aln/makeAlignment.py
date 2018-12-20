@@ -10,7 +10,7 @@ import os
 ## all the files
 files= {snakemake.params['STRAINS'][n]: snakemake.input[n] for n in range(len(snakemake.params['STRAINS']))}
 seq_format= 'fasta'
-cores= snakemake.params['CORES']
+cores= snakemake.threads
 one_big_aln_f= snakemake.output[0]
 if not os.path.isdir(snakemake.params['TMP_D']):
     os.makedirs(snakemake.params['TMP_D'])

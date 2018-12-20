@@ -7,14 +7,14 @@ rule for_tab_sam2bam:
     params: 
         output_prefix= lambda wildcards: os.path.join(wildcards.TMP_D,
 wildcards.strain, 'stampy', 'tab_dna')
+    conda: 
+        ENV_FILES_POOL.find_yaml('old_mapping')
     shell:
         """
-        source activate old_mapping
         samtools view -bS \
 {input.STAMPY_SAM} > {output.bam}
         samtools sort {output.bam} \
 {params.output_prefix}
         samtools index {output.bam}
-        source deactivate
         """
 

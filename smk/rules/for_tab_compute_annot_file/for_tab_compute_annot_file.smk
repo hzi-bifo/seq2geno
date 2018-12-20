@@ -4,7 +4,8 @@ rule for_tab_compute_annot_file:
     output:
         anno_f=temp('annotations_for_snps.tab')
     params:
-        species= DNA_READS.index.values.tolist()
+        species= DNA_READS.index.values.tolist(),
+        ref_name= PROJECT
     script:'create_dict_for_snps.py'
 
 

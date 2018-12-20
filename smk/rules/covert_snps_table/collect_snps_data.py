@@ -1,18 +1,19 @@
-import pandas as pd
 
 def covert_snp_data(f, out_f, strains):
+    import pandas as pd
+    import re
     # load the file 
     df=pd.read_csv(f, sep='\t', header= 0, index_col= None)
 
     # create feature names
-    feat= ['|'.join(df.iloc[n, :6].apply(str)) for n in range(df.shape[0]) ]
+    feat= ['_'.join(df.iloc[n, :6].apply(str)) for n in range(df.shape[0]) ]
     df.insert(loc=0, column= 'feature', value= feat)
     df.set_index('feature', inplace= True)
 
     # 
     sub_df= df[strains]
-    sub_df.replace('.*\w+.*', '1', regex= True, inplace= True)
-    sub_df.replace('^\W$', '0', regex= True, inplace= True)
+    re_pattern= '[0-9]+\.*[0-9]*'
+    sub_df= sub_df.applymap(lambda x: '1' if re.search(re_pattern, x) else '0')
 
     # print output
     sub_df= sub_df.transpose()

@@ -6,6 +6,7 @@ rule create_ref_target_seqs:
         ref_target_seqs="{TMP_D}/reference.target_regions.fa"
     params:
         fea_type='CDS'
+    threads: 1
     run:
         from Bio import SeqIO
         from Bio.SeqRecord import SeqRecord

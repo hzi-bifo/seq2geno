@@ -12,15 +12,16 @@ strain=DNA_READS.index.values.tolist()),
         dict_f= os.path.join(TMP_D, 'dict.txt'),
         anno_f='annotations_for_snps.tab'
     output: 
-        snps_list=temp(os.path.join(TMP_D, 'DNA_Pool1.tab'))
+        snps_list=temp(os.path.join(TMP_D, 'all_SNPs.tab'))
+
+    conda: ENV_FILES_POOL.find_yaml('old_mapping')
+    threads: 1
     params:
-        script_f='lib/snps/mutation_table.py'
+        script_f='mutation_table.py'
     shell:
         """
-        source activate py27
-        python {params.script_f}  -f {input.dict_f} \
+        {params.script_f} -f {input.dict_f} \
 -a {input.anno_f} \
 -o {output.snps_list}
-        source deactivate
         """
 

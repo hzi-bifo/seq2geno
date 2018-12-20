@@ -5,9 +5,9 @@ from Bio.Alphabet import IUPAC
 import re
 
 
-gbk_f= 'data/reference/RefCln_UCBPP-PA14.gbk'
-species_strain= 'Paeru_PA14'
-out_f='test.tab'
+gbk_f= snakemake.input['ref_gbk']
+species_strain= snakemake.params['ref_name']
+out_f=snakemake.output['anno_f']
 
 # read the gbk
 rec= SeqIO.read(open(gbk_f, 'r', encoding='windows-1252'), 'gb')
@@ -28,7 +28,7 @@ with open(out_f, 'w') as out_fh:
             continue
         d=[species_strain, acc, sequence_type, fea.qualifiers['locus_tag'][0],
             target_feature, str(fea.location.start+1), str(fea.location.end),
-            '+' if fea.strand  == 1 else '-', fea.qualifiers['name'][0] if
-            'name' in fea.qualifiers else '.']
+            '+' if fea.strand  == 1 else '-', 
+            fea.qualifiers['name'][0] if 'name' in fea.qualifiers else '']
         out_fh.write('\t'.join(d)+'\n')
 

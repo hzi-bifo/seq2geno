@@ -23,6 +23,7 @@ if __name__== '__main__':
     seq2geno_smk_dir = os.path.join(seq2geno_home, 'smk')
     seq2geno_lib_dir = os.path.join(seq2geno_home, 'lib')
     seq2geno_env_dir = os.path.join(seq2geno_home, 'env')
+    seq2geno_env_files_dir = os.path.join(seq2geno_home, 'install/env_yaml/')
 
     # parse user's arguments
     import UserOptions
@@ -30,6 +31,10 @@ if __name__== '__main__':
     setattr(args, 'seq2geno_smk_dir', seq2geno_smk_dir)
     setattr(args, 'seq2geno_lib_dir', seq2geno_lib_dir)
     setattr(args, 'seq2geno_env_dir', seq2geno_env_dir)
+    setattr(args, 'seq2geno_env_files_dir', seq2geno_env_files_dir)
+
+    # max core number
+    cores= args.cores
 
     # create the config file
     config_f= 'config.yaml'
@@ -47,6 +52,7 @@ if __name__== '__main__':
     main_cmd= [os.path.join(seq2geno_home, 'bin', 'BuildEnv'), 
             main_env, main_smk,
             config_f, args.workdir,
+            cores,
             'T' if args.dryrun else 'F', 
             'T' if args.notemp else 'F']
 

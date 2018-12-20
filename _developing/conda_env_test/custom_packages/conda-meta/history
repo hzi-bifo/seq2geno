@@ -1,0 +1,3 @@
+==> 2018-11-29 15:44:04 <==
+# cmd: /home/thkuo/miniconda3/bin/conda create --no-default-packages -p /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/_developing/conda_env_test/custom_packages
+# conda version: 4.5.11

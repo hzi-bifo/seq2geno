@@ -6,7 +6,7 @@ dif: true
 dif_alpha: 0.05
 dif_lfc: 0
 dif_out: difxpr
-dna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.3.dna.tsv
+dna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.10.dna_full.tsv
 dryrun: true
 expr_table: expr.edit.tab
 gp_data_dir: null
@@ -22,8 +22,9 @@ phe_table: data/strains/pheno/phenotypes.edit.mat
 project: test
 ref_fa: data/reference/RefCln_UCBPP-PA14.fa
 ref_gbk: data/reference/RefCln_UCBPP-PA14.gbk
-rna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.3.rna.tsv
+rna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.10.rna_full.tsv
 seq2geno_env_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/env
+seq2geno_env_files_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/install/env_yaml/
 seq2geno_lib_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/lib
 seq2geno_smk_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/smk
 stampy_exe: null

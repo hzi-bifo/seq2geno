@@ -2,10 +2,11 @@ rule create_consensus_sequence:
     ## Create consensus sequences of the coding regions 
     input:
         ref_target_seqs="{TMP_D}/reference.target_regions.fa",
-        vcf_gz="{TMP_D}/{strain}/{mapper}/vcf.gz",
-        vcf_gz_index="{TMP_D}/{strain}/{mapper}/vcf.gz.tbi"
+        vcf_gz="{TMP_D}/{strain}/freebayes/vcf.gz",
+        vcf_gz_index="{TMP_D}/{strain}/freebayes/vcf.gz.tbi"
     output:
-        cons_coding_seqs="{TMP_D}/{strain}/{mapper}/cons.fa"
+        cons_coding_seqs="{TMP_D}/{strain}/freebayes/cons.fa"
+    threads: 1
     shell:
         """
         bcftools consensus -f {input[ref_target_seqs]} \

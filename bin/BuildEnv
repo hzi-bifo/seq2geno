@@ -8,8 +8,9 @@ env=$1
 snakefile=$2
 configfile=$3
 workdir=$4
-dryrun=$5
-notemp=$6
+cores=$5
+dryrun=$6
+notemp=$7
 
 source activate $env
 
@@ -17,5 +18,6 @@ $DIR'/main.internal.py' \
   --snakefile $snakefile \
   --configfile $configfile \
   --workdir $workdir \
+  --cores $cores\
   --dryrun $dryrun \
   --notemp $notemp 

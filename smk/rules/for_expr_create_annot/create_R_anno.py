@@ -25,15 +25,18 @@ with open(out_f, 'w') as out_fh:
     columns=['locus', 'ID', 'gene_name', 'type', 'Start', 'End']
     out_fh.write('\t'.join(columns)+'\n')
 
-
+    target_fea= [fea for fea in rec.features if ((fea.type == 'gene') or
+        (not (re.search('RNA', fea.type) is None)))]
     for fea in [fea for fea in rec.features if ((fea.type == 'gene') or
         (not (re.search('RNA', fea.type) is None)))]:
         if not ('locus_tag' in fea.qualifiers):
             continue
         acc= fea.qualifiers['locus_tag'][0]
         gene_name= (fea.qualifiers['name'][0] if 'name' in fea.qualifiers else
-                '')
-        locus= ','.join([acc, gene_name])
+                '-')
+#        locus= ','.join([acc, gene_name])
+        locus= ','.join([acc, fea.qualifiers['name'][0] ]) if ('name' in
+        fea.qualifiers) else acc
         # be careful about the coordinates
         d=[locus, acc, gene_name, str(fea.type), str(fea.location.start+1),
                 str(fea.location.end)]

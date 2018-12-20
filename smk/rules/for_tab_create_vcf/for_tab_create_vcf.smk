@@ -9,12 +9,12 @@ rule for_tab_create_vcf:
     params: 
         minDepth= 0,
         CORES=CORES
+    conda:
+        ENV_FILES_POOL.find_yaml('old_mapping')
     shell:
         """
-        source activate old_mapping
         samtools mpileup -uf {input.REF} {input.sorted_bam} |\
 bcftools view -bvcg \
 - > {output.bcf}
-        source deactivate
         """ 
 
