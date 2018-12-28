@@ -2,16 +2,17 @@ rule create_gff:
     input:
         assembly="{TMP_D}/{strain}/{assembler}/scaffolds.fasta"
     output:
-        ffn_output="{TMP_D}/{strain}/{assembler}/{annotator}/de_novo.ffn",
-        gff_output="{TMP_D}/{strain}/{assembler}/{annotator}/de_novo.gff"
+        ffn_output="{TMP_D}/{strain}/{assembler}/prokka/de_novo.ffn",
+        gff_output="{TMP_D}/{strain}/{assembler}/prokka/de_novo.gff"
     params:
         anno_prefix='de_novo',
-        cores=CORES
+        outdir= lambda wildcards: os.path.join(wildcards.TMP_D,
+wildcards.strain, wildcards.assembler, 'prokka') 
+    threads:1
     shell:
         """
-        prokka --cpus {params.cores} --force --prefix {params.anno_prefix} \
+        prokka --cpus {threads} --force --prefix {params.anno_prefix} \
 --locustag {wildcards.strain} \
---outdir \
-{wildcards.TMP_D}/{wildcards.strain}/{wildcards.assembler}/{wildcards.annotator} \
+--outdir {params.outdir} \
 {input.assembly}
         """

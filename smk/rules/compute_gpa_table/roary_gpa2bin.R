@@ -1,5 +1,3 @@
-#!/usr/bin/Rscript
-
 # convert the table of roary gpa (.csv) to a fasta of gpa
 load_data_matrix<- function(pa_f){
   ## with pheatmap

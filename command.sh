@@ -6,7 +6,6 @@
 source activate snakemake_env
 cd /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9
 ./bin/seq2geno \
-  --dryrun \
   --project test \
   --ref-fa data/reference/RefCln_UCBPP-PA14.fa \
   --ref-gbk data/reference/RefCln_UCBPP-PA14.gbk \

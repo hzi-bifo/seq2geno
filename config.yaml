@@ -7,7 +7,7 @@ dif_alpha: 0.05
 dif_lfc: 0
 dif_out: difxpr
 dna_reads: /net/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/merged/data/samples.10.dna_full.tsv
-dryrun: true
+dryrun: false
 expr_table: expr.edit.tab
 gp_data_dir: null
 gp_kmer: '6'
