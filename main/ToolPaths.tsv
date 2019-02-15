@@ -1,9 +1,9 @@
 # Variables required by each workflow
 	TOOL_HOME	PATH	SNAKEFILE
-denovo	seq2geno.dirty.denovo/in_one	$TOOL_HOME/lib:$TOOL_HOME/lib/Roary/bin/:$TOOL_HOME/lib/jvarkit/dist/:$PATH	$TOOL_HOME/denovo.in_one.smk
-expr	seq2geno.dirty.expr/in_one	$TOOL_HOME/lib:$PATH	$TOOL_HOME/expr.in_one.smk
-phylo	seq2geno.dirty.phylo/in_one	$TOOL_HOME/lib:$PATH	$TOOL_HOME/phylo.in_one.smk
-snps	seq2geno.dirty/in_one	$TOOL_HOME/lib:$PATH	$TOOL_HOME/snps.in_one.smk
-cmpr	seq2geno.dirty.cmpr/in_one	$PATH	$TOOL_HOME/compress_feat_table.smk
-de	seq2geno.dirty.difexpr/in_one	$PATH	$TOOL_HOME/dif_xpr_analysis.smk
-ar	seq2geno.dirty.cont_anc_rcn/in_one	$PATH	$TOOL_HOME/cont_anc_reconstruction.smk
+denovo	denovo	$TOOL_HOME/lib:$TOOL_HOME/lib/Roary/bin/:$TOOL_HOME/lib/jvarkit/dist/:$PATH	$TOOL_HOME/denovo.in_one.smk
+expr	expr	$TOOL_HOME/lib:$PATH	$TOOL_HOME/expr.in_one.smk
+phylo	phylo	$TOOL_HOME/lib:$PATH	$TOOL_HOME/phylo.in_one.smk
+snps	snps	$TOOL_HOME/lib:$PATH	$TOOL_HOME/snps.in_one.smk
+cmpr	cmpr	$PATH	$TOOL_HOME/compress_feat_table.smk
+de	difexpr	$PATH	$TOOL_HOME/dif_xpr_analysis.smk
+ar	cont_anc_rcn	$PATH	$TOOL_HOME/cont_anc_reconstruction.smk

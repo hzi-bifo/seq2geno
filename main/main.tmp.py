@@ -121,13 +121,15 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
         import snakemake
         import os 
         os.environ['PATH']=env_dict['PATH']
-        snakemake.snakemake(
+        success= snakemake.snakemake(
             configfile=config_f,
             snakefile= env_dict['SNAKEFILE'],
             workdir= os.path.dirname(config_f),
             unlock= True)
+        if not success:
+            raise Exception('Could not unlock target folder'.format(os.path.dirname(config_f)))
 
-        snakemake.snakemake(
+        success=snakemake.snakemake(
             snakefile= env_dict['SNAKEFILE'],
             cores= max_cores,
             configfile=config_f,
@@ -138,13 +140,23 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
             printshellcmds= True,
             force_incomplete= True,
             notemp=True
-        )
-    except:
+            )
+        if not success:
+            raise Exception('Snakemake workflow fails')
+    except Exception as e:
+        from datetime import datetime
+        print('ERROR ({})'.format(proc))
+        print('{}\t{}\n'.format(
+            datetime.now().isoformat(' ',timespec= 'minutes'),
+            e))
+        raise RuntimeError(e)
+    except :
         from datetime import datetime
         print('ERROR ({})'.format(proc))
         print('{}\t{}\n'.format(
             datetime.now().isoformat(' ',timespec= 'minutes'),
             sys.exc_info()))
+        raise RuntimeError('Unknown problem occured when lauching Snakemake')
 
 #proc_targets= {'denovo': 'denovo.log', 'snps': 'snps.log'}
 #config_f= {'denovo': 'denovo/config.yml'}
@@ -157,12 +169,17 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
 from pprint import pprint
 import os
 import sys
+
 import UserOptions
 args= UserOptions.main()
 from pprint import pprint
 pprint(args)
-import create_config
-create_config.main(args)
+try:
+    import create_config
+    create_config.main(args)
+except:
+    print('ERROR: fail to initiate the project')
+    sys.exit()
 
 '''
 import argparse
@@ -187,27 +204,44 @@ parser.add_argument('--dryrun', dest= 'dryrun', action= 'store_true',
     help= 'only list the computational processes', default= False)
 args= parser.parse_args()
 '''
+try:
+    ## denovo
+    config_f= os.path.join(args.wd, 'denovo', 'denovo_config.yml')
+    run_proc('denovo', config_f, dryrun= args.dryrun, max_cores=
+            int(args.cores))
+    ## expr
+    config_f= os.path.join(args.wd, 'expr', 'expr_config.yml')
+    run_proc('expr', config_f, dryrun= args.dryrun, max_cores= args.cores)
+    ## phylo
+    config_f= os.path.join(args.wd, 'phylo', 'phylo_config.yml')
+    run_proc('phylo', config_f, dryrun= args.dryrun, max_cores= args.cores)
+    ## snps
+    config_f= os.path.join(args.wd, 'snps', 'snps_config.yml')
+    run_proc('snps', config_f, dryrun= args.dryrun, max_cores= args.cores)
+except RuntimeError as e:
+    sys.exit('ERROR: {}'.format(e))
+except: 
+    sys.exit('Unknown problem during the analysis')
+else:
+    if not args.dryrun:
+        try:
+            ## remove redundancy
+            config_f= os.path.join(args.wd,'cmprs_config.yml')
+            run_proc('cmpr', config_f, dryrun= args.dryrun, max_cores= args.cores)
+            ## ancestral reconstruction
+            config_f= os.path.join(args.wd,'ar_config.yml')
+            run_proc('ar', config_f, dryrun= args.dryrun, max_cores= args.cores)
+            # differential expression
+            config_f= os.path.join(args.wd,'de_config.yml')
+            run_proc('de', config_f, dryrun= args.dryrun, max_cores= args.cores)
+        except RuntimeError as e:
+            sys.exit('ERROR: {}'.format(e))
+        except: 
+            sys.exit('Unknown problem during the analysis')
+        else:
+            collect_results(args.wd)
+    else:
+        print('The workflow of redundancy removal, ancestral reconstruction, '
+            'and differential expression analysis will be scheduled after '
+            'the above processes are done')
 
-### denovo
-#config_f= os.path.join(args.wd, 'denovo', 'denovo_config.yml')
-#run_proc('denovo', config_f, dryrun= args.dryrun, max_cores= args.cores)
-### expr
-#config_f= os.path.join(args.wd, 'expr', 'expr_config.yml')
-#run_proc('expr', config_f, dryrun= args.dryrun, max_cores= args.cores)
-### phylo
-#config_f= os.path.join(args.wd, 'phylo', 'phylo_config.yml')
-#run_proc('phylo', config_f, dryrun= args.dryrun, max_cores= args.cores)
-### snps
-#config_f= os.path.join(args.wd, 'snps', 'snps_config.yml')
-#run_proc('snps', config_f, dryrun= args.dryrun, max_cores= args.cores)
-### remove redundancy
-#config_f= os.path.join(args.wd,'cmprs_config.yml')
-#run_proc('cmpr', config_f, dryrun= args.dryrun, max_cores= args.cores)
-### ancestral reconstruction
-#config_f= os.path.join(args.wd,'ar_config.yml')
-#run_proc('ar', config_f, dryrun= args.dryrun, max_cores= args.cores)
-## differential expression
-config_f= os.path.join(args.wd,'de_config.yml')
-run_proc('de', config_f, dryrun= args.dryrun, max_cores= args.cores)
-
-collect_results(args.wd)

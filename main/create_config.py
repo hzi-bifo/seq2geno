@@ -10,19 +10,6 @@ import os
 import subprocess
 import sys
 
-def run_snakemake(proc_name, proc_log, snakefile, cores, 
-        configfile, workdir, dryrun):
-    import snakemake
-    use_conda= True
-    printshellcmds= dryrun
-    force_incomplete= True
-    try :
-        snakemake.snakemake(snakefile= snakef, cores= cores, use_conda= use_conda,
-            configfile= config_f, workdir= workdir, dryrun= dryrun,
-            printshellcmds= dryrun, force_incomplete= force_incomplete
-        )
-    except Error as e:
-        sys.exit(e)
 
 class phylo_args:
     def __init__(self, list_f, REF_FA, REF_GFF,
@@ -137,6 +124,7 @@ def create_yaml_f(args, wd, config_f):
     try:
         config_f= os.path.abspath(os.path.join(wd, config_f))
         target_dir= os.path.dirname(config_f)
+        print(target_dir)
         if not os.path.exists(target_dir):
             print('creating {}...'.format(target_dir))
             os.makedirs(target_dir)
@@ -152,6 +140,7 @@ def create_yaml_f(args, wd, config_f):
         sys.exit()
 
 def main(args):
+    print('Creating config files')
 #    seq2geno_home= os.path.abspath(
 #            os.path.join(os.path.dirname(os.path.realpath(__file__)),
 #                os.pardir))

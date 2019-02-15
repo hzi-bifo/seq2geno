@@ -91,7 +91,8 @@ def main():
     ######
     #####
     args = parser.parse_args()
-    print(args)
+    args.cores= int(args.cores)
+#    print(args)
 #    option_rules(args)
 
     return(args)
