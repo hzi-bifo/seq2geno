@@ -1,7 +1,0 @@
-include: os.path.join(RULE_LIB_DIR, 'ng_detect_var_for_pop', 'ng_detect_var_for_pop.smk')
-include: os.path.join(RULE_LIB_DIR, 'ng_sort_bam', 'ng_sort_bam.smk')
-include: os.path.join(RULE_LIB_DIR, 'ng_sam2bam', 'ng_sam2bam.smk')
-include: os.path.join(RULE_LIB_DIR, 'ng_stampy_remapping', 'ng_stampy_remapping.smk')
-include: os.path.join(RULE_LIB_DIR, 'ng_redirect_bwa_result', 'ng_redirect_bwa_result.smk')
-include: os.path.join(RULE_LIB_DIR, 'ng_single_read_bwa_mapping', 'ng_single_read_bwa_mapping.smk')
-include: os.path.join(RULE_LIB_DIR, 'ng_paired_read_bwa_mapping', 'ng_paired_read_bwa_mapping.smk')

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SEQ2GENO_HOME=$HOME/bin/seq2geno
+## install the basic environment
+conda create --file [...]
+## create files to change environment vars
+source activate [...]
+cd $CONDA_PREFIX
+mkdir -p ./etc/conda/activate.d
+touch ./etc/conda/activate.d/env_vars.sh
+echo '#!/bin/sh' > ./etc/conda/activate.d/env_vars.sh
+echo 'export SEQ2GENO_HOME=${realpath $SEQ2GENO_HOME}'  >>  \
+  ./etc/conda/activate.d/env_vars.sh
+mkdir -p ./etc/conda/deactivate.d
+touch ./etc/conda/deactivate.d/env_vars.sh
+echo '#!/bin/sh' > ./etc/conda/deactivate.d/env_vars.sh
+echo 'unset $SEQ2GENO_HOME' >> \
+  ./etc/conda/deactivate.d/env_vars.sh

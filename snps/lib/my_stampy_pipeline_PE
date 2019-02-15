@@ -1,0 +1,33 @@
+#align illumina reads using stampy and art-file for visualization
+
+prefix=$1	# used to name the different output files
+infile1=$2	# name of input fastq file containing the left end reads 
+infile2=$3	# name of input fastq file containing the right end reads
+reffiles=$4	# path and prefix of reference files
+annofile=$5	# path to annotation file
+Rannofile=$6	# path to annotation file
+
+indexref=$reffiles
+hashref=$reffiles
+bwaopt="-q10 $reffiles"
+annotation=$annofile
+Rannotation=$Rannofile
+
+#echo  "starting stampy"
+stampy.py --bwaoptions="$bwaopt" -g $indexref -h $hashref -M $infile1 $infile2 > $prefix.sam #2> $prefix.report
+
+#echo  "writing art file"
+sam2art.pl -s 2 -p -4 $prefix.sam > $prefix.art
+
+#echo  "writing sin file"
+sam2art.pl -s 2 -l -p -4 $prefix.sam > $prefix.sin
+
+#echo  "writing flat pileup file"
+sam2art.pl -f -s 2 -p $prefix.sam > $prefix.flatcount
+
+#echo  "making gene counts"
+art2genecount.pl -b -a $prefix.sin -t tab -r $annotation > $prefix.rpg
+
+#echo  "writing statistics"
+sam_statistics.pl -r -p $prefix.sam > $prefix.stats
+#genes_statistics.R $prefix.rpg $Rannotation $prefix.stats $prefix

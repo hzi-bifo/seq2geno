@@ -1,0 +1,12 @@
+./create_genml.py --genml test.gml \
+  --project geno2pheno \
+  --out geno2pheno_out \
+  --bin_tables b \
+  --con_tables c \
+  --assemblies a \
+  --tree t \
+  --pheno p \
+  --opt scores_f1_1 \
+  --models svm rf \
+  --part rand \
+  --cls classes

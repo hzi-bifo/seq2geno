@@ -1,0 +1,57 @@
+#!/bin/bash
+f=
+m=
+i=
+s=
+d=
+h=
+n=
+
+while test $# -gt 0
+do
+    case $1 in
+        -f)
+            f=$2
+            shift
+            ;;
+        -m)
+            m=$2
+            shift
+            ;;
+        -i)
+            i="-i"
+            ;;
+        -d)
+            d="-d"
+            ;;
+        -n)
+            n="-n"
+            ;;
+        -s)
+            s=$2
+            shift
+            ;;
+        -h)
+            h="-h"
+            shift
+            ;;
+        *)
+            echo >&2 "Invalid argument: $1"
+            ;;
+    esac
+    shift
+done
+if [ ! -z $h ]  
+    then 
+        read header1 < /dev/stdin 
+        read  header2 < $s
+        echo "$header1	$header2"
+        
+fi
+if [  -z $n ]  
+    then 
+        field_map.edit.py < <(sort -t$'\t' -d -k$f,$f /dev/stdin) -d -f $f $i $d -m $m  -s <(sort -t$'\t' -d -k $m,$m $s)    | grep -v '^NA	' | grep -v '	NA$' | grep -v '^NA$';
+    else
+        field_map.edit.py < <(sort -t$'\t' -d -k$f,$f /dev/stdin) -d -f $f $i $d -m $m  -s <(sort -t$'\t' -d -k $m,$m $s)    | egrep '^NA	|^NA$' | uniq ;
+        
+fi
