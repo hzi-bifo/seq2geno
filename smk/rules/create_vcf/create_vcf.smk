@@ -8,7 +8,7 @@ rule create_vcf:
         vcf_gz="{TMP_D}/{strain}/freebayes/vcf.gz"
     params: 
         CORES=CORES
-    threads: 10
+    threads: 1 
     shell:
         """
         freebayes-parallel <(fasta_generate_regions.py \

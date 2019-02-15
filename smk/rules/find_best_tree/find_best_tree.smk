@@ -3,7 +3,7 @@ rule find_best_tree:
         one_big_var_aln=TMP_D+'/OneBig.var.aln'
     output:
         tree=TREE_OUT
-    threads: int(CORES)
+    threads: 12
     params:
         FASTTREE_BIN='FastTreeMP',
         cores= CORES,

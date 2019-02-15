@@ -23,10 +23,10 @@ rule compute_rename_dict:
         '''
         cat {input.ref_gff} | sed '/^>/,$d' | tail -n+2 | \
 grep -v '#' > {output.tmp_gff}
-        field_map_wrapper.edit < <(grep -v @ {input.anno_f}) -s <(cat \
+        ./field_map_wrapper.edit < <(grep -v @ {input.annot_f}) -s <(cat \
 {output.tmp_gff}) -f 6 -m 4 -i| cut -f4,9,19 > {output.tmp_annotation_map}
-        refine_mapping.py {output.tmp_annotation_map} \
+        python refine_mapping.py {poutput.tmp_annotation_map} \
 > {output.tmp_refined_map}
-        match_clusters.py {output.tmp_refined_map} \
+        python match_clusters.py {output.tmp_refined_map} \
 {input.roary_clustered_proteins} > {output.rename_dict}
         '''

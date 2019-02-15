@@ -1,4 +1,4 @@
-name: roary_env
+name: roary_env 
 channels:
   - bioconda
   - conda-forge
@@ -65,7 +65,7 @@ dependencies:
   - perl-exporter=5.72=pl5.22.0_0
   - perl-exporter-tiny=0.042=1
   - perl-extutils-makemaker=7.24=pl5.22.0_1
-  - perl-file-find-rule=0.34=3
+  - perl-file-find-rule=0.34=1
   - perl-file-grep=0.02=0
   - perl-file-listing=6.04=0
   - perl-file-slurp-tiny=0.004=0
@@ -212,7 +212,7 @@ dependencies:
   - perl-xsloader=0.22=pl5.22.0_0
   - perl-yaml=1.24=pl522_1
   - prank=v.170427=h2d50403_1
-  - roary=3.8.2=pl5.22.0_0
+  - roary=3.12.0=pl5.22.0_0
   - tidyp=1.04=1
   - boost=1.63.0=py36_5
   - boost-cpp=1.63.0=2
@@ -274,4 +274,3 @@ dependencies:
   - xorg-xproto=7.0.31=h470a237_7
   - xz=5.2.4=h470a237_1
   - zlib=1.2.11=h470a237_3
-

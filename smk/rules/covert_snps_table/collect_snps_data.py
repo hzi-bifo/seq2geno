@@ -20,8 +20,5 @@ def covert_snp_data(f, out_f, strains):
     sub_df.to_csv(out_f, sep= '\t', header= True, index= True)
 
 if __name__=='__main__':
-#    f= 'results/syn_snps.tab'
-#    out_f= './test.mat'
     strains= snakemake.params['strains']
-    for n in range(len(snakemake.input)):
-        covert_snp_data(snakemake.input[n], snakemake.output[n], strains)
+    covert_snp_data(snakemake.input[0], snakemake.output[0], strains)

@@ -3,6 +3,7 @@ rule index_vcf:
         vcf_gz="{TMP_D}/{strain}/freebayes/vcf.gz"
     output:
         vcf_gz_index= "{TMP_D}/{strain}/freebayes/vcf.gz.tbi"
+    threads: 1
     shell:
         """
         tabix -p vcf {input[vcf_gz]}

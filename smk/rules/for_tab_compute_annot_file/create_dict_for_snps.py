@@ -18,7 +18,7 @@ sequence_type= 'Chromosome'
 with open(out_f, 'w') as out_fh:
     header_line= '@'+'|'.join([species_strain, acc, chr_len])
     columns=['@Strain', 'Refseq_Accession', 'Replicon', 'Locus_Tag',
-    'Feature_Type','Start', 'Stop', 'Strand', 'Gene_Name']
+    'Feature_Type','Start', 'Stop', 'Strand', 'Gene_Name', 'Product_Name']
     out_fh.write(header_line+'\n')
     out_fh.write('\t'.join(columns)+'\n')
     
@@ -29,6 +29,8 @@ with open(out_f, 'w') as out_fh:
         d=[species_strain, acc, sequence_type, fea.qualifiers['locus_tag'][0],
             target_feature, str(fea.location.start+1), str(fea.location.end),
             '+' if fea.strand  == 1 else '-', 
-            fea.qualifiers['name'][0] if 'name' in fea.qualifiers else '']
+            fea.qualifiers['name'][0] if 'name' in fea.qualifiers else '', 
+            re.sub('\s+', '_', fea.qualifiers['function'][0]) if ('function' 
+                in fea.qualifiers) else '.']
         out_fh.write('\t'.join(d)+'\n')
 

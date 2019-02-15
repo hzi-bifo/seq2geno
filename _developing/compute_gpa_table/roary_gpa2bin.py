@@ -2,7 +2,7 @@ import pandas as pd
 import textwrap
 
 strains=snakemake.params['strains']
-rename_dict_f=snakemake.input['rename_dict']
+rename_dict_f=snakemake.params['rename_dict']
 gpa_f= snakemake.input['roary_gpa']
 out_f=snakemake.output['gpa_table']
 

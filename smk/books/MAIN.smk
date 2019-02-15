@@ -68,6 +68,7 @@ REF_FA=MAIN_VARS.reference.call_ref_seq_file()
 #REF_GBK=user_opt['ref_gbk']
 REF_GBK=MAIN_VARS.reference.call_ref_anno_file()
 print(MAIN_VARS.reference)
+REF_GFF='/net/metagenomics/data/from_moni/old.tzuhao/seq2geno/data/reference/RefCln_UCBPP-PA14.gff'
 
 #####
 # The paths below are determined by main instead of the user
@@ -128,7 +129,7 @@ for k in output_keys:
 OUT_DIR= user_opt['output_dir']
 output_opts= ['tree', 'gpa_table', 'nonsyn_snps_table', 'syn_snps_table',
     'expr_table', 'indel_table', 'dif_out', 'c_ac_out']
-(TREE_OUT, GPA_OUT, NONSYN_SNPS_OUT, SYN_SNPS_OUT, EXPR_OUT, INDEL_OUT,
+(TREE_OUT, GPA_OUT, NONSYN_SNPS_OUT, ALL_SNPS_OUT, EXPR_OUT, INDEL_OUT,
 DIF_XPR_OUT, C_ANCREC_OUT)= [assign_internal_variables(user_opt[opt]) for opt
 in output_opts]
 
@@ -167,8 +168,9 @@ user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']]
 # lauch the workflow
 rule all:
     input: 
-        user_opt['gpa_table'],
-        user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']
+        user_opt['tree']
+#        user_opt['gpa_table']
+#        user_opt['nonsyn_snps_table'], user_opt['syn_snps_table']
 #        TMP_D+'/CH2502/samtools/tab_dna.flt.vcf'
 #        TMP_D+'/CH2502/dna_for_tab.flatcount',
 #        TMP_D+'/CH2502/stampy/dna_for_tab.sam'

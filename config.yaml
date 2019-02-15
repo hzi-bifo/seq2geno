@@ -15,7 +15,7 @@ gp_md: geno2pheno.md
 gpa_table: gpa.mat
 indel_table: indel.mat
 ng: false
-nonsyn_snps_table: ns-syn.mat
+nonsyn_snps_table: ns-syn_snps.mat
 notemp: true
 output_dir: results
 phe_table: data/strains/pheno/phenotypes.edit.mat
@@ -28,6 +28,6 @@ seq2geno_env_files_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno
 seq2geno_lib_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/lib
 seq2geno_smk_dir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9/smk
 stampy_exe: null
-syn_snps_table: s-syn.mat
+all_snps_table: all-snps.mat
 tree: Paeru.nwk
 workdir: /net/sgi/metagenomics/data/from_moni/old.tzuhao/seq2geno/dev_versions/v9

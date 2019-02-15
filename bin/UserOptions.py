@@ -103,7 +103,7 @@ def main():
             '''specifiy a gene pres/abs table filename and compute it if not
 available
             ''')
-    output_arg.add_argument('--s-snp', dest='syn_snps_table',
+    output_arg.add_argument('--all-snp', dest='all_snps_table',
             default= None,
             type= str, 
             help=
