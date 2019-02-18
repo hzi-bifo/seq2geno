@@ -75,7 +75,7 @@ mutations = defaultdict(list)
 # ("gene"), gene names ("name") and gene positions. For each position in the
 # genome, where the gene can be found, replace the 0 in the genome list with
 # the locus tag and gene name, if applicable.
-
+print('Read annot tab')
 with open(Args.AnnoFile) as anno:
   if not size:
     head = anno.readline()
@@ -85,7 +85,8 @@ with open(Args.AnnoFile) as anno:
     except:
       print "It seems I can't find the genome size in the annotation file!"
       print "Please enter it manually with the argument -s <number>."
-  genome = [0]*size
+  #genome = [0]*size
+  genome = [0]*(size+1) # as the coordinates in this analysis are all 1-based
   for line in anno:
     if not line.startswith("@"):
       line = line.rstrip()
@@ -206,11 +207,28 @@ names.sort()
 # not there and not because this region is not covered with reads, read the
 # ".flatcount" file for each isolate, then loop over the mutations dictionary,
 # take the position of each mutation and check the number of reads in the file.
-
+print('Review null values')
+for item in names:
+    print(item)
+    lost_keys= [key for key in list(mutations.keys()) if not item in 
+            [r[0] for r in mutations[key]]]
+    print(len(lost_keys))
+    filename = item +".flatcount"
+    with open(filename) as flat:
+        for key in lost_keys:
+            pos = int(key.split("_")[0])*6
+            flat.seek(pos, 0)
+            string = flat.read(6)
+            if string:
+                number = int(string)
+                mutations[key].append((item, "NR" if number == 0 else " "))
+'''
+### replaced with the above block
 for key in mutations:
   muts = []
   for x in mutations[key]:
     muts.append(x[0])
+  print(muts)
   for item in names:
     if item not in muts:
       filename = item +".flatcount"
@@ -224,6 +242,7 @@ for key in mutations:
             mutations[key].append((item, "NR"))
           else:
             mutations[key].append((item, " "))
+'''
 
 
 ##    --       Write Output     --    ##
@@ -232,6 +251,8 @@ for key in mutations:
 # mutation to the file. Also include the information whether it is inside a
 # gene or not by using the genome list.
 
+print('Write the results')
+print('Totally {} features'.format(str(len(mutations))))
 with open(Args.OutFile, "w") as out:
   out.write("gene\tpos\tref\talt")
   for item in names:

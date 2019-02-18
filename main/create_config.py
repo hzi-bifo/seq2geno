@@ -13,7 +13,7 @@ import sys
 
 class phylo_args:
     def __init__(self, list_f, REF_FA, REF_GFF,
-    config_f='phylo_config.yml'):
+        redirected_reads_dir, config_f='phylo_config.yml'):
         self.list_f= list_f
         self.REF_FA= REF_FA
         self.REF_GFF= REF_GFF
@@ -25,6 +25,7 @@ class phylo_args:
         self.families_seq_dir= 'families'
         self.aln_f= 'OneLarge.gapReplaced.var2.gt90.aln'
         self.tree_f= 'OneLarge.gapReplaced.var2.gt90.nwk'
+        self.new_reads_dir= redirected_reads_dir
 
 class expr_args:
     def __init__(self, list_f, ref_fasta, ref_gbk,  
@@ -47,9 +48,10 @@ class expr_args:
         self.r_annot='R_annotation.tab'
 
 class snps_args:
-    def __init__(self, list_f, ref_fasta, ref_gbk,
-    config_f= 'snps_config.yml'):
+    def __init__(self, list_f, ref_fasta, ref_gbk, adaptor,
+            redirected_reads_dir, config_f= 'snps_config.yml'):
         self.list_f=list_f
+        self.adaptor= adaptor
         self.ref_fasta= ref_fasta
         self.ref_gbk= ref_gbk 
         #self.snps_aa_bin_mat=snps_aa_bin_mat
@@ -71,10 +73,11 @@ class snps_args:
         self.nonsyn_snps_aa_table='nonsyn_SNPs_final.tab'
         self.snps_aa_bin_mat='all_SNPs_final.bin.mat'
         self.nonsyn_snps_aa_bin_mat='nonsyn_SNPs_final.bin.mat'
+        self.new_reads_dir= redirected_reads_dir
 
 class denovo_args:
     def __init__(self, list_f, REF_GFF, ref_gbk, 
-    config_f='denovo_config.yml'):
+        redirected_reads_dir, config_f='denovo_config.yml'):
         self.list_f= list_f
         self.REF_GFF= REF_GFF
         self.ref_gbk= ref_gbk 
@@ -91,6 +94,7 @@ class denovo_args:
         subfolder= 'denovo'
         self.config_f= os.path.join(
             subfolder, config_f)
+        self.new_reads_dir= redirected_reads_dir
 
 class cmprs_args:
     def __init__(self, bin_tables,
@@ -152,25 +156,32 @@ def main(args):
     cores= args.cores
 
     # snps
-    s_args= snps_args(list_f= args.dna_reads, 
+    s_args= snps_args(list_f= os.path.abspath(args.dna_reads), 
+            adaptor= args.adaptor,
+            redirected_reads_dir= os.path.join(
+                os.path.abspath(args.wd), 'reads', 'dna'),
             ref_fasta= args.ref_fa, 
             ref_gbk= args.ref_gbk)
     create_yaml_f(s_args, args.wd, s_args.config_f)
 
     # denovo
-    d_args= denovo_args(list_f= args.dna_reads, 
+    d_args= denovo_args(list_f= os.path.abspath(args.dna_reads), 
             REF_GFF= args.ref_gff, 
+            redirected_reads_dir= os.path.join(
+                os.path.abspath(args.wd), 'reads', 'dna'),
             ref_gbk= args.ref_gbk)
     create_yaml_f(d_args, args.wd, d_args.config_f)
 
     # phylo
-    p_args= phylo_args(list_f= args.dna_reads, 
+    p_args= phylo_args(list_f= os.path.abspath(args.dna_reads), 
+            redirected_reads_dir= os.path.join(
+                os.path.abspath(args.wd), 'reads', 'dna'),
             REF_FA= args.ref_fa, 
             REF_GFF= args.ref_gff)
     create_yaml_f(p_args, args.wd, p_args.config_f)
 
     # expr
-    e_args= expr_args(list_f= args.rna_reads, 
+    e_args= expr_args(list_f= os.path.abspath(args.rna_reads), 
             ref_fasta= args.ref_fa, 
             ref_gbk= args.ref_gbk)
     create_yaml_f(e_args, args.wd, e_args.config_f)
@@ -193,7 +204,7 @@ def main(args):
     create_yaml_f(a_args, args.wd, a_args.config_f)
     
     # differential expression analysis
-    de_args= diffexpr_args(pheno= args.phe_table,
+    de_args= diffexpr_args(pheno= os.path.abspath(args.phe_table),
             expr_config_f= e_args.config_f)
     create_yaml_f(de_args, args.wd, de_args.config_f)
 

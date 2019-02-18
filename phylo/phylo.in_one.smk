@@ -15,6 +15,8 @@ seq_list=config['seq_list']
 families_seq_dir=config['families_seq_dir']
 aln_f=config['aln_f']
 tree_f=config['tree_f']
+adaptor_f= config['adaptor']
+new_reads_dir= config['new_reads_dir']
 
 rule all:
     input:
@@ -161,10 +163,8 @@ rule mapping:
     input:
         ref=REF_FA,
         ref_index=REF_FA+".bwt",
-        #FQ1=strain_fq1,
-        #FQ2=strain_fq2
-        FQ1=lambda wildcards: dna_reads[wildcards.strain][0],
-        FQ2=lambda wildcards: dna_reads[wildcards.strain][1]
+        FQ1= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.1.gz'),
+        FQ2= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.2.gz')
     output:
         sam="{tmp_d}/{strain}/bwa.sam",
         bam="{tmp_d}/{strain}/bwa.bam",
@@ -179,7 +179,72 @@ rule mapping:
         bamtools sort -in {output.bam} -out {output.sorted_bam}
         samtools index {output.sorted_bam}
         """
-        
+
+#rule clean_reads:
+#    input:
+#        f1= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq.1.gz'.format(wildcards.strain)),
+#        f2= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq.2.gz'.format(wildcards.strain))
+#    output:
+#        log_f= os.path.join(new_reads_dir, '{strain}.log'),
+#        f1= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.1.gz'),
+#        f2= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.2.gz')
+#    params:
+#        adaptor_f= adaptor_f,
+#        tmp_f1= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq_cleaned.1'.format(wildcards.strain)),
+#        tmp_f2= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq_cleaned.2'.format(wildcards.strain))
+#    shadow: "shallow"
+#    shell:
+#        '''
+#        if [ -e "{params.adaptor_f}" ]
+#        then
+#            fastq-mcf -l 50 -q 20 {params.adaptor_f} {input.f1} {input.f2} \
+#-o {params.tmp_f1} -o {params.tmp_f2} > {output.log_f}
+#            gzip -9 {params.tmp_f1}
+#            gzip -9 {params.tmp_f2}
+#        else
+#            echo 'No trimming' > {output.log_f}
+#            echo $(readlink {input.f1}) >> {output.log_f}
+#            echo $(readlink {input.f2}) >> {output.log_f}
+#            ln {input.f1} {output.f1}
+#            ln {input.f2} {output.f2}
+#        fi
+#        '''
+       
+rule redirect_and_preprocess_reads:
+    input: 
+        infile1=lambda wildcards: dna_reads[wildcards.strain][0],
+        infile2=lambda wildcards: dna_reads[wildcards.strain][1]
+    output:
+        log_f= os.path.join(new_reads_dir, '{strain}.log'),
+        f1= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.1.gz'),
+        f2= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.2.gz')
+    params:
+        adaptor_f= adaptor_f,
+        tmp_f1= lambda wildcards: os.path.join(
+            new_reads_dir, '{}.fastq_cleaned.1'.format(wildcards.strain)),
+        tmp_f2= lambda wildcards: os.path.join(
+            new_reads_dir, '{}.fastq_cleaned.2'.format(wildcards.strain))
+    shell:
+         '''
+        if [ -e "{params.adaptor_f}" ]
+        then
+            fastq-mcf -l 50 -q 20 {params.adaptor_f} {input.infile1} {input.infile2} \
+-o {params.tmp_f1} -o {params.tmp_f2} > {output.log_f}
+            gzip -9 {params.tmp_f1}
+            gzip -9 {params.tmp_f2}
+        else
+            echo 'No trimming' > {output.log_f}
+            echo $(readlink {input.infile1}) >> {output.log_f}
+            echo $(readlink {input.infile2}) >> {output.log_f}
+            ln  -s {input.infile1} {output.f1}
+            ln  -s {input.infile2} {output.f2}
+        fi
+        '''
+
 rule call_var:
     input:
         ref=REF_FA,

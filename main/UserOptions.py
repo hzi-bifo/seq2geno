@@ -43,13 +43,18 @@ def main():
 #        help='working records')
 #    project_arg.add_argument('-c', dest='cmprs', action= 'store_true',
 #        help='redundancy removal of binary features')
-    project_arg.add_argument('--dryrun', dest= 'dryrun', action= 'store_true',
+    project_arg.add_argument('-dryrun', dest= 'dryrun', action= 'store_true',
         help='only show the processes')
+    project_arg.add_argument('--adaptor_f', dest= 'adaptor',type= str,
+        default= '-',
+        help='if the reads need to be cleaned, '
+        'please specify the file that contains adaptors')
 
     ## samples
     sam_arg= parser.add_argument_group('samples')
     sam_arg.add_argument('--dna-reads', dest='dna_reads', type= str,
-        help='list of samples and dna sequencing reads', default= '-')
+        help='list of samples and dna sequencing reads', default= '-', 
+        required= True)
     sam_arg.add_argument('--rna-reads', dest='rna_reads', type= str,
         help='list of samples and rna sequencing reads', default= '-')
     sam_arg.add_argument('--pheno', dest='phe_table', type= str,
@@ -80,13 +85,13 @@ def main():
 #        help='output tree file', default= '-')
 #
 #    ## expr
-#    expr_arg= parser.add_argument_group('expr')
+    expr_arg= parser.add_argument_group('expr')
 #    expr_arg.add_argument('--expr_f', dest='expr_f', type= str,
 #        help='output expression table', default= '-')
-#    expr_arg.add_argument('-de', dest='diffexpr', action= 'store_true',
-#        help='differential expression analysis')
-#    expr_arg.add_argument('-ar', dest='ancrec', action= 'store_true',
-#        help='ancestral reconstruction')
+    expr_arg.add_argument('-de', dest='de', action= 'store_true',
+        default= False, help='differential expression analysis')
+    expr_arg.add_argument('-ar', dest='ar', action= 'store_true',
+        default= False, help='ancestral reconstruction')
 
     ######
     #####
