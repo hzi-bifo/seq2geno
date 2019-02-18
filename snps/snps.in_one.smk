@@ -233,6 +233,7 @@ rule redirect_and_preprocess_reads:
             gzip -9 {params.tmp_f1}
             gzip -9 {params.tmp_f2}
         else
+            echo 'Reads not trimmed'
             echo 'No trimming' > {output.log_f}
             echo $(readlink {input.infile1}) >> {output.log_f}
             echo $(readlink {input.infile2}) >> {output.log_f}

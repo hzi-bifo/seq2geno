@@ -169,13 +169,6 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
             sys.exc_info()))
         raise RuntimeError('Unknown problem occured when lauching Snakemake')
 
-#proc_targets= {'denovo': 'denovo.log', 'snps': 'snps.log'}
-#config_f= {'denovo': 'denovo/config.yml'}
-#targets= []
-#required= ['denovo', 'snps']
-#max_cores= 15
-#dryrun= True
-#all_analysis= ['denovo', 'snps', 'phylo', 'expr']
 
 from pprint import pprint
 import os
@@ -192,29 +185,6 @@ except:
     print('ERROR: fail to initiate the project')
     sys.exit()
 
-'''
-import argparse
-arg_formatter = lambda prog: argparse.RawTextHelpFormatter(prog,
-        max_help_position=4, width = 80)
-parser = argparse.ArgumentParser(
-        formatter_class= arg_formatter,
-        description='start seq2geno')
-
-parser.add_argument('-v', action= 'version', 
-    version='v.Beta')
-parser.add_argument('-f', dest= 'target_dir', type= str,
-    help= 'target folder, created by create_config', 
-    required= True)
-parser.add_argument('-c', dest= 'max_core', type= int,
-    help= 'max number of cores to use', 
-    default= 1)
-#parser.add_argument('-m', dest= 'max_mem_per_task', type= int,
-#    help= 'max size (Gb) of memory for each task', 
-#    default= 10)
-parser.add_argument('--dryrun', dest= 'dryrun', action= 'store_true',
-    help= 'only list the computational processes', default= False)
-args= parser.parse_args()
-'''
 try:
     ## expr
     if args.rna_reads != '-':
@@ -231,7 +201,7 @@ try:
     else:
         print('Single nucleotide variants will not be detected '
             'due to lack of DNA reads')
-    '''
+
     ## denovo
     if args.dna_reads != '-':
         config_f= os.path.join(args.wd, 'denovo', 'denovo_config.yml')
@@ -240,7 +210,7 @@ try:
     else:
         print('The assemblies and subsequent works will not be conducted '
             'due to lack of DNA reads')
-
+    '''
     ## phylo
     if args.dna_reads != '-':
         config_f= os.path.join(args.wd, 'phylo', 'phylo_config.yml')

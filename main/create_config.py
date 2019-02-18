@@ -12,11 +12,13 @@ import sys
 
 
 class phylo_args:
-    def __init__(self, list_f, REF_FA, REF_GFF,
+    def __init__(self, list_f, REF_FA, REF_GFF,adaptor,
         redirected_reads_dir, config_f='phylo_config.yml'):
         self.list_f= list_f
         self.REF_FA= REF_FA
         self.REF_GFF= REF_GFF
+        self.adaptor= adaptor
+        self.new_reads_dir= redirected_reads_dir
         subfolder= 'phylo'
         self.config_f= os.path.join(
             subfolder, config_f)
@@ -25,7 +27,6 @@ class phylo_args:
         self.families_seq_dir= 'families'
         self.aln_f= 'OneLarge.gapReplaced.var2.gt90.aln'
         self.tree_f= 'OneLarge.gapReplaced.var2.gt90.nwk'
-        self.new_reads_dir= redirected_reads_dir
 
 class expr_args:
     def __init__(self, list_f, ref_fasta, ref_gbk,  
@@ -52,6 +53,7 @@ class snps_args:
             redirected_reads_dir, config_f= 'snps_config.yml'):
         self.list_f=list_f
         self.adaptor= adaptor
+        self.new_reads_dir= redirected_reads_dir
         self.ref_fasta= ref_fasta
         self.ref_gbk= ref_gbk 
         #self.snps_aa_bin_mat=snps_aa_bin_mat
@@ -73,14 +75,15 @@ class snps_args:
         self.nonsyn_snps_aa_table='nonsyn_SNPs_final.tab'
         self.snps_aa_bin_mat='all_SNPs_final.bin.mat'
         self.nonsyn_snps_aa_bin_mat='nonsyn_SNPs_final.bin.mat'
-        self.new_reads_dir= redirected_reads_dir
 
 class denovo_args:
-    def __init__(self, list_f, REF_GFF, ref_gbk, 
+    def __init__(self, list_f, REF_GFF, ref_gbk, adaptor,
         redirected_reads_dir, config_f='denovo_config.yml'):
         self.list_f= list_f
         self.REF_GFF= REF_GFF
         self.ref_gbk= ref_gbk 
+        self.new_reads_dir= redirected_reads_dir
+        self.adaptor= adaptor
         self.out_spades_dir= 'spades'
         self.out_prokka_dir= 'prokka'
         self.out_roary_dir= 'roary'
@@ -94,7 +97,6 @@ class denovo_args:
         subfolder= 'denovo'
         self.config_f= os.path.join(
             subfolder, config_f)
-        self.new_reads_dir= redirected_reads_dir
 
 class cmprs_args:
     def __init__(self, bin_tables,
@@ -167,6 +169,7 @@ def main(args):
     # denovo
     d_args= denovo_args(list_f= os.path.abspath(args.dna_reads), 
             REF_GFF= args.ref_gff, 
+            adaptor= args.adaptor,
             redirected_reads_dir= os.path.join(
                 os.path.abspath(args.wd), 'reads', 'dna'),
             ref_gbk= args.ref_gbk)
@@ -174,6 +177,7 @@ def main(args):
 
     # phylo
     p_args= phylo_args(list_f= os.path.abspath(args.dna_reads), 
+            adaptor= args.adaptor,
             redirected_reads_dir= os.path.join(
                 os.path.abspath(args.wd), 'reads', 'dna'),
             REF_FA= args.ref_fa, 
