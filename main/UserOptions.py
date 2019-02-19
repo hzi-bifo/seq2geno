@@ -34,7 +34,7 @@ def main():
     ## project
     project_arg= parser.add_argument_group('project')
     project_arg.add_argument('--wd', dest= 'wd', required= True, 
-        help='working directory, which every other paths should be relative to')
+        help='working directory')
     project_arg.add_argument('--cores', dest= 'cores', default= 1,
         help='number of cpus')
 #    project_arg.add_argument('--mem', dest= 'memory', default= 10,
@@ -84,7 +84,23 @@ def main():
 #    phylo_arg.add_argument('--tree_f', dest='tree_f', type= str,
 #        help='output tree file', default= '-')
 #
-#    ## expr
+
+    ## core functions
+    func_arg= parser.add_argument_group('functions')
+    func_arg.add_argument('-e', dest='expr', action= 'store_true',
+        default= False, 
+        help='count expression levels')
+    func_arg.add_argument('-d', dest='denovo', action= 'store_true',
+        default= False, 
+        help='create de novo assemblies and count gene contents')
+    func_arg.add_argument('-s', dest='snps', action= 'store_true',
+        default= False, 
+        help='detect variants')
+    func_arg.add_argument('-p', dest='phylo', action= 'store_true',
+        default= False, 
+        help='infer phylogenetic tree')
+
+    ## expr
     expr_arg= parser.add_argument_group('expr')
 #    expr_arg.add_argument('--expr_f', dest='expr_f', type= str,
 #        help='output expression table', default= '-')
