@@ -245,7 +245,7 @@ rule create_annot:
 rule spades_create_assembly:
     input: 
         READS= lambda wildcards: [
-            os.path.join(new_reads_dir,'{}.fastq_cleaned.{}.gz'.format(
+            os.path.join(new_reads_dir,'{}.cleaned.{}.fq.gz'.format(
             wildcards.strain, str(n))) for n in [1,2]]
     output: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
     threads:1
@@ -264,8 +264,8 @@ rule spades_create_assembly:
 #            new_reads_dir, '{}.fastq.2.gz'.format(wildcards.strain))
 #    output:
 #        log_f= os.path.join(new_reads_dir, '{strain}.log'),
-#        f1= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.1.gz'),
-#        f2= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.2.gz')
+#        f1= os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
+#        f2= os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
 #    params:
 #        adaptor_f= adaptor_f,
 #        tmp_f1= lambda wildcards: os.path.join(
@@ -296,8 +296,8 @@ rule redirect_and_preprocess_reads:
         infile2=lambda wildcards: dna_reads[wildcards.strain][1]
     output:
         log_f= os.path.join(new_reads_dir, '{strain}.log'),
-        f1= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.1.gz'),
-        f2= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.2.gz')
+        f1= os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
+        f2= os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
     params:
         adaptor_f= adaptor_f,
         tmp_f1= lambda wildcards: os.path.join(

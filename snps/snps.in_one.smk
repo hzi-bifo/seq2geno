@@ -28,7 +28,19 @@ rule all:
     input:
         expand('{strain}.tar.gz', strain= strains),
         snps_aa_bin_mat,
-        nonsyn_snps_aa_bin_mat
+        nonsyn_snps_aa_bin_mat,
+        expand('{in_tab}_{info}', 
+            in_tab= [snps_aa_bin_mat, nonsyn_snps_aa_bin_mat], 
+            info= ['GROUPS', 'NONRDNT'])
+
+rule compress_feat_table:
+    input: 
+        F='{in_tab}'
+    output: 
+        GROUPS='{in_tab}_GROUPS',
+        NONRDNT='{in_tab}_NONRDNT'
+    conda: 'cmpr_env.yaml'
+    script: 'featCompress.py'
 
 rule compress_data:
     input:
@@ -149,9 +161,9 @@ $PERL5LIB
 rule my_stampy_pipeline_PE:
     input:
         infile1= lambda wildcards: os.path.join(
-        new_reads_dir, '{}.fastq_cleaned.1.gz'.format(wildcards.strain)),
+        new_reads_dir, '{}.cleaned.1.fq.gz'.format(wildcards.strain)),
         infile2= lambda wildcards: os.path.join(
-        new_reads_dir, '{}.fastq_cleaned.2.gz'.format(wildcards.strain)),
+        new_reads_dir, '{}.cleaned.2.fq.gz'.format(wildcards.strain)),
         reffile=ref_fasta,
         ref_index_stampy=ref_fasta+'.stidx',
         ref_index_bwa=ref_fasta+'.bwt',
@@ -176,48 +188,14 @@ rule my_stampy_pipeline_PE:
 {input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
         """
 
-#rule clean_reads:
-#    input:
-#        f1= lambda wildcards: os.path.join(
-#            new_reads_dir, '{}.fastq.1.gz'.format(wildcards.strain)),
-#        f2= lambda wildcards: os.path.join(
-#            new_reads_dir, '{}.fastq.2.gz'.format(wildcards.strain))
-#    output:
-#        log_f= os.path.join(new_reads_dir, '{strain}.log'),
-#        f1= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.1.gz'),
-#        f2= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.2.gz')
-#    params:
-#        adaptor_f= adaptor_f,
-#        tmp_f1= lambda wildcards: os.path.join(
-#            new_reads_dir, '{}.fastq_cleaned.1'.format(wildcards.strain)),
-#        tmp_f2= lambda wildcards: os.path.join(
-#            new_reads_dir, '{}.fastq_cleaned.2'.format(wildcards.strain))
-#    shadow: "shallow"
-#    shell:
-#        '''
-#        if [ -e "{params.adaptor_f}" ]
-#        then
-#            fastq-mcf -l 50 -q 20 {params.adaptor_f} {input.f1} {input.f2} \
-#-o {params.tmp_f1} -o {params.tmp_f2} > {output.log_f}
-#            gzip -9 {params.tmp_f1}
-#            gzip -9 {params.tmp_f2}
-#        else
-#            echo 'No trimming' > {output.log_f}
-#            echo $(readlink {input.f1}) >> {output.log_f}
-#            echo $(readlink {input.f2}) >> {output.log_f}
-#            ln {input.f1} {output.f1}
-#            ln {input.f2} {output.f2}
-#        fi
-#        '''
-       
 rule redirect_and_preprocess_reads:
     input: 
         infile1=lambda wildcards: dna_reads[wildcards.strain][0],
         infile2=lambda wildcards: dna_reads[wildcards.strain][1]
     output:
         log_f= os.path.join(new_reads_dir, '{strain}.log'),
-        f1= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.1.gz'),
-        f2= os.path.join(new_reads_dir, '{strain}.fastq_cleaned.2.gz')
+        f1= os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
+        f2= os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
     params:
         adaptor_f= adaptor_f,
         tmp_f1= lambda wildcards: os.path.join(
