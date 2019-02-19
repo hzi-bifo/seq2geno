@@ -24,6 +24,18 @@ rule all:
     input:
         indel_bin_mat= out_indel_f,
         gpa_bin_mat=out_gpa_f
+        expand('{in_tab}_{info}', 
+            in_tab= [indel_bin_mat, gpa_bin_mat], 
+            info= ['GROUPS', 'NONRDNT'])
+
+rule remove_redundant_feat:
+    input: 
+        F='{in_tab}'
+    output: 
+        GROUPS='{in_tab}_GROUPS',
+        NONRDNT='{in_tab}_NONRDNT'
+    conda: 'cmpr_env.yaml'
+    script: 'featCompress.py'
 
 rule abricate_dict:
     input:
@@ -32,7 +44,7 @@ rule abricate_dict:
         ref_gff=REF_GFF,
         anno_f=annot_tab
     output:
-        rename_dict='{roary_dir}/roary_PA14_abricate.txt',
+        rename_dict='{roary_dir}/roary_abricate.txt',
         tmp_annotation_map= '{roary_dir}/annotation_mapped.txt',
         tmp_refined_map= '{roary_dir}/refined_mapping.txt',
         tmp_gff='{roary_dir}/tmp.gff'
@@ -40,7 +52,7 @@ rule abricate_dict:
     shell:
         '''
         cat {input.ref_gff} | sed '/^>/,$d' | tail -n+2 | \
-grep -v '#' > {output.tmp_gff}
+grep -v '#' |grep -v '^\s*$' > {output.tmp_gff}
         field_map_wrapper.edit < <(grep -v @ {input.anno_f}) -s <(cat \
 {output.tmp_gff}) -f 6 -m 4 -i| cut -f4,9,19 > {output.tmp_annotation_map}
         refine_mapping.py {output.tmp_annotation_map} \
@@ -51,7 +63,7 @@ grep -v '#' > {output.tmp_gff}
 
 rule gpa_bin_mat:
     input:
-        rename_dict_f=os.path.join(out_roary_dir, 'roary_PA14_abricate.txt'),
+        rename_dict_f=os.path.join(out_roary_dir, 'roary_abricate.txt'),
         gpa_csv=os.path.join(out_roary_dir, 'gene_presence_absence.csv')
     output:
         gpa_bin_mat=out_gpa_f
@@ -145,7 +157,7 @@ rule indel_identify_indels:
         core_gene_list=os.path.join(out_roary_dir, 'core_genes_50.txt'),
         gpa_rtab=os.path.join(out_roary_dir, 'gene_presence_absence.Rtab'),
         annot=out_gpa_f,
-        roary_abricate= os.path.join(out_roary_dir, 'roary_PA14_abricate.txt')
+        roary_abricate= os.path.join(out_roary_dir, 'roary_abricate.txt')
     output:
         indel_annot= out_indel_f
     params:
@@ -175,8 +187,10 @@ rule indel_identify_indels:
 {params.indels_dir}/{{}}_indel_stats.txt" ::: $core_genes
 
         cd {params.indels_dir}
+        # In 'clustered_proteins', roary never quotes gene names; 
+        # in the .Rtab, space-included names are quoted
         {params.generate_feature_script} \
-<(cut -f1 ../{input.gpa_rtab} | tail -n+2 | grep -v hdl ) \
+<(cut -f1 ../{input.gpa_rtab} | tail -n+2 | grep -v hdl | sed 's/"//g') \
 ../{input.annot} \
 ../{output.indel_annot} \
 ../{output.indel_annot}.stats \

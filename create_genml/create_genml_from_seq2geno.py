@@ -64,46 +64,58 @@ if __name__== '__main__':
     ## genotype block
     geno = ET.SubElement(root, "genotype")
     #### for binary tables
-    bin_tables = ET.SubElement(geno, "tables",
-            attrib= {
-                'path': os.path.join(args.sg, 'RESULTS', 'bin_tables'), 
-                'normalization': "binary", 
-                'transpose': "False"}
-        )
-    setattr(bin_tables, 'text', args.sg)
+    if os.path.isdir(os.path.join(args.sg, 'RESULTS', 'bin_tables')):
+        bin_tables = ET.SubElement(geno, "tables",
+                attrib= {
+                    'path': os.path.join(args.sg, 'RESULTS', 'bin_tables'), 
+                    'normalization': "binary", 
+                    'transpose': "False"}
+            )
+        setattr(bin_tables, 'text', args.sg)
     #### for numeric features
-    con_tables = ET.SubElement(geno, "tables",
-            attrib= {
-                'path': os.path.join(args.sg, 'RESULTS', 'num_tables'), 
-                'normalization': "numeric", 
-                'transpose': "False"}
-        )
-    setattr(con_tables, 'text', args.sg)
+    if os.path.isdir(os.path.join(args.sg, 'RESULTS', 'num_tables')):
+        con_tables = ET.SubElement(geno, "tables",
+                attrib= {
+                    'path': os.path.join(args.sg, 'RESULTS', 'num_tables'), 
+                    'normalization': "numeric", 
+                    'transpose': "False"}
+            )
+        setattr(con_tables, 'text', args.sg)
     #### genome seq
-    seq= ET.SubElement(geno, "sequence",
-            attrib={
-                'path': os.path.join(args.sg, 'RESULTS', 'assemblies'), 
-                'kmer': str(args.kmer)}
-        )
-    setattr(seq, 'text', args.sg)
+    if os.path.isdir(os.path.join(args.sg, 'RESULTS', 'assemblies')):
+        seq= ET.SubElement(geno, "sequence",
+                attrib={
+                    'path': os.path.join(args.sg, 'RESULTS', 'assemblies'), 
+                    'kmer': str(args.kmer)}
+            )
+        setattr(seq, 'text', args.sg)
 
     ####
     ## phenotype block
-    pheno = ET.SubElement(root, "phenotype",
-            attrib={
-                'path': os.path.join(args.sg, 'RESULTS', 'phenotypes',
-                'phenotypes.mat')}
-        )
-    setattr(pheno, 'text', '\n')
+    if os.path.isfile(os.path.join(args.sg, 'RESULTS', 'phenotypes',
+        'phenotypes.mat')) :
+        pheno = ET.SubElement(root, "phenotype",
+                attrib={
+                    'path': os.path.join(args.sg, 'RESULTS', 'phenotypes',
+                    'phenotypes.mat')}
+            )
+        setattr(pheno, 'text', '\n')
+    else:
+        sys.exit('No phenotype was found')
 
     ####
     ## phylogeny block
-    phy= ET.SubElement(root, "phylogentictree",
-            attrib={
-                'path': os.path.join(args.sg, 'RESULTS', 'phylogeny',
-                'tree.nwk')}
-        )
-    setattr(phy, 'text', '\n')
+    if os.path.isfile(os.path.join(args.sg, 'RESULTS', 'phylogeny',
+        'tree.nwk')):
+        phy= ET.SubElement(root, "phylogentictree",
+                attrib={
+                    'path': os.path.join(args.sg, 'RESULTS', 'phylogeny',
+                    'tree.nwk')}
+            )
+        setattr(phy, 'text', '\n')
+    else:
+        sys.exit('No phylogeny was found')
+
 
     ####
     ## predict block
