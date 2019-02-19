@@ -23,9 +23,9 @@ new_reads_dir= config['new_reads_dir']
 rule all:
     input:
         indel_bin_mat= out_indel_f,
-        gpa_bin_mat=out_gpa_f
-        expand('{in_tab}_{info}', 
-            in_tab= [indel_bin_mat, gpa_bin_mat], 
+        gpa_bin_mat=out_gpa_f,
+        non_redundant= expand('{in_tab}_{info}', 
+            in_tab= [out_indel_f, out_gpa_f], 
             info= ['GROUPS', 'NONRDNT'])
 
 rule remove_redundant_feat:
