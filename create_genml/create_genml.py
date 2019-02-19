@@ -80,17 +80,35 @@ if __name__== '__main__':
     ####
     ## genotype block
     geno = ET.SubElement(root, "genotype")
+#    #### for binary tables
+#    bin_tables = ET.SubElement(geno, "bin_tables",
+#            path=args.bt_dir,
+#            normalization="binary",
+#            transpose="False")
+#    setattr(bin_tables, 'text', args.project)
     #### for binary tables
-    bin_tables = ET.SubElement(geno, "bin_tables",
-            path=args.bt_dir,
-            normalization="binary",
-            transpose="False")
-    setattr(bin_tables, 'text', args.project)
+    if os.path.isdir(args.bt_dir):
+        bin_tables = ET.SubElement(geno, "tables",
+                attrib= {
+                    'path': args.bt_dir, 
+                    'normalization': "binary", 
+                    'transpose': "False"}
+            )
+        setattr(bin_tables, 'text', args.sg)
+#    #### for numeric features
+#    con_tables = ET.SubElement(geno, "con_tables",
+#            attrib= {'path': args.ct_dir, 'normalization': "numeric",
+#                'transpose': "False"})
+#    setattr(con_tables, 'text', args.project)
     #### for numeric features
-    con_tables = ET.SubElement(geno, "con_tables",
-            attrib= {'path': args.ct_dir, 'normalization': "numeric",
-                'transpose': "False"})
-    setattr(con_tables, 'text', args.project)
+    if os.path.isdir(args.ct_dir):
+        con_tables = ET.SubElement(geno, "tables",
+                attrib= {
+                    'path': args.ct_dir, 
+                    'normalization': "numeric", 
+                    'transpose': "False"}
+            )
+        setattr(con_tables, 'text', args.sg)
     #### genome seq
     seq= ET.SubElement(geno, "sequence",
             attrib={'path': args.assem, 'kmer': str(args.kmer)})

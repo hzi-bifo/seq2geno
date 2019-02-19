@@ -33,7 +33,7 @@ rule all:
             in_tab= [snps_aa_bin_mat, nonsyn_snps_aa_bin_mat], 
             info= ['GROUPS', 'NONRDNT'])
 
-rule compress_feat_table:
+rule remove_redundant_feat:
     input: 
         F='{in_tab}'
     output: 

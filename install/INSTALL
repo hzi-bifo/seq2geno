@@ -1,10 +1,13 @@
 #!/bin/sh
 
+# Step 1. Please ensure your Conda is installed
+# Step 2. edit SEQ2GENO_HOME
+
 SEQ2GENO_HOME=$HOME/bin/seq2geno
 ## install the basic environment
-conda create --file [...]
+conda create --file snakemake_env.yml
 ## create files to change environment vars
-source activate [...]
+source activate snakemake_env
 cd $CONDA_PREFIX
 mkdir -p ./etc/conda/activate.d
 touch ./etc/conda/activate.d/env_vars.sh

@@ -3,6 +3,7 @@ from xml.dom import minidom
 import xml.etree.ElementTree as ET
 import argparse
 import os
+import sys
 def parse_usr_opts():
     arg_formatter = lambda prog: argparse.RawTextHelpFormatter(prog,
             max_help_position=4, width = 80)
@@ -92,8 +93,7 @@ if __name__== '__main__':
 
     ####
     ## phenotype block
-    if os.path.isfile(os.path.join(args.sg, 'RESULTS', 'phenotypes',
-        'phenotypes.mat')) :
+    if os.path.isfile(os.path.join(args.sg, 'RESULTS', 'phenotype', 'phenotypes.mat')):
         pheno = ET.SubElement(root, "phenotype",
                 attrib={
                     'path': os.path.join(args.sg, 'RESULTS', 'phenotypes',
