@@ -1,6 +1,6 @@
 [submodule "lib/jvarkit"]
-	path = lib/jvarkit
-	url = https://github.com/lindenb/jvarkit.git
+  path = denovo/lib/jvarkit/
+  url = https://github.com/lindenb/jvarkit.git
 [submodule "lib/roary-3.8.2"]
-	path = lib/roary-3.8.2
-	url = https://github.com/sanger-pathogens/Roary.git
+  path = denovo/lib/Roary/ 
+  url = https://github.com/hzi-bifo/Roary.git

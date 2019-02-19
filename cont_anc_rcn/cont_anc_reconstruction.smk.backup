@@ -1,0 +1,15 @@
+TREE_OUT=config['TREE_OUT']
+EXPR_OUT=config['EXPR_OUT']
+C_ANCREC_OUT= config['C_ANCREC_OUT']
+rule all:
+    input:
+        output_dir=C_ANCREC_OUT
+        
+rule cont_anc_reconstruction:
+    input:
+        tree_f= TREE_OUT,
+        data_f= EXPR_OUT
+    output: 
+        output_dir=directory(C_ANCREC_OUT)
+    conda: 'ar_env.yaml'
+    script: 'contAncRec.R'
