@@ -68,35 +68,44 @@ output_suffix2<- 'deseq2.DifXpr.list'
 ### start DESeq2
 for (target_col in colnames(phe_df)){
   print(target_col)
-  ## detect target strains (as there may be NA phenotypes)
-  target_strains<- rownames(phe_df[phe_df[,target_col] %in% c('1','0'),])
-  target_strains<- target_strains[target_strains %in% rownames(rpg_mat)]
-  print(target_strains)
+  ## ensure the target column is binary
+  uq_all_phe<- unique(phe_df[,target_col])
+  uq_all_phe<- uq_all_phe[grepl('\\w+', uq_all_phe)]
+  if (length(uq_all_phe) != 2){
+    stop('Differential expression analysis is only for two classes. Please turn off this function')
+  }else{
+    print('Detected groups: \n')
+    print(paste(uq_all_phe, collapse= ','))
+    ## detect target strains (as there may be NA phenotypes)
+    target_strains<- rownames(phe_df[phe_df[,target_col] %in% uq_all_phe,])
+    target_strains<- target_strains[target_strains %in% rownames(rpg_mat)]
+    print(target_strains)
 
-  ## create colData
-  col_df<- data.frame(sample=target_strains, pheno= phe_df[target_strains, target_col])
-  rownames(col_df)<- target_strains
-  dds<-DESeqDataSetFromMatrix(countData = t(rpg_mat[target_strains,]),
-                              colData = col_df, 
-                              design = ~pheno) 
+    ## create colData
+    col_df<- data.frame(sample=target_strains, pheno= phe_df[target_strains, target_col])
+    rownames(col_df)<- target_strains
+    dds<-DESeqDataSetFromMatrix(countData = t(rpg_mat[target_strains,]),
+				colData = col_df, 
+				design = ~pheno) 
 
-  # determine the reference class
-  dds$pheno<- factor(dds$pheno, levels= c('1', '0'))
+    # determine the reference class
+    dds$pheno<- factor(dds$pheno, levels= uq_all_phe)
 
-  # start the analysis
-  register(MulticoreParam(cpu_num))
-  dds <- DESeq(dds, parallel= T)
-  resultsNames(dds)
-  res <- results(dds)
-  print(dim(res))
-  print(head(res))
-  res_filtered <- subset(res, (padj < alpha_cutoff) & (abs(log2FoldChange)>= lfc_cutoff))
-  print(dim(res_filtered))
-  print(head(res_filtered))
+    # start the analysis
+    register(MulticoreParam(cpu_num))
+    dds <- DESeq(dds, parallel= T)
+    resultsNames(dds)
+    res <- results(dds)
+    print(dim(res))
+    print(head(res))
+    res_filtered <- subset(res, (padj < alpha_cutoff) & (abs(log2FoldChange)>= lfc_cutoff))
+    print(dim(res_filtered))
+    print(head(res_filtered))
 
-  out_f1<- file.path(output_dir, paste0(target_col, output_suffix1, collapse= '_'))
-  write.table(res, out_f1, col.names=NA, sep= '\t', quote= F)
-  out_f2<- file.path(output_dir, paste0(target_col, output_suffix2, collapse= '_'))
-  write(rownames(res_filtered), out_f2)
+    out_f1<- file.path(output_dir, paste0(target_col, output_suffix1, collapse= '_'))
+    write.table(res, out_f1, col.names=NA, sep= '\t', quote= F)
+    out_f2<- file.path(output_dir, paste0(target_col, output_suffix2, collapse= '_'))
+    write(rownames(res_filtered), out_f2)
+
 
 }
