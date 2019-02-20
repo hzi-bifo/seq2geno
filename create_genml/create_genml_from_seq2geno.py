@@ -14,8 +14,6 @@ def parse_usr_opts():
 
     parser.add_argument('-v', action= 'version', 
         version='v.Beta')
-    parser.add_argument('--genml', dest= 'genml', 
-            help= 'genml filename', default= 'geno2pheno.gml')
     parser.add_argument('--seq2geno', dest= 'sg', 
             help= 'seq2geno project folder', required= True)
     parser.add_argument('--out', dest= 'out', 
@@ -65,53 +63,58 @@ if __name__== '__main__':
     ## genotype block
     geno = ET.SubElement(root, "genotype")
     #### for binary tables
-    if os.path.isdir(os.path.join(args.sg, 'RESULTS', 'bin_tables')):
-        bin_tables = ET.SubElement(geno, "tables",
-                attrib= {
-                    'path': os.path.join(args.sg, 'RESULTS', 'bin_tables'), 
-                    'normalization': "binary", 
-                    'transpose': "False"}
-            )
+    bin_tab_dir= os.path.abspath(os.path.join(args.sg, 'RESULTS',
+        'bin_tables'))
+    if os.path.isdir(bin_tab_dir):
+        bin_tables = ET.SubElement(
+            geno, "tables",
+            attrib= {
+                'path': bin_tab_dir, 
+                'normalization': "binary", 
+                'transpose': "False"})
         setattr(bin_tables, 'text', args.sg)
     #### for numeric features
-    if os.path.isdir(os.path.join(args.sg, 'RESULTS', 'num_tables')):
-        con_tables = ET.SubElement(geno, "tables",
-                attrib= {
-                    'path': os.path.join(args.sg, 'RESULTS', 'num_tables'), 
-                    'normalization': "numeric", 
-                    'transpose': "False"}
-            )
+    num_tab_dir= os.path.abspath(os.path.join(args.sg, 'RESULTS',
+        'num_tables'))
+    if os.path.isdir(num_tab_dir):
+        con_tables = ET.SubElement(
+            geno, "tables",
+            attrib= {
+                'path': num_tab_dir, 
+                'normalization': "numeric", 
+                'transpose': "False"})
         setattr(con_tables, 'text', args.sg)
     #### genome seq
-    if os.path.isdir(os.path.join(args.sg, 'RESULTS', 'assemblies')):
-        seq= ET.SubElement(geno, "sequence",
-                attrib={
-                    'path': os.path.join(args.sg, 'RESULTS', 'assemblies'), 
-                    'kmer': str(args.kmer)}
-            )
+    assem_dir= os.path.abspath(os.path.join(args.sg, 'RESULTS', 
+        'assemblies'))
+    if os.path.isdir(assem_dir):
+        seq= ET.SubElement(
+            geno, "sequence",
+            attrib={
+                'path': assem_dir, 
+                'kmer': str(args.kmer)})
         setattr(seq, 'text', args.sg)
 
     ####
     ## phenotype block
-    if os.path.isfile(os.path.join(args.sg, 'RESULTS', 'phenotype', 'phenotypes.mat')):
-        pheno = ET.SubElement(root, "phenotype",
-                attrib={
-                    'path': os.path.join(args.sg, 'RESULTS', 'phenotypes',
-                    'phenotypes.mat')}
-            )
+    phe_f= os.path.abspath(os.path.join(args.sg, 'RESULTS', 'phenotype',
+        'phenotypes.mat'))
+    if os.path.isfile(phe_f):
+        pheno = ET.SubElement(
+            root, "phenotype",
+            attrib={'path': phe_f})
         setattr(pheno, 'text', '\n')
     else:
         sys.exit('No phenotype was found')
 
     ####
     ## phylogeny block
-    if os.path.isfile(os.path.join(args.sg, 'RESULTS', 'phylogeny',
-        'tree.nwk')):
-        phy= ET.SubElement(root, "phylogentictree",
-                attrib={
-                    'path': os.path.join(args.sg, 'RESULTS', 'phylogeny',
-                    'tree.nwk')}
-            )
+    phy_f=os.path.abspath(os.path.join(args.sg, 'RESULTS', 'phylogeny',
+        'tree.nwk'))
+    if os.path.isfile(phy_f):
+        phy= ET.SubElement(
+            root, "phylogentictree",
+            attrib={'path': phy_f})
         setattr(phy, 'text', '\n')
     else:
         sys.exit('No phylogeny was found')
@@ -145,7 +148,7 @@ if __name__== '__main__':
     rough_string= ET.tostring(root, 'utf-8')
     reparsed= minidom.parseString(rough_string)
     indented_string= reparsed.toprettyxml(indent="  ")
-    genml_f= args.genml
+    genml_f= os.path.join(args.sg, 'seq2geno.gml')
     with open(genml_f, 'w') as genml_fh:
             genml_fh.write(indented_string)
 
