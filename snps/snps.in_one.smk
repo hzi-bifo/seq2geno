@@ -199,9 +199,9 @@ rule redirect_and_preprocess_reads:
     params:
         adaptor_f= adaptor_f,
         tmp_f1= lambda wildcards: os.path.join(
-            new_reads_dir, '{}.fastq_cleaned.1'.format(wildcards.strain)),
+            new_reads_dir, '{}.cleaned.1.fq'.format(wildcards.strain)),
         tmp_f2= lambda wildcards: os.path.join(
-            new_reads_dir, '{}.fastq_cleaned.2'.format(wildcards.strain))
+            new_reads_dir, '{}.cleaned.2.fq'.format(wildcards.strain))
     shell:
          '''
         if [ -e "{params.adaptor_f}" ]
