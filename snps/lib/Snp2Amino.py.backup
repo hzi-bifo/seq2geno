@@ -18,6 +18,7 @@
 import math, argparse, sys, Bio, logging 
 #import warnings
 from collections import defaultdict
+import Bio
 from Bio import SeqIO
 from Bio.Seq import Seq
 #from Bio import BiopythonWarning

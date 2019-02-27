@@ -98,6 +98,8 @@ for seq_record in SeqIO.parse(Args.GbkFile, "genbank"):
     if not feature.type=="misc_feature" and not feature.type=="unsure":
       if "locus_tag" in feature.qualifiers.keys():
         locus = feature.qualifiers["locus_tag"][0]
+        if locus in GenDict:
+            sys.exit('Repeated locus id in genbank file: {}'.format(locus))
         if locus in SnpDict.keys():
           start = feature.location.start
           end = feature.location.end

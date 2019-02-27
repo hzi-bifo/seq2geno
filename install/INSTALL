@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Step 1. ensure your Conda is installed
-# Step 2. edit SEQ2GENO_HOME
-# Step 3. add the below two lines in your home/.profile
+# Step 2. check where the folder of seq2geno is 
+# Step 3. point SEQ2HOME to where seq2geno is located, and run the below lines, and add them in your home/.profile
 export SEQ2GENO_HOME=$HOME/bin/seq2geno
 export PATH=${realpath $SEQ2GENO_HOME}/main:$PATH
 export PATH=${realpath $SEQ2GENO_HOME}/create_genml:$PATH
