@@ -1,8 +1,8 @@
 # Seq2Geno
 
 ### What is Seq2Geno?
-Seq2Geno is a pipeline tool for genomic analysis about bacterial populations. Compared to shell scripts, Seq2Geno uses Snakemake to schedule the processes and relies on Conda to manage the computational environments. The two tools improve the reproducibility of the computational results. 
-Seq2Geno outputs are formatted for Geno2Pheno, which trains phenotype predictors based on genomic features. 
+Seq2Geno is a computational workflow for genomic analysis of bacterial populations. Seq2Geno uses Snakemake to schedule the processes and relies on Conda to manage the computational environments. The two tools improve the reproducibility of the computational results. 
+Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which trains phenotype predictors based on genomic features. 
 
 ### What does Seq2Geno cover?
 - detect single nucleotide variants
