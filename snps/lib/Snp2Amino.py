@@ -98,8 +98,6 @@ for seq_record in SeqIO.parse(Args.GbkFile, "genbank"):
     if not feature.type=="misc_feature" and not feature.type=="unsure":
       if "locus_tag" in feature.qualifiers.keys():
         locus = feature.qualifiers["locus_tag"][0]
-        if locus in GenDict:
-            sys.exit('Repeated locus id in genbank file: {}'.format(locus))
         if locus in SnpDict.keys():
           start = feature.location.start
           end = feature.location.end
@@ -108,6 +106,11 @@ for seq_record in SeqIO.parse(Args.GbkFile, "genbank"):
             gene_seq = seq_record.seq[start:end]
           else:
             gene_seq = seq_record.seq[start:end].reverse_complement()
+          # repeated locus ids
+          if locus in GenDict and (start != GenDict[locus][0] or end !=
+                  GenDict[locus][1]):
+            sys.exit('Repeated and incongruent locus ids in genbank file: {}'.format(locus))
+          
           GenDict[locus] = [int(start), int(end), gene_seq, strand]
 
 
