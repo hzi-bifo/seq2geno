@@ -1,26 +1,27 @@
 name: indel_env
 channels:
+  - hcc
   - bioconda
   - conda-forge
   - defaults
 dependencies:
   - java-jdk=8.0.112=1
   - pyvcf=0.6.8=py27_0
-  - blas=1.1=openblas
-  - ca-certificates=2018.11.29=ha4d7672_0
-  - certifi=2018.11.29=py27_1000
+  - ca-certificates=2019.3.9=hecc5488_0
+  - certifi=2019.3.9=py27_0
   - libffi=3.2.1=hf484d3e_1005
   - libgcc-ng=7.3.0=hdf63c60_0
   - libgfortran-ng=7.2.0=hdf63c60_3
   - libstdcxx-ng=7.3.0=hdf63c60_0
+  - mkl_fft=1.0.11=py27h14c3975_0
+  - mkl_random=1.0.2=py27h637b7d7_2
   - ncurses=6.1=hf484d3e_1002
-  - numpy=1.16.0=py27_blas_openblash1522bff_1000
   - openblas=0.3.3=h9ac9557_1001
   - openjdk=8.0.112=zulu8.19.0.1_3
-  - openssl=1.0.2p=h14c3975_1002
+  - openssl=1.1.1b=h14c3975_1
   - pandas=0.23.4=py27h637b7d7_1000
   - pip=18.1=py27_1000
-  - python=2.7.15=h938d71a_1006
+  - python=2.7.15=h721da81_1008
   - python-dateutil=2.7.5=py_0
   - pytz=2018.9=py_0
   - readline=7.0=hf8c457e_1001
@@ -30,6 +31,12 @@ dependencies:
   - tk=8.6.9=h84994c4_1000
   - wheel=0.32.3=py27_0
   - zlib=1.2.11=h14c3975_1004
+  - blas=1.0=mkl
+  - intel-openmp=2019.1=144
+  - mkl=2019.1=144
+  - numpy=1.16.2=py27h7e9f1db_0
+  - numpy-base=1.16.2=py27hde5b4d6_0
+  - jvarkit-msa2vcf=1.0=0
   - pip:
     - backports-abc==0.5
     - backports.shutil-get-terminal-size==1.0.0
