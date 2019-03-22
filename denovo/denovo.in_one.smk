@@ -206,14 +206,13 @@ strain= list(dna_reads.keys()))
         gpa_rtab=os.path.join('{roary_dir}', 'gene_presence_absence.Rtab'),
         prot_tab=os.path.join('{roary_dir}', 'clustered_proteins')
     conda: 'perl5_22_env.yml'
-    #conda: 'perl5_20_env.yml'
-    #conda: 'perl_for_prokka.yml'
     params:
         check_add_perl_env_script= 'install_perl_mods.sh',
         roary_bin= 'roary'
     shadow: "shallow"
     shell:
         '''
+        set +u
         {params.check_add_perl_env_script}
         ROARY_HOME=$(dirname $(dirname $(which roary)))
         PERL5LIB=$ROARY_HOME/lib:\
@@ -221,14 +220,11 @@ $ROARY_HOME/build/bedtools2/lib:\
 $PERL5LIB
         echo $PERL5LIB
         rm -r {wildcards.roary_dir}
-        {params.roary_bin} -f {wildcards.roary_dir} -e -n -v {input.gff_files} -r -p 30 -g 100000 -z
+        {params.roary_bin} -f {wildcards.roary_dir} \
+-e -n -v {input.gff_files} -r -p 30 -g 100000 -z
+        set -u
         ''' 
 
-#        PERL5LIB=$CONDA_PREFIX/lib/perl5/5.20.3:\
-#$CONDA_PREFIX/lib/perl5/site_perl/5.22.0/x86_64-linux-thread-multi:\
-#$CONDA_PREFIX/lib/perl5/site_perl/5.22.0/:\
-#$ROARY_HOME/lib:\
-#$ROARY_HOME/build/bedtools2/lib:$PERL5LIB
 rule create_gff:
     input: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
     output: 

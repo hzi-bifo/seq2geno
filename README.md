@@ -28,11 +28,11 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 
 	Please don't forget the flag `--recursive`. It will help to download the required submodules (i.e. the external repositories).
 
-    1. Install the core environment:
+    2. Install the core environment:
 
 	The core environment is required to initiate Seq2Geno. Please follow the few describtion in install/INSTALL
 
-    1. Install the process-spcific environment:
+    3. Install the process-spcific environment:
 	
 	All the processes in Seq2Geno do not share the same pool of computational tools. The process-specific tools, however, do not need to be installed manually, because they are already listed in yaml files that Conda can parse. The installation using Conda is automatically launched when Seq2Geno is used for the first time. 
 

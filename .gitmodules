@@ -1,6 +1,6 @@
 [submodule "denovo/lib/Roary"]
 	path = denovo/lib/Roary
 	url = https://github.com/hzi-bifo/Roary.git
-[submodule "denovo/lib/jvarkit"]
-	path = denovo/lib/jvarkit
-	url = https://github.com/lindenb/jvarkit.git
+#[submodule "denovo/lib/jvarkit"]
+#	path = denovo/lib/jvarkit
+#	url = https://github.com/lindenb/jvarkit.git
