@@ -155,6 +155,7 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
         ## run the process
         success=snakemake.snakemake(
             snakefile= env_dict['SNAKEFILE'],
+            restart_times= 3, 
             cores= max_cores,
             configfile=config_f,
             workdir= os.path.dirname(config_f),

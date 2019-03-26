@@ -259,6 +259,8 @@ rule spades_create_assembly:
             wildcards.strain, str(n))) for n in [1,2]]
     output: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
     threads:1
+    resources:
+        mem_mb=lambda wildcards, attempt: attempt * 10000
     params:
         spades_outdir= os.path.join(out_spades_dir, '{strain}'),
         SPADES_OPT='--careful',
