@@ -1,8 +1,0 @@
-list_f: 'data/samples.10.dna_full.tsv'
-REF_FA: 'reference.fa'
-REF_GFF: 'reference.gff'
-results_dir: 'results'
-seq_list: 'seq_lists'
-families_seq_dir: 'families'
-aln_f: 'OneLarge.gapReplaced.var2.gt90.aln'
-tree_f: 'OneLarge.gapReplaced.var2.gt90.fasttree'
