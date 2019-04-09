@@ -37,12 +37,6 @@ def main():
         help='working directory')
     project_arg.add_argument('--cores', dest= 'cores', default= 1,
         help='number of cpus')
-#    project_arg.add_argument('--mem', dest= 'memory', default= 10,
-#        help='max memory size (Gb)')
-#    project_arg.add_argument('--log', dest= 'log', default= 'seq2geno.log', 
-#        help='working records')
-#    project_arg.add_argument('-c', dest='cmprs', action= 'store_true',
-#        help='redundancy removal of binary features')
     project_arg.add_argument('-dryrun', dest= 'dryrun', action= 'store_true',
         help='only show the processes')
     project_arg.add_argument('--adaptor_f', dest= 'adaptor',type= str,
@@ -69,22 +63,6 @@ def main():
     ref_arg.add_argument('--ref-gff', dest='ref_gff', type= str,
         help='reference genome annotation (gff3)', default= '-')
 
-#    ## snps
-#    snps_arg= parser.add_argument_group('snps')
-#    snps_arg.add_argument('--snps_f', dest='snps_f', type= str,
-#        help='output snps file', default= '-')
-#
-#    ## denovo
-#    denovo_arg= parser.add_argument_group('denovo')
-#    denovo_arg.add_argument('--gpa_f', dest='gpa_f', type= str,
-#        help='output gene pres/abs file', default= '-')
-#
-#    ## phylo
-#    phylo_arg= parser.add_argument_group('phylo')
-#    phylo_arg.add_argument('--tree_f', dest='tree_f', type= str,
-#        help='output tree file', default= '-')
-#
-
     ## core functions
     func_arg= parser.add_argument_group('functions')
     func_arg.add_argument('-e', dest='expr', action= 'store_true',
@@ -102,8 +80,6 @@ def main():
 
     ## expr
     expr_arg= parser.add_argument_group('expr')
-#    expr_arg.add_argument('--expr_f', dest='expr_f', type= str,
-#        help='output expression table', default= '-')
     expr_arg.add_argument('-de', dest='de', action= 'store_true',
         default= False, help='differential expression analysis')
     expr_arg.add_argument('-ar', dest='ar', action= 'store_true',
@@ -111,7 +87,7 @@ def main():
 
     ######
     #####
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
     args.cores= int(args.cores)
 #    print(args)
 #    option_rules(args)
