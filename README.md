@@ -19,14 +19,15 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
     - conda (tested version: 4.5.11)
     - python (tested verson: 3.6)
     - Linux (tested version: Debian GNU/Linux 8.8 jessie)
+    - git (tested version: 2.17)
 
 - Installation of Seq2Geno
 
     1. Download Seq2Geno:
 
-	`git clone --recursive https://github.com/hzi-bifo/seq2geno.git`
+	`git clone --recurse-submodules https://github.com/hzi-bifo/seq2geno.git`
 
-	Please don't forget the flag `--recursive`. It will help to download the required submodules (i.e. the external repositories).
+	The flag `--recurse-submodules` will help to download the required submodules (i.e. the external repositories). The flag is available only in git version >2.13, so the users of earlier versions should considering finding the proper method to download the submodules. 
 
     2. Install the core environment:
 
