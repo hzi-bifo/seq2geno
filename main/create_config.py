@@ -124,7 +124,6 @@ class diffexpr_args:
         self.lfc= 1
 
 def create_yaml_f(args, wd, config_f):
-    print(config_f)
     import yaml
     import os
     try:
@@ -137,13 +136,14 @@ def create_yaml_f(args, wd, config_f):
         config_fh= open(config_f, 'w')
         yaml.dump(vars(args), config_fh, default_flow_style= False)
         config_fh.close()
-    except IOError as e:
+    except Exception as e:
         from datetime import datetime
         print('ERROR ({})'.format(proc))
         print('{}\t{}\n'.format(
             datetime.now().isoformat(' ',timespec= 'minutes'),
-            '{} cannot be inaccessible'.format(target_dir)))
+            str(e)))
         sys.exit()
+
 
 def main(args):
     print('Creating config files')

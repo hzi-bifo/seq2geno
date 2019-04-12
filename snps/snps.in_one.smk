@@ -150,6 +150,7 @@ rule my_samtools_SNP_pipeline:
     conda: 'snps_tab_mapping.yml'
     shell:
         """
+        sleep 10
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:\
 $CONDA_PREFIX/lib/perl5/5.22.2:\
 $CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:\
@@ -180,6 +181,7 @@ rule my_stampy_pipeline_PE:
     conda: 'snps_tab_mapping.yml'
     shell:
         """
+        sleep 10
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2:$PERL5LIB
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:$PERL5LIB
