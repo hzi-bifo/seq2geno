@@ -20,8 +20,8 @@ group_out_f= snakemake.output['GROUPS']
 comp_out_f= snakemake.output['NONRDNT']
 
 ## read table
-df= pd.read_csv(f, sep= '\t', header= 0, index_col= 0, dtype= 'str', na_values=
-        [''], keep_default_na= False)
+df= pd.read_csv(f, sep= '\t', header= 0, index_col= 0, low_memory=False,
+        dtype= str, na_values=[''], keep_default_na= False)
 check_input(df)
 
 ## group the features
