@@ -1,4 +1,4 @@
-
+#!/bin/bash
 #align illumina reads using stampy and art-file for visualization
 
 prefix=$1	# used to name the different output files

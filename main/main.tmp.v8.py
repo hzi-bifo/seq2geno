@@ -263,10 +263,4 @@ if __name__=='__main__':
     import UserOptions
     args= UserOptions.main()
     main(args)
-    #from pprint import pprint
-    #pprint(args)
-
-    ## create genml
-
-    ## run geno2pheno
 

@@ -1,6 +1,4 @@
 #!/usr/bin/env python2
-
-
 """
 -------------------------------------------------------------------------------
  Name:         Snp2Amino
@@ -18,10 +16,10 @@
 import math, argparse, sys, Bio, logging 
 #import warnings
 from collections import defaultdict
-import Bio
 from Bio import SeqIO
 from Bio.Seq import Seq
 #from Bio import BiopythonWarning
+import re
 
 #warnings.filterwarnings("error")
 
@@ -51,8 +49,9 @@ GenDict = {}
 # Set up logging so that every logging message is printed to the specified log
 # file via specifying the logging level as "DEBUG".
 if "." in Args.OutFile:
-  name = Args.OutFile.split(".")[:-1]
-  logfile = "%s.log" % "".join(name)
+  #name = Args.OutFile.split(".")[:-1]
+  #logfile = "%s.log" % "".join(name)
+  logfile = re.sub('[^\.]+$', '\.log', Args.OutFile)
 else:
   logfile = "%s.log" % Args.OutFile
 
@@ -78,7 +77,7 @@ with open(Args.Table) as snp:
       ref = info[2]
       alt = info[3]
       Table[gene].append(info)
-      SnpDict[gene].append([pos, ref, alt])
+      SnpDict[gene].append([pos, ref, alt, info])
     else:
       head = line
 
@@ -106,11 +105,6 @@ for seq_record in SeqIO.parse(Args.GbkFile, "genbank"):
             gene_seq = seq_record.seq[start:end]
           else:
             gene_seq = seq_record.seq[start:end].reverse_complement()
-          # repeated locus ids
-          if locus in GenDict and (start != GenDict[locus][0] or end !=
-                  GenDict[locus][1]):
-            sys.exit('Repeated and incongruent locus ids in genbank file: {}'.format(locus))
-          
           GenDict[locus] = [int(start), int(end), gene_seq, strand]
 
 
@@ -151,7 +145,8 @@ for gene in SnpDict:
   if gene in GenDict:
     for snp in SnpDict[gene]:
       if len(snp[1])>1 or len(snp[2])>1:
-        snp.extend(("none", "none"))
+        snp.insert(3, "none")
+        snp.insert(4, "none")
       else:
         strand = GenDict[gene][3]
         logging.info("gene: %s, strand: %s" % (gene, strand))
@@ -180,15 +175,18 @@ for gene in SnpDict:
         if len(gene_seq[start:end]) % 3 == 0:
           orig = str(gene_seq[start:end].translate())
           muta = str(snp_seq[start:end].translate())
-          snp.extend((orig, muta))
+          snp.insert(3, orig)
+          snp.insert(4, muta)
         else:
           logging.warning("Gene %s contains a partial codon. Make sure that's all right." %gene)
-          snp.extend(("none", "none"))
+          snp.insert(3, "none")
+          snp.insert(4, "none")
         #except BiopythonWarning:
           #print ""gene, snp
   else:
     for snp in SnpDict[gene]:
-      snp.extend(("none", "none"))
+        snp.insert(3, "none")
+        snp.insert(4, "none")
 
 
 '''    Combine original table with amino acid information    '''
@@ -220,19 +218,18 @@ with open(Args.OutFile, "w") as out:
   if Args.NonSyn == "all":
     for gene in sorted(SnpDict.keys()):
       for item in SnpDict[gene]:
-        for line in Table[gene]:
-          if line[1]==str(item[0]) and line[2]==item[1] and line[3]==item[2]:
-            final = line[:]
-            final[4:4] = item[3:]
-            out.write("\t".join(final) +"\n")
-            break
+        #for line in Table[gene]:
+          #if line[1]==str(item[0]) and line[2]==item[1] and line[3]==item[2]:
+            #final = line[:]
+            #final[4:4] = item[3:]
+            out.write("\t".join(item[5][:4] + item[3:5] + item[5][4:]) +"\n")
   elif Args.NonSyn == "non-syn":
     for gene in sorted(SnpDict.keys()):
       for item in SnpDict[gene]:
-        for line in Table[gene]:
+        #for line in Table[gene]:
           if item[3] != "none" and item[4] != "none" and item[3] != item[4]:
-            if line[1]==str(item[0]) and line[2]==item[1] and line[3]==item[2]:
-              final = line[:]
-              final[4:4] = item[3:]
-              out.write("\t".join(final) +"\n")
-              break
+            #if line[1]==str(item[0]) and line[2]==item[1] and line[3]==item[2]:
+              #final = line[:]
+              #final[4:4] = item[3:]
+              #out.write("\t".join(final) +"\n")
+              out.write("\t".join(item[5][:4] + item[3:5] + item[4][6:]) +"\n")

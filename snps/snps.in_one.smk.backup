@@ -3,6 +3,7 @@ import pandas as pd
 from snakemake.utils import validate
 
 list_f= config['list_f']
+#list_f= 'data/samples.10.dna_full.tsv'
 dna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
@@ -22,10 +23,10 @@ snps_aa_bin_mat=config['snps_aa_bin_mat']
 nonsyn_snps_aa_bin_mat=config['nonsyn_snps_aa_bin_mat']
 adaptor_f= config['adaptor']
 new_reads_dir= config['new_reads_dir']
-table_subset_num=30
 
 rule all:
     input:
+        expand('{strain}.tar.gz', strain= strains),
         snps_aa_bin_mat,
         nonsyn_snps_aa_bin_mat,
         expand('{in_tab}_{info}', 
@@ -41,6 +42,20 @@ rule remove_redundant_feat:
     conda: 'cmpr_env.yaml'
     script: 'featCompress.py'
 
+rule compress_data:
+    input:
+        ## must ensure the table is done
+        snps_aa_bin_mat=snps_aa_bin_mat,
+        nonsyn_snps_aa_bin_mat=nonsyn_snps_aa_bin_mat,
+        to_compress=['{strain}.sam','{strain}.art','{strain}.sin','{strain}.flatcount',
+            '{strain}.rpg','{strain}.stats','{strain}.bam','{strain}.raw.bcf','{strain}.flt.vcf']
+    output:
+        cmpr_out= '{strain}.tar.gz'
+    shell:
+        '''
+        env GZIP=-9 tar -czvf {output.cmpr_out} {input.to_compress}
+        '''
+
 rule create_binary_table:
     input:
         snps_aa_table=snps_aa_table,
@@ -48,17 +63,22 @@ rule create_binary_table:
     output:
         snps_aa_bin_mat=snps_aa_bin_mat,
         nonsyn_snps_aa_bin_mat=nonsyn_snps_aa_bin_mat
-#    conda: 'py27.yml'
-    params:
-        parse_snps_tool= 'parse_snps.py'
-    threads: 1
-    shell:
-        '''
-        {params.parse_snps_tool} {input.snps_aa_table} \
-{output.snps_aa_bin_mat} 
-        {params.parse_snps_tool} {input.nonsyn_snps_aa_table} \
-{output.nonsyn_snps_aa_bin_mat} 
-        '''
+    run:
+        import pandas as pd
+        import re
+        def tab_transform(tab_f):
+            tab=pd.read_csv(tab_f, sep='\t', header= 0)
+            target_columns=['gene', 'pos', 'ref', 'alt', 'ref aa','alt aa']
+            tab['feat_name']=tab.apply(lambda r:
+    '_'.join(r[target_columns].apply(lambda x: str(x)).tolist()), axis=1)
+            mat=tab.set_index('feat_name').drop(target_columns, axis=1).transpose()
+            mat=mat.applymap(lambda x: '1' if re.search('[0-9]+', str(x)) else '0')
+            return(mat)
+        all_mat=tab_transform(input.snps_aa_table)
+        all_mat.to_csv(output.snps_aa_bin_mat, sep= '\t', index_label= '')
+        nonsyn_mat=tab_transform(input.nonsyn_snps_aa_table)
+        nonsyn_mat.to_csv(output.nonsyn_snps_aa_bin_mat, sep= '\t', index_label= '')
+        
 
 rule create_table:
     input:
@@ -70,40 +90,11 @@ rule create_table:
     output:
         snps_table=snps_table
     conda: 'snps_tab_mapping.yml'
-    params:
-        split_tool='split_for_mutation_table.py',
-        isol_subset_num= table_subset_num,
-        isol_subset_top= table_subset_num-1,
-        isol_subset_dir= 'isols_subset',
-        mut_tab_tool= 'mutation_table.py',
-        snps_subset_dir= 'snps_subset'
-    shadow: "shallow"
-    threads: 30
+    params: 
+        tool_script='mutation_table.edit.py'
     shell:
         '''
-        if [ ! -d {params.isol_subset_dir} ]; then
-          mkdir -p {params.isol_subset_dir};
-        fi
-        if [ ! -d {params.snps_subset_dir} ]; then
-          mkdir -p {params.snps_subset_dir};
-        fi
-        {params.split_tool} {input.dict_file} \
- {params.isol_subset_num} \
- {params.isol_subset_dir}
-
-        for i in {{0..{params.isol_subset_top}}}; \
-do echo "{params.mut_tab_tool} -f <(cat {input.dict_file} ) \
- -a {input.annofile} \
- -o {params.snps_subset_dir}/all_snps_$i.txt \
- --restrict_samples {params.isol_subset_dir}/isols_${{i}}.txt\
- --force_homozygous"; done \
-| parallel -j {threads} --joblog {params.snps_subset_dir}/joblog_mutation_table.txt
-
-        i=$(for i in {{0..{params.isol_subset_top}}}; \
- do echo -n " <(cut -f5-  {params.snps_subset_dir}/all_snps_${{i}}.txt)"; done)
-
-        echo "paste <(cut -f1-4  {params.snps_subset_dir}/all_snps_0.txt )  $i\
-> {output.snps_table}" | bash
+        {params.tool_script} -f {input.dict_file} -a {input.annofile} -o {output.snps_table}
         '''
 
 rule include_aa_into_table:
@@ -114,17 +105,12 @@ rule include_aa_into_table:
         snps_aa_table=snps_aa_table,
         nonsyn_snps_aa_table=nonsyn_snps_aa_table
     conda: 'snps_tab_mapping.yml'
-    params:
-        to_aa_tool= 'Snp2Amino.py' 
-    threads: 1
     shell:
-        """
-        {params.to_aa_tool} -f {input.snps_table} -g {input.ref_gbk} \
--n all -o {output.snps_aa_table}
-        awk '{{if($6 != "none" && $5 != $6){{print $0}}}}' {output.snps_aa_table} > \
-{output.nonsyn_snps_aa_table}
-        """
-
+        '''
+        Snp2Amino.py -f {input.snps_table} -g {input.ref_gbk} -o {output.snps_aa_table}
+        Snp2Amino.py -n non-syn -f {input.snps_table} -g {input.ref_gbk} \
+-o {output.nonsyn_snps_aa_table}
+        '''
 
 rule isolate_dict:
     input:
@@ -219,11 +205,11 @@ rule redirect_and_preprocess_reads:
         tmp_f2= lambda wildcards: os.path.join(
             new_reads_dir, '{}.cleaned.2.fq'.format(wildcards.strain))
     shell:
-        '''
+         '''
         if [ -e "{params.adaptor_f}" ]
         then
             fastq-mcf -l 50 -q 20 {params.adaptor_f} {input.infile1} {input.infile2} \
-  -o {params.tmp_f1} -o {params.tmp_f2} > {output.log_f}
+-o {params.tmp_f1} -o {params.tmp_f2} > {output.log_f}
             gzip -9 {params.tmp_f1}
             gzip -9 {params.tmp_f2}
         else
@@ -231,8 +217,8 @@ rule redirect_and_preprocess_reads:
             echo 'No trimming' > {output.log_f}
             echo $(readlink {input.infile1}) >> {output.log_f}
             echo $(readlink {input.infile2}) >> {output.log_f}
-            cp {input.infile1} {output.f1}
-            cp {input.infile2} {output.f2}
+            ln  -s {input.infile1} {output.f1}
+            ln  -s {input.infile2} {output.f2}
         fi
         '''
 

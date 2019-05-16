@@ -5,7 +5,7 @@
 # Purpose:      take multiple VCF files, flatcount files and the annotation to
 #               create a comprehensible mutations table.
 #
-# Author:       spo12
+# Author of first version:       spo12
 #
 # Created:      23.09.2013
 # Last Changed: 03.06.2016
@@ -43,7 +43,8 @@ Parser.add_argument("-r", dest="Region", metavar="<genomic region>",
                     help="genomic region of interest (instead of whole genome), format: start-end")
 Parser.add_argument("-o", dest="OutFile", default="all_mutations.tab", metavar="<filename>",
                     help="path and name of the output file")
-
+Parser.add_argument("--force_homozygous", action = "store_true", help = "if set, convert heterozygous to the next most likely SNP call") 
+Parser.add_argument("--restrict_samples", help = "restrict to these samples for coverage check" ) 
 Args = Parser.parse_args()
 
 
@@ -58,10 +59,8 @@ if Args.Region:
   region = Args.Region
   first = int(region.split("-")[0])
   last = int(region.split("-")[1])
-#print first, last
-#print type(first), type(last) #int
 
-names = []
+names = set()
 mutations = defaultdict(list)
 
 
@@ -127,78 +126,77 @@ with open(Args.AnnoFile) as anno:
 # and compare that to the threshold. If the SNP position is well enough covered,
 # continue with checking the genomic region and SNP score threshold as explained
 # above.
-print('Start reading variant calling results...')
+
+def assign_key(pos, ref, alt, name, qual): 
+    key = pos +"_"+ ref +"_"+ alt
+    mutations[key].append((name, qual))
+
+def force_homozygous(pos, ref, alt, name, qual):
+    if Args.force_homozygous:
+        if prob.startswith("0/1") and len(ref.split(",")) == 1:
+            probs = prob.split(":")[1].split(",")
+            if int(probs[2]) < int(probs[0]):
+                assign_key(pos, ref, alt, name, qual)
+        else:
+            assign_key(pos, ref, alt, name, qual)
+    else:
+        assign_key(pos, ref, alt, name, qual)
+
+
+def reads(pos, ref, alt, name, qual, flat):
+    if not Args.Region:
+        region(pos, ref, alt, name, qual)
+    else:
+        flt_pos = int(pos)*6
+        flat.seek(flt_pos, 0)
+        string = flat.read(6)
+        if string:
+            region(pos, ref, alt, name, qual)
+
+def region(pos, ref, alt, name, qual):
+    if not Args.Region:
+        score(pos, ref, alt, name, qual)
+    else:
+        if int(pos) >= first and int(pos) <= last:
+            score(pos, ref, alt, name, qual)
+
+def score(pos, ref, alt, name, qual):
+    if Args.Score:
+        force_homozygous(pos, ref, alt, name, qual)
+    else:
+        if float(qual)>= Args.Score:
+            force_homozygous(pos, ref, alt, name, qual)
+
+
+
 with open(Args.DictFile) as infile:
   for line in infile:
     name = line.rstrip()
-    print(name)
-    names.append(name)
+    names.add(name)
+    #filename = name +".raw.vcf"
     filename = name +".flt.vcf"
-    with open(filename) as vcf:
-      if not Args.Reads:
-        for line in vcf:
-          if not line.startswith("#"):
-            line = line.rstrip()
-            info = line.split("\t")
-            pos = info[1]
-            ref = info[3]
-            alt = info[4]
-            qual = info[5]
-            #print info
-            if not Args.Region:
-              if not Args.Score:
-                key = pos +"_"+ ref +"_"+ alt
-                mutations[key].append((name, qual))
-              else:
-                if float(qual)>= Args.Score:
-                  key = pos +"_"+ ref +"_"+ alt
-                  mutations[key].append((name, qual))
-            else:
-              if int(pos) >= first and int(pos) <= last:
-                if not Args.Score:
-                  key = pos +"_"+ ref +"_"+ alt
-                  mutations[key].append((name, qual))
-                else:
-                  if float(qual)>= Args.Score:
-                    key = pos +"_"+ ref +"_"+ alt
-                    mutations[key].append((name, qual))
-      else:
+    flat = None
+    if region:
         flatcount = name +".flatcount"
-        with open(flatcount) as flat:
-          for line in vcf:
-            if not line.startswith("#"):
-              line = line.rstrip()
-              info = line.split("\t")
-              pos = info[1]
-              ref = info[3]
-              alt = info[4]
-              qual = info[5]
-              flt_pos = int(pos)*6
-              flat.seek(flt_pos, 0)
-              string = flat.read(6)
-              if string:
-                number = int(string)
-                if number >= Args.Reads:
-                  if not Args.Region:
-                    if not Args.Score:
-                      key = pos +"_"+ ref +"_"+ alt
-                      mutations[key].append((name, qual))
-                    else:
-                      if float(qual)>= Args.Score:
-                        key = pos +"_"+ ref +"_"+ alt
-                        mutations[key].append((name, qual))
-                  else:
-                    if int(pos) >= first and int(pos) <= last:
-                      if not Args.Score:
-                        key = pos +"_"+ ref +"_"+ alt
-                        mutations[key].append((name, qual))
-                      else:
-                        if float(qual)>= Args.Score:
-                          key = pos +"_"+ ref +"_"+ alt
-                          mutations[key].append((name, qual))
-
+        flat = open(flatcount)
+    with open(filename) as vcf:
+      for line in vcf:
+        if not line.startswith("#"):
+          line = line.rstrip()
+          info = line.split("\t")
+          pos = info[1]
+          ref = info[3]
+          alt = info[4]
+          qual = info[5]
+          prob = info[9]
+          reads(pos, ref, alt, name, qual, flat) 
+    if Args.Region:
+        flat.close()
+#restrict to subset of samples if specified
+if Args.restrict_samples:
+    with open(Args.restrict_samples) as f:
+        names = set([s.strip() for s in f])
 # Sort the list of samples/file names to speed up the next loop.
-names.sort()
 
 
 ##    --     Find Read Counts   --    ##
@@ -206,25 +204,45 @@ names.sort()
 # not there and not because this region is not covered with reads, read the
 # ".flatcount" file for each isolate, then loop over the mutations dictionary,
 # take the position of each mutation and check the number of reads in the file.
+mut2sample = {}
+for mut in mutations:
+    mut2sample[mut] = set()
+    for x in mutations[mut]:
+        mut2sample[mut].add(x[0])
+for item in names:
+    filename = item +".flatcount"
+    with open(filename) as flat:
+        for key in mutations:
+            muts = []
+            if item not in mut2sample[key]:
+              pos = int(key.split("_")[0])*6
+              flat.seek(pos, 0)
+              string = flat.read(6)
+              if string:
+                number = int(string)
+                if number == 0:
+                  mutations[key].append((item, "NR"))
+                else:
+                  mutations[key].append((item, ""))
 
-for key in mutations:
-  muts = []
-  for x in mutations[key]:
-    muts.append(x[0])
-  for item in names:
-    if item not in muts:
-      filename = item +".flatcount"
-      pos = int(key.split("_")[0])*6
-      with open(filename) as flat:
-        flat.seek(pos, 0)
-        string = flat.read(6)
-        if string:
-          number = int(string)
-          if number == 0:
-            mutations[key].append((item, "NR"))
-          else:
-            mutations[key].append((item, " "))
-
+#for key in mutations:
+#  muts = []
+#  for x in mutations[key]:
+#    muts.append(x[0])
+#  for item in names:
+#    if item not in muts:
+#      filename = item +".flatcount"
+#      pos = int(key.split("_")[0])*6
+#      with open(filename) as flat:
+#        flat.seek(pos, 0)
+#        string = flat.read(6)
+#        if string:
+#          number = int(string)
+#          if number == 0:
+#            mutations[key].append((item, "NR"))
+#          else:
+#            mutations[key].append((item, ""))
+#
 
 ##    --       Write Output     --    ##
 # Open/create the output file and write a header into it, including the names
@@ -234,7 +252,7 @@ for key in mutations:
 
 with open(Args.OutFile, "w") as out:
   out.write("gene\tpos\tref\talt")
-  for item in names:
+  for item in sorted(names):
     try:
       name = item.split("/")[-1]
     except:
@@ -242,7 +260,6 @@ with open(Args.OutFile, "w") as out:
     out.write("\t"+ name)
   out.write("\n")
   for key in sorted(mutations):
-    print('line 244\t{}'.format(key))
     info = key.split("_")
     pos = info[0]
     ref = info[1]
@@ -253,5 +270,6 @@ with open(Args.OutFile, "w") as out:
     else:
       out.write(gene +"\t"+ pos +"\t"+ ref +"\t"+ alt)
     for item in sorted(mutations[key]):
-      out.write("\t"+ item[1])
+      if item[0] in names:
+        out.write("\t"+ item[1])
     out.write("\n")

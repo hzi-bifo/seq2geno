@@ -222,12 +222,15 @@ rule call_var:
         vcf='{tmp_d}/{strain}/bwa.vcf',
         vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
         vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.gz.tbi'
+    params:
+        freebayes_params= '-p 1'
     threads: 16
     conda:'freebayes_1_1_env.yml'
     shell:
         """
-        freebayes-parallel <(fasta_generate_regions.py {input[1]} 100000) \
-{threads} -f {input.ref} {input.sorted_bam} > {output.vcf}
+        freebayes-parallel <(fasta_generate_regions.py {input.ref_index} 100000) \
+ {threads} -f {input.ref} {params.freebayes_params} {input.sorted_bam} \
+ > {output.vcf}
         bgzip -c {output.vcf} > {output.vcf_gz}
         tabix -p vcf {output.vcf_gz}
         """
