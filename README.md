@@ -39,110 +39,71 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 
 ### Usage and Input
 
+Usage:
 ```
-  seq2geno \
-      -dryrun -s -d -e -p -de -ar \
-      --cores 15 \
-      --dna-reads samples.10.dna_full.with_ref.tsv \
-      --rna-reads samples.10.rna_full.tsv \
-      --ref-fa ref.fasta \
-      --ref-gff ref.gff3 \
-      --ref-gbk ref.gb \
-      --pheno phenotype_list \
-      --adaptor adapter.fasta \
-      --wd SEQ2GENO_OUT
-```
-| option | function |
-| --- | --- |
-| dryrun | display the processes |
-| s | SNPs calling |
-| d | creating _de novo_ assemblies |
-| e | counting expression levels |
-| p | inferring the phylogeny |
-| de | differential expression |
-| ar | ancestral reconstruction of expression levels |
-
-- wd: the working directory
-The intermediate and final files will be created under the folder. The final outcomes will be symlinked to RESULTS/.
-
-- dna-reads: The list of DNA-seq data 
-
-It should be a two-column list, where the first column includes all samples and the second column lists the __paired-end reads files__. The two reads file are separated by a comma. The first line is the first sample.
-```
-sample01	sample01_1.fastq.gz,sample01_2.fastq.gz
-sample02	sample02_1.fastq.gz,sample02_2.fastq.gz
-sample03	sample03_1.fastq.gz,sample03_2.fastq.gz
+  seq2geno -f options.yml
 ```
 
-- rna-reads: The list of RNA-seq data
+The input file is an yaml file where all options are described. The file includes two parts. 
+- functions:
 
-It should be a two-column list, where the first column includes all samples and the second column lists the __short reads files__. The first line is the first sample.
-```
-sample01	sample01.rna.fastq.gz
-sample02	sample02.rna.fastq.gz
-sample03	sample03.rna.fastq.gz
-```
+| option | action | values ([default])|
+| --- | --- | --- |
+| dryrun | display the processes and exit | [Y]/N |
+| s | SNPs calling | Y/[N] |
+| d | creating _de novo_ assemblies | Y/[N] |
+| e | counting expression levels | Y/[N] |
+| p | inferring the phylogeny | Y/[N] |
+| de | differential expression | Y/[N] |
+| ar | ancestral reconstruction of expression levels | Y/[N] |
 
-- pheno: The phenotype table
+- files:
 
-For n samples with m phenotypes, the table is n-by-m and the upper-left is blanck. The table is tab-separated. The header line includes the name of phenotypes. The value in the table can also be blanck. 
-```
-        virulence
-sample01	high
-sample02	mediate
-sample03	low
-```
+    - cores: available number of cpus 
+    Although the parameter is included in the "files" session, please just set a number instead of specify an file where the number is stated.
 
-- ref-fa, ref-gff, ref-gbk	The reference data
+    - wd: the working directory
+    The intermediate and final files will be created under the folder. The final outcomes will be symlinked to RESULTS/.
 
-The fasta, gff, and genbank files of a reference genome. They should have same sequence ids. 
+    - dna-reads: The list of DNA-seq data 
 
-- adaptor: The adaptor file
+    It should be a two-column list, where the first column includes all samples and the second column lists the __paired-end reads files__. The two reads file are separated by a comma. The first line is the first sample.
+    ```
+    sample01	sample01_1.fastq.gz,sample01_2.fastq.gz
+    sample02	sample02_1.fastq.gz,sample02_2.fastq.gz
+    sample03	sample03_1.fastq.gz,sample03_2.fastq.gz
+    ```
 
-The fasta file of adaptors of DNA-seq. It is used to process the DNA-seq reads. 
+    - rna-reads: The list of RNA-seq data
 
-### Connection with Geno2Pheno
-Geno2Pheno requires an "genml" file to describe the required files and parameters. To create the file, we offer scripts to create the file. 
+    It should be a two-column list, where the first column includes all samples and the second column lists the __short reads files__. The first line is the first sample.
+    ```
+    sample01	sample01.rna.fastq.gz
+    sample02	sample02.rna.fastq.gz
+    sample03	sample03.rna.fastq.gz
+    ```
 
-  1. If your data were computed by Seq2Geno:
+    - pheno: The phenotype table
 
-Please use create_genml_from_seq2geno.py
-```
-create_genml_from_seq2geno.py \
-  --seq2geno SEQ2GENO_OUT \
-  --pred abr --opt scores_f1_1 \
-  --fold_n 5 --test_perc 0.1 \
-  --part rand --models svm lr --k-mer 6 \
-  --cls geno2pheno.classes \
-  --out geno2pheno
-```
-| option | function |
-| --- | --- |
-| pred | the name of machine learning project |
-| opt | the target metric to optimize |
-| fold_n | the number of fold for cross validation |
-| test_perc | the precentage of samples separated from the whole set for individual testing |
-| part | the method to partition samples |
-| models | the machine learning algorithm |
-| k-mer | the k-mer size for encoding genome sequences |
+    For n samples with m phenotypes, the table is n-by-m and the upper-left is blanck. The table is tab-separated. The header line includes the name of phenotypes. The value in the table can also be blanck. 
+    ```
+	    virulence
+    sample01	high
+    sample02	mediate
+    sample03	low
+    ```
 
-- cls: classification labels
-The file specifies classification labels based on the phenotypes. It is a two-column tab-separated file, where the first column are the phenotypes and the second column includes their prediction labels. 
-```
-high	class_1
-mediate	class_1
-low	class_2
-```
+    - ref-fa, ref-gff, ref-gbk	The reference data
 
-- out: the prediction output folder
+    The fasta, gff, and genbank files of a reference genome. They should have same sequence ids. 
 
-  1. If your data were not computed by Seq2Geno:
+    - adaptor: The adaptor file (optional)
 
-Please use create_genml.py, which allows you to specify the paths to the precomputed results. 
+    The fasta file of adaptors of DNA-seq. It is used to process the DNA-seq reads. 
 
 ### License
 Please read [the license file]
 
 ### Contact
-Please open an issue if the problem cannot be solved. 
-We will need to know how to reproduce your problem.
+Please open an issue here, or send an email to Tzu-Hao.Kuo@helmhotz-hzi.de
+
