@@ -19,7 +19,7 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
     - conda (tested version: 4.5.11)
     - python (tested verson: 3.6)
     - Linux (tested version: Debian GNU/Linux 8.8 jessie)
-    - git (tested version: 2.17)
+    - git (tested version: 2.18)
 
 - Installation of Seq2Geno
 
