@@ -256,7 +256,10 @@ def main(args):
                 'and differential expression analysis will be scheduled after '
                 'the above processes are done')
     finally:
-        collect_results(args.wd)
+        if not args.dryrun:
+            collect_results(args.wd)
+        else:
+            print("Dryrun mode doesn't create RESULTS/")
 
 
 if __name__=='__main__':
