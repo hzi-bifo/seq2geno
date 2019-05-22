@@ -2,7 +2,8 @@
 
 import pandas as pd
 def snp2bin(snp_f, out):
-    m = pd.read_csv(snp_f, sep = "\t", na_values = ['NR'], header = 0)
+    #m = pd.read_csv(snp_f, sep = "\t", na_values = ['NR'], header = 0)
+    m = pd.read_csv(snp_f, sep = "\t", na_values = ['NR', ''], header = 0)
     name_cols = m.iloc[:, 0:6].astype('string')
     names = name_cols.apply(lambda x: "_".join(x), axis = 1)
     #names = m["gene"].map(str) + "_" + m["pos"].map(str) + m["ref aa"].map(str)
@@ -10,7 +11,8 @@ def snp2bin(snp_f, out):
     m.drop(["gene", "pos", "ref", "alt", "ref aa", "alt aa"], axis = 1, inplace = True)
     #replace nas with 0
     #m.replace(["NR", ""], [0, 0], inplace = True)
-    m[pd.isnull] = 0
+    #m[pd.isnull] = 0
+    m= m.fillna(0)
     m = m.astype('int')
     #replace snps with quality score over 1 with 1
     mask = m > 0

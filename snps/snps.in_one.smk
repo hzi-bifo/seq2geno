@@ -72,12 +72,12 @@ rule create_table:
     conda: 'snps_tab_mapping.yml'
     params:
         split_tool='split_for_mutation_table.py',
-        isol_subset_num= table_subset_num,
-        isol_subset_top= table_subset_num-1,
+        isol_subset_num= lambda wildcards: min(table_subset_num,len(strains)),
+        isol_subset_top= lambda wildcards: min(table_subset_num,len(strains)) - 1,
         isol_subset_dir= 'isols_subset',
         mut_tab_tool= 'mutation_table.py',
         snps_subset_dir= 'snps_subset'
-    shadow: "shallow"
+    #shadow: "shallow"
     threads: 30
     shell:
         '''
@@ -92,15 +92,19 @@ rule create_table:
  {params.isol_subset_dir}
 
         for i in {{0..{params.isol_subset_top}}}; \
-do echo "{params.mut_tab_tool} -f <(cat {input.dict_file} ) \
- -a {input.annofile} \
- -o {params.snps_subset_dir}/all_snps_$i.txt \
- --restrict_samples {params.isol_subset_dir}/isols_${{i}}.txt\
- --force_homozygous"; done \
-| parallel -j {threads} --joblog {params.snps_subset_dir}/joblog_mutation_table.txt
+        do \
+          echo "{params.mut_tab_tool} -f <(cat {input.dict_file} ) \
+           -a {input.annofile} \
+           -o {params.snps_subset_dir}/all_snps_$i.txt \
+           --restrict_samples {params.isol_subset_dir}/isols_${{i}}.txt\
+           --force_homozygous"; \
+        done \
+        | parallel -j {threads} --joblog {params.snps_subset_dir}/joblog_mutation_table.txt
 
         i=$(for i in {{0..{params.isol_subset_top}}}; \
- do echo -n " <(cut -f5-  {params.snps_subset_dir}/all_snps_${{i}}.txt)"; done)
+ do 
+ if [ -f {params.snps_subset_dir}/all_snps_${{i}}.txt ]; then
+ echo -n " <(cut -f5-  {params.snps_subset_dir}/all_snps_${{i}}.txt)"; fi; done)
 
         echo "paste <(cut -f1-4  {params.snps_subset_dir}/all_snps_0.txt )  $i\
 > {output.snps_table}" | bash

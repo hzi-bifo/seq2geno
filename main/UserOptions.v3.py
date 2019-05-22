@@ -34,7 +34,7 @@ def parse_arg_yaml(yml_f):
     available_functions= ['snps', 'expr', 'denovo', 'phylo', 'de', 'ar',
     'dryrun']
     with open(yml_f, 'r') as yml_fh:
-        opt_dict= yaml.load(yml_fh)
+        opt_dict= yaml.safe_load(yml_fh)
         for k in opt_dict['functions']: 
             opt_dict['functions'][k]= (True if 
                  opt_dict['functions'][k] == 'Y' else False)

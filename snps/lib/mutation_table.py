@@ -198,78 +198,79 @@ if Args.restrict_samples:
         names = set([s.strip() for s in f])
 # Sort the list of samples/file names to speed up the next loop.
 
+##  empty samples list
+if len([sample for sample in names if re.search('\w', sample)]) >= 1:
+    ##    --     Find Read Counts   --    ##
+    # To check if a certain mutation does not appear in one isolate because it is
+    # not there and not because this region is not covered with reads, read the
+    # ".flatcount" file for each isolate, then loop over the mutations dictionary,
+    # take the position of each mutation and check the number of reads in the file.
+    mut2sample = {}
+    for mut in mutations:
+        mut2sample[mut] = set()
+        for x in mutations[mut]:
+            mut2sample[mut].add(x[0])
+    for item in names:
+        filename = item +".flatcount"
+        with open(filename) as flat:
+            for key in mutations:
+                muts = []
+                if item not in mut2sample[key]:
+                  pos = int(key.split("_")[0])*6
+                  flat.seek(pos, 0)
+                  string = flat.read(6)
+                  if string:
+                    number = int(string)
+                    if number == 0:
+                      mutations[key].append((item, "NR"))
+                    else:
+                      mutations[key].append((item, ""))
 
-##    --     Find Read Counts   --    ##
-# To check if a certain mutation does not appear in one isolate because it is
-# not there and not because this region is not covered with reads, read the
-# ".flatcount" file for each isolate, then loop over the mutations dictionary,
-# take the position of each mutation and check the number of reads in the file.
-mut2sample = {}
-for mut in mutations:
-    mut2sample[mut] = set()
-    for x in mutations[mut]:
-        mut2sample[mut].add(x[0])
-for item in names:
-    filename = item +".flatcount"
-    with open(filename) as flat:
-        for key in mutations:
-            muts = []
-            if item not in mut2sample[key]:
-              pos = int(key.split("_")[0])*6
-              flat.seek(pos, 0)
-              string = flat.read(6)
-              if string:
-                number = int(string)
-                if number == 0:
-                  mutations[key].append((item, "NR"))
-                else:
-                  mutations[key].append((item, ""))
+    #for key in mutations:
+    #  muts = []
+    #  for x in mutations[key]:
+    #    muts.append(x[0])
+    #  for item in names:
+    #    if item not in muts:
+    #      filename = item +".flatcount"
+    #      pos = int(key.split("_")[0])*6
+    #      with open(filename) as flat:
+    #        flat.seek(pos, 0)
+    #        string = flat.read(6)
+    #        if string:
+    #          number = int(string)
+    #          if number == 0:
+    #            mutations[key].append((item, "NR"))
+    #          else:
+    #            mutations[key].append((item, ""))
+    #
 
-#for key in mutations:
-#  muts = []
-#  for x in mutations[key]:
-#    muts.append(x[0])
-#  for item in names:
-#    if item not in muts:
-#      filename = item +".flatcount"
-#      pos = int(key.split("_")[0])*6
-#      with open(filename) as flat:
-#        flat.seek(pos, 0)
-#        string = flat.read(6)
-#        if string:
-#          number = int(string)
-#          if number == 0:
-#            mutations[key].append((item, "NR"))
-#          else:
-#            mutations[key].append((item, ""))
-#
+    ##    --       Write Output     --    ##
+    # Open/create the output file and write a header into it, including the names
+    # of the isolates. Then loop over the mutations dictionary and write each
+    # mutation to the file. Also include the information whether it is inside a
+    # gene or not by using the genome list.
 
-##    --       Write Output     --    ##
-# Open/create the output file and write a header into it, including the names
-# of the isolates. Then loop over the mutations dictionary and write each
-# mutation to the file. Also include the information whether it is inside a
-# gene or not by using the genome list.
-
-with open(Args.OutFile, "w") as out:
-  out.write("gene\tpos\tref\talt")
-  for item in sorted(names):
-    try:
-      name = item.split("/")[-1]
-    except:
-      name = item
-    out.write("\t"+ name)
-  out.write("\n")
-  for key in sorted(mutations):
-    info = key.split("_")
-    pos = info[0]
-    ref = info[1]
-    alt = info[2]
-    gene = genome[int(pos)]
-    if gene == 0:
-      out.write("intergenic\t"+ pos +"\t"+ ref +"\t"+ alt)
-    else:
-      out.write(gene +"\t"+ pos +"\t"+ ref +"\t"+ alt)
-    for item in sorted(mutations[key]):
-      if item[0] in names:
-        out.write("\t"+ item[1])
-    out.write("\n")
+    with open(Args.OutFile, "w") as out:
+      out.write("gene\tpos\tref\talt")
+      for item in sorted(names):
+        try:
+          name = item.split("/")[-1]
+        except:
+          name = item
+        out.write("\t"+ name)
+      out.write("\n")
+      for key in sorted(mutations):
+        info = key.split("_")
+        pos = info[0]
+        ref = info[1]
+        alt = info[2]
+        gene = genome[int(pos)]
+        if gene == 0:
+          out.write("intergenic\t"+ pos +"\t"+ ref +"\t"+ alt)
+        else:
+          out.write(gene +"\t"+ pos +"\t"+ ref +"\t"+ alt)
+        for item in sorted(mutations[key]):
+          if item[0] in names:
+            out.write("\t"+ item[1])
+        out.write("\n")
