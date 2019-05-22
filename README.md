@@ -44,8 +44,9 @@ Usage:
   seq2geno -f options.yml
 ```
 
-The input file is an yaml file where all options are described. The file includes two parts. 
-- functions:
+The input file is an yaml file where all options are described. The file includes two parts:
+
+1. features:
 
 | option | action | values ([default])|
 | --- | --- | --- |
@@ -57,10 +58,9 @@ The input file is an yaml file where all options are described. The file include
 | de | differential expression | Y/[N] |
 | ar | ancestral reconstruction of expression levels | Y/[N] |
 
-- files:
+2. general: 
 
-    - cores: available number of cpus 
-    Although the parameter is included in the "files" session, please just set a number instead of specify an file where the number is stated.
+    - cores: accessible number of cpus
 
     - wd: the working directory
     The intermediate and final files will be created under the folder. The final outcomes will be symlinked to RESULTS/.
@@ -102,8 +102,9 @@ The input file is an yaml file where all options are described. The file include
     The fasta file of adaptors of DNA-seq. It is used to process the DNA-seq reads. 
 
 ### License
-Please read [the license file]
+Apache 2.0 (please see the LICENSE)
 
 ### Contact
-Please open an issue here, or send an email to Tzu-Hao.Kuo@helmhotz-hzi.de
+Please open an issue here or contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmhotz-hzi.de). 
+We will need to know how to reproduce the problem. 
 

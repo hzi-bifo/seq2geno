@@ -35,14 +35,21 @@ def parse_arg_yaml(yml_f):
     'dryrun']
     with open(yml_f, 'r') as yml_fh:
         opt_dict= yaml.safe_load(yml_fh)
-        for k in opt_dict['functions']: 
-            opt_dict['functions'][k]= (True if 
-                 opt_dict['functions'][k] == 'Y' else False)
+        for k in opt_dict['features']: 
+            if k in opt_dict['features']:
+                opt_dict['features'][k]= (True if opt_dict['features'][k] == 'Y'
+                else False)
+            else:
+                opt_dict['features'][k]=False 
     args= arguments()
-    args.add_opt(**opt_dict['files'])
-    args.add_opt(**opt_dict['functions'])
-    args.check_args()
-    return(args)
+    try:
+        args.add_opt(**opt_dict['general'])
+        args.add_opt(**opt_dict['features'])
+    except KeyError as e:
+        sys.exit('ERROR: {} not found in the input file'.format(str(e)))
+    else:
+        args.check_args()
+        return(args)
 
 def main():
     '''
@@ -58,9 +65,7 @@ def main():
     parser = argparse.ArgumentParser(
             formatter_class= arg_formatter,
             description='Seq2Geno: the pipline tool '
-                'for genomic features computation\n'
-                '(Note: all directories and files are relative '
-                'to the working directory)')
+                'for genomic features computation\n')
 
     parser.add_argument('-v', action= 'version', 
         version='v.Beta')
