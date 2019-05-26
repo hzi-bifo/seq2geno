@@ -231,10 +231,12 @@ rule create_gff:
         os.path.join(out_prokka_dir, '{strain}', '{strain}.gff'), 
         os.path.join(out_prokka_dir, '{strain}', '{strain}.ffn')
     threads: 1
-    conda: 'perl_for_prokka.yml'
+    #conda: 'perl_for_prokka.yml'
+    conda: 'prokka_env.yml'
     shell:
         '''
         echo $PERL5LIB
+        which prokka
         prokka --locustag {wildcards.strain} \
 --prefix  {wildcards.strain} \
 --force  --cpus {threads} --metagenome --compliant \
