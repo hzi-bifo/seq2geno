@@ -52,8 +52,8 @@ dependencies:
   - libopenblas=0.2.20=h9ac9557_7
   - libstdcxx-ng=7.2.0=hdf63c60_3
   - mkl=2018.0.3=1
-  - numpy=1.12.1=py27h9378851_1
-  - numpy-base=1.14.5=py27hdbf6ddf_4
+    #  - numpy=1.12.1=py27h9378851_1
+    #  - numpy-base=1.14.5=py27hdbf6ddf_4
   - scikit-learn=0.19.1=py27hedc7406_0
   - scipy=1.1.0=py27hc49cb51_0
   - pip:

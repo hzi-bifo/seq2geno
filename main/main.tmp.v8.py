@@ -258,8 +258,10 @@ def main(args):
     finally:
         if not args.dryrun:
             collect_results(args.wd)
+            print('Key results can be found in {}'.format(args.wd))
+            print('Seq2Geno complete')
         else:
-            print("Dryrun mode doesn't create RESULTS/")
+            print("Dryrun mode doesn't update {}".format(args.wd))
 
 
 if __name__=='__main__':
