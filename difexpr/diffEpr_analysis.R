@@ -17,7 +17,6 @@ script_dir<- Sys.getenv('TOOL_HOME')
 source(paste(script_dir, 'seq2geno.MatIO.R', sep='/'))
 
 expr_f<- snakemake@input[['expr_table']] # expression levels
-target_strains<- snakemake@params[['strains']] # flat list from snakemake
 phe_f<- snakemake@input[['phe_table']] # binary table of sample classes, which can include multiple columns but still follow the format of feature tables
 #output_dir<- '' 
 output_dir<- snakemake@output[['dif_xpr_out']]
@@ -28,35 +27,21 @@ lfc_cutoff<- as.numeric(snakemake@params[['lfc_cutoff']])
 #####
 ### The input matrix
 ### check if it in line with the feature table rules (refer to github issues and the scripts)
-rpg_mat<- read_seq2geno.tab(expr_f, string_values= F)
+raw_rpg_mat<- read_seq2geno.tab(expr_f, string_values= F)
+### remove zero-count genes
+rpg_mat<- raw_rpg_mat[, (colSums(raw_rpg_mat) > 0)]
+n_reduced<- ncol(raw_rpg_mat)- ncol(rpg_mat)
+if (n_reduced > 0){
+  write('WARNING: Genes not expressed in any sample were excluded from differential expression analysis', stderr())
+}
 
 #####
 ### classes
-#phe_f<- '../data/pheno_table_CLSI_S-vs-R.txt'
 phe_df<- read_seq2geno.tab(phe_f, string_values= T)
-#colnames(phe_df)<- c('Tob', 'Cef', 'Cip', 'Mer', 'Col')
-#phe_df[phe_df == 1]<- 'Resistant'
-#phe_df[phe_df == 0]<- 'Sensitive'
-#phe_df[is.na(phe_df)]<- 'Intermediate'
-#print(phe_df[1:3, 1:3])
-#print(dim(phe_df))
-
-print(dim(rpg_mat))
-print(dim(phe_df))
 
 #####
 ### detect target strains
-
-#####
-### filter by row
-### not necessary
-#row_sums<- rowSums(rpg_mat)
-#br<- c(0, 10, 100, 500, 1000, 2000, 5000, 7500, 10000, Inf)
-#freq<- hist(row_sums, breaks= br, include.lowest= T, plot= F)
-#ranges<- paste(head(br,-1), br[-1], sep=" - ")
-#print(data.frame(range = ranges, frequency = freq$counts))
-# set the cutoff= 1000
-#rpg_mat<- rpg_mat[row_sums > 1000, ]
+target_strains<- rownames(phe_df)
 
 #####
 ### set the output directory
@@ -66,7 +51,8 @@ output_suffix2<- 'deseq2.DifXpr.list'
 
 #####
 ### start DESeq2
-for (target_col in colnames(phe_df)){
+col_names<- colnames(phe_df)
+for (target_col in col_names){
   print(target_col)
   ## ensure the target column is binary
   uq_all_phe<- unique(phe_df[,target_col])
@@ -74,12 +60,11 @@ for (target_col in colnames(phe_df)){
   if (length(uq_all_phe) != 2){
     stop('Differential expression analysis is only for two classes. Please turn off this function')
   }else{
-    print('Detected groups: \n')
-    print(paste(uq_all_phe, collapse= ','))
-    ## detect target strains (as there may be NA phenotypes)
-    target_strains<- rownames(phe_df[phe_df[,target_col] %in% uq_all_phe,])
+    write("Detected groups: \n", stdout())
+    write(paste(uq_all_phe, collapse= ','), stdout())
+    ## exclude NA
+    target_strains<- names(phe_df[phe_df[,target_col] %in% uq_all_phe,])
     target_strains<- target_strains[target_strains %in% rownames(rpg_mat)]
-    print(target_strains)
 
     ## create colData
     col_df<- data.frame(sample=target_strains, pheno= phe_df[target_strains, target_col])
@@ -106,6 +91,5 @@ for (target_col in colnames(phe_df)){
     write.table(res, out_f1, col.names=NA, sep= '\t', quote= F)
     out_f2<- file.path(output_dir, paste0(target_col, output_suffix2, collapse= '_'))
     write(rownames(res_filtered), out_f2)
-
-
+  }
 }
