@@ -26,7 +26,11 @@ if (length(tree$tip.label) < length(target_spe)){
 }
 # zero branch
 if (any(tree$edge.length <= 0)){
-  stop('The tree includes branch lengths equal or less than zero')
+  brs<- tree$edge.length
+  brs[brs <= 0]<- 1e-6
+  tree$edge.length<- brs
+  write('WARNING: The tree includes branch lengths equal or less than zero. We assigned 1e-6 to these branches when inferring ancestral values', stderr())
+  #stop('The tree includes branch lengths equal or less than zero')
 }
 tree_backup<- tree
 if (length(tree$tip.label) > length(target_spe)){
