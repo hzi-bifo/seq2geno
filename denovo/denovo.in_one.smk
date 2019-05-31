@@ -132,6 +132,7 @@ rule indel_align_families:
         extracted_proteins_dir=extracted_proteins_dir,
         parallel_log= 'mafft.log'
     threads: 20 
+    conda: 'indel_cluster_env.yml'
     shell:
         '''
         core_genes={input.core_gene_list}
@@ -169,6 +170,8 @@ rule indel_identify_indels:
     conda: 'indel_env.yml'
     shell:
         '''
+	which python
+	which python2
         core_genes=$(cat {input.core_gene_list})
         if [ -d {params.indels_dir} ]; then
             rm -r {params.indels_dir};
@@ -179,6 +182,9 @@ rule indel_identify_indels:
 < {params.extracted_proteins_dir}/{{}}.aln > {params.indels_dir}/{{}}.vcf" ::: $core_genes
 
         #vcf to indel yes/no vector, stats and gff
+	which python
+	which python2
+	echo $PATH
         parallel -j {threads} "{params.vcf2indel_script} \
 {params.indels_dir}/{{}}.vcf \
 {params.indels_dir}/{{}} \
@@ -208,17 +214,34 @@ strain= list(dna_reads.keys()))
     conda: 'perl5_22_env.yml'
     params:
         check_add_perl_env_script= 'install_perl_mods.sh',
+        check_add_software_script= 'set_roary_env.sh',
         roary_bin= 'roary'
-    shadow: "shallow"
+#    shadow: "shallow"
     shell:
         '''
         set +u
         {params.check_add_perl_env_script}
+#        {params.check_add_software_script}
         ROARY_HOME=$(dirname $(dirname $(which roary)))
-        PERL5LIB=$ROARY_HOME/lib:\
-$ROARY_HOME/build/bedtools2/lib:\
-$PERL5LIB
+	export PATH=\
+$ROARY_HOME/build/fasttree:\
+$ROARY_HOME/build/mcl-14-137/src/alien/oxygen/src:\
+$ROARY_HOME/build/mcl-14-137/src/shmcl:\
+$ROARY_HOME/build/ncbi-blast-2.4.0+/bin:\
+$ROARY_HOME/build/prank-msa-master/src:\
+$ROARY_HOME/build/cd-hit-v4.6.6-2016-0711:\
+$ROARY_HOME/build/bedtools2/bin:\
+$ROARY_HOME/build/parallel-20160722/src:\
+$PATH
+	export PERL5LIB=$ROARY_HOME/lib:\
+$ROARY_HOME/build/bedtools2/lib:$PERL5LIB
+#        PERL5LIB=$ROARY_HOME/lib:\
+#$ROARY_HOME/build/bedtools2/lib:\
+#$PERL5LIB
+#	ln -rsf $ROARY_HOME/lib/Bio $CONDA_PREFIX/lib/perl5/5.22.0/
+	which perl
         echo $PERL5LIB
+        echo $PERLLIB
         rm -r {wildcards.roary_dir}
         {params.roary_bin} -f {wildcards.roary_dir} \
 -e -n -v {input.gff_files} -r -p 30 -g 100000 -z
@@ -235,7 +258,7 @@ rule create_gff:
     conda: 'prokka_env.yml'
     shell:
         '''
-        echo $PERL5LIB
+#        echo $PERL5LIB
         which prokka
         prokka --locustag {wildcards.strain} \
 --prefix  {wildcards.strain} \
