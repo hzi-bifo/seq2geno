@@ -169,12 +169,14 @@ rule my_samtools_SNP_pipeline:
     shell:
         """
         sleep 10
+	set +u
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:\
 $CONDA_PREFIX/lib/perl5/5.22.2:\
 $CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:\
 $PERL5LIB
         echo $PERL5LIB
         my_samtools_SNP_pipeline {wildcards.strain} {input.reffile} 0
+	set -u
         """
 
 rule my_stampy_pipeline_PE:
@@ -200,12 +202,14 @@ rule my_stampy_pipeline_PE:
     shell:
         """
         sleep 10
+	set +u
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2:$PERL5LIB
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:$PERL5LIB
         my_stampy_pipeline_PE {wildcards.strain} \
 {input.infile1} {input.infile2} {input.reffile} \
 {input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
+	set -u
         """
 
 rule redirect_and_preprocess_reads:
@@ -273,6 +277,6 @@ rule stampy_index_ref:
     shell:
         '''
         stampy.py -G {input.reffile} {input.reffile}
-        stampy.py -g {input.reffile} -H {input.reffile}
+	stampy.py -g {input.reffile} -H {input.reffile}
         bwa index -a bwtsw {input.reffile}
         '''
