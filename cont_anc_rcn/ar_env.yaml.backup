@@ -1,4 +1,4 @@
-name: ar_env
+name: ar_env 
 channels:
   - bioconda
   - conda-forge

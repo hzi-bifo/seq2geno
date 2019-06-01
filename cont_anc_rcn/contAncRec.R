@@ -1,3 +1,6 @@
+
+.libPaths(paste(Sys.getenv('CONDA_PREFIX'), 'lib', 'R', 'library', sep='/'))
+
 library('phytools')
 library('mnormt')
 library('ape')
