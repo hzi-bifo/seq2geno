@@ -5,5 +5,4 @@ channels:
   - defaults
 dependencies:
   - mafft=7.310=1
-prefix: /home/thkuo/miniconda3/envs/mafft_7_310_env
 

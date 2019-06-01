@@ -29,7 +29,7 @@ rule tree:
         tree= tree_f
     threads:20
     shell:
-        '''        
+        '''
         which FastTreeMP
         export OMP_NUM_THREADS={threads}
         FastTreeMP -nt -gtr -gamma \
@@ -39,30 +39,30 @@ rule tree:
 rule process_aln:
     input:
         out_aln='OneLarge.aln'
-    output: 
+    output:
         out_var_aln=aln_f
     params:
         tmp_aln1= 'OneLarge.gapReplaced.aln',
         tmp_aln2= 'OneLarge.gapReplaced.var2.aln'
-    conda: 'concatenate_seq_env.yml'    
+    conda: 'concatenate_seq_env.yml'
     shell:
         """
         cat {input} | sed '/^>/!s/[^ATCGatcg]/-/g' > {params.tmp_aln1}
         removeInvariant.py --in {params.tmp_aln1} --out {params.tmp_aln2} --cn 2
         trimal -gt 0.90 -in {params.tmp_aln2} -out {output.out_var_aln}
         """
-        
+
 rule concatenate:
     input:
         fam_list='aln_to_concatenate'
     output:
         out_aln='OneLarge.aln'
-    conda: 'concatenate_seq_env.yml'    
+    conda: 'concatenate_seq_env.yml'
     params:
         conc_script='concatenateAln.py'
     shell:
         '''
-        {params.conc_script} --l {input.fam_list} --o {output.out_aln} 
+        {params.conc_script} --l {input.fam_list} --o {output.out_aln}
         '''
 
 rule list_families:
@@ -129,21 +129,30 @@ rule consensus_seqs:
         bcftools consensus -f {input.ref_region_seqs} \
 -o {output.cons_fa} {input.vcf_gz} 
         '''
-        
 
-rule ref_regions: 
+rule ref_regions:
     input:
         ref_gff=REF_GFF,
         ref_fa=REF_FA
     output:
-        ref_regions=REF_GFF+".gene_regions",
-        ref_region_seqs=REF_GFF+".gene_regions.fa"
+        ref_regions=REF_GFF+".gene_regions"
     conda: 'py27.yml'
     shell:
         '''
         make_GeneRegions.py --g {input.ref_gff} --f gene > {output.ref_regions}
+        '''
+
+rule ref_regions_seq:
+    input:
+        ref_fa=REF_FA,
+        ref_regions=REF_GFF+".gene_regions"
+    output:
+        ref_region_seqs=REF_GFF+".gene_regions.fa"
+    conda: 'phylo_bwa_env.yml'
+    shell:
+        '''
         parallel -j 1 \'samtools faidx {input.ref_fa} {{}}\' \
- :::: {output.ref_regions} > {output.ref_region_seqs}
+ :::: {input.ref_regions} > {output.ref_region_seqs}
         '''
 
 rule index_ref:
@@ -153,6 +162,7 @@ rule index_ref:
         REF_FA+".bwt",
         REF_FA+".fai"
     threads:1
+    conda: 'phylo_bwa_env.yml'
     shell:
         """
         samtools faidx {input}
@@ -171,6 +181,7 @@ rule mapping:
         sorted_bam="{tmp_d}/{strain}/bwa.sorted.bam",
         sorted_bam_index="{tmp_d}/{strain}/bwa.sorted.bam.bai"
     threads:1
+    conda: 'phylo_bwa_env.yml'
     shell:
         """
         bwa mem -v 2 -M -R \'@RG\\tID:snps\\tSM:snps\' -t {threads} \
