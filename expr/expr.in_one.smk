@@ -103,6 +103,7 @@ rule stampy_index_ref:
         ref_fasta+'.bwt',
         ref_fasta+'.stidx',
         ref_fasta+'.sthash'
+    conda: 'snps_tab_mapping.yml'
     shell:
         '''
         stampy.py -G {input.reffile} {input.reffile}
