@@ -117,10 +117,10 @@ rule include_aa_into_table:
     output:
         snps_aa_table=snps_aa_table,
         nonsyn_snps_aa_table=nonsyn_snps_aa_table
-    conda: 'snps_tab_mapping.yml'
     params:
         to_aa_tool= 'Snp2Amino.py' 
     threads: 1
+    conda: 'py27.yml'
     shell:
         """
         {params.to_aa_tool} -f {input.snps_table} -g {input.ref_gbk} \

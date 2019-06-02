@@ -3,6 +3,7 @@ channels:
   - bioconda
   - conda-forge
   - defaults
+  - conda-forge/label/broken
 dependencies:
   - perl-aceperl=1.92=0
   - perl-algorithm-munkres=0.08=0

@@ -2,6 +2,7 @@ name: phylo_bwa_env
 channels:
   - bioconda
   - conda-forge
+  - conda-forge/label/broken
   - defaults
 dependencies:
   - bamtools=2.3.0=he941832_2

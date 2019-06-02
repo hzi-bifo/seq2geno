@@ -2,6 +2,7 @@ name: py27
 channels:
   - bioconda
   - conda-forge
+  - conda-forge/label/broken
   - defaults
 dependencies:
   - biopython=1.70=np112py27_1
