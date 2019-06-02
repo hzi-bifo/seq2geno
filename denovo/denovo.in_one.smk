@@ -170,8 +170,6 @@ rule indel_identify_indels:
     conda: 'indel_env.yml'
     shell:
         '''
-	which python
-	which python2
         core_genes=$(cat {input.core_gene_list})
         if [ -d {params.indels_dir} ]; then
             rm -r {params.indels_dir};
@@ -182,9 +180,6 @@ rule indel_identify_indels:
 < {params.extracted_proteins_dir}/{{}}.aln > {params.indels_dir}/{{}}.vcf" ::: $core_genes
 
         #vcf to indel yes/no vector, stats and gff
-	which python
-	which python2
-	echo $PATH
         parallel -j {threads} "{params.vcf2indel_script} \
 {params.indels_dir}/{{}}.vcf \
 {params.indels_dir}/{{}} \
@@ -216,13 +211,14 @@ strain= list(dna_reads.keys()))
         check_add_perl_env_script= 'install_perl_mods.sh',
         check_add_software_script= 'set_roary_env.sh',
         roary_bin= 'roary'
-#    shadow: "shallow"
     shell:
         '''
         set +u
-        {params.check_add_perl_env_script}
 #        {params.check_add_software_script}
         ROARY_HOME=$(dirname $(dirname $(which roary)))
+        # required perl modules
+        {params.check_add_perl_env_script}
+
 	export PATH=\
 $ROARY_HOME/build/fasttree:\
 $ROARY_HOME/build/mcl-14-137/src/alien/oxygen/src:\

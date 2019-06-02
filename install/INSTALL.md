@@ -17,4 +17,15 @@ conda create --file snakemake_env.yml
 source activate snakemake_env
 source deactivate
 ```
-Although `source activate` is functionally interchangeable with `conda activate`, we still recommend to test with the former. It will be required by snakemake, so these commands could also help to ensure.  
+Although `source activate` is functionally interchangeable with `conda activate`, we still recommend to test with the former. It will be required by snakemake, so these commands could also help to ensure. 
+
+#### Step 6. install dependencies of Raory 
+Roary already has its own script for installing dependencies, so we can simply use it:
+
+```
+source activate snakemake_env
+cd $SEQ2GENO_HOME/denovo/lib/Roary
+./install_dependencies.sh
+source deactivate
+```
+These softwares should now be available under `$SEQ2GENO_HOME/denovo/lib/Roary/build`.
