@@ -16,7 +16,7 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 ### Get started
 - Prerequisites
 
-    - conda (tested version: 4.5.11)
+    - conda (tested version: 4.6.14)
     - python (tested verson: 3.6)
     - Linux (tested version: Debian GNU/Linux 8.8 jessie)
     - git (tested version: 2.18)
@@ -25,9 +25,13 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 
     1. Download Seq2Geno:
 
-	`git clone --recurse-submodules https://github.com/hzi-bifo/seq2geno.git`
+	```
+	git clone --recurse-submodules https://github.com/hzi-bifo/seq2geno.git
+	cd seq2geno
+	git submodule update --init --recursive
+	```
 
-	The flag `--recurse-submodules` will help to download the required submodules (i.e. the external repositories). The flag is available only in git version >2.13, so the users of earlier versions should considering finding the proper method to download the submodules. 
+	The option `--recurse-submodules` helps to download the submodules that are located at another repository (i.e. Seq2Geno and Geno2Pheno). The flag is available only in git version >2.13, and users of earlier git versions may need to find the substitute.  
 
     2. Install the core environment:
 
@@ -51,10 +55,10 @@ The input file is an yaml file where all options are described. The file include
 | option | action | values ([default])|
 | --- | --- | --- |
 | dryrun | display the processes and exit | [Y]/N |
-| s | SNPs calling | Y/[N] |
-| d | creating _de novo_ assemblies | Y/[N] |
-| e | counting expression levels | Y/[N] |
-| p | inferring the phylogeny | Y/[N] |
+| snps | SNPs calling | Y/[N] |
+| denovo | creating _de novo_ assemblies | Y/[N] |
+| expr | counting expression levels | Y/[N] |
+| phylo | inferring the phylogeny | Y/[N] |
 | de | differential expression | Y/[N] |
 | ar | ancestral reconstruction of expression levels | Y/[N] |
 
@@ -63,37 +67,37 @@ The input file is an yaml file where all options are described. The file include
     - cores: accessible number of cpus
 
     - wd: the working directory
-    The intermediate and final files will be created under the folder. The final outcomes will be symlinked to RESULTS/.
+    The intermediate and final files will be stored under this folder. The final outcomes will be symlinked to RESULTS/.
 
-    - dna-reads: The list of DNA-seq data 
+    - dna_reads: The list of DNA-seq data 
 
     It should be a two-column list, where the first column includes all samples and the second column lists the __paired-end reads files__. The two reads file are separated by a comma. The first line is the first sample.
     ```
-    sample01	sample01_1.fastq.gz,sample01_2.fastq.gz
-    sample02	sample02_1.fastq.gz,sample02_2.fastq.gz
-    sample03	sample03_1.fastq.gz,sample03_2.fastq.gz
+    sample01	/paired/end/reads/sample01_1.fastq.gz,/paired/end/reads/sample01_2.fastq.gz
+    sample02	/paired/end/reads/sample02_1.fastq.gz,/paired/end/reads/sample02_2.fastq.gz
+    sample03	/paired/end/reads/sample03_1.fastq.gz,/paired/end/reads/sample03_2.fastq.gz
     ```
 
-    - rna-reads: The list of RNA-seq data
+    - rna_reads: The list of RNA-seq data
 
     It should be a two-column list, where the first column includes all samples and the second column lists the __short reads files__. The first line is the first sample.
     ```
-    sample01	sample01.rna.fastq.gz
-    sample02	sample02.rna.fastq.gz
-    sample03	sample03.rna.fastq.gz
+    sample01	/transcription/reads/sample01.rna.fastq.gz
+    sample02	/transcription/reads/sample02.rna.fastq.gz
+    sample03	/transcription/reads/sample03.rna.fastq.gz
     ```
 
-    - pheno: The phenotype table
+    - phe_table: The phenotype table
 
-    For n samples with m phenotypes, the table is n-by-m and the upper-left is blanck. The table is tab-separated. The header line includes the name of phenotypes. The value in the table can also be blanck. 
+    The table is tab-separated. For n samples with m phenotypes, the table is (n+1)-by-(m+1) as shown below. The first column should be sample names. The header line should includes names of phenotypes. Missing values are acceptable.
     ```
-	    virulence
+    strains	virulence
     sample01	high
     sample02	mediate
     sample03	low
     ```
 
-    - ref-fa, ref-gff, ref-gbk	The reference data
+    - ref_fa, ref_gff, ref_gbk: the data of reference genome
 
     The fasta, gff, and genbank files of a reference genome. They should have same sequence ids. 
 
