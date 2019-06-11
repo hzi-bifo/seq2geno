@@ -48,7 +48,7 @@ rule create_binary_table:
     output:
         snps_aa_bin_mat=snps_aa_bin_mat,
         nonsyn_snps_aa_bin_mat=nonsyn_snps_aa_bin_mat
-#    conda: 'py27.yml'
+    conda: 'py27.yml'
     params:
         parse_snps_tool= 'parse_snps.py'
     threads: 1

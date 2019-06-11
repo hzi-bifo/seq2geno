@@ -151,6 +151,7 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
         ## unclock the snakemake working directory
         success= snakemake.snakemake(
             configfile=config_f,
+            ignore_incomplete= True,
             snakefile= env_dict['SNAKEFILE'],
             workdir= os.path.dirname(config_f),
             unlock= True)
@@ -160,15 +161,15 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
         ## run the process
         success=snakemake.snakemake(
             snakefile= env_dict['SNAKEFILE'],
-            restart_times= 3, 
+            restart_times= 3,
             cores= max_cores,
             configfile=config_f,
+            force_incomplete= True,
             workdir= os.path.dirname(config_f),
             use_conda=True,
             conda_prefix= os.path.join(env_dict['TOOL_HOME'], 'env'),
             dryrun= dryrun,
             printshellcmds= True,
-            force_incomplete= True,
             notemp=True
             )
         if not success:
@@ -191,6 +192,11 @@ def run_proc(proc, config_f, dryrun= True, max_cores=1):
 def main(args):
     import os
     import sys
+    from tqdm import tqdm
+
+    processes_num= 8
+    pbar = tqdm(total= processes_num,
+        desc= "\nseq2geno")
     try:
         import create_config
         create_config.main(args)
@@ -199,7 +205,7 @@ def main(args):
         e=sys.exc_info()[0]
         print(e)
         sys.exit()
-
+    pbar.update(1)
     try:
         ## expr
         if args.rna_reads != '-' and args.expr:
@@ -207,6 +213,7 @@ def main(args):
             run_proc('expr', config_f, dryrun= args.dryrun, max_cores= args.cores)
         else:
             print('Skip counting expression levels')
+        pbar.update(1)
 
         ## snps
         if args.dna_reads != '-' and args.snps:
@@ -214,6 +221,7 @@ def main(args):
             run_proc('snps', config_f, dryrun= args.dryrun, max_cores= args.cores)
         else:
             print('Skip calling single nucleotide variants')
+        pbar.update(1)
 
         ## denovo
         if args.dna_reads != '-' and args.denovo:
@@ -222,6 +230,7 @@ def main(args):
                     int(args.cores))
         else:
             print('Skip creating de novo assemblies')
+        pbar.update(1)
 
         ## phylo
         if args.dna_reads != '-' and args.phylo:
@@ -229,6 +238,7 @@ def main(args):
             run_proc('phylo', config_f, dryrun= args.dryrun, max_cores= args.cores)
         else:
             print('Skip inferring phylogeny')
+        pbar.update(1)
     except Exception as e:
         sys.exit('ERROR: {}'.format(e))
     else:
@@ -240,6 +250,7 @@ def main(args):
                     run_proc('ar', config_f, dryrun= args.dryrun, max_cores= args.cores)
                 else:
                     print('Skip ancestral reconstruction')
+                pbar.update(1)
 
                 # differential expression
                 if args.phe_table != '-' and args.rna_reads != '-' and args.de:
@@ -247,6 +258,7 @@ def main(args):
                     run_proc('de', config_f, dryrun= args.dryrun, max_cores= args.cores)
                 else:
                     print('Skip differential expression analysis')
+                pbar.update(1)
             except RuntimeError as e:
                 sys.exit('ERROR: {}'.format(e))
             except: 
@@ -255,6 +267,7 @@ def main(args):
             print('The workflow of redundancy removal, ancestral reconstruction, '
                 'and differential expression analysis will be scheduled after '
                 'the above processes are done')
+            pbar.update(2)
     finally:
         if not args.dryrun:
             collect_results(args.wd)
@@ -262,7 +275,9 @@ def main(args):
             print('Seq2Geno complete')
         else:
             print("Dryrun mode doesn't update {}".format(args.wd))
+        pbar.update(1)
 
+    pbar.close()
 
 if __name__=='__main__':
     import UserOptions

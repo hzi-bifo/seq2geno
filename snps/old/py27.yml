@@ -1,4 +1,4 @@
-name: py27_tmp
+name: py27_env
 channels:
   - bioconda
   - conda-forge
@@ -26,16 +26,12 @@ dependencies:
   - numpy=1.12.1=py27h9378851_1
   - olefile=0.46=py_0
   - openssl=1.1.1b=h14c3975_1
-  - pandas=0.24.2=py27hf484d3e_0
   - pillow=6.0.0=py27he7afcd5_0
   - pip=19.1=py27_0
   - python=2.7.15=h721da81_1008
-  - python-dateutil=2.8.0=py_0
-  - pytz=2019.1=py_0
   - readline=7.0=hf8c457e_1001
   - reportlab=3.5.23=py27h7d98c4e_0
   - setuptools=41.0.1=py27_0
-  - six=1.12.0=py27_1000
   - sqlite=3.28.0=h8b20d00_0
   - tk=8.6.9=h84994c4_1001
   - wheel=0.33.4=py27_0

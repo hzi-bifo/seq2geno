@@ -84,7 +84,16 @@ with open(Args.AnnoFile) as anno:
     except:
       print "It seems I can't find the genome size in the annotation file!"
       print "Please enter it manually with the argument -s <number>."
-  genome = [0]*size
+  '''
+  comments by thk:
+  The coordinates in this script are pseudo 1-based, so that the 
+  1-based coordinates of genes can fit this python script. 
+  Therefore, it should be the following line instead of 
+  the genome size described in the annot file that helps to 
+  adjust the coordinates. Otherwise it looks confusing and hard to 
+  maintain it in the future. 
+  '''
+  genome = [0]*(size+1)
   for line in anno:
     if not line.startswith("@"):
       line = line.rstrip()

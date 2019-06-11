@@ -112,7 +112,6 @@ dependencies:
   - snakemake-minimal=5.3.1=py_0
   - sqlite=3.28.0=h8b20d00_0
   - tk=8.6.9=h84994c4_1001
-  - tqdm=4.7.2=py36_0
   - typing_extensions=3.7.2=py36_1000
   - urllib3=1.12=py36_0
   - wheel=0.33.4=py36_0

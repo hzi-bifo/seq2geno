@@ -240,9 +240,11 @@ $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
         echo $PERLLIB
         rm -r {wildcards.roary_dir}
         {params.roary_bin} -f {wildcards.roary_dir} \
--e -n -v {input.gff_files} -r -p 30 -g 100000 -z
+-v {input.gff_files} -p 30 -g 100000 -z
         set -u
         ''' 
+#        {params.roary_bin} -f {wildcards.roary_dir} \
+#-e -n -v {input.gff_files} -r -p 30 -g 100000 -z
 
 rule create_gff:
     input: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')

@@ -83,7 +83,7 @@ rule alignment:
     conda: 'mafft_7_310_env.yml'
     shell:
         '''
-        mafft --nuc --maxiterate 0 --retree 2 --parttree \
+        mafft --quiet --nuc --maxiterate 0 --retree 2 --parttree \
 {input} > {output}
         '''
 
