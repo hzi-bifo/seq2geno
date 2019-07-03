@@ -66,7 +66,7 @@ The input file is an yaml file where all options are described. The file include
 
     - cores: accessible number of cpus
 
-    - old_config: do not overwrite the previous config files. Please make the old config file really are accessible.
+    - old_config: do not overwrite the previous config files of seq2geno. (Please make sure the old config file really are accessible.)
 
     - wd: the working directory
     The intermediate and final files will be stored under this folder. The final outcomes will be symlinked to RESULTS/.
