@@ -41,6 +41,13 @@ def parse_arg_yaml(yml_f):
                 else False)
             else:
                 opt_dict['features'][k]=False 
+
+    if 'old_config' in opt_dict['general']:
+        opt_dict['general']['old_config']= (True if opt_dict['general']['old_config'] == 'Y'
+        else False)
+    else:
+        opt_dict['general']['old_config']= False
+
     args= arguments()
     try:
         args.add_opt(**opt_dict['general'])

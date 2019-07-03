@@ -128,8 +128,8 @@ def create_yaml_f(args, wd, config_f):
     import os
     try:
         config_f= os.path.abspath(os.path.join(wd, config_f))
+        print(config_f)
         target_dir= os.path.dirname(config_f)
-        print(target_dir)
         if not os.path.exists(target_dir):
             print('creating {}...'.format(target_dir))
             os.makedirs(target_dir)
@@ -143,6 +143,7 @@ def create_yaml_f(args, wd, config_f):
             datetime.now().isoformat(' ',timespec= 'minutes'),
             str(e)))
         sys.exit()
+
 
 
 def main(args):

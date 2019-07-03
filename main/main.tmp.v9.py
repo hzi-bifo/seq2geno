@@ -198,8 +198,13 @@ def main(args):
     pbar = tqdm(total= processes_num,
         desc= "\nseq2geno")
     try:
-        import create_config
-        create_config.main(args)
+        ## accept config files
+        if args.old_config:
+            print('Skip creating config files '
+                  '(will use old config files if available)')
+        else:
+            import create_config
+            create_config.main(args)
     except:
         print('ERROR: fail to initiate the project')
         e=sys.exc_info()[0]
