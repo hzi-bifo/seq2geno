@@ -79,7 +79,7 @@ rule list_families:
         with open(params.fam_stats, 'r') as fam_fh:
             families= [l.strip().split('\t') for l in fam_fh.readlines()]
             target_fam= [fam[0] for fam in families 
-                if (int(fam[2])-int(fam[1]))/int(fam[2]) <= 0.1]
+                if (int(fam[2])-int(fam[1]))/int(fam[2]) <= params.indel_cutoff]
         from os.path import basename
         with open(output.out_fam_list, 'w') as out_fh:
             for f in input.out_seq:
