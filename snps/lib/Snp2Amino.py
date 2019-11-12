@@ -51,7 +51,7 @@ GenDict = {}
 if "." in Args.OutFile:
   #name = Args.OutFile.split(".")[:-1]
   #logfile = "%s.log" % "".join(name)
-  logfile = re.sub('[^\.]+$', '\.log', Args.OutFile)
+  logfile = re.sub('[^\.]+$', 'log', Args.OutFile)
 else:
   logfile = "%s.log" % Args.OutFile
 

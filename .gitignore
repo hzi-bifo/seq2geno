@@ -6,3 +6,4 @@ phylo/env/
 denovo/env/
 snps/env/
 expr/env/
+*.pyc
