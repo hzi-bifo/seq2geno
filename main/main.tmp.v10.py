@@ -274,7 +274,8 @@ def main(args):
                 'the above processes are done')
             pbar.update(2)
     finally:
-        collect_results(args.wd)
+        if not args.dryrun:
+            collect_results(args.wd)
         print('Working directory {} {}'.format(
             args.wd, 'updated' if not args.dryrun else 'unchanged'))
         pbar.update(1)

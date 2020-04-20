@@ -1,3 +1,15 @@
+#cpanm --force Bio::Perl
+#cpanm --force Moose
+#cpanm --force Log::Log4perl
+#cpanm --force Array::Utils
+#cpanm --force File::Grep
+#cpanm --force File::Which 
+#cpanm --force File::Slurper
+#cpanm --force Text::CSV
+#cpanm --force XML::Parser
+#cpanm --force Graph
+#cpanm --force Graph::Writer::Dot
+#cpanm --force File::Find::Rule
 cpanm Bio::Perl
 cpanm Moose
 cpanm Log::Log4perl
