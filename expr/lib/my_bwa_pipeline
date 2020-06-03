@@ -1,0 +1,35 @@
+#!/bin/bash -       
+#description     :BWA-based method; the other parts are still the same 
+#author		 :tku16
+#==========
+#align illumina reads using bwa and art-file for visualization
+
+prefix=$1	# used to name the different output files
+infile=$2	# name of input fastq file containing the left end reads 
+reffiles=$3	# path and prefix of reference genome files
+annofile=$4	# path to annotation file
+Rannofile=$5	# path to annotation file for R
+
+indexref=$reffiles
+hashref=$reffiles
+annotation=$annofile
+Rannotation=$Rannofile
+
+## for single end and length <70bp
+bwa aln $reffiles $infile > $prefix.sai
+bwa samse -f $prefix.sam -r $(echo "@RG\tID:snps\tSM:snps") \
+ $reffiles $prefix.sai $infile 
+
+### writing profiles ###
+sam2art.pl -s 2 $prefix.sam > $prefix.art
+sam2art.pl -s 2 -l $prefix.sam > $prefix.sin
+sam2art.pl -f -s 2 $prefix.sam > $prefix.flatcount
+
+### counting genes ###
+#art2genecount.pl -b -a $prefix.sin -t tab -r $annotation > $prefix.rpg
+art2genecount.pl -a $prefix.sin -t tab -r $annotation > $prefix.rpg
+
+### mapping statistics ###
+sam_statistics.pl -r $prefix.sam > $prefix.stats
+#genes_statistics.R $prefix.rpg $Rannotation $prefix.stats $prefix
+# As the usage of art2genecount.pl was changed, this R script cannot deal with the three-column format of rpg

@@ -151,52 +151,108 @@ rule indel_align_families:
 #for i in `ls|grep \.fasta`; do i=`echo $i | cut -f1 -d "."` ; echo "mafft $i.fasta \
 #> $i.aln"; done | parallel --joblog {params.parallel_log} -j {threads}
 
-rule indel_identify_indels:
+rule indel_msa2vcf:
     input:
-        fam_aln_files=dynamic(os.path.join(
-            extracted_proteins_dir, '{fam}.aln')),
-        core_gene_list=os.path.join(out_roary_dir, 'core_genes_50.txt'),
+        indel_msa=os.path.join(
+            extracted_proteins_dir, '{fam}.aln')
+    output:
+        indel_vcf='indels/{fam}.vcf'
+    conda: 'indel_env.yml'
+    shell:
+        '''
+        msa2vcf < {input.indel_msa} > {output.indel_vcf}
+        '''
+       
+rule indel_vcf2bin:
+    input:
+        indel_vcf='indels/{fam}.vcf'
+    output:
+        indel_indels= 'indels/{fam}_indels.txt',
+        indel_gff= 'indels/{fam}_indels.gff',
+        indel_stats= 'indels/{fam}_indel_stats.txt'
+    conda: 'indel_env.yml'
+    params:
+        vcf2indel_script= 'vcf2indel.py',
+        prefix= lambda wildcards: 'indel/{}'.format(wildcards.fam) 
+    shell:
+        '''
+        {params.vcf2indel_script} {input.indel_vcf} \
+ {params.prefix} {output.indel_indels} {output.indel_gff} {output.indel_stats}
+        '''
+
+rule indel_integrate_indels:
+    input:
+        indel_all_indels=dynamic('indels/{fam}_indels.txt'),
+        core_gene_list=os.path.join(out_roary_dir,'core_genes_50.txt'),
         gpa_rtab=os.path.join(out_roary_dir, 'gene_presence_absence.Rtab'),
         annot=out_gpa_f,
         roary_abricate= os.path.join(out_roary_dir, 'roary_abricate.txt')
     output:
-        indel_annot= out_indel_f
+        indel_annot= out_indel_f,
+        indel_annot_stats= out_indel_f+'.stats'
     params:
-        vcf2indel_script= 'vcf2indel.py',
-        indels_dir='indels',
         generate_feature_script='generate_indel_features.py',
-        extracted_proteins_dir=extracted_proteins_dir
-    threads: 20
+        w_dir= 'indels'
     conda: 'indel_env.yml'
     shell:
         '''
-        core_genes=$(cat {input.core_gene_list})
-        if [ -d {params.indels_dir} ]; then
-            rm -r {params.indels_dir};
-        fi 
-        mkdir {params.indels_dir} 
-        #variant calling on msa
-        parallel -j {threads} "msa2vcf \
-< {params.extracted_proteins_dir}/{{}}.aln > {params.indels_dir}/{{}}.vcf" ::: $core_genes
-
-        #vcf to indel yes/no vector, stats and gff
-        parallel -j {threads} "{params.vcf2indel_script} \
-{params.indels_dir}/{{}}.vcf \
-{params.indels_dir}/{{}} \
-{params.indels_dir}/{{}}_indels.txt \
-{params.indels_dir}/{{}}_indels.gff \
-{params.indels_dir}/{{}}_indel_stats.txt" ::: $core_genes
-
-        cd {params.indels_dir}
+        cd {params.w_dir}
         # In 'clustered_proteins', roary never quotes gene names; 
         # in the .Rtab, space-included names are quoted
         {params.generate_feature_script} \
-<(cut -f1 ../{input.gpa_rtab} | tail -n+2 | grep -v hdl | sed 's/"//g') \
+<(cut -f1 ../{input.gpa_rtab} | tail -n+2 | sed 's/"//g') \
 ../{input.annot} \
 ../{output.indel_annot} \
 ../{output.indel_annot}.stats \
 ../{input.roary_abricate}
         '''
+
+##rule indel_identify_indels:
+##    input:
+##        fam_aln_files=dynamic(os.path.join(
+##            extracted_proteins_dir, '{fam}.aln')),
+##        core_gene_list=os.path.join(out_roary_dir, 'core_genes_50.txt'),
+##        gpa_rtab=os.path.join(out_roary_dir, 'gene_presence_absence.Rtab'),
+##        annot=out_gpa_f,
+##        roary_abricate= os.path.join(out_roary_dir, 'roary_abricate.txt')
+##    output:
+##        indel_annot= out_indel_f
+##    params:
+##        vcf2indel_script= 'vcf2indel.py',
+##        indels_dir='indels',
+##        generate_feature_script='generate_indel_features.py',
+##        extracted_proteins_dir=extracted_proteins_dir
+##    threads: 20
+##    conda: 'indel_env.yml'
+##    shell:
+##        '''
+##        core_genes=$(cat {input.core_gene_list})
+##        if [ -d {params.indels_dir} ]; then
+##            rm -r {params.indels_dir};
+##        fi 
+##        mkdir {params.indels_dir} 
+##        #variant calling on msa
+##        parallel -j {threads} "msa2vcf \
+##< {params.extracted_proteins_dir}/{{}}.aln > {params.indels_dir}/{{}}.vcf" ::: $core_genes
+##
+##        #vcf to indel yes/no vector, stats and gff
+##        parallel -j {threads} "{params.vcf2indel_script} \
+##{params.indels_dir}/{{}}.vcf \
+##{params.indels_dir}/{{}} \
+##{params.indels_dir}/{{}}_indels.txt \
+##{params.indels_dir}/{{}}_indels.gff \
+##{params.indels_dir}/{{}}_indel_stats.txt" ::: $core_genes
+##
+##        cd {params.indels_dir}
+##        # In 'clustered_proteins', roary never quotes gene names; 
+##        # in the .Rtab, space-included names are quoted
+##        {params.generate_feature_script} \
+##<(cut -f1 ../{input.gpa_rtab} | tail -n+2 | grep -v hdl | sed 's/"//g') \
+##../{input.annot} \
+##../{output.indel_annot} \
+##../{output.indel_annot}.stats \
+##../{input.roary_abricate}
+##        '''
 
 rule roary:
     input:

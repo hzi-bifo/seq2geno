@@ -1,9 +1,9 @@
 #!/bin/bash -       
-#description     :Replace the stampy-based mworkflow with bwa method due to the license issue
+#description     :BWA-based method; the other parts are still the same 
 #author		 :tku16
 #==========
 
-#align illumina reads using stampy and art-file for visualization
+#align illumina reads using bwa and art-file for visualization
 prefix=$1	# used to name the different output files
 infile1=$2	# name of input fastq file containing the left end reads 
 infile2=$3	# name of input fastq file containing the right end reads
