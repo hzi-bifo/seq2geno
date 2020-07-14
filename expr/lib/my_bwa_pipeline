@@ -15,11 +15,11 @@ hashref=$reffiles
 annotation=$annofile
 Rannotation=$Rannofile
 
-## for single end and length <70bp
+## for single end and length <100bp
 bwa aln $reffiles $infile > $prefix.sai
-bwa samse -f $prefix.sam -r $(echo "@RG\tID:snps\tSM:snps") \
- $reffiles $prefix.sai $infile 
-
+bwa samse -r $( echo "@RG\tID:snps\tSM:snps" ) \
+ $reffiles $prefix.sai $infile > $prefix.sam 
+du -sh $prefix.sam
 ### writing profiles ###
 sam2art.pl -s 2 $prefix.sam > $prefix.art
 sam2art.pl -s 2 -l $prefix.sam > $prefix.sin

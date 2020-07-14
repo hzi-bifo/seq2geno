@@ -78,7 +78,7 @@ class snps_args:
 
 class denovo_args:
     def __init__(self, list_f, REF_GFF, ref_gbk, adaptor,
-        redirected_reads_dir, config_f='denovo_config.yml'):
+        redirected_reads_dir, config_f='config.yml'):
         self.list_f= list_f
         self.REF_GFF= REF_GFF
         self.ref_gbk= ref_gbk 
@@ -216,3 +216,9 @@ def main(args):
     # Determine which version to use (ori or ng)
     # Create the environment, followed by the analysis snakemake workflows
     #subprocess.call(main_cmd)
+    return({'snps':  os.path.abspath(os.path.join(args.wd, s_args.config_f)),
+            'expr': os.path.abspath(os.path.join(args.wd, e_args.config_f)),
+            'denovo':os.path.abspath(os.path.join(args.wd, d_args.config_f)),
+            'phylo':os.path.abspath(os.path.join(args.wd, p_args.config_f)),
+            'ar':os.path.abspath(os.path.join(args.wd, a_args.config_f)),
+            'de':os.path.abspath(os.path.join(args.wd, de_args.config_f))})

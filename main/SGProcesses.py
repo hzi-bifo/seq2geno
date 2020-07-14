@@ -1,5 +1,6 @@
 class SGProcess:
     def __init__(self, wd, proc, config_f, dryrun= True, max_cores= 1):
+        import os
         self.proc= proc
         self.dryrun= dryrun
         self.max_cores= max_cores
@@ -16,7 +17,6 @@ class SGProcess:
         print(proc)
         try:
             import snakemake
-            import os 
             os.environ['PATH']=env_dict['PATH']
 
             ## run the process
@@ -51,7 +51,7 @@ class SGProcess:
                 sys.exc_info()))
             raise RuntimeError('Unknown problem occured when lauching Snakemake')
 
-    def EditEnv(proc):
+    def EditEnv(self, proc):
         import os
         import sys
         import re

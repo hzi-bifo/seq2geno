@@ -27,12 +27,12 @@ rule archive_data:
         check_file= out_table,
         target_files= expand('{strain}.{types}',
                         strain= strains, 
-                        types= ['sam','art', 'sin', 'flatcount', 'rpg', 'stats'])
+                        types= ['sam', 'sai', 'art', 'sin', 'flatcount', 'rpg', 'stats'])
     output:
         arx= arx_file
     shell:
         '''
-        tar -cf {input.target_files} --remove-files| gzip --best -o {output.arx}
+        tar -czvf {output.arx}  {input.target_files} --remove-files
         '''
         
 
@@ -72,6 +72,7 @@ rule my_bwa_pipeline:
         Rannofile=r_annot
     output:
         sam='{strain}.sam',
+        sai='{strain}.sai',
         art='{strain}.art',
         sin='{strain}.sin',
         flatcount='{strain}.flatcount',

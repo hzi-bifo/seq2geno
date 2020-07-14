@@ -7,6 +7,7 @@ def main(args):
     import os
     from SGProcesses import SGProcess
 
+    config_files= {}
     try:
         ## accept config files
         if args.old_config:
@@ -86,15 +87,15 @@ def main(args):
         processes_num= len(all_processes)+1
         pbar = tqdm(total= processes_num,
             desc= "\nseq2geno")
-        pbar.update(1)
         for p in all_processes:
-            SGProcess.run_proc()
+            p.run_proc()
+            pbar.update(1)
     except Exception as e:
         sys.exit('ERROR: {}'.format(e))
     finally:
         if not args.dryrun:
             from CollectResults import collect_results
-            collect_results(args.wd)
+            collect_results(args.wd, config_files)
         print('Working directory {} {}'.format(
             args.wd, 'updated' if not args.dryrun else 'unchanged'))
         pbar.update(1)

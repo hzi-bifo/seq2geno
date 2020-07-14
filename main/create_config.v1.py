@@ -216,9 +216,3 @@ def main(args):
     # Determine which version to use (ori or ng)
     # Create the environment, followed by the analysis snakemake workflows
     #subprocess.call(main_cmd)
-    return({'snps':  os.path.abspath(os.path.join(args.wd, s_args.config_f)),
-            'expr': os.path.abspath(os.path.join(args.wd, e_args.config_f)),
-            'denovo':os.path.abspath(os.path.join(args.wd, d_args.config_f)),
-            'phylo':os.path.abspath(os.path.join(args.wd, p_args.config_f)),
-            'ar':os.path.abspath(os.path.join(args.wd, a_args.config_f)),
-            'de':os.path.abspath(os.path.join(args.wd, de_args.config_f))})

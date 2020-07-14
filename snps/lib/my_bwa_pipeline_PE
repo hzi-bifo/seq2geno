@@ -19,7 +19,7 @@ Rannotation=$Rannofile
 
 bwa mem -v 2 -M \
   -t 1 \
-  -R $(echo "@RG\tID:snps\tSM:snps") \
+  -R $( echo "@RG\tID:snps\tSM:snps" ) \
   $reffiles $infile1 $infile2 > $prefix.sam 
 
 #echo  "writing art file"

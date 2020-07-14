@@ -1,29 +1,31 @@
 
-def collect_results(project_dir):
+def collect_results(project_dir, config_files):
     import os
     import shutil
     import yaml
+    import re
     results_newdir= os.path.join(project_dir, 'RESULTS')
     if os.path.isdir(results_newdir):
         shutil.rmtree(results_newdir)
     os.mkdir(results_newdir)
-    denovo_config= os.path.join(project_dir, 'denovo', 'denovo_config.yml') 
-    snps_config= os.path.join(project_dir, 'snps', 'snps_config.yml') 
-    expr_config= os.path.join(project_dir, 'expr', 'expr_config.yml') 
-    phylo_config= os.path.join(project_dir, 'phylo', 'phylo_config.yml') 
-    diffexpr_config= os.path.join(project_dir, 'de_config.yml')
+    denovo_config= config_files['denovo'] 
+    snps_config= config_files['snps'] 
+    expr_config= config_files['expr'] 
+    phylo_config= config_files['phylo'] 
+    diffexpr_config= config_files['de']
 
     ## de novo assemblies
     d_config= yaml.safe_load(open(denovo_config, 'r'))
     assem_newdir= os.path.join(results_newdir, 'assemblies')
-    os.mkdir(assem_newdir)
     assem_outdir= os.path.join(os.path.dirname(denovo_config),
             d_config['out_spades_dir'])
-    if  os.path.isdir(assem_outdir):
+    if  os.path.isdir(assem_outdir) :
         strains=os.listdir(assem_outdir)
         for s in strains:
             old= os.path.join(assem_outdir, s, 'contigs.fasta')
             new= os.path.join(assem_newdir, '{}.fasta'.format(s))
+            if not os.path.isdir(assem_newdir):
+                os.mkdir(assem_newdir)
             if os.path.isfile(old):
                 os.symlink(os.path.abspath(old), new)
     ## gpa, indel and snps tables
