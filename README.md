@@ -61,7 +61,7 @@ The input file is an yaml file where all options are described. The file include
 | --- | --- | --- |
 | dryrun | display the processes and exit | [Y]/N |
 | snps | SNPs calling | Y/[N] |
-| denovo | creating _de novo_ assemblies | Y/[N] |
+| denovo | creating de novo assemblies | Y/[N] |
 | expr | counting expression levels | Y/[N] |
 | phylo | inferring the phylogeny | Y/[N] |
 | de | differential expression | Y/[N] |
