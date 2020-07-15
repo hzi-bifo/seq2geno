@@ -312,8 +312,10 @@ rule create_gff:
     conda: 'prokka_env.yml'
     shell:
         '''
-#        echo $PERL5LIB
         which prokka
+        export PROKKA_BIN=$( which prokka )
+	export PERL5LIB=$( dirname $PROKKA_BIN )/../perl5/:$PERL5LIB
+        echo $PERL5LIB
         prokka --locustag {wildcards.strain} \
 --prefix  {wildcards.strain} \
 --force  --cpus {threads} --metagenome --compliant \
