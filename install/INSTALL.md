@@ -3,8 +3,8 @@
 It might look like `/YOUR/HOME/bin/seq2geno`
 #### Step 3. edit the environment variables and add the lines below in your ~/.profile
 ```
-export SEQ2GENO_HOME=$HOME/bin/seq2geno
-export PATH=$(realpath $SEQ2GENO_HOME)/main:$PATH
+export SEQ2GENO_HOME=$HOME/bin/
+export PATH=$( realpath $SEQ2GENO_HOME )/main:$PATH
 ```
 If this package was acquired as Seq2Geno2Pheno was installed, these variable will be set up by Seq2Geno2Pheno.
 

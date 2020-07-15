@@ -156,7 +156,7 @@ rule isolate_dict:
         with open(output[0], 'w') as out_fh:
             out_fh.write('\n'.join(params.strains))
         
-rule my_samtools_SNP_pipeline:
+rule samtools_SNP_pipeline:
     input:
         sam='{strain}.sam',
         reffile=ref_fasta
@@ -179,7 +179,7 @@ $PERL5LIB
 	set -u
         """
 
-rule my_bwa_pipeline_PE:
+rule bwa_pipeline_PE:
     input:
         infile1= lambda wildcards: os.path.join(
         new_reads_dir, '{}.cleaned.1.fq.gz'.format(wildcards.strain)),
@@ -209,39 +209,6 @@ rule my_bwa_pipeline_PE:
 {input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
 	set -u
         """
-
-#rule my_stampy_pipeline_PE:
-#    input:
-#        infile1= lambda wildcards: os.path.join(
-#        new_reads_dir, '{}.cleaned.1.fq.gz'.format(wildcards.strain)),
-#        infile2= lambda wildcards: os.path.join(
-#        new_reads_dir, '{}.cleaned.2.fq.gz'.format(wildcards.strain)),
-#        reffile=ref_fasta,
-#        ref_index_stampy=ref_fasta+'.stidx',
-#        ref_index_bwa=ref_fasta+'.bwt',
-#        annofile=annot_tab,
-#        Rannofile=r_annot
-#    output:
-#        sam=temp('{strain}.sam'),
-#        art='{strain}.art',
-#        sin='{strain}.sin',
-#        flatcount='{strain}.flatcount',
-#        rpg='{strain}.rpg',
-#        stat='{strain}.stats'
-#    threads:1
-#    conda: 'snps_tab_mapping.yml'
-#    shell:
-#        """
-#        sleep 10
-#	set +u
-#        export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
-#        export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2:$PERL5LIB
-#        export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:$PERL5LIB
-#        my_stampy_pipeline_PE {wildcards.strain} \
-#{input.infile1} {input.infile2} {input.reffile} \
-#{input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
-#	set -u
-#        """
 
 rule redirect_and_preprocess_reads:
     input: 
@@ -309,18 +276,3 @@ rule index_ref:
         bwa index -a bwtsw {input.reffile}
         samtools faidx {input}
         '''
-
-#rule stampy_index_ref:
-#    input:
-#        reffile=ref_fasta
-#    output:
-#        ref_fasta+'.bwt',
-#        ref_fasta+'.stidx',
-#        ref_fasta+'.sthash'
-#    conda: 'snps_tab_mapping.yml'
-#    shell:
-#        '''
-#        stampy.py -G {input.reffile} {input.reffile}
-#	stampy.py -g {input.reffile} -H {input.reffile}
-#        bwa index -a bwtsw {input.reffile}
-#        '''

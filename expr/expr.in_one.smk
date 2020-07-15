@@ -61,7 +61,7 @@ rule collect_rpg:
         log_rpg_df= pd.np.log(rpg_df+1)
         log_rpg_df.to_csv(out_log_table, sep = "\t")    
 
-rule my_bwa_pipeline:
+rule bwa_pipeline:
     input:
         #infile=strain_fq,
         infile=lambda wildcards: rna_reads[wildcards.strain],
@@ -91,35 +91,7 @@ lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
 {input.reffile} {input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
         set -u
         """
-#rule my_stampy_pipeline:
-#    input:
-#        #infile=strain_fq,
-#        infile=lambda wildcards: rna_reads[wildcards.strain],
-#        reffile=ref_fasta,
-#        ref_index_stampy=ref_fasta+'.stidx',
-#        ref_index_bwa=ref_fasta+'.bwt',
-#        annofile=annot_tab,
-#        Rannofile=r_annot
-#    output:
-#        sam='{strain}.sam',
-#        art='{strain}.art',
-#        sin='{strain}.sin',
-#        flatcount='{strain}.flatcount',
-#        rpg='{strain}.rpg',
-#        stat='{strain}.stats'
-#    threads:1
-#    conda: 'snps_tab_mapping.yml'
-#    shell:
-#        """
-#        set +u
-#        export PERL5LIB=$CONDA_PREFIX/\
-#lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
-#        export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2:$PERL5LIB
-#        export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:$PERL5LIB
-#        my_stampy_pipeline {wildcards.strain} {input.infile} \
-#{input.reffile} {input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
-#        set -u
-#        """
+
 rule create_annot:
     input:
         ref_gbk=ref_gbk
@@ -154,18 +126,3 @@ rule index_ref:
         bwa index -a bwtsw {input.reffile}
         samtools faidx {input}
         '''
-
-#rule stampy_index_ref:
-#    input:
-#        reffile=ref_fasta
-#    output:
-#        ref_fasta+'.bwt',
-#        ref_fasta+'.stidx',
-#        ref_fasta+'.sthash'
-#    conda: 'snps_tab_mapping.yml'
-#    shell:
-#        '''
-#        stampy.py -G {input.reffile} {input.reffile}
-#        stampy.py -g {input.reffile} -H {input.reffile}
-#        bwa index -a bwtsw {input.reffile}
-#        '''
