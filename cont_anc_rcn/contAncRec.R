@@ -17,7 +17,7 @@ out_dir<- snakemake@output[['output_dir']]
 dir.create(out_dir, showWarnings = FALSE)
 
 tree<- read.newick(tree_f)
-data<- as.data.frame(read_seq2geno.tab(data_f))# species in rows
+data<- as.data.frame(read_seq2geno.tab(data_f, string_values= F))# species in rows
 genes<- colnames(data)
 
 #####
@@ -76,9 +76,9 @@ out<- round(out, digits = 3)
 edge_out<- round(edge_out, digits = 3)
 
 out_node_f<- file.path(out_dir, paste(basename(data_f), 'recons_node.mat', sep= '.'))
-write.table(out, file= out_node_f, quote= FALSE, sep= '\t')
+write.table(out, file= out_node_f, quote= FALSE, sep= '\t', col.names = NA)
 out_edge_f<- file.path(out_dir, paste(basename(data_f), 'recons_edge.mat', sep= '.'))
-write.table(edge_out, file= out_edge_f, quote= FALSE, sep= '\t')
+write.table(edge_out, file= out_edge_f, quote= FALSE, sep= '\t', col.names = NA)
 out_parent_f<-file.path(out_dir, paste(basename(data_f), 'parent-to-child.tsv', sep= '.')) 
 write.table(edges, file= out_parent_f, quote= FALSE, row.names = FALSE, sep= '\t')
 

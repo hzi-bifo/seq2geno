@@ -73,7 +73,6 @@ def main(args):
 
     ## differential expression
     if  not args.dryrun and args.phe_table != '-' and args.rna_reads != '-' and args.de:
-        SGProcess('de', config_f, dryrun= args.dryrun, max_cores= args.cores)
         all_processes.append(SGProcess(args.wd,
                       'de', config_f= config_files['de'], 
                        dryrun= args.dryrun, 

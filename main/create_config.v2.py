@@ -106,7 +106,7 @@ class cmprs_args:
 
 class ar_args:
     def __init__(self, phylo_config_f, expr_config_f,
-        config_f='config.yml'):
+        config_f='ar_config.yml'):
         self.config_f= config_f
         self.phylo_config= phylo_config_f
         self.expr_config= expr_config_f
@@ -115,7 +115,7 @@ class ar_args:
 
 class diffexpr_args:
     def __init__(self, pheno, expr_config_f,
-        config_f='config.yml'):
+        config_f='de_config.yml'):
         self.config_f= config_f
         self.pheno_tab= pheno
         self.expr_config= expr_config_f

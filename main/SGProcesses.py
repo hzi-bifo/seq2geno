@@ -4,7 +4,7 @@ class SGProcess:
         self.proc= proc
         self.dryrun= dryrun
         self.max_cores= max_cores
-        self.config_f= os.path.join(wd, proc, 'config.yml')
+        self.config_f= config_f 
         
     def run_proc(self):
         proc= self.proc
