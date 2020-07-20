@@ -17,6 +17,7 @@ aln_f=config['aln_f']
 tree_f=config['tree_f']
 adaptor_f= config['adaptor']
 new_reads_dir= config['new_reads_dir']
+mapping_results_dir= config['mapping_results_dir']
 fam_stats_file= 'fam_stats.txt'
 
 rule all:
@@ -180,6 +181,23 @@ rule index_ref:
         samtools faidx {input}
         bwa index {input}
         """
+rule move_mapping_result:
+    ## this will allow phylo workflow reuse those done in the snps workflow;
+    ## however, the snps workflow cannot reuse them because the mapping
+    ## procedure must be run again to generate the other required intermediate
+    ## files
+    input:
+        sorted_bam="{}/{{strain}}/bwa.sorted.bam".format(results_dir),
+        sorted_bam_index="{}/{{strain}}/bwa.sorted.bam.bai".format(results_dir)
+    output:
+        moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
+        moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
+    shell:
+        '''
+        mv {input.sorted_bam} {output.moved_bam}
+        mv {input.sorted_bam_index} {output.moved_bam_index}
+        '''
+
 
 rule mapping:
     input:
@@ -188,10 +206,12 @@ rule mapping:
         FQ1= os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
         FQ2= os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
     output:
-        sam="{tmp_d}/{strain}/bwa.sam",
-        bam="{tmp_d}/{strain}/bwa.bam",
-        sorted_bam="{tmp_d}/{strain}/bwa.sorted.bam",
-        sorted_bam_index="{tmp_d}/{strain}/bwa.sorted.bam.bai"
+        ## because directly piping is unavialble with this version of compiled bamtools, 
+        ## sam file as an intermediate is needed
+        sam= temp("{tmp_d}/{strain}/bwa.sam"),
+        bam= temp("{tmp_d}/{strain}/bwa.bam"),
+        sorted_bam=temp("{tmp_d}/{strain}/bwa.sorted.bam"),
+        sorted_bam_index=temp("{tmp_d}/{strain}/bwa.sorted.bam.bai")
     threads:1
     conda: 'phylo_bwa_env.yml'
     shell:
@@ -239,8 +259,10 @@ rule call_var:
     input:
         ref=REF_FA,
         ref_index=REF_FA+".fai",
-        sorted_bam="{tmp_d}/{strain}/bwa.sorted.bam",
-        sorted_bam_index="{tmp_d}/{strain}/bwa.sorted.bam.bai"
+#        sorted_bam="{tmp_d}/{strain}/bwa.sorted.bam",
+#        sorted_bam_index="{tmp_d}/{strain}/bwa.sorted.bam.bai"
+        moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
+        moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
     output:
         vcf='{tmp_d}/{strain}/bwa.vcf',
         vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
@@ -252,7 +274,7 @@ rule call_var:
     shell:
         """
         freebayes-parallel <(fasta_generate_regions.py {input.ref_index} 100000) \
- {threads} -f {input.ref} {params.freebayes_params} {input.sorted_bam} \
+ {threads} -f {input.ref} {params.freebayes_params} {input.moved_bam} \
  > {output.vcf}
         bgzip -c {output.vcf} > {output.vcf_gz}
         tabix -p vcf {output.vcf_gz}

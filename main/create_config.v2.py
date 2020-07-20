@@ -13,12 +13,13 @@ import sys
 
 class phylo_args:
     def __init__(self, list_f, REF_FA, REF_GFF,adaptor,
-        redirected_reads_dir, config_f='config.yml'):
+        redirected_reads_dir,mapping_results_dir, config_f='config.yml'):
         self.list_f= list_f
         self.REF_FA= REF_FA
         self.REF_GFF= REF_GFF
         self.adaptor= adaptor
         self.new_reads_dir= redirected_reads_dir
+        self.mapping_results_dir= mapping_results_dir
         subfolder= 'phylo'
         self.config_f= os.path.join(
             subfolder, config_f)
@@ -50,12 +51,13 @@ class expr_args:
 
 class snps_args:
     def __init__(self, list_f, ref_fasta, ref_gbk, adaptor,
-            redirected_reads_dir, config_f= 'config.yml'):
+            redirected_reads_dir,mapping_results_dir, config_f= 'config.yml'):
         self.list_f=list_f
         self.adaptor= adaptor
         self.new_reads_dir= redirected_reads_dir
         self.ref_fasta= ref_fasta
         self.ref_gbk= ref_gbk 
+        self.mapping_results_dir= mapping_results_dir
         #self.snps_aa_bin_mat=snps_aa_bin_mat
         #self.nonsyn_snps_aa_bin_mat= 'nonsyn_'+ self.snps_aa_bin_mat
         #self.config_f= os.path.join(
@@ -163,6 +165,8 @@ def main(args):
             adaptor= args.adaptor,
             redirected_reads_dir= os.path.join(
                 os.path.abspath(args.wd), 'reads', 'dna'),
+            mapping_results_dir= os.path.join(
+                os.path.abspath(args.wd), 'mapping_results', 'dna'),
             ref_fasta= args.ref_fa, 
             ref_gbk= args.ref_gbk)
     create_yaml_f(s_args, args.wd, s_args.config_f)
@@ -181,6 +185,8 @@ def main(args):
             adaptor= args.adaptor,
             redirected_reads_dir= os.path.join(
                 os.path.abspath(args.wd), 'reads', 'dna'),
+            mapping_results_dir= os.path.join(
+                os.path.abspath(args.wd), 'mapping_results', 'dna'),
             REF_FA= args.ref_fa, 
             REF_GFF= args.ref_gff)
     create_yaml_f(p_args, args.wd, p_args.config_f)
