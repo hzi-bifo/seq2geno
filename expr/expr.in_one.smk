@@ -71,7 +71,7 @@ rule bwa_pipeline:
         annofile=annot_tab,
         Rannofile=r_annot
     output:
-        sam='{strain}.sam',
+        sam=temp('{strain}.sam'),
         sai='{strain}.sai',
         art='{strain}.art',
         sin='{strain}.sin',

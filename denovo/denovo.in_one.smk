@@ -303,7 +303,9 @@ $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
 #-e -n -v {input.gff_files} -r -p 30 -g 100000 -z
 
 rule create_gff:
-    input: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
+    input: 
+        contigs= os.path.join(out_spades_dir,'{strain}', 'contigs.fasta'),
+        ref_gbk=ref_gbk
     output: 
         os.path.join(out_prokka_dir, '{strain}', '{strain}.gff'), 
         os.path.join(out_prokka_dir, '{strain}', '{strain}.ffn')
@@ -319,7 +321,8 @@ rule create_gff:
         prokka --locustag {wildcards.strain} \
 --prefix  {wildcards.strain} \
 --force  --cpus {threads} --metagenome --compliant \
---outdir prokka/{wildcards.strain} {input}
+--proteins {input.ref_gbk} \
+--outdir prokka/{wildcards.strain} {input.contigs}
         '''
 rule create_annot:
     input:

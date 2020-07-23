@@ -130,12 +130,12 @@ def create_yaml_f(args, wd, config_f):
     import os
     try:
         config_f= os.path.abspath(os.path.join(wd, config_f))
-        print(config_f)
         target_dir= os.path.dirname(config_f)
         if not os.path.exists(target_dir):
             print('creating {}...'.format(target_dir))
             os.makedirs(target_dir)
         config_fh= open(config_f, 'w')
+        print('creating {}...'.format(config_f))
         yaml.dump(vars(args), config_fh, default_flow_style= False)
         config_fh.close()
     except Exception as e:
