@@ -56,10 +56,10 @@ rule collect_rpg:
             df=df.rename(columns=col_dict).set_index('locus')
             series_to_collect.append(df.loc[:,s])
         rpg_df=pd.DataFrame(series_to_collect)
-        rpg_df.to_csv(output[0], sep='\t') 
+        rpg_df.to_csv(output[0], sep='\t', index_label=False) 
 
         log_rpg_df= pd.np.log(rpg_df+1)
-        log_rpg_df.to_csv(out_log_table, sep = "\t")    
+        log_rpg_df.to_csv(out_log_table, sep = "\t", index_label=False)    
 
 rule bwa_pipeline:
     input:

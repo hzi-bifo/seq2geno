@@ -267,6 +267,7 @@ strain= list(dna_reads.keys()))
         check_add_perl_env_script= 'install_perl_mods.sh',
         check_add_software_script= 'set_roary_env.sh',
         roary_bin= 'roary'
+    threads: 16
     shell:
         '''
         set +u
@@ -296,7 +297,7 @@ $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
         echo $PERLLIB
         rm -r {wildcards.roary_dir}
         {params.roary_bin} -f {wildcards.roary_dir} \
--v {input.gff_files} -p 30 -g 100000 -z
+-v {input.gff_files} -p {threads} -g 100000 -z
         set -u
         ''' 
 #        {params.roary_bin} -f {wildcards.roary_dir} \

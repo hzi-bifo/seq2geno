@@ -44,7 +44,7 @@ for name, group in grouped_t_df:
 ## print the compressed features
 new_df= pd.DataFrame(data= new_feat_dict) # features in columns
 new_df.to_csv(comp_out_f, sep= '\t', header= True, 
-    index= True, index_label= '', encoding= 'utf-8')
+    index= True, index_label=False, encoding= 'utf-8')
 
 ## print the cluster information
 with open(group_out_f, 'w') as group_out_fh:
