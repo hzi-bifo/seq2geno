@@ -14,7 +14,7 @@ class arguments:
         missing_obligatory_args= [k 
             for k in obligatory_args if not hasattr(self, k)]
         if len(missing_obligatory_args):
-            sys.exit('ERROR: {} are obligatory'.format(
+            sys.exit('ERROR: "{}" is obligatory'.format(
                 ' '.join(missing_obligatory_args)))
         # default values of optional arguments
         optional_args= {'cores':1, 'adaptor': '-', 'rna_reads': '-', 
