@@ -38,6 +38,7 @@ rule remove_redundant_feat:
     script: 'featCompress.py'
 
 rule abricate_dict:
+    #' Determine family names using the reference gff file
     input:
         roary_clustered_proteins= os.path.join(out_roary_dir,
 "clustered_proteins"),
@@ -62,6 +63,7 @@ grep -v '#' |grep -v '^\s*$' > {output.tmp_gff}
         '''
 
 rule gpa_bin_mat:
+    #' Encoding the roary output into the matrix of binary states
     input:
         rename_dict_f=os.path.join(out_roary_dir, 'roary_abricate.txt'),
         gpa_csv=os.path.join(out_roary_dir, 'gene_presence_absence.csv')
@@ -97,7 +99,7 @@ index_label= 'Gene')
  
 
 rule indel_select_core_genes:
-    ## needs shadow
+    #' Detect indels
     input:
         gpa_csv=os.path.join('{roary_dir}', 'gene_presence_absence.csv'),
         prot_tab=os.path.join('{roary_dir}', 'clustered_proteins')
@@ -118,6 +120,7 @@ rule indel_select_core_genes:
         '''
 
 rule indel_align_families:
+    #' Compute family-wise alignments
     input:
         ffn_files=expand(os.path.join(
             out_prokka_dir, '{strain}', '{strain}.ffn'),
@@ -152,6 +155,7 @@ rule indel_align_families:
 #> $i.aln"; done | parallel --joblog {params.parallel_log} -j {threads}
 
 rule indel_msa2vcf:
+    #' Make vcf for each family-wise alignment
     input:
         indel_msa=os.path.join(
             extracted_proteins_dir, '{fam}.aln')
@@ -164,6 +168,7 @@ rule indel_msa2vcf:
         '''
        
 rule indel_vcf2bin:
+    #' Encode the indel vcf files into the matrix of binary states
     input:
         indel_vcf='indels/{fam}.vcf'
     output:
@@ -181,6 +186,7 @@ rule indel_vcf2bin:
         '''
 
 rule indel_integrate_indels:
+    #' Combine the data of all families
     input:
         indel_all_indels=dynamic('indels/{fam}_indels.txt'),
         core_gene_list=os.path.join(out_roary_dir,'core_genes_50.txt'),
@@ -255,6 +261,7 @@ rule indel_integrate_indels:
 ##        '''
 
 rule roary:
+    #' Run Roary to compute orthologous groups
     input:
         gff_files= expand(os.path.join(out_prokka_dir, '{strain}', '{strain}.gff'),
 strain= list(dna_reads.keys()))
@@ -304,6 +311,7 @@ $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
 #-e -n -v {input.gff_files} -r -p 30 -g 100000 -z
 
 rule create_gff:
+    #' Detect coding regions 
     input: 
         contigs= os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
     output: 
