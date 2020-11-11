@@ -5,7 +5,13 @@ rna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
-        rna_reads[d[0]]= d[1]
+        try:
+            assert len(d)==2
+        except AssertionError:
+            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
+            raise AssertionError
+        else:
+            rna_reads[d[0]]= d[1]
 
 strains=list(rna_reads.keys())
 out_table= config['out_table']

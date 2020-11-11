@@ -7,6 +7,11 @@ with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
         dna_reads[d[0]]= d[1].split(',')
+        try:
+            assert ((len(d)==2) and (len(d[1].split(','))==2))
+        except AssertionError:
+            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
+            raise AssertionError
 
 REF_FA=config['REF_FA']
 REF_GFF=config['REF_GFF']
