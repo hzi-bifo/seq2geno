@@ -95,14 +95,15 @@ rule list_families:
 
 rule alignment:
     input:
-        os.path.join(families_seq_dir, '{fam}.fa')
+        fam_fa= os.path.join(families_seq_dir, '{fam}.fa')
     output:
-        os.path.join(families_seq_dir, '{fam}.aln')
+        fam_aln= os.path.join(families_seq_dir, '{fam}.aln')
     conda: 'mafft_7_310_env.yml'
+    params: 
+        mafft_params='--nuc --maxiterate 0 --retree 2 --parttree'
     shell:
         '''
-        mafft --quiet --nuc --maxiterate 0 --retree 2 --parttree \
-{input} > {output}
+        mafft {params.mafft_params} {input.fam_fa} > {input.fam_aln}
         '''
 
 rule sort:
@@ -203,7 +204,6 @@ rule move_mapping_result:
         mv {input.sorted_bam_index} {output.moved_bam_index}
         '''
 
-
 rule mapping:
     input:
         ref=REF_FA,
@@ -260,6 +260,32 @@ rule redirect_and_preprocess_reads:
         fi
         '''
 
+rule filter_var:
+    input:
+#        "{tmp_dir}/{species}/bwa.vcf.gz"
+        vcf_gz='{tmp_d}/{strain}/bwa.vcf.raw.gz'
+    output:
+#        "{tmp_dir}/{species}/bwa.filtered.vcf.gz"
+#        vcf='{tmp_d}/{strain}/bwa.vcf',
+        vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
+        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.gz.tbi'
+    params:
+        filter_pat='MEAN(DP)<=240 & MEAN(DP)>=3 & QUAL>=20'
+#        vcftools_filter_params='--max-meanDP 240 --min-meanDP 3 --minQ 20'
+#        vcftools_out_prefix='{tmp_d}/{strain}/bwa'
+    threads: 2
+    conda:'bcftools_1_6_env.yml'
+    shell:
+        """
+        bcftools --include {params.filter_pat} --threads {threads}\
+        -O z -o {output.vcf_gz} {input.vcf_gz}
+        tabix {output.vcf_gz}
+        """
+#        vcftools --gzvcf {input.vcf_gz} {params.vcftools_filter_params} --recode --out {params.vcftools_out_prefix}
+#        mv {wildcards.tmp_dir}/{wildcards.species}/bwa.recode.vcf {wildcards.tmp_dir}/{wildcards.species}/bwa.filtered.vcf
+#        bgzip -c {wildcards.tmp_dir}/{wildcards.species}/bwa.filtered.vcf > {output}
+
+
 rule call_var:
     input:
         ref=REF_FA,
@@ -269,9 +295,12 @@ rule call_var:
         moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
         moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
     output:
-        vcf='{tmp_d}/{strain}/bwa.vcf',
-        vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
-        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.gz.tbi'
+#        vcf='{tmp_d}/{strain}/bwa.vcf',
+#        vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
+#        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.gz.tbi'
+        vcf='{tmp_d}/{strain}/bwa.raw.vcf',
+        vcf_gz='{tmp_d}/{strain}/bwa.vcf.raw.gz',
+        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.raw.gz.tbi'
     params:
         freebayes_params= '-p 1'
     threads: 16
