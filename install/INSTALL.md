@@ -6,18 +6,21 @@ It might look like `/YOUR/HOME/bin/seq2geno`
 export SEQ2GENO_HOME=$HOME/bin/
 export PATH=$( realpath $SEQ2GENO_HOME )/main:$PATH
 ```
-If this package was acquired as Seq2Geno2Pheno was installed, these variable will be set up by Seq2Geno2Pheno.
 
 #### Step 4. install the core environment
+create the environment with the commands:
 ```
-conda env create --file=snakemake_env.yml
+conda env create -n snakemake_env --file=snakemake_env.yml
 ```
+We use the name "snakemake_env", but
+this might need changes if any previous environment is already named after it
 #### Step 5. test if the core environment 
 ```
 source activate snakemake_env
+seq2geno -h
 source deactivate
 ```
-Although `source activate` is functionally interchangeable with `conda activate`, the former will be required by snakemake so we still recommend to test with it. 
+Your conda might ask you to replace `source activate` with `conda activate` 
 
 #### Step 6. install dependencies of Raory 
 Roary already has its own script for installing dependencies, so we can simply use it:

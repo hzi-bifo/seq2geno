@@ -16,7 +16,7 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 ### Get started
 - Prerequisites
 
-    - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.6.14)
+    - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.8.4)
     - file [.condarc](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-channels.html) that includes these channels and is detectable by your conda
                 - hzi-bifo
 		- conda-forge/label/broken
@@ -114,6 +114,9 @@ To only create the folder and config files, please turn off the last six options
     - adaptor: The adaptor file (optional)
 
     The fasta file of adaptors of DNA-seq. It is used to process the DNA-seq reads. 
+
+### Example usages and data
+The tutorials and example data and commands can be found in  __example_sg_dataset.tar.gz__
 
 ### License
 Apache 2.0 (please see the LICENSE)
