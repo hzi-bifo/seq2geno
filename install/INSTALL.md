@@ -3,7 +3,7 @@
 It might look like `/YOUR/HOME/bin/seq2geno`
 #### Step 3. edit the environment variables and add the lines below in your ~/.profile
 ```
-export SEQ2GENO_HOME=$HOME/bin/
+export SEQ2GENO_HOME=/YOUR/HOME/bin/seq2geno
 export PATH=$( realpath $SEQ2GENO_HOME )/main:$PATH
 ```
 
