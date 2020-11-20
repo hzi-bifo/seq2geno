@@ -18,11 +18,11 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 
     - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.8.4)
     - file [.condarc](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-channels.html) that includes these channels and is detectable by your conda
-                - hzi-bifo
-		- conda-forge/label/broken
-		- bioconda
-		- conda-forge
-		- defaults
+    	- hzi-bifo
+	- conda-forge/label/broken
+	- bioconda
+	- conda-forge
+	- defaults
     - [python](https://www.python.org/downloads/) (tested verson: 3.6)
     - [Linux](https://www.cyberciti.biz/faq/find-linux-distribution-name-version-number/) (tested version: Debian GNU/Linux 8.8 jessie)
     - [git](https://git-scm.com/downloads) (tested version: 2.18)
