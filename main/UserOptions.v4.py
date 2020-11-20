@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+#' Role: Front desk
+#' Purpose: 
+#' Parse the yaml file and pass the user's options to the package facade
 class arguments:
     '''
     The object of arguments, as argparse is replaced

@@ -1,0 +1,1 @@
+/home/thkuo/seq2geno2pheno/seq2geno/snps/rules/mapping.smk

@@ -1,3 +1,13 @@
+#' Purpose:
+#' - Determine differential expressions
+#' Materials:
+#' - expression levels  
+#' - phenotypes
+#' Methods:
+#' - differnetial expression analyzed by DESeq2
+#' Output:
+#' - list of differntially expressed genes
+#
 import yaml
 DIF_XPR_OUT=config['out_dir']
 PHE_TABLE_F=config['pheno_tab']
@@ -20,7 +30,7 @@ rule dif_xpr_analysis:
     params:
         alpha_cutoff=DIFXPR_ALPHA,
         lfc_cutoff= DIFXPR_LFC
-    threads: 20
+    threads: 12 
     conda: 'dif_expr_env.yml'
     script: 'diffEpr_analysis.R'
         

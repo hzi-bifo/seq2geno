@@ -1,14 +1,3 @@
-#' Purpose:
-#' - Quantify the expression levels and generate the features matrix
-#' Materials:
-#' - RNA-seq reads
-#' - reference genome
-#' - adaptor file (optional)
-#' Methods:
-#' - Reads mapped using BWA backtrack
-#' Output:
-#' - numeric expression table
-#
 import pandas as pd
 
 list_f= config['list_f']
@@ -16,13 +5,7 @@ rna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
-        try:
-            assert len(d)==2
-        except AssertionError:
-            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
-            raise AssertionError
-        else:
-            rna_reads[d[0]]= d[1]
+        rna_reads[d[0]]= d[1]
 
 strains=list(rna_reads.keys())
 out_table= config['out_table']
@@ -31,31 +14,13 @@ ref_fasta= config['ref_fasta']
 ref_gbk= config['ref_gbk']
 annot_tab= config['annot_tab']
 r_annot= config['r_annot']
-arx_file= 'rna_mapping.tar.gz'
 
 rule:
     input:
-        arx_file,
         out_table,
         out_log_table
 
-rule archive_data:
-    #' archive the intermediate data 
-    input:
-        check_file= out_table,
-        target_files= expand('{strain}.{types}',
-                        strain= strains, 
-                        types= ['sam', 'sai', 'art', 'sin', 'flatcount', 'rpg', 'stats'])
-    output:
-        arx= arx_file
-    shell:
-        '''
-        tar -czvf {output.arx}  {input.target_files} --remove-files
-        '''
-        
-
 rule collect_rpg:
-    #' integrate the per-region coverages and form the matrix
     input:
         rpg_files= expand('{strain}.rpg',strain= strains)
     output:
@@ -75,14 +40,12 @@ rule collect_rpg:
             df=df.rename(columns=col_dict).set_index('locus')
             series_to_collect.append(df.loc[:,s])
         rpg_df=pd.DataFrame(series_to_collect)
-        rpg_df.to_csv(output[0], sep='\t', index_label=False) 
+        rpg_df.to_csv(output[0], sep='\t') 
 
         log_rpg_df= pd.np.log(rpg_df+1)
-        log_rpg_df.to_csv(out_log_table, sep = "\t", index_label='strain')    
-
-rule bwa_pipeline:
-    #' reads mapped to the reference genome with BWA backtrack algorithm
-    #' count the coverages for each coding region
+        log_rpg_df.to_csv(out_log_table, sep = "\t")    
+        
+rule my_stampy_pipeline:
     input:
         #infile=strain_fq,
         infile=lambda wildcards: rna_reads[wildcards.strain],
@@ -92,8 +55,7 @@ rule bwa_pipeline:
         annofile=annot_tab,
         Rannofile=r_annot
     output:
-        sam=temp('{strain}.sam'),
-        sai='{strain}.sai',
+        sam='{strain}.sam',
         art='{strain}.art',
         sin='{strain}.sin',
         flatcount='{strain}.flatcount',
@@ -108,13 +70,11 @@ rule bwa_pipeline:
 lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2:$PERL5LIB
         export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:$PERL5LIB
-        my_bwa_pipeline {wildcards.strain} {input.infile} \
+        my_stampy_pipeline {wildcards.strain} {input.infile} \
 {input.reffile} {input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
         set -u
         """
-
 rule create_annot:
-    #' determine the coding regions to quantify the expression levels
     input:
         ref_gbk=ref_gbk
     output:
@@ -127,7 +87,6 @@ rule create_annot:
         '''
 
 rule create_r_annot:
-    #' determine the coding regions to quantify the expression levels
     input:
         ref_gbk=ref_gbk
     output:
@@ -137,15 +96,17 @@ rule create_r_annot:
         create_R_anno.py -r {input.ref_gbk} -o {output.R_anno_f}
         '''
 
-rule index_ref:
+rule stampy_index_ref:
     input:
         reffile=ref_fasta
     output:
         ref_fasta+'.bwt',
-        ref_fasta+'.fai'
+        ref_fasta+'.stidx',
+        ref_fasta+'.sthash'
     conda: 'snps_tab_mapping.yml'
     shell:
         '''
+        stampy.py -G {input.reffile} {input.reffile}
+        stampy.py -g {input.reffile} -H {input.reffile}
         bwa index -a bwtsw {input.reffile}
-        samtools faidx {input}
         '''

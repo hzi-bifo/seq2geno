@@ -1,0 +1,20 @@
+features:
+  denovo: N
+  dryrun: Y 
+  ar: N
+  de: N
+  expr: N
+  phylo: N
+  snps: Y
+general:
+  cores: 19
+  mapping_software: bwa-mem
+  dna_reads: /net/sgi/metagenomics/data/from_moni/old.tzuhao/TreePaper/Saure/bin/snps_workflow/dna_list_CH3657
+  wd: /net/sgi/metagenomics/data/from_moni/old.tzuhao/TreePaper/Saure/results/CH3657/seq2geno
+  phe_table: '-' 
+  ref_fa:
+    /net/metagenomics/data/from_moni/old.tzuhao/TreePaper/Saure/data/reference/NCTC8325/GCF_000013425.1_ASM1342v1_genomic.fna
+  ref_gbk: /net/metagenomics/data/from_moni/old.tzuhao/TreePaper/Saure/data/reference/NCTC8325/GCF_000013425.1_ASM1342v1_genomic.gbff
+  ref_gff: /net/metagenomics/data/from_moni/old.tzuhao/TreePaper/Saure/data/reference/NCTC8325/GCF_000013425.1_ASM1342v1_genomic.gff
+  rna_reads: '-'
+

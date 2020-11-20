@@ -1,3 +1,4 @@
+#' Purpose: Collect the key results made by the finished workflows
 
 def collect_results(project_dir, config_files):
     import os

@@ -1,32 +1,12 @@
-#' Purpose:
-#' - De novo procedures of assemblies, annotation and orthologous clustering
-#' Materials:
-#' - DNA-seq reads
-#' - adaptor file (optional)
-#' Methods:
-#' - De novo assemblies with SPAdes 
-#' - Annotation with Prokka
-#' - Orthologous clustering with Roary
-#' - Indels from MSA with msa2vcf
-#' Output:
-#' - de novo assemblies
-#' - binary GPA table
-#
 import os
 import pandas as pd
-#' parse the list of reads
+
 list_f=config['list_f']
 dna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
         dna_reads[d[0]]= d[1].split(',')
-        try:
-            assert ((len(d)==2) and (len(d[1].split(','))==2))
-        except AssertionError:
-            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
-            raise AssertionError
-
 out_prokka_dir=config['out_prokka_dir']
 out_roary_dir=config['out_roary_dir']
 out_spades_dir= config['out_spades_dir']
@@ -58,7 +38,6 @@ rule remove_redundant_feat:
     script: 'featCompress.py'
 
 rule abricate_dict:
-    #' Determine family names using the reference gff file
     input:
         roary_clustered_proteins= os.path.join(out_roary_dir,
 "clustered_proteins"),
@@ -83,7 +62,6 @@ grep -v '#' |grep -v '^\s*$' > {output.tmp_gff}
         '''
 
 rule gpa_bin_mat:
-    #' Encoding the roary output into the matrix of binary states
     input:
         rename_dict_f=os.path.join(out_roary_dir, 'roary_abricate.txt'),
         gpa_csv=os.path.join(out_roary_dir, 'gene_presence_absence.csv')
@@ -119,7 +97,7 @@ index_label= 'Gene')
  
 
 rule indel_select_core_genes:
-    #' Detect indels
+    ## needs shadow
     input:
         gpa_csv=os.path.join('{roary_dir}', 'gene_presence_absence.csv'),
         prot_tab=os.path.join('{roary_dir}', 'clustered_proteins')
@@ -127,9 +105,10 @@ rule indel_select_core_genes:
         core_gene_list='{roary_dir}/core_genes_50.txt'
     params:
         min_num_strains= 2, 
+        #min_num_strains= 50, 
         filter_awk_script=awk_script_f 
     conda:'indel_env.yml'
-    threads: 12
+    threads:20
     shell:
         '''
         awk -v threshold="{params.min_num_strains}" \
@@ -139,7 +118,6 @@ rule indel_select_core_genes:
         '''
 
 rule indel_align_families:
-    #' Compute family-wise alignments
     input:
         ffn_files=expand(os.path.join(
             out_prokka_dir, '{strain}', '{strain}.ffn'),
@@ -153,7 +131,7 @@ rule indel_align_families:
         gene_cluster2multi_script='gene_clusters2multi_fasta.py',
         extracted_proteins_dir=extracted_proteins_dir,
         parallel_log= 'mafft.log'
-    threads: 12 
+    threads: 20 
     conda: 'indel_cluster_env.yml'
     shell:
         '''
@@ -170,60 +148,50 @@ rule indel_align_families:
         parallel --joblog {params.parallel_log} -j {threads} \
 'mafft {{}}.fasta > {{}}.aln' ::: `ls| grep 'fasta'| sed 's/\.fasta//'`
         '''
+#for i in `ls|grep \.fasta`; do i=`echo $i | cut -f1 -d "."` ; echo "mafft $i.fasta \
+#> $i.aln"; done | parallel --joblog {params.parallel_log} -j {threads}
 
-rule indel_msa2vcf:
-    #' Detect indels from each family-wise alignment
+rule indel_identify_indels:
     input:
-        indel_msa=os.path.join(
-            extracted_proteins_dir, '{fam}.aln')
-    output:
-        indel_vcf='indels/{fam}.vcf'
-    conda: 'indel_env.yml'
-    shell:
-        '''
-        msa2vcf < {input.indel_msa} > {output.indel_vcf}
-        '''
-       
-rule indel_vcf2bin:
-    #' Encode the indel vcf files into the matrix of binary states
-    input:
-        indel_vcf='indels/{fam}.vcf'
-    output:
-        indel_indels= 'indels/{fam}_indels.txt',
-        indel_gff= 'indels/{fam}_indels.gff',
-        indel_stats= 'indels/{fam}_indel_stats.txt'
-    conda: 'indel_env.yml'
-    params:
-        vcf2indel_script= 'vcf2indel.py',
-        prefix= lambda wildcards: 'indel/{}'.format(wildcards.fam) 
-    shell:
-        '''
-        {params.vcf2indel_script} {input.indel_vcf} \
- {params.prefix} {output.indel_indels} {output.indel_gff} {output.indel_stats}
-        '''
-
-rule indel_integrate_indels:
-    #' Combine the data of all families
-    input:
-        indel_all_indels=dynamic('indels/{fam}_indels.txt'),
-        core_gene_list=os.path.join(out_roary_dir,'core_genes_50.txt'),
+        fam_aln_files=dynamic(os.path.join(
+            extracted_proteins_dir, '{fam}.aln')),
+        core_gene_list=os.path.join(out_roary_dir, 'core_genes_50.txt'),
         gpa_rtab=os.path.join(out_roary_dir, 'gene_presence_absence.Rtab'),
         annot=out_gpa_f,
         roary_abricate= os.path.join(out_roary_dir, 'roary_abricate.txt')
     output:
-        indel_annot= out_indel_f,
-        indel_annot_stats= out_indel_f+'.stats'
+        indel_annot= out_indel_f
     params:
+        vcf2indel_script= 'vcf2indel.py',
+        indels_dir='indels',
         generate_feature_script='generate_indel_features.py',
-        w_dir= 'indels'
+        extracted_proteins_dir=extracted_proteins_dir
+    threads: 20
     conda: 'indel_env.yml'
     shell:
         '''
-        cd {params.w_dir}
+        core_genes=$(cat {input.core_gene_list})
+        if [ -d {params.indels_dir} ]; then
+            rm -r {params.indels_dir};
+        fi 
+        mkdir {params.indels_dir} 
+        #variant calling on msa
+        parallel -j {threads} "msa2vcf \
+< {params.extracted_proteins_dir}/{{}}.aln > {params.indels_dir}/{{}}.vcf" ::: $core_genes
+
+        #vcf to indel yes/no vector, stats and gff
+        parallel -j {threads} "{params.vcf2indel_script} \
+{params.indels_dir}/{{}}.vcf \
+{params.indels_dir}/{{}} \
+{params.indels_dir}/{{}}_indels.txt \
+{params.indels_dir}/{{}}_indels.gff \
+{params.indels_dir}/{{}}_indel_stats.txt" ::: $core_genes
+
+        cd {params.indels_dir}
         # In 'clustered_proteins', roary never quotes gene names; 
         # in the .Rtab, space-included names are quoted
         {params.generate_feature_script} \
-<(cut -f1 ../{input.gpa_rtab} | tail -n+2 | sed 's/"//g') \
+<(cut -f1 ../{input.gpa_rtab} | tail -n+2 | grep -v hdl | sed 's/"//g') \
 ../{input.annot} \
 ../{output.indel_annot} \
 ../{output.indel_annot}.stats \
@@ -231,7 +199,6 @@ rule indel_integrate_indels:
         '''
 
 rule roary:
-    #' Run Roary to compute orthologous groups
     input:
         gff_files= expand(os.path.join(out_prokka_dir, '{strain}', '{strain}.gff'),
 strain= list(dna_reads.keys()))
@@ -244,7 +211,6 @@ strain= list(dna_reads.keys()))
         check_add_perl_env_script= 'install_perl_mods.sh',
         check_add_software_script= 'set_roary_env.sh',
         roary_bin= 'roary'
-    threads: 16
     shell:
         '''
         set +u
@@ -274,16 +240,14 @@ $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
         echo $PERLLIB
         rm -r {wildcards.roary_dir}
         {params.roary_bin} -f {wildcards.roary_dir} \
--v {input.gff_files} -p {threads} -g 100000 -z
+-v {input.gff_files} -p 30 -g 100000 -z
         set -u
         ''' 
 #        {params.roary_bin} -f {wildcards.roary_dir} \
 #-e -n -v {input.gff_files} -r -p 30 -g 100000 -z
 
 rule create_gff:
-    #' Detect coding regions 
-    input: 
-        contigs= os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
+    input: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
     output: 
         os.path.join(out_prokka_dir, '{strain}', '{strain}.gff'), 
         os.path.join(out_prokka_dir, '{strain}', '{strain}.ffn')
@@ -292,19 +256,14 @@ rule create_gff:
     conda: 'prokka_env.yml'
     shell:
         '''
+#        echo $PERL5LIB
         which prokka
-        export PROKKA_BIN=$( which prokka )
-	export PERL5LIB=$( dirname $PROKKA_BIN )/../perl5/:$PERL5LIB
-        echo $PERL5LIB
         prokka --locustag {wildcards.strain} \
 --prefix  {wildcards.strain} \
 --force  --cpus {threads} --metagenome --compliant \
---outdir prokka/{wildcards.strain} {input.contigs}
+--outdir prokka/{wildcards.strain} {input}
         '''
-
 rule create_annot:
-    #' Collect the annotations from the reference for updating 
-    #' the labels of gene families
     input:
         ref_gbk=ref_gbk
     output:
@@ -317,9 +276,6 @@ rule create_annot:
         '''
 
 rule spades_create_assembly:
-    #' Compute de novo assemlies with sapdes
-    #' The computational resources is increased when 
-    #' the process is crashed and rerun
     input: 
         READS= lambda wildcards: [
             os.path.join(new_reads_dir,'{}.cleaned.{}.fq.gz'.format(
@@ -335,8 +291,40 @@ rule spades_create_assembly:
     conda: 'spades_3_10_env.yml'
     script:'run_spades.py'
 
+#rule clean_reads:
+#    input:
+#        f1= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq.1.gz'.format(wildcards.strain)),
+#        f2= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq.2.gz'.format(wildcards.strain))
+#    output:
+#        log_f= os.path.join(new_reads_dir, '{strain}.log'),
+#        f1= os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
+#        f2= os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
+#    params:
+#        adaptor_f= adaptor_f,
+#        tmp_f1= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq_cleaned.1'.format(wildcards.strain)),
+#        tmp_f2= lambda wildcards: os.path.join(
+#            new_reads_dir, '{}.fastq_cleaned.2'.format(wildcards.strain))
+#    shadow: "shallow"
+#    shell:
+#        '''
+#        if [ -e "{params.adaptor_f}" ]
+#        then
+#            fastq-mcf -l 50 -q 20 {params.adaptor_f} {input.f1} {input.f2} \
+#-o {params.tmp_f1} -o {params.tmp_f2} > {output.log_f}
+#            gzip -9 {params.tmp_f1}
+#            gzip -9 {params.tmp_f2}
+#        else
+#            echo 'No trimming' > {output.log_f}
+#            echo $(readlink {input.f1}) >> {output.log_f}
+#            echo $(readlink {input.f2}) >> {output.log_f}
+#            ln {input.f1} {output.f1}
+#            ln {input.f2} {output.f2}
+#        fi
+#        '''
 rule redirect_and_preprocess_reads:
-    #' reads processing before mapped to the reference 
     input: 
         infile1=lambda wildcards: dna_reads[wildcards.strain][0],
         infile2=lambda wildcards: dna_reads[wildcards.strain][1]

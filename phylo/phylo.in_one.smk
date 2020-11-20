@@ -1,6 +1,23 @@
+#' Purpose:
+#' - Compute phylognetic tree from mapping results of DNA-seq reads
+#' Materials:
+#' - DNA-seq reads
+#' - reference genome
+#' - adaptor file (optional)
+#' Methods:
+#' - Reads mapped using BWA-MEM
+#' - Variant sites called with freebayes
+#' - Sequences computed with bcftools consensus
+#' - MSA calculated with MAFFT
+#' - Phylogenetic tree inferred using fasttree
+#' Output:
+#' - phylogenetic tree
+#' - mapping reults
+#' - vcf files
+
 import os
 import pandas as pd
-
+#' parse the list of reads
 list_f=config['list_f']
 dna_reads= {}
 with open(list_f, 'r') as list_fh:
@@ -30,20 +47,21 @@ rule all:
         tree_f
 
 rule tree:
+    #' infer the phylogenetic tree
     input:
         alignment=aln_f
     output:
         tree= tree_f
-    threads:20
+    threads: 12
     shell:
         '''
-        which FastTreeMP
         export OMP_NUM_THREADS={threads}
         FastTreeMP -nt -gtr -gamma \
 -log {output.tree}.log -out {output.tree} {input.alignment}
         '''
 
 rule process_aln:
+    #' prune the invariant sites (<2 alternative state or >90% gaps)
     input:
         out_aln='OneLarge.aln'
     output:
@@ -60,6 +78,7 @@ rule process_aln:
         """
 
 rule concatenate:
+    #' concatenate the family-wise alignments that pass the length filter
     input:
         fam_list='aln_to_concatenate'
     output:
@@ -73,6 +92,7 @@ rule concatenate:
         '''
 
 rule list_families:
+    #' filter the gene families by the length diversity
     input:
         out_seq=dynamic(os.path.join(families_seq_dir, '{fam}.aln'))
     output:
@@ -101,12 +121,14 @@ rule alignment:
     conda: 'mafft_7_310_env.yml'
     params: 
         mafft_params='--nuc --maxiterate 0 --retree 2 --parttree'
+    threads: 2
     shell:
         '''
-        mafft {params.mafft_params} {input.fam_fa} > {input.fam_aln}
+        mafft --thread {threads} {params.mafft_params} {input.fam_fa} > {output.fam_aln}
         '''
 
 rule sort:
+    #' calculate the length diverty of sequences for each family
     input:
         seq_list_f=seq_list
     output:
@@ -136,6 +158,7 @@ rule list_cons_sequences:
         '''
 
 rule consensus_seqs:
+    #' introduce the variant sites to the reference 
     input:
         ref_region_seqs=REF_GFF+'.gene_regions.fa',
         vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
@@ -150,6 +173,7 @@ rule consensus_seqs:
         '''
 
 rule ref_regions:
+    #' determine the coding regions to infer the phylogeny with
     input:
         ref_gff=REF_GFF,
         ref_fa=REF_FA
@@ -188,10 +212,7 @@ rule index_ref:
         bwa index {input}
         """
 rule move_mapping_result:
-    ## this will allow phylo workflow reuse those done in the snps workflow;
-    ## however, the snps workflow cannot reuse them because the mapping
-    ## procedure must be run again to generate the other required intermediate
-    ## files
+    #' allow phylo and snps workflow to reuse those done by each other workflow
     input:
         sorted_bam="{}/{{strain}}/bwa.sorted.bam".format(results_dir),
         sorted_bam_index="{}/{{strain}}/bwa.sorted.bam.bai".format(results_dir)
@@ -205,6 +226,7 @@ rule move_mapping_result:
         '''
 
 rule mapping:
+    #' reads mapping using bwa-mem
     input:
         ref=REF_FA,
         ref_index=REF_FA+".bwt",
@@ -229,6 +251,7 @@ rule mapping:
         """
 
 rule redirect_and_preprocess_reads:
+    #' reads processing before mapped to the reference 
     input: 
         infile1=lambda wildcards: dna_reads[wildcards.strain][0],
         infile2=lambda wildcards: dna_reads[wildcards.strain][1]
@@ -260,47 +283,17 @@ rule redirect_and_preprocess_reads:
         fi
         '''
 
-rule filter_var:
-    input:
-#        "{tmp_dir}/{species}/bwa.vcf.gz"
-        vcf_gz='{tmp_d}/{strain}/bwa.vcf.raw.gz'
-    output:
-#        "{tmp_dir}/{species}/bwa.filtered.vcf.gz"
-#        vcf='{tmp_d}/{strain}/bwa.vcf',
-        vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
-        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.gz.tbi'
-    params:
-        filter_pat='MEAN(DP)<=240 & MEAN(DP)>=3 & QUAL>=20'
-#        vcftools_filter_params='--max-meanDP 240 --min-meanDP 3 --minQ 20'
-#        vcftools_out_prefix='{tmp_d}/{strain}/bwa'
-    threads: 2
-    conda:'bcftools_1_6_env.yml'
-    shell:
-        """
-        bcftools --include {params.filter_pat} --threads {threads}\
-        -O z -o {output.vcf_gz} {input.vcf_gz}
-        tabix {output.vcf_gz}
-        """
-#        vcftools --gzvcf {input.vcf_gz} {params.vcftools_filter_params} --recode --out {params.vcftools_out_prefix}
-#        mv {wildcards.tmp_dir}/{wildcards.species}/bwa.recode.vcf {wildcards.tmp_dir}/{wildcards.species}/bwa.filtered.vcf
-#        bgzip -c {wildcards.tmp_dir}/{wildcards.species}/bwa.filtered.vcf > {output}
-
-
 rule call_var:
+    #' variant calling using freebayes
     input:
         ref=REF_FA,
         ref_index=REF_FA+".fai",
-#        sorted_bam="{tmp_d}/{strain}/bwa.sorted.bam",
-#        sorted_bam_index="{tmp_d}/{strain}/bwa.sorted.bam.bai"
         moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
         moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
     output:
-#        vcf='{tmp_d}/{strain}/bwa.vcf',
-#        vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
-#        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.gz.tbi'
-        vcf='{tmp_d}/{strain}/bwa.raw.vcf',
-        vcf_gz='{tmp_d}/{strain}/bwa.vcf.raw.gz',
-        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.raw.gz.tbi'
+        vcf='{tmp_d}/{strain}/bwa.vcf',
+        vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
+        vcf_gz_index= '{tmp_d}/{strain}/bwa.vcf.gz.tbi'
     params:
         freebayes_params= '-p 1'
     threads: 16

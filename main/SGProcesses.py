@@ -1,3 +1,5 @@
+#' Role: Workers
+#' Purpose: Define the class of workflow
 class SGProcess:
     def __init__(self, wd, proc, config_f, dryrun= True, max_cores= 1):
         import os
