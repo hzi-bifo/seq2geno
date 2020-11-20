@@ -71,13 +71,14 @@ def main():
 
     parser = argparse.ArgumentParser(
             formatter_class= arg_formatter,
-            description='Seq2Geno: the pipline tool '
-                'for genomic features computation\n')
+            description='''
+        Seq2Geno: the automatic tool for computing genomic features from
+        the sequencing data\n''')
 
     parser.add_argument('-v', action= 'version', 
         version='v.Beta')
     parser.add_argument('-d', dest= 'dsply_args', action= 'store_true',
-        help= 'display the arguments in yaml and exit')
+        help= 'show the arguments described in the config file (yaml) and exit')
     parser.add_argument('-f', dest= 'yml_f', required= True, 
         help= 'the yaml file where the arguments are listed')
     primary_args= parser.parse_args()
