@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
-'''
-Purpose:
-    Interact with the user, accept the request, and convert the information
-    to the input for the subsequent snakemake workflow
-'''
+#' Purpose: Determine parameters and filepaths of intermediate data
 
 import os
 import subprocess
@@ -13,12 +9,13 @@ import sys
 
 class phylo_args:
     def __init__(self, list_f, REF_FA, REF_GFF,adaptor,
-        redirected_reads_dir, config_f='config.yml'):
+        redirected_reads_dir,mapping_results_dir, config_f='config.yml'):
         self.list_f= list_f
         self.REF_FA= REF_FA
         self.REF_GFF= REF_GFF
         self.adaptor= adaptor
         self.new_reads_dir= redirected_reads_dir
+        self.mapping_results_dir= mapping_results_dir
         subfolder= 'phylo'
         self.config_f= os.path.join(
             subfolder, config_f)
@@ -34,40 +31,26 @@ class expr_args:
         self.list_f= list_f
         self.ref_fasta= ref_fasta
         self.ref_gbk= ref_gbk 
-        #self.out_table=os.path.basename(out_table)
-        #self.out_log_table= self.out_table+'_log_transformed'
-        #self.config_f= os.path.join(os.path.dirname(out_table), 
-        #        config_f)
         self.out_table='expr.mat'
         self.out_log_table= 'expr.mat_log_transformed'
         subfolder= 'expr'
         self.config_f= os.path.join(
             subfolder, config_f)
-        #self.annot_tab='data/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
-        #self.r_annot= 'data/Pseudomonas_aeruginosa_PA14_12genes_R_annotation'
         self.annot_tab='annotation.tab'
         self.r_annot='R_annotation.tab'
 
 class snps_args:
     def __init__(self, list_f, ref_fasta, ref_gbk, adaptor,
-            redirected_reads_dir, config_f= 'config.yml'):
+            redirected_reads_dir,mapping_results_dir, config_f= 'config.yml'):
         self.list_f=list_f
         self.adaptor= adaptor
         self.new_reads_dir= redirected_reads_dir
         self.ref_fasta= ref_fasta
         self.ref_gbk= ref_gbk 
-        #self.snps_aa_bin_mat=snps_aa_bin_mat
-        #self.nonsyn_snps_aa_bin_mat= 'nonsyn_'+ self.snps_aa_bin_mat
-        #self.config_f= os.path.join(
-        #    os.path.dirname(snps_aa_bin_mat), config_f)
+        self.mapping_results_dir= mapping_results_dir
         subfolder= 'snps'
         self.config_f= os.path.join(
             subfolder, config_f)
-        #self.annot_tab= 'data/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
-        #self.r_annot= 'data/Pseudomonas_aeruginosa_PA14_12genes_R_annotation'
-        #self.snps_table= 'all_SNPs.tab'
-        #self.snps_aa_table= 'all_SNPs_final.tab'
-        #self.nonsyn_snps_aa_table= 'nonsyn_SNPs_final.tab'
         self.annot_tab='annotation.tab'
         self.r_annot='R_annotation.tab'
         self.snps_table='all_SNPs.tab'
@@ -88,11 +71,8 @@ class denovo_args:
         self.out_prokka_dir= 'prokka'
         self.out_roary_dir= 'roary'
         self.extracted_proteins_dir= 'extracted_proteins_nt/'
-        #self.out_gpa_f= os.path.basename(out_gpa_f)
-        #self.out_indel_f= 'indel_'+self.out_gpa_f
         self.out_gpa_f= 'gpa.mat'
         self.out_indel_f= 'indel.mat'
-        #self.anno_f= 'data/Pseudomonas_aeruginosa_PA14_annotation_with_ncRNAs_07_2011_12genes.tab'
         self.annot_tab='annotation.tab'
         subfolder= 'denovo'
         self.config_f= os.path.join(
@@ -128,12 +108,12 @@ def create_yaml_f(args, wd, config_f):
     import os
     try:
         config_f= os.path.abspath(os.path.join(wd, config_f))
-        print(config_f)
         target_dir= os.path.dirname(config_f)
         if not os.path.exists(target_dir):
             print('creating {}...'.format(target_dir))
             os.makedirs(target_dir)
         config_fh= open(config_f, 'w')
+        print('creating {}...'.format(config_f))
         yaml.dump(vars(args), config_fh, default_flow_style= False)
         config_fh.close()
     except Exception as e:
@@ -148,13 +128,6 @@ def create_yaml_f(args, wd, config_f):
 
 def main(args):
     print('Creating config files')
-#    seq2geno_home= os.path.abspath(
-#            os.path.join(os.path.dirname(os.path.realpath(__file__)),
-#                os.pardir))
-#
-#    # parse user's arguments
-#    import UserOptions
-#    args= UserOptions.main()
     # max core number
     cores= args.cores
 
@@ -163,6 +136,8 @@ def main(args):
             adaptor= args.adaptor,
             redirected_reads_dir= os.path.join(
                 os.path.abspath(args.wd), 'reads', 'dna'),
+            mapping_results_dir= os.path.join(
+                os.path.abspath(args.wd), 'mapping_results', 'dna'),
             ref_fasta= args.ref_fa, 
             ref_gbk= args.ref_gbk)
     create_yaml_f(s_args, args.wd, s_args.config_f)
@@ -181,6 +156,8 @@ def main(args):
             adaptor= args.adaptor,
             redirected_reads_dir= os.path.join(
                 os.path.abspath(args.wd), 'reads', 'dna'),
+            mapping_results_dir= os.path.join(
+                os.path.abspath(args.wd), 'mapping_results', 'dna'),
             REF_FA= args.ref_fa, 
             REF_GFF= args.ref_gff)
     create_yaml_f(p_args, args.wd, p_args.config_f)

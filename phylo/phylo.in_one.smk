@@ -1,12 +1,34 @@
+#' Purpose:
+#' - Compute phylognetic tree from mapping results of DNA-seq reads
+#' Materials:
+#' - DNA-seq reads
+#' - reference genome
+#' - adaptor file (optional)
+#' Methods:
+#' - Reads mapped using BWA-MEM
+#' - Variant sites called with freebayes
+#' - Sequences computed with bcftools consensus
+#' - MSA calculated with MAFFT
+#' - Phylogenetic tree inferred using fasttree
+#' Output:
+#' - phylogenetic tree
+#' - mapping reults
+#' - vcf files
+
 import os
 import pandas as pd
-
+#' parse the list of reads
 list_f=config['list_f']
 dna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
         dna_reads[d[0]]= d[1].split(',')
+        try:
+            assert ((len(d)==2) and (len(d[1].split(','))==2))
+        except AssertionError:
+            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
+            raise AssertionError
 
 REF_FA=config['REF_FA']
 REF_GFF=config['REF_GFF']
@@ -17,6 +39,7 @@ aln_f=config['aln_f']
 tree_f=config['tree_f']
 adaptor_f= config['adaptor']
 new_reads_dir= config['new_reads_dir']
+mapping_results_dir= config['mapping_results_dir']
 fam_stats_file= 'fam_stats.txt'
 
 rule all:
@@ -24,20 +47,21 @@ rule all:
         tree_f
 
 rule tree:
+    #' infer the phylogenetic tree
     input:
         alignment=aln_f
     output:
         tree= tree_f
-    threads:20
+    threads: 12
     shell:
         '''
-        which FastTreeMP
         export OMP_NUM_THREADS={threads}
         FastTreeMP -nt -gtr -gamma \
 -log {output.tree}.log -out {output.tree} {input.alignment}
         '''
 
 rule process_aln:
+    #' prune the invariant sites (<2 alternative state or >90% gaps)
     input:
         out_aln='OneLarge.aln'
     output:
@@ -54,6 +78,7 @@ rule process_aln:
         """
 
 rule concatenate:
+    #' concatenate the family-wise alignments that pass the length filter
     input:
         fam_list='aln_to_concatenate'
     output:
@@ -67,6 +92,7 @@ rule concatenate:
         '''
 
 rule list_families:
+    #' filter the gene families by the length diversity
     input:
         out_seq=dynamic(os.path.join(families_seq_dir, '{fam}.aln'))
     output:
@@ -89,17 +115,20 @@ rule list_families:
 
 rule alignment:
     input:
-        os.path.join(families_seq_dir, '{fam}.fa')
+        fam_fa= os.path.join(families_seq_dir, '{fam}.fa')
     output:
-        os.path.join(families_seq_dir, '{fam}.aln')
+        fam_aln= os.path.join(families_seq_dir, '{fam}.aln')
     conda: 'mafft_7_310_env.yml'
+    params: 
+        mafft_params='--nuc --maxiterate 0 --retree 2 --parttree'
+    threads: 2
     shell:
         '''
-        mafft --quiet --nuc --maxiterate 0 --retree 2 --parttree \
-{input} > {output}
+        mafft --thread {threads} {params.mafft_params} {input.fam_fa} > {output.fam_aln}
         '''
 
 rule sort:
+    #' calculate the length diverty of sequences for each family
     input:
         seq_list_f=seq_list
     output:
@@ -129,6 +158,7 @@ rule list_cons_sequences:
         '''
 
 rule consensus_seqs:
+    #' introduce the variant sites to the reference 
     input:
         ref_region_seqs=REF_GFF+'.gene_regions.fa',
         vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
@@ -143,6 +173,7 @@ rule consensus_seqs:
         '''
 
 rule ref_regions:
+    #' determine the coding regions to infer the phylogeny with
     input:
         ref_gff=REF_GFF,
         ref_fa=REF_FA
@@ -180,18 +211,34 @@ rule index_ref:
         samtools faidx {input}
         bwa index {input}
         """
+rule move_mapping_result:
+    #' allow phylo and snps workflow to reuse those done by each other workflow
+    input:
+        sorted_bam="{}/{{strain}}/bwa.sorted.bam".format(results_dir),
+        sorted_bam_index="{}/{{strain}}/bwa.sorted.bam.bai".format(results_dir)
+    output:
+        moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
+        moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
+    shell:
+        '''
+        mv {input.sorted_bam} {output.moved_bam}
+        mv {input.sorted_bam_index} {output.moved_bam_index}
+        '''
 
 rule mapping:
+    #' reads mapping using bwa-mem
     input:
         ref=REF_FA,
         ref_index=REF_FA+".bwt",
         FQ1= os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
         FQ2= os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
     output:
-        sam="{tmp_d}/{strain}/bwa.sam",
-        bam="{tmp_d}/{strain}/bwa.bam",
-        sorted_bam="{tmp_d}/{strain}/bwa.sorted.bam",
-        sorted_bam_index="{tmp_d}/{strain}/bwa.sorted.bam.bai"
+        ## because directly piping is unavialble with this version of compiled bamtools, 
+        ## sam file as an intermediate is needed
+        sam= temp("{tmp_d}/{strain}/bwa.sam"),
+        bam= temp("{tmp_d}/{strain}/bwa.bam"),
+        sorted_bam=temp("{tmp_d}/{strain}/bwa.sorted.bam"),
+        sorted_bam_index=temp("{tmp_d}/{strain}/bwa.sorted.bam.bai")
     threads:1
     conda: 'phylo_bwa_env.yml'
     shell:
@@ -204,6 +251,7 @@ rule mapping:
         """
 
 rule redirect_and_preprocess_reads:
+    #' reads processing before mapped to the reference 
     input: 
         infile1=lambda wildcards: dna_reads[wildcards.strain][0],
         infile2=lambda wildcards: dna_reads[wildcards.strain][1]
@@ -236,11 +284,12 @@ rule redirect_and_preprocess_reads:
         '''
 
 rule call_var:
+    #' variant calling using freebayes
     input:
         ref=REF_FA,
         ref_index=REF_FA+".fai",
-        sorted_bam="{tmp_d}/{strain}/bwa.sorted.bam",
-        sorted_bam_index="{tmp_d}/{strain}/bwa.sorted.bam.bai"
+        moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
+        moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
     output:
         vcf='{tmp_d}/{strain}/bwa.vcf',
         vcf_gz='{tmp_d}/{strain}/bwa.vcf.gz',
@@ -252,7 +301,7 @@ rule call_var:
     shell:
         """
         freebayes-parallel <(fasta_generate_regions.py {input.ref_index} 100000) \
- {threads} -f {input.ref} {params.freebayes_params} {input.sorted_bam} \
+ {threads} -f {input.ref} {params.freebayes_params} {input.moved_bam} \
  > {output.vcf}
         bgzip -c {output.vcf} > {output.vcf_gz}
         tabix -p vcf {output.vcf_gz}

@@ -17,6 +17,7 @@ aln_f=config['aln_f']
 tree_f=config['tree_f']
 adaptor_f= config['adaptor']
 new_reads_dir= config['new_reads_dir']
+fam_stats_file= 'fam_stats.txt'
 
 rule all:
     input:
@@ -70,10 +71,21 @@ rule list_families:
         out_seq=dynamic(os.path.join(families_seq_dir, '{fam}.aln'))
     output:
         out_fam_list='aln_to_concatenate'
+    params:
+        fam_stats=fam_stats_file,
+        indel_cutoff= 0.1
     run:
+        target_fam= []
+        with open(params.fam_stats, 'r') as fam_fh:
+            families= [l.strip().split('\t') for l in fam_fh.readlines()]
+            target_fam= [fam[0] for fam in families 
+                if (int(fam[2])-int(fam[1]))/int(fam[2]) <= params.indel_cutoff]
+        from os.path import basename
         with open(output.out_fam_list, 'w') as out_fh:
             for f in input.out_seq:
-                out_fh.write(f+'\n')
+                fam= re.sub('\.aln$', '', basename(f))
+                if fam in target_fam:
+                    out_fh.write(f+'\n')
 
 rule alignment:
     input:
@@ -94,12 +106,12 @@ rule sort:
         out_seq=dynamic(os.path.join(families_seq_dir, '{fam}.fa'))
     conda: 'concatenate_seq_env.yml'    
     params:
-        out_stats='fam_stats.txt',
+        fam_stats=fam_stats_file,
         out_dir= families_seq_dir
     shell:
         '''
         geneStats.py --l {input.seq_list_f} --d {params.out_dir} \
---o {params.out_stats}
+--o {params.fam_stats}
         '''
 
 rule list_cons_sequences:

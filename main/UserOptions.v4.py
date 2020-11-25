@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+#' Role: Front desk
+#' Purpose: 
+#' Parse the yaml file and pass the user's options to the package facade
 class arguments:
     '''
     The object of arguments, as argparse is replaced
@@ -14,7 +18,7 @@ class arguments:
         missing_obligatory_args= [k 
             for k in obligatory_args if not hasattr(self, k)]
         if len(missing_obligatory_args):
-            sys.exit('ERROR: {} are obligatory'.format(
+            sys.exit('ERROR: "{}" is obligatory'.format(
                 ' '.join(missing_obligatory_args)))
         # default values of optional arguments
         optional_args= {'cores':1, 'adaptor': '-', 'rna_reads': '-', 
@@ -67,13 +71,14 @@ def main():
 
     parser = argparse.ArgumentParser(
             formatter_class= arg_formatter,
-            description='Seq2Geno: the pipline tool '
-                'for genomic features computation\n')
+            description='''
+        Seq2Geno: the automatic tool for computing genomic features from
+        the sequencing data\n''')
 
     parser.add_argument('-v', action= 'version', 
         version='v.Beta')
     parser.add_argument('-d', dest= 'dsply_args', action= 'store_true',
-        help= 'display the arguments in yaml and exit')
+        help= 'show the arguments described in the config file (yaml) and exit')
     parser.add_argument('-f', dest= 'yml_f', required= True, 
         help= 'the yaml file where the arguments are listed')
     primary_args= parser.parse_args()

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-
+#' Role: Manager 
+#' Purpose: 
+#' Determine, initiate and launch the workflows based on user-defined
+#' arguments
 
 def main(args):
     import sys
@@ -25,6 +28,7 @@ def main(args):
     all_processes= []
     ##>>>
     ## initiate processes
+
     ## expr
     if args.rna_reads != '-' and args.expr:
         all_processes.append(SGProcess(args.wd,

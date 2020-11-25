@@ -1,3 +1,14 @@
+#' Purpose:
+#' - Quantify the expression levels and generate the features matrix
+#' Materials:
+#' - RNA-seq reads
+#' - reference genome
+#' - adaptor file (optional)
+#' Methods:
+#' - Reads mapped using BWA backtrack
+#' Output:
+#' - numeric expression table
+#
 import pandas as pd
 
 list_f= config['list_f']
@@ -5,7 +16,13 @@ rna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
-        rna_reads[d[0]]= d[1]
+        try:
+            assert len(d)==2
+        except AssertionError:
+            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
+            raise AssertionError
+        else:
+            rna_reads[d[0]]= d[1]
 
 strains=list(rna_reads.keys())
 out_table= config['out_table']
@@ -23,6 +40,7 @@ rule:
         out_log_table
 
 rule archive_data:
+    #' archive the intermediate data 
     input:
         check_file= out_table,
         target_files= expand('{strain}.{types}',
@@ -37,6 +55,7 @@ rule archive_data:
         
 
 rule collect_rpg:
+    #' integrate the per-region coverages and form the matrix
     input:
         rpg_files= expand('{strain}.rpg',strain= strains)
     output:
@@ -56,12 +75,14 @@ rule collect_rpg:
             df=df.rename(columns=col_dict).set_index('locus')
             series_to_collect.append(df.loc[:,s])
         rpg_df=pd.DataFrame(series_to_collect)
-        rpg_df.to_csv(output[0], sep='\t') 
+        rpg_df.to_csv(output[0], sep='\t', index_label=False) 
 
         log_rpg_df= pd.np.log(rpg_df+1)
-        log_rpg_df.to_csv(out_log_table, sep = "\t")    
+        log_rpg_df.to_csv(out_log_table, sep = "\t", index_label='strain')    
 
 rule bwa_pipeline:
+    #' reads mapped to the reference genome with BWA backtrack algorithm
+    #' count the coverages for each coding region
     input:
         #infile=strain_fq,
         infile=lambda wildcards: rna_reads[wildcards.strain],
@@ -71,7 +92,7 @@ rule bwa_pipeline:
         annofile=annot_tab,
         Rannofile=r_annot
     output:
-        sam='{strain}.sam',
+        sam=temp('{strain}.sam'),
         sai='{strain}.sai',
         art='{strain}.art',
         sin='{strain}.sin',
@@ -93,6 +114,7 @@ lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
         """
 
 rule create_annot:
+    #' determine the coding regions to quantify the expression levels
     input:
         ref_gbk=ref_gbk
     output:
@@ -105,6 +127,7 @@ rule create_annot:
         '''
 
 rule create_r_annot:
+    #' determine the coding regions to quantify the expression levels
     input:
         ref_gbk=ref_gbk
     output:

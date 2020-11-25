@@ -1,5 +1,14 @@
-#TREE_OUT=config['TREE_OUT']
-#EXPR_OUT=config['EXPR_OUT']
+#' Purpose:
+#' - Ancestral reconstruction for the expression levels along the tree topology
+#' Materials:
+#' - expression levels
+#' - tree
+#' Methods:
+#' - Reads mapped using BWA-MEM
+#' - Variant sites called with samtools mpileup
+#' Output:
+#' - the reconstructed values of nodes and the changes in eadges
+#
 import os
 import yaml
 expr_config_f= config['expr_config']

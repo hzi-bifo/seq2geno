@@ -1,13 +1,31 @@
-## import a list
+#' Purpose:
+#' - Calculate SNPs matrix from mapping results of DNA-seq reads
+#' Materials:
+#' - DNA-seq reads
+#' - reference genome
+#' - adaptor file (optional)
+#' Methods:
+#' - Reads mapped using BWA-MEM
+#' - Variant sites called with samtools mpileup
+#' Output:
+#' - binary SNPs table  
+#' - SNPs effects (i.e. synnymous and non-synonymous)
+#' - vcf files
+#
 import pandas as pd
 from snakemake.utils import validate
-
+#' parse the list of reads
 list_f= config['list_f']
 dna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
         dna_reads[d[0]]= d[1].split(',')
+        try:
+            assert ((len(d)==2) and (len(d[1].split(','))==2))
+        except AssertionError:
+            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
+            raise AssertionError
 
 strains= list(dna_reads.keys())
 
@@ -15,6 +33,7 @@ ref_fasta=config['ref_fasta']
 ref_gbk=config['ref_gbk']
 annot_tab=config['annot_tab']
 r_annot=config['r_annot']
+mapping_results_dir= config['mapping_results_dir']
 snps_table=config['snps_table']
 snps_aa_table=config['snps_aa_table']
 nonsyn_snps_aa_table=config['nonsyn_snps_aa_table']
@@ -26,6 +45,9 @@ table_subset_num=30
 
 rule all:
     input:
+        expand('{}/{{strain}}.{{file_ext}}'.format(mapping_results_dir),
+            strain= strains, 
+            file_ext= ['bam', 'bam.bai']),
         snps_aa_bin_mat,
         nonsyn_snps_aa_bin_mat,
         expand('{in_tab}_{info}', 
@@ -33,6 +55,7 @@ rule all:
             info= ['GROUPS', 'NONRDNT'])
 
 rule remove_redundant_feat:
+    #' features grouped by patterns
     input: 
         F='{in_tab}'
     output: 
@@ -42,6 +65,7 @@ rule remove_redundant_feat:
     script: 'featCompress.py'
 
 rule create_binary_table:
+    #' create the binary matrix for the variant sites
     input:
         snps_aa_table=snps_aa_table,
         nonsyn_snps_aa_table=nonsyn_snps_aa_table
@@ -61,6 +85,7 @@ rule create_binary_table:
         '''
 
 rule create_table:
+    #' print the lsit of all variant sites 
     input:
         flt_vcf=expand('{strain}.flt.vcf', strain= strains),
         flatcount=expand('{strain}.flatcount', strain= strains),
@@ -111,6 +136,7 @@ rule create_table:
         '''
 
 rule include_aa_into_table:
+    #' predict SNPs effect by translating the codons
     input:
         ref_gbk=ref_gbk,
         snps_table=snps_table
@@ -131,6 +157,7 @@ rule include_aa_into_table:
 
 
 rule isolate_dict:
+    #' ensure no empty file
     input:
         flt_vcf=expand('{strain}.flt.vcf', strain= strains),
         flatcount=expand('{strain}.flatcount', strain= strains)
@@ -155,15 +182,34 @@ rule isolate_dict:
         
         with open(output[0], 'w') as out_fh:
             out_fh.write('\n'.join(params.strains))
-        
+
+
+rule move_mapping_result:
+    #' allow phylo and snps workflow to reuse those done by each other workflow
+    input:
+        bam='{strain}.bam',
+        bam_index='{strain}.bam.bai'
+    output:
+        moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
+        moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
+    shell:
+        '''
+        mv {input.bam} {output.moved_bam}
+        mv {input.bam_index} {output.moved_bam_index}
+        '''
+
 rule samtools_SNP_pipeline:
+    #' variant calling with samtools mpileup
     input:
         sam='{strain}.sam',
         reffile=ref_fasta
     output:
         bam=temp('{strain}.bam'),
+        bam_index=temp('{strain}.bam.bai'),
         raw_bcf='{strain}.raw.bcf',
         flt_vcf='{strain}.flt.vcf'
+    params: 
+        min_depth= 0
     threads:1
     conda: 'snps_tab_mapping.yml'
     shell:
@@ -175,11 +221,12 @@ $CONDA_PREFIX/lib/perl5/5.22.2:\
 $CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:\
 $PERL5LIB
         echo $PERL5LIB
-        my_samtools_SNP_pipeline {wildcards.strain} {input.reffile} 0
+        my_samtools_SNP_pipeline {wildcards.strain} {input.reffile} {params.min_depth} 
 	set -u
         """
 
 rule bwa_pipeline_PE:
+    #' reads mapped to the reference genome with BWA-MEM
     input:
         infile1= lambda wildcards: os.path.join(
         new_reads_dir, '{}.cleaned.1.fq.gz'.format(wildcards.strain)),
@@ -211,6 +258,7 @@ rule bwa_pipeline_PE:
         """
 
 rule redirect_and_preprocess_reads:
+    #' reads processing before mapped to the reference 
     input: 
         infile1=lambda wildcards: dna_reads[wildcards.strain][0],
         infile2=lambda wildcards: dna_reads[wildcards.strain][1]
