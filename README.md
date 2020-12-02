@@ -1,10 +1,21 @@
 # Seq2Geno
 
-### What is Seq2Geno?
-Seq2Geno is a computational workflow for genomic analysis of bacterial populations. Seq2Geno uses Snakemake to schedule the processes and relies on Conda to manage the computational environments. The two tools improve the reproducibility of the computational results. 
-Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which trains phenotype predictors based on genomic features. 
+- [What is Seq2Geno?](#intro)
+- [What does Seq2Geno cover?](#functions") 
+- [Get started](#install") 
+- [Usage and Input](#command") 
+- [Train the phenotypic predictor with the Seq2Geno results](#genyml") 
+- [Example usages and data](#example") 
+- [License](#license") 
+- [Contact](#contact") 
 
-### What does Seq2Geno cover?
+
+### <a name="intro"></a>What is Seq2Geno?
+Seq2Geno enables the users to use one command to conduct the complex analyses for the next-generation sequencing data of bacteiral samples. The package  automatically resolves the dependencies among procedures and manages the procedure-specific computational environments, aiming to reduce unexpected errors and increase the reproducibility of genomic data. 
+
+The output data from Seq2Geno can be used to train phenotypic predictors using [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de).
+
+### <a name="functions"></a>What does Seq2Geno cover?
 - detect single nucleotide variants
 - create de novo assemblies
 - compute gene presence/absence and the indels
@@ -13,7 +24,7 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 - find differentially expressed genes
 - reconstruct ancestral values of expression level
 
-### Get started
+### <a name="install"></a>Get started
 - Prerequisites
 
     - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.8.4)
@@ -47,7 +58,7 @@ Seq2Geno outputs are formatted for use with the Geno2Pheno workflow, which train
 	
 	All the processes in Seq2Geno do not share the same pool of computational tools. The process-specific tools, however, do not need to be installed manually, because they are already listed in yaml files that Conda can parse. The installation using Conda is automatically launched when Seq2Geno is used for the first time. 
 
-### Usage and Input
+### <a name="command"></a>Usage and Input
 
 Usage:
 ```
@@ -115,13 +126,16 @@ To only create the folder and config files, please turn off the last six options
 
     The fasta file of adaptors of DNA-seq. It is used to process the DNA-seq reads. 
 
-### Example usages and data
-The tutorials and example data and commands can be found in  __example_sg_dataset.tar.gz__
+### <a name="genyml"></a>Train the phenotypic predictor with the Seq2Geno results 
+[Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de) requires all input data packed in a single zip file. The input file for the validator and gnerator of that zip file can be generated using submission\_tool/create\_genyml.py. 
 
-### License
+### <a name="example"></a>Example usages and data
+The tutorials and example data and commands can be found in  __example\_sg\_dataset.tar.gz__
+
+### <a name="license"></a>License
 Apache 2.0 (please see the LICENSE)
 
-### Contact
+### <a name="contact"></a>Contact
 Please open an issue here or contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmhotz-hzi.de). 
 We will need to know how to reproduce the problem. 
 
