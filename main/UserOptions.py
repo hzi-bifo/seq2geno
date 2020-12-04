@@ -31,7 +31,7 @@ class arguments:
                 assert hasattr(self, k)
         except AssertionError as e:
             sys.exit('ERROR:  obligatory arguments "{}" not properly set'.format(
-                ' '.join(obligatory_args)))
+                ', '.join(obligatory_args)))
         #' check the reference genome
         ArgsTest.test_reference_seq(self.ref_fa)
         #' check the dna-seq data
