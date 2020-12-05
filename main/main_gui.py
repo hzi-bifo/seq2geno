@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 #' Role: Manager 
 #' Purpose: 
-#' Determine, initiate and launch the workflows based on user-defined
-#' arguments
+#' Parse the arguments through the GUI
 
 import tkinter as tk
 from functools import partial
@@ -33,7 +32,7 @@ def browseDirs(field):
     auto-fill the textbox
     '''
     from tkinter import filedialog
-    d_name= filedialog.askdirectory(title= 'select firectory', 
+    d_name= filedialog.askdirectory(title= 'select directory', 
                                 initialdir= '.')
     #' update the value
     config_dict[field].set(d_name)
@@ -81,8 +80,8 @@ def make_file_field(root, field, is_optional= False):
     '''
     row= make_file_field_shared(root, field, is_optional)
     if is_optional:
-        optout_but= ttk.Button(row, text= 'skip', width= 10, command=
-                          partial(field_opt_out, field))
+        optout_but= ttk.Button(row, text= 'skip', width= 6, 
+                               command=partial(field_opt_out, field))
         optout_but.pack(side=tk.RIGHT, padx=5, pady=5)
     but= ttk.Button(row, text= 'browse', width= 10, command= partial(browseFiles, field))
     but.pack(side=tk.RIGHT, padx=5, pady=5)
@@ -98,97 +97,73 @@ def make_dir_field(root, field):
 def make_plain_field(root, field):
     row= make_file_field_shared(root, field)
 
-def makeform_general(root):
+def makeform_general(root, args_dict):
     '''
     create the form for determining input data
     '''
-    is_optional_dict= {'old_config': True, 'dna_reads': False, 
-                       'ref_fa': False, 'ref_gbk': False,'ref_gff': False,  
-                       'rna_reads': True,
-                       'adaptor': True}
-    for field in is_optional_dict:
-        make_file_field(root, field, is_optional_dict[field])
-    dir_fields= ['wd']
-    for field in dir_fields:
-        make_dir_field(root, field)
-    #' fields that do not need the file browser
-    make_file_field_shared(root, 'cores')
+    for field in args_dict:
+        if args_dict[field]['class'] == 'file':
+            #' arguments of filenames
+            make_file_field(
+                root, field, 
+                (True if len(args_dict[field]['pattern'])==0 else False))
+        elif args_dict[field]['class'] == 'dir':
+            #' arguments of directories
+            make_dir_field(root, field)
+        else:
+            #' other types of arguments
+            make_file_field_shared(root, field)
 
-def makeform_functions(root):
+def makeform_functions(root, func_options):
     '''
     options of functions
     '''
-    func_options= {'snps': ['skip', 'include'],
-        'denovo': ['skip','include'],
-        'expr': ['skip','include'],
-        'phylo': ['skip','include'],
-        'ar': ['skip','include'],
-        'de': ['skip','include'],
-        'mode': ['dryrun', 'execute']}
     for func in func_options:
         row = ttk.Frame(root)
         row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
-        lab = ttk.Label(row, width=15, text=func, anchor='w')
+        lab = ttk.Label(row, width=10, text=func, anchor='w')
         lab.pack(side=tk.LEFT)
         func_dict[func]= tk.StringVar(row)
         func_dict[func].set(func_options[func][0])
         opt_but= ttk.OptionMenu(row, func_dict[func], *func_options[func])
         opt_but.pack(side=tk.LEFT)
 
-def func_name_adaptor(d):
-    '''
-    Becasue the function names used in the main script is abbreviated,
-    this interface describe thw workflows in a more understoodable way.
-    To allow the main script recognize them,
-    this adaptor convert the names and values
-    '''
-    #' ensure the datatype first
-    assert isinstance(d, dict)
-    #' the dictionary for the conversion
-    func_name_adaptor={ 'mode': 'dryrun',
-            'snps': 'snps',
-            'denovo': 'denovo',
-            'expr':'expr',
-            'phylo':'phylo',
-            'ar':'ar',
-            'de': 'de'  }
-    func_val_adaptor= { 'include': 'Y', 'skip': 'N',
-                       'dryrun': 'Y','execute': 'N'}
-    new_d= dict()
-    for k in func_name_adaptor:
-        old_val= d[k]
-        new_val= func_val_adaptor[old_val]
-        new_key= func_name_adaptor[k]
-        new_d[new_key]= new_val
-    return(new_d)
+#def func_name_adaptor(d):
+#    '''
+#    Becasue the function names used in the main script is abbreviated,
+#    this interface describe thw workflows in a more understoodable way.
+#    To allow the main script recognize them,
+#    this adaptor convert the names and values
+#    '''
+#    #' ensure the datatype first
+#    assert isinstance(d, dict)
+#    #' the dictionary for the conversion
+#    func_name_adaptor={ 'mode': 'dryrun',
+#            'snps': 'snps',
+#            'denovo': 'denovo',
+#            'expr':'expr',
+#            'phylo':'phylo',
+#            'ar':'ar',
+#            'de': 'de'  }
+#    func_val_adaptor= { 'include': 'Y', 'skip': 'N',
+#                       'dryrun': 'Y','execute': 'N'}
+#    new_d= dict()
+#    for k in func_name_adaptor:
+#        old_val= d[k]
+#        new_val= func_val_adaptor[old_val]
+#        new_key= func_name_adaptor[k]
+#        new_d[new_key]= new_val
+#    return(new_d)
 
-
-#class ToggledFrame(ttk.Frame):
-#    def __init__(self, root, name):
-#        self.show = tk.IntVar()
-#        self.show.set(0)
-#        from tkinter import ttk
-#        self.main_frame= ttk.Frame(root)
-#        lab = ttk.Label(self.main_frame, width=15, text=name, anchor='w')
-#        lab.pack(side=tk.LEFT)
-#        toggle_button = ttk.Checkbutton(self.main_frame, width=2, text='+', command=self.toggle,
-#                                            variable=self.show, style='Toolbutton')
-#        toggle_button.pack(side="left")
-#        self.sub_frame = ttk.Frame(self, relief="sunken", borderwidth=1)
-#    def toggle(self):
-#        if bool(self.show.get()):
-#            self.sub_frame.pack(fill="x", expand=1)
-#            self.toggle_button.configure(text='-')
-#        else:
-#            self.sub_frame.forget()
-#            self.toggle_button.configure(text='+')
 
 def load_theme(root):
     import os
     parent_d=os.path.dirname(__file__)
-    awtheme_d=os.path.join(parent_d, 'theme', 'awthemes-10.0.0')
+    awtheme_d=os.path.join(parent_d, 'GUIutils', 'theme', 'awthemes-10.0.0')
     root.tk.call('lappend', 'auto_path', awtheme_d)
     root.tk.call('package', 'require', 'awdark')
+    s= ttk.Style()
+    s.theme_use('awdark')
 
 def make_arguments_for_main(func_dict, config_dict):
     ''' 
@@ -198,7 +173,8 @@ def make_arguments_for_main(func_dict, config_dict):
     config_plainstr_dict= {k: config_dict[k].get() for k in config_dict}
     pprint(config_plainstr_dict)
     func_plainstr_dict= {k: func_dict[k].get() for k in func_dict}
-    func_plainstr_dict_for_main= func_name_adaptor(func_plainstr_dict)
+    #func_plainstr_dict_for_main= func_name_adaptor(func_plainstr_dict)
+    func_plainstr_dict_for_main= func_plainstr_dict
     pprint(func_plainstr_dict_for_main)
     import UserOptions 
     args= UserOptions.arguments()
@@ -212,28 +188,78 @@ def make_arguments_for_main(func_dict, config_dict):
         args.check_args()
         return(args)
 
+def read_arguments_space():
+    import yaml
+    as_f='GUIutils/ArgSpace.yml'
+    as_fh= open(as_f, 'r')
+    args= yaml.safe_load(as_fh)
+    as_fh.close()
+    return(args)
+
+def load_old_yaml():
+    '''
+    Allow the user to select the old yaml file and parse the arguments
+    '''
+    from tkinter import filedialog
+    import UserOptions 
+    import os
+    yml_f= filedialog.askopenfilename(title= 'select file', 
+                                initialdir= '.',
+                                filetypes=[('yml', '*.yml'),
+                                        ('.yaml', '*.yaml'),
+                                        ('all', '*')])
+    if len(yml_f) > 0 :
+        #' in case the selection is canceled or accidents
+        args= UserOptions.parse_arg_yaml(yml_f)
+        for func in func_dict:
+            if func in args:
+                func_dict[func].set(args[func])
+        for k in config_dict:
+            if k in args:
+                config_dict.set(args[k])
+
+class seq2geno_gui:
+    def __init__(self, root):
+        self.win_root= root
+    def show(self):
+        win_root= self.win_root
+        #' read the arguments space
+        argspace= read_arguments_space()
+
+        win_mainframe= ttk.Notebook(win_root)
+        #' group the arguments
+        #' options of workflows 
+        panel_functions= ttk.Frame(win_mainframe)
+        win_mainframe.add(panel_functions, text= 'features')
+        makeform_functions(panel_functions, argspace['features'])
+        #' IO panel 
+        panel_general= ttk.Frame(win_mainframe)
+        win_mainframe.add(panel_general, text= 'general')
+        makeform_general(panel_general, argspace['general'])
+
+        #' the menu
+        #' file
+        win_menubar= tk.Menu(win_root)
+        filemenu= tk.Menu(win_menubar, tearoff= False)
+        filemenu.add_command(label= 'Load yaml', command=load_old_yaml)
+        filemenu.add_command(label= 'Exit', command=win_root.quit)
+        win_menubar.add_cascade(menu= filemenu, label= 'File')
+        #' theming
+        win_mainframe.pack()
+        win_root.config(menu= win_menubar)
+        load_theme(win_root)
+        win_root.mainloop()
+    def extract_args(self):
+        #' collect the arguments
+        args_for_main= make_arguments_for_main(func_dict, config_dict)
+        self.args= args_for_main
+        return(self.args)
+
+
 if __name__ == '__main__':
     win_root = tk.Tk()
-    win_root.configure(background='black')
+    win_root.configure(background='grey')
     win_root.title('Seq2Geno')
-    win_root.geometry('1200x1000')
-
-    #' functions
-    panel_functions= ttk.Frame(win_root).pack(side=tk.TOP)
-    makeform_functions(panel_functions)
-    #' the configurable arguments
-    panel_general= ttk.Frame(win_root).pack(side= tk.TOP)
-    makeform_general(panel_general)
-    save_but = ttk.Button(win_root, text='Save', command=win_root.quit)
-    save_but.pack(side=tk.TOP, padx=5, pady=5)
-    #' theming
-    load_theme(win_root)
-#    win_root.tk.call('lappend', 'auto_path',
-#                     '/home/thkuo/projects/test_tkinter/awthemes-10.0.0')
-#    win_root.tk.call('package', 'require', 'awdark')
-    s= ttk.Style()
-    s.theme_use('awdark')
-    win_root.mainloop()
-    #' collect the arguments
-    args_for_main= make_arguments_for_main(func_dict, config_dict)
-    print(args_for_main)
+    seq2geno_gui= seq2geno_gui(win_root)
+    seq2geno_gui.show()
+    print(seq2geno_gui.extract_args())

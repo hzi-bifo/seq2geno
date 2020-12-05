@@ -1,0 +1,56 @@
+features:
+# possible choices for every function
+  dryrun: 
+  - Y
+  - N
+  denovo: 
+  - N
+  - Y
+  ar: 
+  - N
+  - Y
+  de:
+  - N
+  - Y
+  expr: 
+  - N
+  - Y
+  phylo: 
+  - N
+  - Y
+  snps: 
+  - N
+  - Y
+general:
+# the regular expression patterns also controls whether an argument is mandatory or optional
+  cores:
+      class: 'int'
+      pattern: '^[0-9]+$'
+  old_config: 
+      class: 'file'
+      pattern: ''
+  dna_reads:  
+      class: 'file'
+      pattern: '\\w+'
+  wd:  
+      class: 'dir'
+      pattern: '\\w+'
+  phe_table: 
+      class: 'file'
+      pattern: ''
+  ref_fa: 
+      class: 'file'
+      pattern: '\\w+'
+  ref_gbk: 
+      class: 'file'
+      pattern: '\\w+'
+  ref_gff: 
+      class: 'file'
+      pattern: '\\w+'
+  rna_reads: 
+      class: 'file'
+      pattern: ''
+  adaptor: 
+      class: 'file'
+      pattern: ''
+
