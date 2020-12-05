@@ -213,7 +213,9 @@ def make_arguments_for_main(func_dict, config_dict, argspace):
 
 def read_arguments_space():
     import yaml
-    as_f='GUIutils/ArgSpace.yml'
+    import os
+    parent_d=os.path.dirname(__file__)
+    as_f=os.path.join(parent_d, 'GUIutils', 'ArgSpace.yml')
     as_fh= open(as_f, 'r')
     args= yaml.safe_load(as_fh)
     as_fh.close()
@@ -237,15 +239,15 @@ def load_old_yaml():
         for func in func_dict:
             if hasattr(old_args, func):
                 arg_val= ('Y' if getattr(old_args, func)=='Y' else 'N')
-                print('{}: {} '.format(func, func_dict[func].get()))
+                #print('{}: {} '.format(func, func_dict[func].get()))
                 func_dict[func].set(arg_val)
-                print('---> {}'.format(func_dict[func].get()))
+                #print('---> {}'.format(func_dict[func].get()))
         for k in config_dict:
             if hasattr(old_args, k):
                 arg_val= getattr(old_args, k)
-                print('{}: {} '.format(k, config_dict[k].get()))
+                #print('{}: {} '.format(k, config_dict[k].get()))
                 config_dict[k].set(arg_val)
-                print('---> {}'.format(config_dict[k].get()))
+                #print('---> {}'.format(config_dict[k].get()))
 
 class seq2geno_gui:
     def __init__(self, root):
