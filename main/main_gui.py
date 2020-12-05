@@ -94,8 +94,16 @@ def make_dir_field(root, field):
     but= ttk.Button(row, text= 'browse', width= 10, command= partial(browseDirs, field))
     but.pack(side=tk.RIGHT, padx=5, pady=5)
 
-def make_plain_field(root, field):
-    row= make_file_field_shared(root, field)
+def make_bool_field(root, field):
+    row = ttk.Frame(root)
+    row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+    lab = ttk.Label(row, width=15, text=field)
+    lab.pack(side=tk.LEFT)
+    config_dict[field]= tk.StringVar(row)
+    opt_but= ttk.OptionMenu(row, config_dict[field],
+                                'N', *['N', 'Y'])
+    opt_but.pack(side=tk.LEFT)
+
 
 def makeform_general(root, args_dict):
     '''
@@ -110,6 +118,9 @@ def makeform_general(root, args_dict):
         elif args_dict[field]['class'] == 'dir':
             #' arguments of directories
             make_dir_field(root, field)
+        elif args_dict[field]['class'] == 'bool':
+            #' arguments of directories
+            make_bool_field(root, field)
         else:
             #' other types of arguments
             make_file_field_shared(root, field)
@@ -124,9 +135,11 @@ def makeform_functions(root, func_options):
         lab = ttk.Label(row, width=10, text=func, anchor='w')
         lab.pack(side=tk.LEFT)
         func_dict[func]= tk.StringVar(row)
-        func_dict[func].set(func_options[func][0])
-        opt_but= ttk.OptionMenu(row, func_dict[func], *func_options[func])
+        #' the options of ttk.OptionMenu differ from those of tk.OptionMenu 
+        opt_but= ttk.OptionMenu(row, func_dict[func],
+                                func_options[func][0], *func_options[func])
         opt_but.pack(side=tk.LEFT)
+
 
 #def func_name_adaptor(d):
 #    '''
@@ -165,21 +178,31 @@ def load_theme(root):
     s= ttk.Style()
     s.theme_use('awdark')
 
-def make_arguments_for_main(func_dict, config_dict):
+def make_arguments_for_main(func_dict, config_dict, argspace):
     ''' 
     prepare the argument object for Seq2Geno
     '''
     from pprint import pprint
-    config_plainstr_dict= {k: config_dict[k].get() for k in config_dict}
-    pprint(config_plainstr_dict)
+    #' encode the boolean variables
+    #' features section
     func_plainstr_dict= {k: func_dict[k].get() for k in func_dict}
-    #func_plainstr_dict_for_main= func_name_adaptor(func_plainstr_dict)
-    func_plainstr_dict_for_main= func_plainstr_dict
-    pprint(func_plainstr_dict_for_main)
+    func_dict_for_main= func_plainstr_dict
+    for k in func_dict_for_main:
+        func_dict_for_main[k]= (True if func_plainstr_dict[k] == 'Y'
+                                      else False)
+    pprint(func_dict_for_main)
+    #' general section
+    config_plainstr_dict= {k: config_dict[k].get() for k in config_dict}
+    config_dict_for_main= config_plainstr_dict
+    for k in config_dict_for_main:
+        if argspace['general'][k]['class'] == 'bool' :
+            config_dict_for_main[k]= (True if config_plainstr_dict[k] == 'Y'
+                                      else False)
+    pprint(config_plainstr_dict)
     import UserOptions 
     args= UserOptions.arguments()
     try:
-        args.add_opt(**func_plainstr_dict_for_main)
+        args.add_opt(**func_dict_for_main)
         args.add_opt(**config_plainstr_dict)
     except KeyError as e:
         sys.exit('ERROR: {} not found in the input file'.format(str(e)))
@@ -210,13 +233,19 @@ def load_old_yaml():
                                         ('all', '*')])
     if len(yml_f) > 0 :
         #' in case the selection is canceled or accidents
-        args= UserOptions.parse_arg_yaml(yml_f)
+        old_args= UserOptions.parse_arg_yaml(yml_f)
         for func in func_dict:
-            if func in args:
-                func_dict[func].set(args[func])
+            if hasattr(old_args, func):
+                arg_val= ('Y' if getattr(old_args, func)=='Y' else 'N')
+                print('{}: {} '.format(func, func_dict[func].get()))
+                func_dict[func].set(arg_val)
+                print('---> {}'.format(func_dict[func].get()))
         for k in config_dict:
-            if k in args:
-                config_dict.set(args[k])
+            if hasattr(old_args, k):
+                arg_val= getattr(old_args, k)
+                print('{}: {} '.format(k, config_dict[k].get()))
+                config_dict[k].set(arg_val)
+                print('---> {}'.format(config_dict[k].get()))
 
 class seq2geno_gui:
     def __init__(self, root):
@@ -224,18 +253,19 @@ class seq2geno_gui:
     def show(self):
         win_root= self.win_root
         #' read the arguments space
-        argspace= read_arguments_space()
+        self.argspace= read_arguments_space()
 
-        win_mainframe= ttk.Notebook(win_root)
+        win_mainframe= ttk.Notebook(win_root, width= 1000)
         #' group the arguments
         #' options of workflows 
         panel_functions= ttk.Frame(win_mainframe)
         win_mainframe.add(panel_functions, text= 'features')
-        makeform_functions(panel_functions, argspace['features'])
+        makeform_functions(panel_functions, self.argspace['features'])
+
         #' IO panel 
         panel_general= ttk.Frame(win_mainframe)
         win_mainframe.add(panel_general, text= 'general')
-        makeform_general(panel_general, argspace['general'])
+        makeform_general(panel_general, self.argspace['general'])
 
         #' the menu
         #' file
@@ -251,9 +281,14 @@ class seq2geno_gui:
         win_root.mainloop()
     def extract_args(self):
         #' collect the arguments
-        args_for_main= make_arguments_for_main(func_dict, config_dict)
+        args_for_main= make_arguments_for_main(func_dict,
+                                               config_dict,
+                                               self.argspace)
         self.args= args_for_main
         return(self.args)
+    def exec(self):
+        import seq2geno
+        seq2geno.main(self.args)
 
 
 if __name__ == '__main__':
@@ -262,4 +297,5 @@ if __name__ == '__main__':
     win_root.title('Seq2Geno')
     seq2geno_gui= seq2geno_gui(win_root)
     seq2geno_gui.show()
-    print(seq2geno_gui.extract_args())
+    print(seq2geno_gui.extract_args().__dict__)
+    seq2geno_gui.exec()

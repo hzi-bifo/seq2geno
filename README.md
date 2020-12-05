@@ -130,7 +130,11 @@ To only create the folder and config files, please turn off the last six options
 [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de) requires all input data packed in a single zip file. The input file for the validator and gnerator of that zip file can be generated using submission\_tool/create\_genyml.py. 
 
 ### <a name="example"></a>Example usages and data
-The tutorials and example data and commands can be found in  __example\_sg\_dataset.tar.gz__
+The tutorials and example data and commands can be found in  __example\_sg\_dataset.tar.gz__ by compressing it:
+
+```
+tar zxvf ./example_sg_dataset.tar.gz 
+```
 
 ### <a name="license"></a>License
 Apache 2.0 (please see the LICENSE)

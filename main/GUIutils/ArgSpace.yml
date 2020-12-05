@@ -27,8 +27,7 @@ general:
       class: 'int'
       pattern: '^[0-9]+$'
   old_config: 
-      class: 'file'
-      pattern: ''
+      class: 'bool'
   dna_reads:  
       class: 'file'
       pattern: '\\w+'

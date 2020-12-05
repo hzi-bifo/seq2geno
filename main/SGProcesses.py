@@ -66,6 +66,16 @@ class SGProcess:
         env_series=pd.Series([])
         env_dict= {}
         try:
+            #' ensure the most important variable
+            assert 'SEQ2GENO_HOME' in os.environ
+        except AssertionError :
+            print('ERROR ({})'.format('SEQ2GENO_HOME'))
+            print('{}\t{}\n'.format(
+                datetime.now().isoformat(' ',timespec= 'minutes'),
+                'SEQ2GENO_HOME not properly set'))
+            sys.exit()
+
+        try:
             env_series= env_df.loc[proc,:]
         except KeyError as ke:
             print('ERROR ({})'.format(proc))
