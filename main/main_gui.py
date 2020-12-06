@@ -19,9 +19,7 @@ from tkinter import ttk
 #' Target values to determine
 
 config_dict= dict()
-config_plainstr_dict= dict()
 func_dict= dict()
-func_plainstr_dict= dict()
 
 #' >>>>
 #' functions
@@ -177,6 +175,8 @@ def load_theme(root):
     root.tk.call('package', 'require', 'awdark')
     s= ttk.Style()
     s.theme_use('awdark')
+    s.configure('.', font=('Helvetica', 12))
+
 
 def make_arguments_for_main(func_dict, config_dict, argspace):
     ''' 
@@ -187,18 +187,13 @@ def make_arguments_for_main(func_dict, config_dict, argspace):
     #' features section
     func_plainstr_dict= {k: func_dict[k].get() for k in func_dict}
     func_dict_for_main= func_plainstr_dict
-    for k in func_dict_for_main:
-        func_dict_for_main[k]= (True if func_plainstr_dict[k] == 'Y'
-                                      else False)
     pprint(func_dict_for_main)
     #' general section
     config_plainstr_dict= {k: config_dict[k].get() for k in config_dict}
     config_dict_for_main= config_plainstr_dict
-    for k in config_dict_for_main:
-        if argspace['general'][k]['class'] == 'bool' :
-            config_dict_for_main[k]= (True if config_plainstr_dict[k] == 'Y'
-                                      else False)
     pprint(config_plainstr_dict)
+
+    #' create the arguments object
     import UserOptions 
     args= UserOptions.arguments()
     try:
@@ -249,6 +244,22 @@ def load_old_yaml():
                 config_dict[k].set(arg_val)
                 #print('---> {}'.format(config_dict[k].get()))
 
+def write_yaml(func_dict, config_dict):
+    '''
+    Save the setting 
+    '''
+    from tkinter import filedialog
+    import yaml
+    func_plainstr_dict= {k: func_dict[k].get() for k in func_dict}
+    config_plainstr_dict= {k: config_dict[k].get() for k in config_dict}
+    arg_dict={'features': func_plainstr_dict, 'general': config_plainstr_dict}
+    #' determine the filename
+    yml_f= filedialog.asksaveasfilename(title= 'save as...', 
+                                initialdir= '.')
+    with open(yml_f, 'w') as yml_fh:
+        yaml.safe_dump(arg_dict, yml_fh)
+
+
 class seq2geno_gui:
     def __init__(self, root):
         self.win_root= root
@@ -274,6 +285,10 @@ class seq2geno_gui:
         win_menubar= tk.Menu(win_root)
         filemenu= tk.Menu(win_menubar, tearoff= False)
         filemenu.add_command(label= 'Load yaml', command=load_old_yaml)
+        filemenu.add_command(
+            label= 'Save as',
+            command=partial(write_yaml,func_dict, config_dict))
+        filemenu.add_command(label= 'Run', command=self.exec)
         filemenu.add_command(label= 'Exit', command=win_root.quit)
         win_menubar.add_cascade(menu= filemenu, label= 'File')
         #' theming
@@ -290,6 +305,7 @@ class seq2geno_gui:
         return(self.args)
     def exec(self):
         import seq2geno
+        self.extract_args()
         seq2geno.main(self.args)
 
 
@@ -300,4 +316,4 @@ if __name__ == '__main__':
     seq2geno_gui= seq2geno_gui(win_root)
     seq2geno_gui.show()
     print(seq2geno_gui.extract_args().__dict__)
-    seq2geno_gui.exec()
+#    seq2geno_gui.exec()

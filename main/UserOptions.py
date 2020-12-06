@@ -54,14 +54,9 @@ def parse_arg_yaml(yml_f):
     opt_dict= {}
     with open(yml_f, 'r') as yml_fh:
         opt_dict= yaml.safe_load(yml_fh)
-        opt_dict['features']= {k: (True if opt_dict['features'][k] == 'Y' else
-                                   False) for k in opt_dict['features']}
     #' reuse the old config files
-    if 'old_config' in opt_dict['general']:
-        opt_dict['general']['old_config']= (True if opt_dict['general']['old_config'] == 'Y'
-        else False)
-    else:
-        opt_dict['general']['old_config']= False
+    if not ('old_config' in opt_dict['general']):
+        opt_dict['general']['old_config']= 'N'
 
     args= arguments()
     try:

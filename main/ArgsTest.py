@@ -37,7 +37,10 @@ def test_rna_reads_list(f):
 
 def test_reference_seq(f):
     print('Checking the reference sequences...')
+    import os
     from Bio import SeqIO
+    #' the file should exist
+    assert os.path.isfile(f)
     #' ensure a single sequence formatted in fasta
     seq_dict= SeqIO.to_dict(SeqIO.parse(f, 'fasta'))
     assert len(seq_dict) == 1
