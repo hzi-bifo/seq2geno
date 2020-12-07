@@ -16,13 +16,18 @@ class arguments:
         import ArgsTest
 
         #' default values of optional arguments
-        optional_args= {'cores':1, ' mem_mb':-1, 
+        optional_args= {'cores':1, 'mem_mb':-1, 
                         'adaptor': '-', 'rna_reads': '-', 
-                'dryrun': True, 'phe_table': '-', 
-                'denovo': False, 'snps': False, 'expr': False, 'phylo': False}
+                'dryrun': 'Y', 'phe_table': '-', 
+                'denovo': 'N', 'snps': 'N', 'expr': 'N', 'phylo': 'N'}
         for k in optional_args:
             if not hasattr(self, k):
+                #' blanck
                 setattr(self, k, optional_args[k])
+            elif len(str(getattr(self, k))) == 0:
+                #' empty 
+                setattr(self, k, optional_args[k])
+
 
         #' obligatory arguments
         obligatory_args= ['dna_reads', 'ref_fa', 'wd']

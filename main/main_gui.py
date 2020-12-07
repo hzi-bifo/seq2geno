@@ -4,8 +4,10 @@
 #' Parse the arguments through the GUI
 
 import tkinter as tk
+from tkinter import scrolledtext
 from functools import partial
 from tkinter import ttk
+import sys
 #' >>>>
 #' Appearance attributes
 #fieldname_font=("Helvetica",12,"bold") 
@@ -69,7 +71,9 @@ def make_file_field_shared(root, field, is_optional= False):
     #' updated when filename selected or typed
     config_dict[field]= tk.StringVar(row)
     ent = ttk.Entry(row, textvariable= config_dict[field])
+    ent.configure(font= ('nimbus mono l', 12))
     ent.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
+    
     return(row)
 
 def make_file_field(root, field, is_optional= False):
@@ -259,6 +263,16 @@ def write_yaml(func_dict, config_dict):
     with open(yml_f, 'w') as yml_fh:
         yaml.safe_dump(arg_dict, yml_fh)
 
+class RedirectText(object):
+    ''' 
+    Class to extend the scrolledText
+    '''
+    def __init__(self, text_ctrl):
+        self.output = text_ctrl
+    def write(self, string):
+        self.output.insert(tk.END, string)
+        self.output.see(tk.END)
+
 class seq2geno_gui:
     def __init__(self, root):
         self.win_root= root
@@ -290,9 +304,21 @@ class seq2geno_gui:
         filemenu.add_command(label= 'Run', command=self.exec)
         filemenu.add_command(label= 'Exit', command=win_root.quit)
         win_menubar.add_cascade(menu= filemenu, label= 'File')
+
+        #' the verbose output
+        panel_verbose= ttk.Frame(win_root, height= 200)
+        v_box= scrolledtext.ScrolledText(panel_verbose, height=200)
+        v_box.configure(font=('nimbus mono l', 12))
+        v_box.pack()
+        redir= RedirectText(v_box)
+        #' recognizable choices
+        sys.stdout= redir
+        sys.stderr= redir
+
         #' theming
-        win_mainframe.pack()
+        win_mainframe.pack(fill= tk.X)
         win_root.config(menu= win_menubar)
+        panel_verbose.pack(fill=tk.X)
         load_theme(win_root)
         win_root.mainloop()
     def extract_args(self):
