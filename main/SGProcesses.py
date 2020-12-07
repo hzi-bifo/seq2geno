@@ -10,7 +10,7 @@ class SGProcess:
         
     def run_proc(self):
         proc= self.proc
-        dryrun= self.dryrun
+        dryrun= True if self.dryrun == 'Y' else False
         max_cores= self.max_cores
         config_f= self.config_f
         import os

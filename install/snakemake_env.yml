@@ -1,10 +1,12 @@
 name: snakemake_env
 channels:
+  - hzi-bifo
   - bioconda
   - conda-forge
   - defaults
   - conda-forge/label/broken
 dependencies:
+  - _libgcc_mutex=0.1=main
   - aioeasywebdav=2.2.0=py36_0
   - aiohttp=3.5.4=py36h14c3975_0
   - appdirs=1.4.3=py_1
@@ -15,10 +17,10 @@ dependencies:
   - biopython=1.73=py36h14c3975_0
   - boto3=1.7.84=py_0
   - botocore=1.10.84=py_0
-  - ca-certificates=2019.3.9=hecc5488_0
+  - ca-certificates=2019.11.28=hecc5488_0
   - cachetools=2.1.0=py_0
   - cairo=1.16.0=ha4e643d_1000
-  - certifi=2019.3.9=py36_0
+  - certifi=2019.11.28=py36_0
   - cffi=1.12.3=py36h8022711_0
   - chardet=3.0.4=py36_1003
   - configargparse=0.13.0=py_1
@@ -74,7 +76,7 @@ dependencies:
   - networkx=2.3=py_0
   - numpy=1.16.4=py36h95a1406_0
   - openblas=0.3.5=h9ac9557_1001
-  - openssl=1.1.1b=h14c3975_1
+  - openssl=1.1.1d=h516909a_0
   - pandas=0.23.4=py36hf8a1672_0
   - pango=1.40.14=h4ea9474_1004
   - paramiko=2.4.2=py36_1000
@@ -133,7 +135,8 @@ dependencies:
   - xorg-xproto=7.0.31=h14c3975_1007
   - xz=5.2.4=h14c3975_1001
   - yaml=0.1.7=h14c3975_1001
+  - yappi=1.0=py36hc9558a2_0
   - yarl=1.3.0=py36h14c3975_1000
   - zlib=1.2.11=h14c3975_1004
   - zstd=1.4.0=h3b9ef0a_0
-
+prefix: /home/thkuo/miniconda3/envs/snakemake_env

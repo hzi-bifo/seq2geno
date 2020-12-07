@@ -259,7 +259,6 @@ def write_yaml(func_dict, config_dict):
     with open(yml_f, 'w') as yml_fh:
         yaml.safe_dump(arg_dict, yml_fh)
 
-
 class seq2geno_gui:
     def __init__(self, root):
         self.win_root= root

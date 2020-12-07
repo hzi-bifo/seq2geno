@@ -126,6 +126,7 @@ def main(args):
         print('Working directory {} {}'.format(
             args.wd, 'updated' if not args.dryrun else 'unchanged'))
         pbar.update(1)
+        print('\n---\n')
 
     pbar.close()
 
