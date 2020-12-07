@@ -33,11 +33,12 @@ def filter_procs(args):
     if args.expr == 'Y':
         #' ensure required data
         assert os.path.isfile(args.rna_reads)
-        all_processes.append(SGProcess(args.wd,
-                      'expr', config_f= config_files['expr'], 
-                      dryrun= args.dryrun, 
-                      max_cores=
-                      int(args.cores)))
+        all_processes.append(SGProcess(
+            args.wd, 'expr', 
+            config_f= config_files['expr'], 
+            dryrun= args.dryrun, 
+            mem_mb= int(args.mem_mb), 
+            max_cores=int(args.cores)))
     else:
         print('Skip counting expression levels')
 
@@ -48,6 +49,7 @@ def filter_procs(args):
         all_processes.append(SGProcess(args.wd,
                       'snps', config_f= config_files['snps'], 
                       dryrun= args.dryrun, 
+                      mem_mb= int(args.mem_mb), 
                       max_cores=int(args.cores)))
     else:
         print('Skip calling single nucleotide variants')
@@ -59,6 +61,7 @@ def filter_procs(args):
         all_processes.append(SGProcess(args.wd,
                       'denovo', config_f= config_files['denovo'], 
                       dryrun= args.dryrun, 
+                      mem_mb= int(args.mem_mb), 
                       max_cores=int(args.cores)))
     else:
         print('Skip creating de novo assemblies')
@@ -70,6 +73,7 @@ def filter_procs(args):
         all_processes.append(SGProcess(args.wd,
                       'phylo', config_f= config_files['phylo'], 
                       dryrun= args.dryrun, 
+                      mem_mb= int(args.mem_mb), 
                       max_cores=int(args.cores)))
     else:
         print('Skip inferring phylogeny')
@@ -83,6 +87,7 @@ def filter_procs(args):
         all_processes.append(SGProcess(args.wd,
                        'ar', config_f= config_files['ar'], 
                        dryrun= args.dryrun, 
+                      mem_mb= int(args.mem_mb), 
                        max_cores=int(args.cores)))
     else:
         print('Skip ancestral reconstruction')
@@ -96,6 +101,7 @@ def filter_procs(args):
         all_processes.append(SGProcess(args.wd,
                       'de', config_f= config_files['de'], 
                        dryrun= args.dryrun, 
+                      mem_mb= int(args.mem_mb), 
                        max_cores=int(args.cores)))
     else:
         print('Skip differential expression analysis')

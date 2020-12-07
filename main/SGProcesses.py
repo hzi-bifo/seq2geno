@@ -1,12 +1,31 @@
 #' Role: Workers
 #' Purpose: Define the class of workflow
 class SGProcess:
-    def __init__(self, wd, proc, config_f, dryrun= True, max_cores= 1):
+    def __init__(self, wd, proc, 
+                 config_f, dryrun= True, 
+                 max_cores= 1, mem_mb=-1):
         import os
+        import psutil
         self.proc= proc
         self.dryrun= dryrun
-        self.max_cores= max_cores
         self.config_f= config_f 
+        #' check and adjust the core number setting
+        cpu_count= int(psutil.cpu_count())
+        if (max_cores > cpu_count) or (mem_mb < 1):
+            print(('The number of cpu was {}; cores setting '
+                  'adjusted').format(str(cpu_count)))
+            self.max_cores= max(int(cpu_count-1), 1)
+        else:
+            self.max_cores= int(max_cores)
+
+        #' check and adjust the memory size setting
+        freemem= psutil.virtual_memory().free/1e6
+        if (mem_mb > freemem) or (mem_mb <= 0):
+            print(('Currently free memory size was {}mb; memory setting '
+                  'adjusted').format(str(freemem)))
+            self.mem_mb= int(freemem * 0.8)
+        else:
+            self.mem_mb= int(mem_mb)
         
     def run_proc(self):
         proc= self.proc
@@ -27,6 +46,7 @@ class SGProcess:
                 lock= False,
                 restart_times= 3,
                 cores= max_cores,
+                resources= {'mem_mb': self.mem_mb}, 
                 configfile=config_f,
                 force_incomplete= True,
                 workdir= os.path.dirname(config_f),

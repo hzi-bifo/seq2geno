@@ -26,6 +26,9 @@ general:
   cores:
       class: 'int'
       pattern: '^[0-9]+$'
+  mem_mb:
+      class: 'int'
+      pattern: '^[0-9]+$'
   old_config: 
       class: 'bool'
   dna_reads:  

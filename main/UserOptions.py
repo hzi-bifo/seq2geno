@@ -16,7 +16,8 @@ class arguments:
         import ArgsTest
 
         #' default values of optional arguments
-        optional_args= {'cores':1, 'adaptor': '-', 'rna_reads': '-', 
+        optional_args= {'cores':1, ' mem_mb':-1, 
+                        'adaptor': '-', 'rna_reads': '-', 
                 'dryrun': True, 'phe_table': '-', 
                 'denovo': False, 'snps': False, 'expr': False, 'phylo': False}
         for k in optional_args:
