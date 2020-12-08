@@ -1,24 +1,24 @@
 # Seq2Geno
 
 - [What is Seq2Geno?](#intro)
-- [What does Seq2Geno cover?](#functions") 
-- [Get started](#install") 
+- [What does Seq2Geno cover?](#functions) 
+- [Get started](#install) 
 - [Usage and Input](#usage) 
     - [GUI](#gui)
     - [command line](#commandline)
     - [arguments](#args)
-- [Train the phenotypic predictor with the Seq2Geno results](#genyml") 
-- [Example usages and data](#example") 
-- [License](#license") 
-- [Contact](#contact") 
+- [Train the phenotypic predictor with the Seq2Geno results](#genyml) 
+- [Example usages and data](#example) 
+- [License](#license) 
+- [Contact](#contact) 
 
 
 ### <a name="intro"></a>What is Seq2Geno?
-As the first stage of Seq2Geno2Pheno, Seq2Geno is a prediction-oriented tool to conduct computational analyses with the next-generation sequencing data of bacterial samples. It enables the users to use either the graphical or the command line interface to edit the arguments and run the analyses. The final output data include the phylogenetic tree and the feature matrices of SNPs, gene presence/absence, and expression levels--formatted for Geno2Pheno the machine learning stage of Seq2Geno2Pheno. 
+As the first stage of Seq2Geno2Pheno, Seq2Geno is a prediction-oriented tool to conduct computational analyses with the next-generation sequencing data of bacterial samples. It enables the users to use either the graphical or the command line interface to edit the arguments and conduct the complex analyses. The final output data include the phylogenetic tree and the feature matrices of SNPs, gene presence/absence, and expression levels, which are formatted for the next stage of machine learning: Geno2Pheno.
 
-To ensure data reproducibility, Seq2Geno automatically resolves the dependencies among procedures and manages the procedure-specific computational environments, aiming to avoid error-prone behaviors (such as manually repeating processes or shifting computational environments). 
+To ensure data reproducibility, Seq2Geno automatically resolves the dependencies among procedures and manages the procedure-specific computational environments, aiming to avoid error-prone behaviors of researchers (such as manually repeating processes or shifting computational environments). 
 
-The output data from Seq2Geno can be used to train phenotypic predictors using [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de).
+The output data from Seq2Geno can be used to train phenotypic predictors using [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de). To have your data submitted to the Geno2Pheno server, please check [the section below](#genyml). 
 
 ### <a name="functions"></a>What does Seq2Geno cover?
 - detect single nucleotide variants
@@ -45,7 +45,7 @@ The output data from Seq2Geno can be used to train phenotypic predictors using [
 
 - Installation of Seq2Geno
 
-    1. Download Seq2Geno:
+Seq2Geno doen't need compilation. Therefore, you will only need to clone Seq2Geno:
 
 	```
 	git clone --recurse-submodules https://github.com/hzi-bifo/seq2geno.git
@@ -55,19 +55,16 @@ The output data from Seq2Geno can be used to train phenotypic predictors using [
 
 	The option `--recurse-submodules` helps to download the submodules that are located at another repository (i.e. Seq2Geno and Geno2Pheno). The flag is available only in git version >2.13, and users of earlier git versions may need to find the substitute.  
 
-    2. Install the core environment:
+- Installation of the environments 
 
-	The core environment is required to initiate Seq2Geno. Please follow the few describtion in install/INSTALL
-
-    3. Install the process-spcific environment:
-	
-	All the processes in Seq2Geno do not share the same pool of computational tools. The process-specific tools, however, do not need to be installed manually, because they are already listed in yaml files that Conda can parse. The installation using Conda is automatically launched when Seq2Geno is used for the first time. 
+The environment that is reuiqred when launching Seq2Geno can be found in install/INSTALL.md. For the process-spcific environment, they do not share the same pool of computational tools, they do not need to be installed manually; instead, they are already described in yaml files that Conda can parse and will be automatically downloaded when they are used for the first time. Therefore, we recommend to try the [example dataset](#example) to speed up the exact analyses in the future. 
 
 ### <a name="usage"></a>Usage and Input
 
 Seq2Geno can launch with either the graphical user interface (GUI) or the command line.
 
 - <a name="gui"></a>GUI
+
 Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. 
 
 - <a name="commandline"></a>command line
@@ -95,17 +92,15 @@ The input file is an yaml file where all options are described. The file include
 
 To only create the folder and config files, please turn off the last six options. 
 
-2. general: 
+2. general (\* mandatory): 
 
     - cores: number of cpus (integer; automatically adjusted if larger than the available cpu number)
 
     - mem_mb: memory size to use (integer in mb; automatically adjusted if larger than the free memory). __Note: some processes may crush because of insufficiently allocated  memory__
 
-    - old_config: if recognizable, the config files that were previously stored in the working directory will be reused
+    - \*wd: the working directory. The intermediate and final files will be stored under this folder. The final outcomes will be symlinked to the sub-directory RESULTS/.
 
-    - wd: the working directory. The intermediate and final files will be stored under this folder. The final outcomes will be symlinked to RESULTS/.
-
-    - dna_reads: The list of DNA-seq data 
+    - \*dna_reads: the list of DNA-seq data 
 
     It should be a two-column list, where the first column includes all samples and the second column lists the __paired-end reads files__. The two reads file are separated by a comma. The first line is the first sample.
     ```
@@ -114,7 +109,14 @@ To only create the folder and config files, please turn off the last six options
     sample03	/paired/end/reads/sample03_1.fastq.gz,/paired/end/reads/sample03_2.fastq.gz
     ```
 
-    - rna_reads: The list of RNA-seq data
+    - \*ref_fa, ref_gff, ref_gbk: the data of reference genome
+
+    The fasta, gff, and genbank files of a reference genome. They should have same sequence ids. 
+
+
+    - old_config: if recognizable, the config files that were previously stored in the working directory will be reused. ('Y': on; 'N': off)
+
+    - rna_reads: the list of RNA-seq data. (string of filename)
 
     It should be a two-column list, where the first column includes all samples and the second column lists the __short reads files__. The first line is the first sample.
     ```
@@ -123,7 +125,7 @@ To only create the folder and config files, please turn off the last six options
     sample03	/transcription/reads/sample03.rna.fastq.gz
     ```
 
-    - phe_table: The phenotype table
+    - phe_table: the phenotype table (string of filename)
 
     The table is tab-separated. For n samples with m phenotypes, the table is (n+1)-by-(m+1) as shown below. The first column should be sample names. The header line should includes names of phenotypes. Missing values are acceptable.
     ```
@@ -133,11 +135,7 @@ To only create the folder and config files, please turn off the last six options
     sample03	low
     ```
 
-    - ref_fa, ref_gff, ref_gbk: the data of reference genome
-
-    The fasta, gff, and genbank files of a reference genome. They should have same sequence ids. 
-
-    - adaptor: The adaptor file (optional)
+    - adaptor: the adaptor file (string of filename)
 
     The fasta file of adaptors of DNA-seq. It is used to process the DNA-seq reads. 
 

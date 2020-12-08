@@ -5,6 +5,7 @@
 
 import tkinter as tk
 from tkinter import scrolledtext
+from tkinter import filedialog
 from functools import partial
 from tkinter import ttk
 import sys
@@ -22,6 +23,7 @@ import sys
 
 config_dict= dict()
 func_dict= dict()
+log_f= ''
 
 #' >>>>
 #' functions
@@ -31,18 +33,33 @@ def browseDirs(field):
     allow the user to select a directory using the file browser and
     auto-fill the textbox
     '''
-    from tkinter import filedialog
     d_name= filedialog.askdirectory(title= 'select directory', 
                                 initialdir= '.')
     #' update the value
     config_dict[field].set(d_name)
 
-def browseFiles(field): 
+def browse_file_and_set_log(log_f):
     '''
     allow the user to select a file using the file browser and
     auto-fill the textbox
     '''
-    from tkinter import filedialog
+    import os
+
+    f_name= filedialog.asksaveasfilename(title= 'save as...', 
+                                initialdir= '.')
+    #' not allowing to use the existing file
+    while os.path.isfile(f_name):
+        f_name= filedialog.asksaveasfilename(
+            title= 'save as...',  initialdir= '.')
+    #' update the value
+    log_f.set(f_name)
+
+
+def browse_file_and_update(field): 
+    '''
+    allow the user to select a file using the file browser and
+    auto-fill the textbox
+    '''
     f_name= filedialog.askopenfilename(title= 'select file', 
                                 initialdir= '.',
                                 filetypes=[('all', '*'),
@@ -50,6 +67,21 @@ def browseFiles(field):
                                         ('.fa', '*.fa')])
     #' update the value
     config_dict[field].set(f_name)
+
+def make_log_field(root, log_f):
+    '''
+    the fields where the value should be a file
+    '''
+    row = ttk.Frame(root)
+    row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+    lab = ttk.Label(row, width=15, text='log file')
+    lab.pack(side=tk.LEFT)
+    log_f= tk.StringVar(row)
+    ent = ttk.Entry(row, textvariable= log_f)
+    ent.configure(font= ('nimbus mono l', 12))
+    ent.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
+    but= ttk.Button(row, text= 'browse', width= 10, command= partial(browse_file_and_set_log, log_f))
+    but.pack(side=tk.RIGHT, padx=5, pady=5)
 
 def field_opt_out(field):
     '''
@@ -85,7 +117,7 @@ def make_file_field(root, field, is_optional= False):
         optout_but= ttk.Button(row, text= 'skip', width= 6, 
                                command=partial(field_opt_out, field))
         optout_but.pack(side=tk.RIGHT, padx=5, pady=5)
-    but= ttk.Button(row, text= 'browse', width= 10, command= partial(browseFiles, field))
+    but= ttk.Button(row, text= 'browse', width= 10, command= partial(browse_file_and_update, field))
     but.pack(side=tk.RIGHT, padx=5, pady=5)
 
 def make_dir_field(root, field):
@@ -293,6 +325,13 @@ class seq2geno_gui:
         win_mainframe.add(panel_general, text= 'general')
         makeform_general(panel_general, self.argspace['general'])
 
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        #' log panel 
+        panel_log= ttk.Frame(win_mainframe)
+        win_mainframe.add(panel_log, text= 'log')
+        make_log_field(panel_log, log_f)
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
         #' the menu
         #' file
         win_menubar= tk.Menu(win_root)
@@ -305,20 +344,20 @@ class seq2geno_gui:
         filemenu.add_command(label= 'Exit', command=win_root.quit)
         win_menubar.add_cascade(menu= filemenu, label= 'File')
 
-        #' the verbose output
-        panel_verbose= ttk.Frame(win_root, height= 200)
-        v_box= scrolledtext.ScrolledText(panel_verbose, height=200)
-        v_box.configure(font=('nimbus mono l', 12))
-        v_box.pack()
-        redir= RedirectText(v_box)
-        #' recognizable choices
-        sys.stdout= redir
-        sys.stderr= redir
-
+#        #' the verbose output
+#        panel_verbose= ttk.Frame(win_root, height= 200)
+#        v_box= scrolledtext.ScrolledText(panel_verbose, height=200)
+#        v_box.configure(font=('nimbus mono l', 12))
+#        v_box.pack()
+#        redir= RedirectText(v_box)
+#        #' recognizable choices
+#        sys.stdout= redir
+#        sys.stderr= redir
+#
         #' theming
         win_mainframe.pack(fill= tk.X)
         win_root.config(menu= win_menubar)
-        panel_verbose.pack(fill=tk.X)
+#        panel_verbose.pack(fill=tk.X)
         load_theme(win_root)
         win_root.mainloop()
     def extract_args(self):

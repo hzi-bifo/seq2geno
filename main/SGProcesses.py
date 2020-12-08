@@ -11,7 +11,7 @@ class SGProcess:
         self.config_f= config_f 
         #' check and adjust the core number setting
         cpu_count= int(psutil.cpu_count())
-        if (max_cores > cpu_count) or (mem_mb < 1):
+        if (max_cores > cpu_count) or (max_cores < 1):
             print(('The number of cpu was {}; cores setting '
                   'adjusted').format(str(cpu_count)))
             self.max_cores= max(int(cpu_count-1), 1)
