@@ -1,0 +1,6 @@
+yml_f: 
+  class: 'file'
+  pattern: '\\w+'
+log_f: 
+  class: 'file'
+  pattern: '\\w+'

@@ -9,6 +9,12 @@ from tkinter import filedialog
 from functools import partial
 from tkinter import ttk
 import sys
+import os
+import yaml
+import re
+from pprint import pprint
+
+import UserOptions 
 #' >>>>
 #' Appearance attributes
 #fieldname_font=("Helvetica",12,"bold") 
@@ -23,7 +29,7 @@ import sys
 
 config_dict= dict()
 func_dict= dict()
-log_f= ''
+primary_dict= dict()
 
 #' >>>>
 #' functions
@@ -37,22 +43,6 @@ def browseDirs(field):
                                 initialdir= '.')
     #' update the value
     config_dict[field].set(d_name)
-
-def browse_file_and_set_log(log_f):
-    '''
-    allow the user to select a file using the file browser and
-    auto-fill the textbox
-    '''
-    import os
-
-    f_name= filedialog.asksaveasfilename(title= 'save as...', 
-                                initialdir= '.')
-    #' not allowing to use the existing file
-    while os.path.isfile(f_name):
-        f_name= filedialog.asksaveasfilename(
-            title= 'save as...',  initialdir= '.')
-    #' update the value
-    log_f.set(f_name)
 
 
 def browse_file_and_update(field): 
@@ -68,20 +58,46 @@ def browse_file_and_update(field):
     #' update the value
     config_dict[field].set(f_name)
 
-def make_log_field(root, log_f):
+def browse_primary_file_and_update(field): 
     '''
-    the fields where the value should be a file
+    allow the user to select a file using the file browser and
+    auto-fill the textbox
     '''
+    f_name= filedialog.asksaveasfilename(title= 'set filename', 
+                                initialdir= '.')
+    #' update the value
+    primary_dict[field].set(f_name)
+
+def make_primary_file_field(root, field, is_optional= False):
+    #' the row
     row = ttk.Frame(root)
-    row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
-    lab = ttk.Label(row, width=15, text='log file')
+    row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=3)
+    #' name of this field
+    lab = ttk.Label(row, width=15, text=field)
     lab.pack(side=tk.LEFT)
-    log_f= tk.StringVar(row)
-    ent = ttk.Entry(row, textvariable= log_f)
+    #' the text
+    #' updated when filename selected or typed
+    primary_dict[field]= tk.StringVar(row)
+    ent = ttk.Entry(row, textvariable= primary_dict[field])
     ent.configure(font= ('nimbus mono l', 12))
     ent.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
-    but= ttk.Button(row, text= 'browse', width= 10, command= partial(browse_file_and_set_log, log_f))
+    if is_optional:
+        optout_but= ttk.Button(row, text= 'skip', width= 6, 
+                               command=partial(field_opt_out, field))
+        optout_but.pack(side=tk.RIGHT, padx=5, pady=5)
+    but= ttk.Button(row, text= 'browse', width= 10, command= partial(browse_primary_file_and_update, field))
     but.pack(side=tk.RIGHT, padx=5, pady=5)
+
+def makeform_primary(root, args_dict):
+    '''
+    create the form for determining input data
+    '''
+    for field in args_dict:
+        if args_dict[field]['class'] == 'file':
+            #' arguments of filenames
+            make_primary_file_field(
+                root, field, 
+                (True if len(args_dict[field]['pattern'])==0 else False))
 
 def field_opt_out(field):
     '''
@@ -204,7 +220,6 @@ def makeform_functions(root, func_options):
 
 
 def load_theme(root):
-    import os
     parent_d=os.path.dirname(__file__)
     awtheme_d=os.path.join(parent_d, 'GUIutils', 'theme', 'awthemes-10.0.0')
     root.tk.call('lappend', 'auto_path', awtheme_d)
@@ -218,7 +233,6 @@ def make_arguments_for_main(func_dict, config_dict, argspace):
     ''' 
     prepare the argument object for Seq2Geno
     '''
-    from pprint import pprint
     #' encode the boolean variables
     #' features section
     func_plainstr_dict= {k: func_dict[k].get() for k in func_dict}
@@ -230,7 +244,6 @@ def make_arguments_for_main(func_dict, config_dict, argspace):
     pprint(config_plainstr_dict)
 
     #' create the arguments object
-    import UserOptions 
     args= UserOptions.arguments()
     try:
         args.add_opt(**func_dict_for_main)
@@ -242,11 +255,7 @@ def make_arguments_for_main(func_dict, config_dict, argspace):
         args.check_args()
         return(args)
 
-def read_arguments_space():
-    import yaml
-    import os
-    parent_d=os.path.dirname(__file__)
-    as_f=os.path.join(parent_d, 'GUIutils', 'ArgSpace.yml')
+def read_arguments_space(as_f):
     as_fh= open(as_f, 'r')
     args= yaml.safe_load(as_fh)
     as_fh.close()
@@ -256,15 +265,16 @@ def load_old_yaml():
     '''
     Allow the user to select the old yaml file and parse the arguments
     '''
-    from tkinter import filedialog
-    import UserOptions 
-    import os
     yml_f= filedialog.askopenfilename(title= 'select file', 
                                 initialdir= '.',
                                 filetypes=[('yml', '*.yml'),
                                         ('.yaml', '*.yaml'),
                                         ('all', '*')])
+    reset_args_with_yml(yml_f)
+
+def reset_args_with_yml(yml_f):
     if len(yml_f) > 0 :
+        primary_dict['yml_f'].set(yml_f)
         #' in case the selection is canceled or accidents
         old_args= UserOptions.parse_arg_yaml(yml_f)
         for func in func_dict:
@@ -284,7 +294,6 @@ def write_yaml(func_dict, config_dict):
     '''
     Save the setting 
     '''
-    from tkinter import filedialog
     import yaml
     func_plainstr_dict= {k: func_dict[k].get() for k in func_dict}
     config_plainstr_dict= {k: config_dict[k].get() for k in config_dict}
@@ -292,27 +301,61 @@ def write_yaml(func_dict, config_dict):
     #' determine the filename
     yml_f= filedialog.asksaveasfilename(title= 'save as...', 
                                 initialdir= '.')
-    with open(yml_f, 'w') as yml_fh:
-        yaml.safe_dump(arg_dict, yml_fh)
+    if len(yml_f) > 0 :
+        primary_dict['yml_f'].set(yml_f)
+        with open(yml_f, 'w') as yml_fh:
+            yaml.safe_dump(arg_dict, yml_fh)
+        return(yml_f)
 
-class RedirectText(object):
-    ''' 
-    Class to extend the scrolledText
+def load_old_log(out):
     '''
-    def __init__(self, text_ctrl):
-        self.output = text_ctrl
-    def write(self, string):
-        self.output.insert(tk.END, string)
-        self.output.see(tk.END)
+    Read the old log file to allow the user to know the current status
+    '''
+    #' open the log file
+    import UserOptions 
+    import os
+    log_f= filedialog.askopenfilename(title= 'select file', 
+                                initialdir= '.',
+                                filetypes=[('log', '*.log'),
+                                        ('all', '*')])
+    primary_dict['log_f'].set(log_f)
+
+    #' print the information in the log file
+    yml_f= ''
+    out.delete('1.0', tk.END)
+    with open(log_f, 'r') as log_fh:
+        for l in log_fh.readlines():
+            is_config_line= re.search('#CONFIGFILE:(.+)', l.strip())
+            if not is_config_line is None:
+                yml_f= is_config_line.group(1)
+            else:
+                out.insert(tk.END, l)
+    
+    #' set the arguments same as the config file that generated the log
+    assert os.path.isfile(yml_f), (
+        'Config file "{}" described in the log not found or broken'.format(yml_f))
+    reset_args_with_yml(yml_f)
+
 
 class seq2geno_gui:
     def __init__(self, root):
         self.win_root= root
     def show(self):
         win_root= self.win_root
-        #' read the arguments space
-        self.argspace= read_arguments_space()
+        parent_d=os.path.dirname(__file__)
 
+        #' primary arguments that the user would set with the commandline interface
+        #' read the arguments space
+        p_as_f=os.path.join(parent_d, 'GUIutils', 'PrimaryArgSpace.yml')
+        self.p_argspace= read_arguments_space(p_as_f)
+        panel_primary=ttk.Frame(win_root, width= 1000, borderwidth= 10)
+        makeform_primary(panel_primary, self.p_argspace)
+
+
+        #' arguments listed in the input yaml file
+        #' read the arguments space
+        as_f=os.path.join(parent_d, 'GUIutils', 'ArgSpace.yml')
+        self.argspace= read_arguments_space(as_f)
         win_mainframe= ttk.Notebook(win_root, width= 1000)
         #' group the arguments
         #' options of workflows 
@@ -325,12 +368,12 @@ class seq2geno_gui:
         win_mainframe.add(panel_general, text= 'general')
         makeform_general(panel_general, self.argspace['general'])
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        #' log panel 
+        #' the log display 
         panel_log= ttk.Frame(win_mainframe)
         win_mainframe.add(panel_log, text= 'log')
-        make_log_field(panel_log, log_f)
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        v_box= scrolledtext.ScrolledText(panel_log, height=200)
+        v_box.configure(font=('nimbus mono l', 12))
+        v_box.pack()
 
         #' the menu
         #' file
@@ -338,13 +381,14 @@ class seq2geno_gui:
         filemenu= tk.Menu(win_menubar, tearoff= False)
         filemenu.add_command(label= 'Load yaml', command=load_old_yaml)
         filemenu.add_command(
-            label= 'Save as',
+            label= 'Save yaml',
             command=partial(write_yaml,func_dict, config_dict))
+        filemenu.add_command(label= 'Load log', 
+                             command=partial(load_old_log, v_box))
         filemenu.add_command(label= 'Run', command=self.exec)
         filemenu.add_command(label= 'Exit', command=win_root.quit)
         win_menubar.add_cascade(menu= filemenu, label= 'File')
 
-#        #' the verbose output
 #        panel_verbose= ttk.Frame(win_root, height= 200)
 #        v_box= scrolledtext.ScrolledText(panel_verbose, height=200)
 #        v_box.configure(font=('nimbus mono l', 12))
@@ -355,6 +399,7 @@ class seq2geno_gui:
 #        sys.stderr= redir
 #
         #' theming
+        panel_primary.pack(fill= tk.X)
         win_mainframe.pack(fill= tk.X)
         win_root.config(menu= win_menubar)
 #        panel_verbose.pack(fill=tk.X)
@@ -368,9 +413,16 @@ class seq2geno_gui:
         self.args= args_for_main
         return(self.args)
     def exec(self):
-        import seq2geno
-        self.extract_args()
-        seq2geno.main(self.args)
+        #' Instead of replacing the command line interface,
+        #' the GUI is a an adaptor between the user and the command line interface.
+        #' Therefore, launching seq2geno from this GUI simply is passing the needed 
+        #' primary arguments: the yaml filename and the log filename
+        yml_f= write_yaml(func_dict, config_dict)
+        #log_f= 
+
+#        import seq2geno
+#        self.extract_args()
+#        seq2geno.main(self.args)
 
 
 if __name__ == '__main__':
