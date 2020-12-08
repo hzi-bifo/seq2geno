@@ -348,8 +348,9 @@ class seq2geno_gui:
         win_root= self.win_root
         parent_d=os.path.dirname(__file__)
 
+        #---
         #' primary arguments that the user would set with the commandline interface
-        #' read the arguments space
+        #' read the spaces of the primary arguments
         p_as_f=os.path.join(parent_d, 'GUIutils', 'PrimaryArgSpace.yml')
         self.p_argspace= read_arguments_space(p_as_f)
         panel_primary=ttk.Frame(win_root, width= 1000, borderwidth= 10)
@@ -361,7 +362,7 @@ class seq2geno_gui:
         as_f=os.path.join(parent_d, 'GUIutils', 'ArgSpace.yml')
         self.argspace= read_arguments_space(as_f)
         win_mainframe= ttk.Notebook(win_root, width= 1000)
-        #' group the arguments
+        #' group the arguments into tabs
         #' options of workflows 
         panel_functions= ttk.Frame(win_mainframe)
         win_mainframe.add(panel_functions, text= 'features')
@@ -379,6 +380,7 @@ class seq2geno_gui:
         v_box.configure(font=('nimbus mono l', 12))
         v_box.pack()
 
+        #---
         #' the menu
         #' file
         win_menubar= tk.Menu(win_root)
@@ -392,7 +394,13 @@ class seq2geno_gui:
         filemenu.add_command(label= 'Run', command=self.exec)
         filemenu.add_command(label= 'Exit', command=win_root.quit)
         win_menubar.add_cascade(menu= filemenu, label= 'File')
+        #' help info
+        helpmenu= tk.Menu(win_menubar, tearoff= False)
+        helpmenu.add_command(label= 'About',
+                             command=partial(self.make_popupmsg, **{'title': 'About', 'f': '../README.md'}))
+        win_menubar.add_cascade(menu= helpmenu, label= 'Help')
 
+        #---
         #' theming
         panel_primary.pack(fill= tk.X)
         win_mainframe.pack(fill= tk.X)
@@ -412,23 +420,37 @@ class seq2geno_gui:
         # determine log path
         log_f= primary_dict['log_f'].get()
         if os.path.isfile(log_f):
-            self.make_popupmsg('Log file existing. Please reset another filename.')
+            self.make_popupmsg(title= 'Log file existing', msg= 'Please reset another filename.')
         # start running
         cmd_d= ['seq2geno', '-f', yml_f]
         if not (re.search('\w', log_f) is None):
             cmd_d= cmd_d+ ['-l', log_f]
         subprocess.Popen(cmd_d)
 
-    def make_popupmsg(self, msg):
+    def make_popupmsg(self, title, msg= None, f= ''):
         '''
-        Generate a popup to show errors
+        Generate a popup to show message 
         '''
         popup = tk.Tk()
-        popup.wm_title("Error")
-        label = ttk.Label(popup, text=msg)
-        label.pack(side="top", fill="x", pady=10)
-        end_but = ttk.Button(popup, text="okay", command = popup.destroy)
-        end_but.pack()
+        popup.wm_title(title)
+        if not msg is None:
+            label = ttk.Label(popup, text=msg)
+            label.pack(side="top", fill="x", pady=10)
+            end_but = ttk.Button(popup, text="okay", command = popup.destroy)
+            end_but.pack()
+        elif os.path.isfile(f):
+            popup_msgframe= ttk.Frame(popup)
+            label= scrolledtext.ScrolledText(popup_msgframe, height=30)
+            label.configure(font=('nimbus mono l', 12))
+            label.pack(side="top", fill=tk.X)
+            popup_msgframe.pack(side= tk.TOP)
+            for l in open(f, 'r').readlines():
+                label.insert(tk.END, l)
+            popup_butframe= ttk.Frame(popup)
+            end_but = ttk.Button(popup_butframe, text="okay", command = popup.destroy)
+            end_but.pack()
+            popup_butframe.pack(side= tk.TOP, fill= tk.X)
+
         popup.mainloop()
 
     def extract_args(self):

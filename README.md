@@ -71,8 +71,10 @@ Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file.
 
 The input for seq2geno is a single yaml file describing all arguments:
 ```
-  seq2geno -f options.yml
+  seq2geno -d -f [options_yaml] -l [log_file]
 ```
+
+The [options\_yaml] describes all the options and input data for Seq2Geno. The [log\_file] should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr.
 
 - <a name="args"></a>arguments
 
