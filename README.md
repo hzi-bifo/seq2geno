@@ -45,8 +45,7 @@ The output data from Seq2Geno can be used to train phenotypic predictors using [
 
 - Installation of Seq2Geno
 
-Seq2Geno doen't need compilation. Therefore, you will only need to clone Seq2Geno:
-
+	Seq2Geno doen't need compilation. Therefore, you will only need to clone Seq2Geno:
 	```
 	git clone --recurse-submodules https://github.com/hzi-bifo/seq2geno.git
 	cd seq2geno
@@ -65,7 +64,7 @@ Seq2Geno can launch with either the graphical user interface (GUI) or the comman
 
 - <a name="gui"></a>GUI
 
-Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. 
+Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. To learn more, please read the the manual in the main/ folder.
 
 - <a name="commandline"></a>command line
 

@@ -145,9 +145,7 @@ def make_dir_field(root, field):
     but= ttk.Button(row, text= 'browse', width= 10, command= partial(browseDirs, field))
     but.pack(side=tk.RIGHT, padx=5, pady=5)
 
-def make_bool_field(root, field):
-    row = ttk.Frame(root)
-    row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+def make_bool_field(row, field):
     lab = ttk.Label(row, width=15, text=field)
     lab.pack(side=tk.LEFT)
     config_dict[field]= tk.StringVar(row)
@@ -161,20 +159,25 @@ def makeform_general(root, args_dict):
     create the form for determining input data
     '''
     for field in args_dict:
+        row = ttk.Frame(root)
+        row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
         if args_dict[field]['class'] == 'file':
             #' arguments of filenames
             make_file_field(
-                root, field, 
+                row, field, 
                 (True if len(args_dict[field]['pattern'])==0 else False))
         elif args_dict[field]['class'] == 'dir':
             #' arguments of directories
-            make_dir_field(root, field)
+            make_dir_field(row, field)
         elif args_dict[field]['class'] == 'bool':
             #' arguments of directories
-            make_bool_field(root, field)
+            make_bool_field(row, field)
         else:
             #' other types of arguments
-            make_file_field_shared(root, field)
+            make_file_field_shared(row, field)
+#        hlp = ttk.Label(row, text=args_dict[field]['help'], anchor='w')
+#        hlp.configure(font=('new century schoolbook', 11), foreground= 'grey80')
+#        hlp.pack(side=tk.LEFT, fill= tk.X)
 
 def makeform_functions(root, func_options):
     '''
@@ -182,14 +185,23 @@ def makeform_functions(root, func_options):
     '''
     for func in func_options:
         row = ttk.Frame(root)
-        row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+        row.pack(side=tk.TOP, padx=5, pady=5, fill= tk.X)
+        # field name
         lab = ttk.Label(row, width=10, text=func, anchor='w')
-        lab.pack(side=tk.LEFT)
+        lab.pack(side=tk.LEFT, fill= tk.X)
+       
         func_dict[func]= tk.StringVar(row)
-        #' the options of ttk.OptionMenu differ from those of tk.OptionMenu 
+        # the options
+        # becareful if shifted from ttk.OptionMenu differ to tk.OptionMenu 
         opt_but= ttk.OptionMenu(row, func_dict[func],
-                                func_options[func][0], *func_options[func])
+                                func_options[func]['options'][0], *func_options[func]['options'])
         opt_but.pack(side=tk.LEFT)
+        # description
+        hlp = ttk.Label(row, width=100, text=func_options[func]['help'], anchor='w')
+        hlp.configure(font=('new century schoolbook', 11), foreground= 'grey80')
+        hlp.pack(side=tk.LEFT, fill= tk.X)
+
+
 
 
 #def func_name_adaptor(d):
@@ -396,8 +408,12 @@ class seq2geno_gui:
         win_menubar.add_cascade(menu= filemenu, label= 'File')
         #' help info
         helpmenu= tk.Menu(win_menubar, tearoff= False)
+        help_f=os.path.join(parent_d, '..', 'README.md') 
         helpmenu.add_command(label= 'About',
-                             command=partial(self.make_popupmsg, **{'title': 'About', 'f': '../README.md'}))
+                             command=partial(self.make_popupmsg, **{'title': 'About', 'f': help_f}))
+        as_f=os.path.join(parent_d, 'GUIutils', 'ArgSpace.yml')
+        helpmenu.add_command(label= 'Input Data',
+                             command=partial(self.make_popupmsg, **{'title': 'Input Data (general panel)', 'f': as_f}))
         win_menubar.add_cascade(menu= helpmenu, label= 'Help')
 
         #---
