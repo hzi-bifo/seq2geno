@@ -436,7 +436,7 @@ class seq2geno_gui:
         # determine log path
         log_f= primary_dict['log_f'].get()
         if os.path.isfile(log_f):
-            self.make_popupmsg(title= 'Log file existing', msg= 'Please reset another filename.')
+            self.make_popupmsg(title= 'Log file existing', msg= 'Please try another filename.')
         # start running
         cmd_d= ['seq2geno', '-f', yml_f]
         if not (re.search('\w', log_f) is None):
@@ -487,8 +487,8 @@ class seq2geno_gui:
 if __name__ == '__main__':
     win_root = tk.Tk()
     win_root.configure(background='grey')
-    win_root.title('Seq2Geno')
+    win_root.title('Seq2Geno: data preparation stage of Seq2Geno2Pheno')
     seq2geno_gui= seq2geno_gui(win_root)
     seq2geno_gui.show()
-    print(seq2geno_gui.extract_args().__dict__)
+#    print(seq2geno_gui.extract_args().__dict__)
 #    seq2geno_gui.exec()
