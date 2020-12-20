@@ -60,11 +60,11 @@ The environment that is reuiqred when launching Seq2Geno can be found in install
 
 ### <a name="usage"></a>Usage and Input
 
-Seq2Geno can launch with either the graphical user interface (GUI) or the command line.
+The graphical user interface (GUI) `seq2geno_gui` and the command line `seq2geno` can be either launched using the launcher `S2G`, put under the home folder of seq2geno, or found in the main folder. When no argument is set for `S2G`, the GUI will be launched; otherwise, it passes arguments to the command line tool. 
 
 - <a name="gui"></a>GUI
 
-Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. To learn more, please read the the manual in the main/ folder.
+Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. To learn more, please read the the manual `doc/GUI_manual.pdf`.
 
 - <a name="commandline"></a>command line
 
@@ -144,11 +144,13 @@ To only create the folder and config files, please turn off the last six options
 [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de) requires all input data packed in a single zip file. The input file for the validator and gnerator of that zip file can be generated using submission\_tool/create\_genyml.py. 
 
 ### <a name="example"></a>Example usages and data
-The tutorials and example data and commands can be found in  __example\_sg\_dataset.tar.gz__ by decompressing it:
+The tutorials and example data and commands can be found in  `example_sg_dataset`. In case the folder was not decompressed from the tar.gz file, please
 
 ```
 tar zxvf ./example_sg_dataset.tar.gz 
 ```
+
+__Note: you might need to ensure the memory setting in the seq2geno_input.yml__
 
 ### <a name="license"></a>License
 Apache 2.0 (please see the LICENSE)

@@ -15,7 +15,7 @@ check_conda_channels () {
 	cd $SEQ2GENO_HOME
 }
 
-set_snakemake_env_vars () {
+set_core_env_vars () {
 	## set up environmental variables
 	echo '+set up core environment'
 	echo '+enter '$CONDA_PREFIX
@@ -69,18 +69,19 @@ if [ -d $( dirname $( dirname $( which conda ) ) )/envs/snakemake_env ]; then
 	echo 'Please remove it (with or without cloning it with the other name).'
 	exit
 else
-	create_core_env ||{echo "Errors in downloading the core environment"; exit; }
+	create_core_env || { echo "Errors in downloading the core environment"; exit; }
 fi
 # activate the environment
 source $( dirname $( dirname $( which conda ) ) )/etc/profile.d/conda.sh
 conda activate snakemake_env || source activate snakemake_env
-set_snakemake_env_vars || { echo "Errors in setting up the core environment"; exit; }
+set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
 set_roary_dependencies || { echo "Errors in installation of Roary dependecies"; exit; }
 download_proc_specific_env || { echo "Errors in installation of the process-specific environments failed"; exit; }
 conda deactivate || source deactivate
 
 ## Finalize
 export SEQ2GENO_HOME=$( realpath ../ )
+export PATH=$SEQ2GENO_HOME/main:$PATH
 mv $SEQ2GENO_HOME/main/S2G $SEQ2GENO_HOME
 echo '-----'
 echo 'Environments installed! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
