@@ -9,14 +9,15 @@
     - [arguments](#args)
 - [Train the phenotypic predictor with the Seq2Geno results](#genyml) 
 - [Example usages and data](#example) 
+- [FAQ](#FAQ)
 - [License](#license) 
 - [Contact](#contact) 
 
 
 ### <a name="intro"></a>What is Seq2Geno?
-As the first stage of Seq2Geno2Pheno, Seq2Geno is a prediction-oriented tool to conduct computational analyses with the next-generation sequencing data of bacterial samples. It enables the users to use either the graphical or the command line interface to edit the arguments and conduct the complex analyses. The final output data include the phylogenetic tree and the feature matrices of SNPs, gene presence/absence, and expression levels, which are formatted for the next stage of machine learning: Geno2Pheno.
+Seq2Geno2Pheno complements experiemental methods to facilitate the study of genotypes and phenotypes. As the first stage of Seq2Geno2Pheno, Seq2Geno provides user-friendly access to computational analyses with the next-generation sequencing data of bacterial samples. It enables the users to use either the graphical or the command line interface to edit the arguments and conduct the complex analyses. The final output data include the phylogenetic tree and the feature matrices of SNPs, gene presence/absence, and expression levels, which are formatted for the next stage of machine learning: Geno2Pheno.
 
-To ensure data reproducibility, Seq2Geno automatically resolves the dependencies among procedures and manages the procedure-specific computational environments, aiming to avoid error-prone behaviors of researchers (such as manually repeating processes or shifting computational environments). 
+Besides the easy access, expanding the input dataset could be also effortless (See section [FAQ](#FAQ) for more details). Furthermore, Seq2Geno automatically resolves the dependencies among procedures and manages the procedure-specific computational environments, aiming to avoid error-prone behaviors of researchers (such as manually repeating processes or shifting computational environments). 
 
 The output data from Seq2Geno can be used to train phenotypic predictors using [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de). To have your data submitted to the Geno2Pheno server, please check [the section below](#genyml). 
 
@@ -60,7 +61,27 @@ Please go to `install/` and either use the `INSTALL.sh` or follow the manual `IN
 
 ### <a name="usage"></a>Usage and Input
 
-The graphical user interface (GUI) `seq2geno_gui` and the command line `seq2geno` can be either launched using the launcher `S2G`, put under the home folder of seq2geno, or found in the main folder. When no argument is set for `S2G`, the GUI will be launched; otherwise, it passes arguments to the command line tool. 
+The graphical user interface (GUI) `seq2geno_gui` and the command line `seq2geno` can be either launched using the launcher `S2G`, put under the home folder of seq2geno, or found in the main folder. When no argument is set for `S2G`, the GUI will be launched; otherwise, it passes arguments to the command line tool:
+
+```
+  S2G -d -f [options_yaml] -l [log_file]
+```
+
+Please read the subset about [command line](#commandline) for more information.
+ 
+
+To use the two interfaces without the launcher, please remeber to activate the core environment:
+
+```
+conda activate snakemake_env
+``` 
+
+or 
+```
+source activate snakemake_env
+```
+
+. More information about usages are listed below.
 
 - <a name="gui"></a>GUI
 
@@ -149,6 +170,26 @@ The tutorials and example data and commands can be found in  `example_sg_dataset
 ```
 tar zxvf ./example_sg_dataset.tar.gz 
 ```
+### <a name="FAQ"></a>FAQ
+__Will every procedure be rerun if I want to add one sample?__
+
+No, you will need to add one more line in your reads list (i.e., the dna or the rna reads. See section [arguments](#args) for more details.) and then run the same workflow again. Seq2Geno use Snakemake to determine whether certain intermediate data need to be recomputed or not. 
+
+__Will every procedure be rerun if I want to exclude one sample?__
+
+No; however, besides excluding that sample from the reads list, you will need to remove all the subsequent results that were previously computed. That could be risky.
+
+__Will every procedure be rerun if I accidentally delete some intermediate data?__
+
+No, only the deleted one and the subsequent data will be recomputed.
+
+__Where is the final data?__
+
+Under your working directory, they are collected in the subfolder `RESULTS/`.
+
+__What is the current status?__
+
+If the log file was specified when Seq2Geno was launched, you could check the log file to determine the current status. Otherwise, the status should be directed to your STDOUT or STDERR.
 
 __Note: you might need to ensure the memory setting in the seq2geno_input.yml__
 
