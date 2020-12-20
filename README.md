@@ -56,7 +56,7 @@ The output data from Seq2Geno can be used to train phenotypic predictors using [
 
 - Installation of the environments 
 
-The environment that is reuiqred when launching Seq2Geno can be found in install/INSTALL.md. For the process-spcific environment, they do not share the same pool of computational tools, they do not need to be installed manually; instead, they are already described in yaml files that Conda can parse and will be automatically downloaded when they are used for the first time. Therefore, we recommend to try the [example dataset](#example) to speed up the exact analyses in the future. 
+Please go to `install/` and either use the `INSTALL.sh` or follow the manual `INSTAL.md`. 
 
 ### <a name="usage"></a>Usage and Input
 
