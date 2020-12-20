@@ -22,3 +22,4 @@ cpanm XML::Parser
 cpanm Graph
 cpanm Graph::Writer::Dot
 cpanm File::Find::Rule
+cpanm Exception::Class

@@ -126,11 +126,11 @@ def main(args):
     except Exception as e:
         sys.exit('ERROR: {}'.format(e))
     finally:
-        if not args.dryrun:
+        if args.dryrun != 'Y':
             from CollectResults import collect_results
             collect_results(args.wd, config_files)
         print('Working directory {} {}'.format(
-            args.wd, 'updated' if not args.dryrun else 'unchanged'))
+            args.wd, 'updated' if args.dryrun != 'Y' else 'unchanged'))
         pbar.update(1)
         print('\n---\n')
 

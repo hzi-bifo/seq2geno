@@ -252,18 +252,16 @@ strain= list(dna_reads.keys()))
         # required perl modules
         {params.check_add_perl_env_script}
 
-        export PATH=\
-        $ROARY_HOME/build/fasttree:\
-        $ROARY_HOME/build/mcl-14-137/src/alien/oxygen/src:\
-        $ROARY_HOME/build/mcl-14-137/src/shmcl:\
-        $ROARY_HOME/build/ncbi-blast-2.4.0+/bin:\
-        $ROARY_HOME/build/prank-msa-master/src:\
-        $ROARY_HOME/build/cd-hit-v4.6.6-2016-0711:\
-        $ROARY_HOME/build/bedtools2/bin:\
-        $ROARY_HOME/build/parallel-20160722/src:\
-        $PATH
+        export PATH=$ROARY_HOME/build/fasttree:\
+$ROARY_HOME/build/mcl-14-137/src/alien/oxygen/src:\
+$ROARY_HOME/build/mcl-14-137/src/shmcl:\
+$ROARY_HOME/build/ncbi-blast-2.4.0+/bin:\
+$ROARY_HOME/build/prank-msa-master/src:\
+$ROARY_HOME/build/cd-hit-v4.6.6-2016-0711:\
+$ROARY_HOME/build/bedtools2/bin:\
+$ROARY_HOME/build/parallel-20160722/src:$PATH
         export PERL5LIB=$ROARY_HOME/lib:\
-        $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
+$ROARY_HOME/build/bedtools2/lib:$PERL5LIB
         which perl
         echo $PERL5LIB
         echo $PERLLIB

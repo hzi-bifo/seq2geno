@@ -51,31 +51,31 @@ download_proc_specific_env () {
 	cd $SEQ2GENO_HOME/example_sg_dataset/
 	./CONFIG.sh
 	echo '+install process-specific environments and dryrun the procedures for the example dataset'
-	seq2geno -f ./seq2geno_inputs.yml
+	$SEQ2GENO_HOME/main/seq2geno -f ./seq2geno_inputs.yml || return false
 }
 create_core_env ()  {
 	## create snakemake_env 
 	echo '+enter install/'
 	cd $SEQ2GENO_HOME/install
-	conda env create -n snakemake_env --file=snakemake_env.yml
+	conda env create -n snakemake_env --file=snakemake_env.yml || return false
 	cd $SEQ2GENO_HOME
 }
 
 #>>>
-check_conda_channels ||{ echo "Errors in setting conda channels"; exit; }
-if [ -d $( dirname $( dirname $( which conda ) ) )/envs/snakemake_env ]; then
-	echo '-----'
-	echo 'Naming conflict: an existing environment is also called "snakemake_env".'
-	echo 'Please remove it (with or without cloning it with the other name).'
-	exit
-else
-	create_core_env || { echo "Errors in downloading the core environment"; exit; }
-fi
-# activate the environment
-source $( dirname $( dirname $( which conda ) ) )/etc/profile.d/conda.sh
+#check_conda_channels ||{ echo "Errors in setting conda channels"; exit; }
+#if [ -d $( dirname $( dirname $( which conda ) ) )/envs/snakemake_env ]; then
+#	echo '-----'
+#	echo 'Naming conflict: an existing environment is also called "snakemake_env".'
+#	echo 'Please remove it (with or without cloning it with the other name).'
+#	exit
+#else
+#	create_core_env || { echo "Errors in downloading the core environment"; exit; }
+#fi
+## activate the environment
+#source $( dirname $( dirname $( which conda ) ) )/etc/profile.d/conda.sh
 conda activate snakemake_env || source activate snakemake_env
-set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
-set_roary_dependencies || { echo "Errors in installation of Roary dependecies"; exit; }
+#set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
+#set_roary_dependencies || { echo "Errors in installation of Roary dependecies"; exit; }
 download_proc_specific_env || { echo "Errors in installation of the process-specific environments failed"; exit; }
 conda deactivate || source deactivate
 
