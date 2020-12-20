@@ -62,20 +62,20 @@ create_core_env ()  {
 }
 
 #>>>
-#check_conda_channels ||{ echo "Errors in setting conda channels"; exit; }
-#if [ -d $( dirname $( dirname $( which conda ) ) )/envs/snakemake_env ]; then
-#	echo '-----'
-#	echo 'Naming conflict: an existing environment is also called "snakemake_env".'
-#	echo 'Please remove it (with or without cloning it with the other name).'
-#	exit
-#else
-#	create_core_env || { echo "Errors in downloading the core environment"; exit; }
-#fi
+check_conda_channels ||{ echo "Errors in setting conda channels"; exit; }
+if [ -d $( dirname $( dirname $( which conda ) ) )/envs/snakemake_env ]; then
+	echo '-----'
+	echo 'Naming conflict: an existing environment is also called "snakemake_env".'
+	echo 'Please remove it (with or without cloning it with the other name).'
+	exit
+else
+	create_core_env || { echo "Errors in downloading the core environment"; exit; }
+fi
 ## activate the environment
-#source $( dirname $( dirname $( which conda ) ) )/etc/profile.d/conda.sh
+source $( dirname $( dirname $( which conda ) ) )/etc/profile.d/conda.sh
 conda activate snakemake_env || source activate snakemake_env
-#set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
-#set_roary_dependencies || { echo "Errors in installation of Roary dependecies"; exit; }
+set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
+set_roary_dependencies || { echo "Errors in installation of Roary dependecies"; exit; }
 download_proc_specific_env || { echo "Errors in installation of the process-specific environments failed"; exit; }
 conda deactivate || source deactivate
 
