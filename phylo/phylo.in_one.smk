@@ -55,9 +55,11 @@ rule tree:
     threads: 12
     shell:
         '''
+        set +u
         export OMP_NUM_THREADS={threads}
         FastTreeMP -nt -gtr -gamma \
 -log {output.tree}.log -out {output.tree} {input.alignment}
+        set -u
         '''
 
 rule process_aln:

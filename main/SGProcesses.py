@@ -39,6 +39,25 @@ class SGProcess:
         try:
             import snakemake
             os.environ['PATH']=env_dict['PATH']
+            if dryrun:
+                # test the environment and install if not yet ready
+                success=snakemake.snakemake(
+                    snakefile= env_dict['SNAKEFILE'],
+                    lock= False,
+                    restart_times= 3,
+                    cores= max_cores,
+                    resources= {'mem_mb': self.mem_mb}, 
+                    configfile=config_f,
+                    force_incomplete= True,
+                    workdir= os.path.dirname(config_f),
+                    use_conda=True,
+                    conda_prefix= os.path.join(env_dict['TOOL_HOME'], 'env'),
+                    #dryrun= dryrun,
+                    create_envs_only= True, 
+                    printshellcmds= True,
+                    notemp=True
+                    )
+
 
             ## run the process
             success=snakemake.snakemake(
