@@ -194,7 +194,7 @@ If the log file was specified when Seq2Geno was launched, you could check the lo
 __Note: you might need to ensure the memory setting in the seq2geno_input.yml__
 
 ### <a name="license"></a>License
-Apache 2.0 (please see the LICENSE)
+Please refer to LICENSE
 
 ### <a name="contact"></a>Contact
 Please open an issue here or contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmhotz-hzi.de). 
