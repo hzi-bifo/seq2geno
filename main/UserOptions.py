@@ -8,6 +8,7 @@ from pprint import pprint
 import sys
 import argparse
 import sys
+import re
 class arguments:
     '''
     The object of arguments, as argparse is replaced
@@ -44,8 +45,9 @@ class arguments:
         #' check the dna-seq data
         ArgsTest.test_dna_reads_list(self.dna_reads)
         #' check the rna-seq data (if set)
-        if hasattr(self, 'rna_reads'):
-            ArgsTest.test_rna_reads_list(self.rna_reads)
+        if getattr(self, 'expr') == 'Y' :
+            if not re.search('\w', getattr(self, 'rna_reads')) is None:
+                ArgsTest.test_rna_reads_list(self.rna_reads)
 
 
 

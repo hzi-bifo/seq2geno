@@ -82,8 +82,7 @@ def filter_procs(args):
     if args.ar == 'Y':
         #' ensure required data
         assert (os.path.isfile(args.dna_reads) and 
-            os.path.isfile(args.rna_reads) and 
-            args.dryrun != 'Y') 
+            os.path.isfile(args.rna_reads) ) 
         all_processes.append(SGProcess(args.wd,
                        'ar', config_f= config_files['ar'], 
                        dryrun= args.dryrun, 
@@ -96,8 +95,7 @@ def filter_procs(args):
     if args.de == 'Y':
         #' ensure required data
         assert (os.path.isfile(args.phe_table) and 
-            os.path.isfile(args.rna_reads) and 
-            args.dryrun != 'Y') 
+            os.path.isfile(args.rna_reads) ) 
         all_processes.append(SGProcess(args.wd,
                       'de', config_f= config_files['de'], 
                        dryrun= args.dryrun, 

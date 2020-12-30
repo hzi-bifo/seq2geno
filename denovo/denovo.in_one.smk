@@ -322,13 +322,22 @@ rule spades_create_assembly:
     output: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
     threads:1
     resources:
-        mem_mb=lambda wildcards, attempt: (2**attempt) * 10000
+        mem_mb=lambda wildcards, attempt: (2**attempt) * 1000
     params:
         spades_outdir= os.path.join(out_spades_dir, '{strain}'),
         SPADES_OPT='--careful',
         SPADES_BIN='spades.py'
     conda: 'spades_3_10_env.yml'
-    script:'run_spades.py'
+#    script:'run_spades.py'
+    shell:
+        '''
+        spades.py \
+{params.SPADES_OPT} \
+--threads {threads} \
+--memory $( expr {resources.mem_mb} / 1000 ) \
+-o {params.spades_outdir} \
+-1 {input.READS[0]} -2 {input.READS[1]}
+        '''
 
 rule redirect_and_preprocess_reads:
     #' reads processing before mapped to the reference 

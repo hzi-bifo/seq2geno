@@ -19,7 +19,7 @@ class SGProcess:
             self.max_cores= int(max_cores)
 
         #' check and adjust the memory size setting
-        freemem= psutil.virtual_memory().free/1e6
+        freemem= psutil.virtual_memory().available/1e6
         if (mem_mb > freemem) or (mem_mb <= 0):
             print(('Currently free memory size was {}mb; memory setting '
                   'adjusted').format(str(freemem)))
