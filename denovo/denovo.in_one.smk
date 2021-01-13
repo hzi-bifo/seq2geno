@@ -252,18 +252,16 @@ strain= list(dna_reads.keys()))
         # required perl modules
         {params.check_add_perl_env_script}
 
-        export PATH=\
-        $ROARY_HOME/build/fasttree:\
-        $ROARY_HOME/build/mcl-14-137/src/alien/oxygen/src:\
-        $ROARY_HOME/build/mcl-14-137/src/shmcl:\
-        $ROARY_HOME/build/ncbi-blast-2.4.0+/bin:\
-        $ROARY_HOME/build/prank-msa-master/src:\
-        $ROARY_HOME/build/cd-hit-v4.6.6-2016-0711:\
-        $ROARY_HOME/build/bedtools2/bin:\
-        $ROARY_HOME/build/parallel-20160722/src:\
-        $PATH
+        export PATH=$ROARY_HOME/build/fasttree:\
+$ROARY_HOME/build/mcl-14-137/src/alien/oxygen/src:\
+$ROARY_HOME/build/mcl-14-137/src/shmcl:\
+$ROARY_HOME/build/ncbi-blast-2.4.0+/bin:\
+$ROARY_HOME/build/prank-msa-master/src:\
+$ROARY_HOME/build/cd-hit-v4.6.6-2016-0711:\
+$ROARY_HOME/build/bedtools2/bin:\
+$ROARY_HOME/build/parallel-20160722/src:$PATH
         export PERL5LIB=$ROARY_HOME/lib:\
-        $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
+$ROARY_HOME/build/bedtools2/lib:$PERL5LIB
         which perl
         echo $PERL5LIB
         echo $PERLLIB
@@ -324,13 +322,22 @@ rule spades_create_assembly:
     output: os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
     threads:1
     resources:
-        mem_mb=lambda wildcards, attempt: (2**attempt) * 10000
+        mem_mb=lambda wildcards, attempt: (2**attempt) * 1000
     params:
         spades_outdir= os.path.join(out_spades_dir, '{strain}'),
         SPADES_OPT='--careful',
         SPADES_BIN='spades.py'
     conda: 'spades_3_10_env.yml'
-    script:'run_spades.py'
+#    script:'run_spades.py'
+    shell:
+        '''
+        spades.py \
+{params.SPADES_OPT} \
+--threads {threads} \
+--memory $( expr {resources.mem_mb} / 1000 ) \
+-o {params.spades_outdir} \
+-1 {input.READS[0]} -2 {input.READS[1]}
+        '''
 
 rule redirect_and_preprocess_reads:
     #' reads processing before mapped to the reference 

@@ -82,8 +82,7 @@ def filter_procs(args):
     if args.ar == 'Y':
         #' ensure required data
         assert (os.path.isfile(args.dna_reads) and 
-            os.path.isfile(args.rna_reads) and 
-            args.dryrun != 'Y') 
+            os.path.isfile(args.rna_reads) ) 
         all_processes.append(SGProcess(args.wd,
                        'ar', config_f= config_files['ar'], 
                        dryrun= args.dryrun, 
@@ -96,8 +95,7 @@ def filter_procs(args):
     if args.de == 'Y':
         #' ensure required data
         assert (os.path.isfile(args.phe_table) and 
-            os.path.isfile(args.rna_reads) and 
-            args.dryrun != 'Y') 
+            os.path.isfile(args.rna_reads) ) 
         all_processes.append(SGProcess(args.wd,
                       'de', config_f= config_files['de'], 
                        dryrun= args.dryrun, 
@@ -126,11 +124,11 @@ def main(args):
     except Exception as e:
         sys.exit('ERROR: {}'.format(e))
     finally:
-        if not args.dryrun:
+        if args.dryrun != 'Y':
             from CollectResults import collect_results
             collect_results(args.wd, config_files)
         print('Working directory {} {}'.format(
-            args.wd, 'updated' if not args.dryrun else 'unchanged'))
+            args.wd, 'updated' if args.dryrun != 'Y' else 'unchanged'))
         pbar.update(1)
         print('\n---\n')
 
