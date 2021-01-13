@@ -140,7 +140,6 @@ def main(args):
                 os.path.abspath(args.wd), 'mapping_results', 'dna'),
             ref_fasta= args.ref_fa, 
             ref_gbk= args.ref_gbk)
-    create_yaml_f(s_args, args.wd, s_args.config_f)
 
     # denovo
     d_args= denovo_args(list_f= os.path.abspath(args.dna_reads), 
@@ -149,7 +148,6 @@ def main(args):
             redirected_reads_dir= os.path.join(
                 os.path.abspath(args.wd), 'reads', 'dna'),
             ref_gbk= args.ref_gbk)
-    create_yaml_f(d_args, args.wd, d_args.config_f)
 
     # phylo
     p_args= phylo_args(list_f= os.path.abspath(args.dna_reads), 
@@ -160,13 +158,11 @@ def main(args):
                 os.path.abspath(args.wd), 'mapping_results', 'dna'),
             REF_FA= args.ref_fa, 
             REF_GFF= args.ref_gff)
-    create_yaml_f(p_args, args.wd, p_args.config_f)
 
     # expr
     e_args= expr_args(list_f= os.path.abspath(args.rna_reads), 
             ref_fasta= args.ref_fa, 
             ref_gbk= args.ref_gbk)
-    create_yaml_f(e_args, args.wd, e_args.config_f)
 
     # compress
     c_args= cmprs_args(bin_tables=[
@@ -178,17 +174,23 @@ def main(args):
             d_args.out_gpa_f),
         os.path.join(os.path.dirname(d_args.config_f), 
             d_args.out_indel_f)])
-    create_yaml_f(c_args, args.wd, c_args.config_f)
 
     # ancestral reconstruction
     a_args= ar_args(phylo_config_f= p_args.config_f,
             expr_config_f= e_args.config_f)
-    create_yaml_f(a_args, args.wd, a_args.config_f)
     
     # differential expression analysis
     de_args= diffexpr_args(pheno= os.path.abspath(args.phe_table),
             expr_config_f= e_args.config_f)
-    create_yaml_f(de_args, args.wd, de_args.config_f)
+
+    if args.old_config != 'Y':
+        create_yaml_f(s_args, args.wd, s_args.config_f)
+        create_yaml_f(d_args, args.wd, d_args.config_f)
+        create_yaml_f(p_args, args.wd, p_args.config_f)
+        create_yaml_f(e_args, args.wd, e_args.config_f)
+        create_yaml_f(c_args, args.wd, c_args.config_f)
+        create_yaml_f(a_args, args.wd, a_args.config_f)
+        create_yaml_f(de_args, args.wd, de_args.config_f)
 
     # Determine which version to use (ori or ng)
     # Create the environment, followed by the analysis snakemake workflows

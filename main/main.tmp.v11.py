@@ -12,13 +12,13 @@ def filter_procs(args):
 
     config_files= {}
     try:
+        import create_config
         ## accept config files
         if args.old_config == 'Y':
+            # skipped in the function of create_config()
             print('Skip creating config files. '
                   'Old config files will be used if found')
-        else:
-            import create_config
-            config_files= create_config.main(args)
+        config_files= create_config.main(args)
     except:
         print('ERROR: fail to initiate the project')
         e=sys.exc_info()[0]
