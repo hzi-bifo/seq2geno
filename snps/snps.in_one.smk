@@ -100,7 +100,8 @@ rule create_table:
         isol_subset_num= lambda wildcards: min(table_subset_num,len(strains)),
         isol_subset_top= lambda wildcards: min(table_subset_num,len(strains)) - 1,
         isol_subset_dir= 'isols_subset',
-        mut_tab_tool= 'mutation_table.py',
+#        mut_tab_tool= 'mutation_table.py',
+        mut_tab_tool= 'mutation_table_py3.py',
         snps_subset_dir= 'snps_subset'
     #shadow: "shallow"
     threads: 30

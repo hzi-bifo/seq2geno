@@ -10,7 +10,7 @@ dependencies:
   - ca-certificates=2019.3.9=hecc5488_0
   - certifi=2019.3.9=py27_0
   - freetype=2.8.1=hfa320df_1
-  - jpeg=9c=h470a237_1
+  - jpeg=9c
   - libblas=3.8.0=5_h6e990d7_netlib
   - libcblas=3.8.0=5_h6e990d7_netlib
   - libgcc=7.2.0=h69d50b8_2

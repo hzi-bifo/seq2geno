@@ -22,8 +22,8 @@ def parse_usr_opts():
             help= 'seq2geno project folder', required= True)
     parser.add_argument('--yaml', dest= 'yaml', 
             help= 'the yaml file to be generated', required= True)
-    parser.add_argument('--out', dest= 'out', 
-            help= 'output folder', default= 'geno2pheno.results')
+#    parser.add_argument('--out', dest= 'out', 
+#            help= 'output folder', default= 'geno2pheno.results')
     parser.add_argument('--proj', dest= 'proj', 
             help= 'project name', default= 'sgp')
 
@@ -74,7 +74,8 @@ def make_genyml(args):
         phenotype_table= os.path.join(args.sg, 'RESULTS',
                                                       'phenotype',
                                                       'phenotypes.mat'),
-        output_directory= args.out,
+        output_directory= 'results/', 
+#        output_directory= args.out,
         number_of_cores=args.cpu
     )
     ####

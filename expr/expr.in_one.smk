@@ -87,7 +87,7 @@ rule bwa_pipeline:
         #infile=strain_fq,
         infile=lambda wildcards: rna_reads[wildcards.strain],
         reffile=ref_fasta,
-        ref_index_stampy=ref_fasta+'.stidx',
+#        ref_index_stampy=ref_fasta+'.stidx',
         ref_index_bwa=ref_fasta+'.bwt',
         annofile=annot_tab,
         Rannofile=r_annot
