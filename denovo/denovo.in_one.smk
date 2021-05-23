@@ -72,10 +72,9 @@ rule abricate_dict:
     conda:'indel_env.yml'
     shell:
         '''
-        cat {input.ref_gff} | sed '/^>/,$d' | tail -n+2 | \
-grep -v '#' |grep -v '^\s*$' > {output.tmp_gff}
-        field_map_wrapper.edit < <(grep -v @ {input.anno_f}) -s <(cat \
-{output.tmp_gff}) -f 6 -m 4 -i| cut -f4,9,19 > {output.tmp_annotation_map}
+        mapping_tab_and_gff.py \
+ -g {input.ref_gff} -t {input.anno_f} \
+ -out_gff {output.tmp_gff} -out_annot {output.tmp_annotation_map}
         refine_mapping.py {output.tmp_annotation_map} \
 > {output.tmp_refined_map}
         match_clusters.py {output.tmp_refined_map} \
