@@ -32,7 +32,10 @@ def filter_procs(args):
     ## expr
     if args.expr == 'Y':
         #' ensure required data
-        assert os.path.isfile(args.rna_reads)
+        try: 
+            assert os.path.isfile(args.rna_reads)
+        except:
+            raise FileNotFoundError(args.rna_reads)
         all_processes.append(SGProcess(
             args.wd, 'expr', 
             config_f= config_files['expr'], 

@@ -93,7 +93,7 @@ def check_primary_args(primary_args):
     assert os.path.isfile(primary_args.yml_f), 'The yaml file not existing'
     print('#CONFIGFILE:{}'.format(primary_args.yml_f))
 
-def main():
+def make_parser():
     '''
     Find the yaml file of arguments
     '''
@@ -115,8 +115,11 @@ def main():
         help= 'the yaml file where the arguments are listed')
     parser.add_argument('-l', dest= 'log_f', required= False, 
         help= 'a non-existing filename for log')
-    primary_args= parser.parse_args()
+    return(parser)
 
+def main():
+    parser= make_parser()
+    primary_args= parser.parse_args()
     #' check those primary arguments
     check_primary_args(primary_args)
 
