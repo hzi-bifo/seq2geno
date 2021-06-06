@@ -70,7 +70,9 @@ def vcf2indel(vcf, gene_name, out, out_gff, out_stats):
     with open(out_stats, 'w') as os:
         os.write("no_indels\tuq_indels\tinserts\tdels\n") 
         os.write("%s\t%s\t%s\t%s\t%s\n" % (gene_name, no_indels, uq_indels, inserts, dels)) 
-    pd.Series(sample_has_indel, name = gene_name).to_csv(out, sep = "\t", header = True)
+    pd.Series(sample_has_indel, name = gene_name).to_csv(out, sep = "\t",
+                                                         header = True,
+                                                         index_label= 'Isolate')
     #print sample_has_indel
 
     

@@ -17,7 +17,7 @@ def snp2bin(snp_f, out):
     #replace snps with quality score over 1 with 1
     mask = m > 0
     m = m.where(~mask, 1)
-    m.T.to_csv(out, sep = "\t")
+    m.T.to_csv(out, sep = "\t", index_label= 'Isolate')
 
 if __name__ == '__main__':
     import argparse

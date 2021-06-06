@@ -114,7 +114,7 @@ rule gpa_bin_mat:
         bin_df= bin_df.transpose() # strains in rows
         bin_df.rename(columns=name_dict, inplace= True)
         bin_df.to_csv(output_f, sep= '\t', header= True, index= True,
-index_label= 'Gene')
+index_label= 'Isolate')
  
 
 rule indel_select_core_genes:

@@ -78,7 +78,7 @@ rule collect_rpg:
         rpg_df.to_csv(output[0], sep='\t', index_label=False) 
 
         log_rpg_df= pd.np.log(rpg_df+1)
-        log_rpg_df.to_csv(out_log_table, sep = "\t", index_label='strain')    
+        log_rpg_df.to_csv(out_log_table, sep = "\t", index_label='Isolate')    
 
 rule bwa_pipeline:
     #' reads mapped to the reference genome with BWA backtrack algorithm
