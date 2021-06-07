@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
+import argparse
+import yaml
+import os
+import sys
+from pprint import pprint
 class Items(list):
     pass
 
 def items_representer(dumper, data):
     return dumper.represent_sequence('tag:yaml.org,2002:seq', data, flow_style=True)
 
-
-
-def parse_usr_opts():
-    import argparse
+def make_parser():
     arg_formatter = lambda prog: argparse.RawTextHelpFormatter(prog,
             max_help_position=4, width = 80)
 
@@ -22,8 +24,6 @@ def parse_usr_opts():
             help= 'seq2geno project folder', required= True)
     parser.add_argument('--yaml', dest= 'yaml', 
             help= 'the yaml file to be generated', required= True)
-#    parser.add_argument('--out', dest= 'out', 
-#            help= 'output folder', default= 'geno2pheno.results')
     parser.add_argument('--proj', dest= 'proj', 
             help= 'project name', default= 'sgp')
 
@@ -52,15 +52,14 @@ def parse_usr_opts():
             help= 'a two-column file to specify labels and prediction groups')
     pred_args.add_argument('--cpu', dest= 'cpu', type= int,default= 1,
             help= 'number of cpus for parallel computation')
-    
+    return(parser)
+
+def parse_usr_opts():
+    parser= make_parser() 
     args = parser.parse_args()
     return(args)
 
 def make_genyml(args):
-    import yaml
-    import os
-    import sys
-    from pprint import pprint
 
     blocks= dict()
     ####
@@ -69,13 +68,12 @@ def make_genyml(args):
     blocks['metadata']=dict(
         project=args.proj,
         phylogenetic_tree= os.path.join(args.sg, 'RESULTS',
-                                                        'phylogeny',
-                                                        'tree.nwk'),
+                                        'phylogeny',
+                                        'tree.nwk'),
         phenotype_table= os.path.join(args.sg, 'RESULTS',
-                                                      'phenotype',
-                                                      'phenotypes.mat'),
+                                      'phenotype',
+                                      'phenotypes.mat'),
         output_directory= 'results/', 
-#        output_directory= args.out,
         number_of_cores=args.cpu
     )
     ####

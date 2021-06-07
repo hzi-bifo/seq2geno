@@ -115,6 +115,8 @@ def make_parser():
         help= 'the yaml file where the arguments are listed')
     parser.add_argument('-l', dest= 'log_f', required= False, 
         help= 'a non-existing filename for log')
+    parser.add_argument('--remote', dest= 'remote', action= 'store_true',
+        help= 'upload the materials to Seq2Geno server and run the workflows')
     return(parser)
 
 def main():

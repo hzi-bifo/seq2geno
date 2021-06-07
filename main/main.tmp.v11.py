@@ -4,25 +4,31 @@
 #' Determine, initiate and launch the workflows based on user-defined
 #' arguments
 
+import os
+import sys
+from tqdm import tqdm
+from SGProcesses import SGProcess
+import UserOptions
+from CollectResults import collect_results
+import LogGenerator
+from Seq2GenoUtils import Warehouse
+from Seq2GenoUtils import Crane
 
 def filter_procs(args):
-    import sys
-    import os
-    from SGProcesses import SGProcess
 
     config_files= {}
     try:
         ## accept config files
         if args.old_config == 'Y':
-            print('Skip creating config files. '
+            logger.info('Skip creating config files. '
                   'Old config files will be used if found')
         else:
             import create_config
             config_files= create_config.main(args)
     except:
-        print('ERROR: fail to initiate the project')
+        logger.info('ERROR: fail to initiate the project')
         e=sys.exc_info()[0]
-        print(e)
+        logger.info(e)
         sys.exit()
 
     all_processes= []
@@ -43,7 +49,7 @@ def filter_procs(args):
             mem_mb= int(args.mem_mb), 
             max_cores=int(args.cores)))
     else:
-        print('Skip counting expression levels')
+        logger.info('Skip counting expression levels')
 
     ## snps
     if args.snps == 'Y':
@@ -55,7 +61,7 @@ def filter_procs(args):
                       mem_mb= int(args.mem_mb), 
                       max_cores=int(args.cores)))
     else:
-        print('Skip calling single nucleotide variants')
+        logger.info('Skip calling single nucleotide variants')
 
     ## denovo
     if args.denovo == 'Y':
@@ -67,7 +73,7 @@ def filter_procs(args):
                       mem_mb= int(args.mem_mb), 
                       max_cores=int(args.cores)))
     else:
-        print('Skip creating de novo assemblies')
+        logger.info('Skip creating de novo assemblies')
 
     ## phylo
     if args.phylo == 'Y':
@@ -79,7 +85,7 @@ def filter_procs(args):
                       mem_mb= int(args.mem_mb), 
                       max_cores=int(args.cores)))
     else:
-        print('Skip inferring phylogeny')
+        logger.info('Skip inferring phylogeny')
 
     ## ancestral reconstruction
     if args.ar == 'Y':
@@ -92,7 +98,7 @@ def filter_procs(args):
                       mem_mb= int(args.mem_mb), 
                        max_cores=int(args.cores)))
     else:
-        print('Skip ancestral reconstruction')
+        logger.info('Skip ancestral reconstruction')
 
     ## differential expression
     if args.de == 'Y':
@@ -105,13 +111,11 @@ def filter_procs(args):
                       mem_mb= int(args.mem_mb), 
                        max_cores=int(args.cores)))
     else:
-        print('Skip differential expression analysis')
+        logger.info('Skip differential expression analysis')
 
     return({'selected': all_processes, 'config_files': config_files})
 
 def main(args):
-    from tqdm import tqdm
-    import sys
     determined_procs= filter_procs(args)
     config_files= determined_procs['config_files']
     all_processes= determined_procs['selected']
@@ -128,17 +132,44 @@ def main(args):
         sys.exit('ERROR: {}'.format(e))
     finally:
         if args.dryrun != 'Y':
-            from CollectResults import collect_results
             collect_results(args.wd, config_files)
-        print('Working directory {} {}'.format(
+        logger.info('Working directory {} {}'.format(
             args.wd, 'updated' if args.dryrun != 'Y' else 'unchanged'))
         pbar.update(1)
-        print('\n---\n')
 
     pbar.close()
 
 if __name__=='__main__':
-    import UserOptions
-    args= UserOptions.main()
-    main(args)
+    logger= LogGenerator.make_logger()
+
+    logger.info('Parse arguments')
+    parser= UserOptions.make_parser()
+    primary_args= parser.parse_args()
+    #' check those primary arguments
+    args= UserOptions.parse_arg_yaml(primary_args.yml_f)
+    args.print_args()
+    #' display the primary arguments only 
+    if primary_args.dsply_args:
+        sys.exit(0)
+
+    ## determine where to run the workflows
+    if primary_args.remote:
+        # pack the materials and send it to the server
+        new_zip_prefix=os.path.abspath(args.wd)
+        new_dir= new_zip_prefix
+        logger.info('Packing the materials to submit')
+        Warehouse.move_data(config_f= primary_args.yml_f, 
+                            new_zip_prefix= new_zip_prefix,
+                            new_dir=new_dir,
+                            logger= logger)
+        logger.info('Communicating with the server')
+        sg_crane= Crane.Seq2Geno_Crane(logger= logger)
+        if not os.path.isdir(args.wd):
+            os.makedirs(args.wd)
+        sg_crane.launch(args.wd, new_zip_prefix+'.zip')
+        logger.info('DONE (remote mode)')
+    else:
+        # run in local machine
+        main(args)
+        logger.info('DONE (local mode)')
 
