@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL3
 
 def test_dna_reads_list(f):
     print('Checking the DNA-seq list...')

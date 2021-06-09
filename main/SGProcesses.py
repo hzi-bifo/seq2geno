@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL3
+
 # Role: Workers
 # Purpose: Define the class of workflow
 
