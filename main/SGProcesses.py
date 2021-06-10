@@ -60,12 +60,12 @@ class SGProcess:
                     restart_times=3,
                     cores=max_cores,
                     resources={'mem_mb': self.mem_mb},
-                    configfile=config_f,
+                    configfiles=[config_f],
                     force_incomplete=True,
                     workdir=os.path.dirname(config_f),
                     use_conda=True,
                     conda_prefix=os.path.join(env_dict['TOOL_HOME'], 'env'),
-                    create_envs_only=True,
+                    conda_create_envs_only=True,
                     printshellcmds=True,
                     notemp=True
                     )
@@ -77,7 +77,7 @@ class SGProcess:
                 restart_times=3,
                 cores=max_cores,
                 resources={'mem_mb': self.mem_mb},
-                configfile=config_f,
+                configfiles=[config_f],
                 force_incomplete=True,
                 workdir=os.path.dirname(config_f),
                 use_conda=True,

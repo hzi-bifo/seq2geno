@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 
-# Refactored from the old script
-# Mainly by removing global variables, encapsulating repeated commands into
-# functions, and improving readibility for maintenance
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+'''
+Rewritten and restyled from the old script by spo12 2013
+    - removing global variables
+    - python3
+    - encapsulating repeated commands into functions
+    - improving readibility for maintenance
+'''
 
 import math
 import argparse
@@ -10,7 +18,7 @@ import sys
 import Bio
 from Bio import SeqIO
 from Bio.Seq import Seq
-import logging 
+import logging
 from collections import defaultdict
 import re
 
@@ -27,26 +35,29 @@ def write_aa_table(out_f, SnpDict, nonsyn, head):
             for gene in sorted(SnpDict.keys()):
                 for item in SnpDict[gene]:
                     out.write("\t".join(item[5][:4] + item[3:5] + item[5][4:])
-                              +"\n")
+                              + "\n")
         elif nonsyn == "non-syn":
             for gene in sorted(SnpDict.keys()):
                 for item in SnpDict[gene]:
-                    if ((item[3] != "none") and (item[4] != "none") 
-                        and (item[3] != item[4])):
+                    if ((item[3] != "none") and (item[4] != "none")
+                       and (item[3] != item[4])):
                         out.write("\t".join(item[5][:4] + item[3:5]
-                                            + item[4][6:]) +"\n")
+                                            + item[4][6:]) + "\n")
 
-def determine_pos(snp,gene, strand,GenDict):
-    # Be careful about the positions because division in python3 and python2
-    # differ. Python2 division for integers applies floor after the division.
-    # For example, in python2:
-    # 38/3 == 12
-    # However in python3:
-    # 38/3 == 12.6666666667
-    ref= -1
-    alt= -1
-    snppos= -1
-    start= -1
+
+def determine_pos(snp, gene, strand, GenDict):
+    '''
+    Be careful about the positions because division in python3 and python2
+    differ. Python2 division for integers applies floor after the division.
+    For example, in python2:
+    38/3 == 12
+    However in python3:
+    38/3 == 12.6666666667
+    '''
+    ref = -1
+    alt = -1
+    snppos = -1
+    start = -1
     if strand == -1:
         ref = str(Seq(snp[1]).complement())
         alt = str(Seq(snp[2]).complement())
@@ -60,12 +71,13 @@ def determine_pos(snp,gene, strand,GenDict):
     end = start + 3
     return(ref, alt, snppos, start, end)
 
+
 def count_aminoacids(SnpDict, GenDict):
     logging.info("Exchanging amino acids.")
     for gene in SnpDict:
         if gene in GenDict:
             for snp in SnpDict[gene]:
-                if len(snp[1])>1 or len(snp[2])>1:
+                if len(snp[1]) > 1 or len(snp[2]) > 1:
                     snp.insert(3, "none")
                     snp.insert(4, "none")
                 else:
@@ -75,7 +87,7 @@ def count_aminoacids(SnpDict, GenDict):
                                  % (GenDict[gene][0], GenDict[gene][1]))
                     logging.info("SNP pos: %d, reference: %s, alternative: %s"
                                  % (snp[0], snp[1], snp[2]))
-                    ref, alt, snppos, start, end=  determine_pos(snp,
+                    ref, alt, snppos, start, end = determine_pos(snp,
                                                                  gene,
                                                                  strand,
                                                                  GenDict)
@@ -93,7 +105,7 @@ def count_aminoacids(SnpDict, GenDict):
                         snp.insert(4, muta)
                         logging.info(
                             "orig: %s, muta: %s, orig aa: %s, muta aa %s" % (
-                                gene_seq[start:end], snp_seq[start:end], 
+                                gene_seq[start:end], snp_seq[start:end],
                                 orig, muta))
                     else:
                         logging.warning(("Gene %s contains a partial codon. "
@@ -105,6 +117,7 @@ def count_aminoacids(SnpDict, GenDict):
                 snp.insert(3, "none")
                 snp.insert(4, "none")
 
+
 def read_gb(gb_f, SnpDict):
     logging.info("Reading GBK file.")
     GenDict = {}
@@ -114,7 +127,8 @@ def read_gb(gb_f, SnpDict):
             sys.exit(
                 "There seems to be no sequence in your GenBank file!")
         for feature in seq_record.features:
-            if not feature.type=="misc_feature" and not feature.type=="unsure":
+            if (not feature.type == "misc_feature" and
+               not feature.type == "unsure"):
                 if "locus_tag" in list(feature.qualifiers.keys()):
                     locus = feature.qualifiers["locus_tag"][0]
                     if locus in list(SnpDict.keys()):
@@ -124,8 +138,10 @@ def read_gb(gb_f, SnpDict):
                         if strand == 1:
                             gene_seq = seq_record.seq[start:end]
                         else:
-                            gene_seq = seq_record.seq[start:end].reverse_complement()
-                        GenDict[locus] = [int(start), int(end), gene_seq, strand]
+                            gene_seq = (
+                                seq_record.seq[start:end].reverse_complement())
+                        GenDict[locus] = [int(start), int(end),
+                                          gene_seq, strand]
     return(GenDict)
 
 
@@ -133,7 +149,7 @@ def read_snps_tab(table_f):
     Table = defaultdict(list)
     SnpDict = defaultdict(list)
     logging.info("Reading SNP table.")
-    head= ''
+    head = ''
     with open(table_f) as snp:
         for line in snp:
             if not line.startswith("gene"):
@@ -156,27 +172,37 @@ def main(Args):
     else:
         logfile = "%s.log" % Args.OutFile
 
-    logging.basicConfig(filename=logfile, level=logging.DEBUG, format='%(asctime)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-    logging.info("You have specified that you want %s SNPs." %Args.NonSyn)
+    logging.basicConfig(filename=logfile, level=logging.DEBUG,
+                        format='%(asctime)s - %(message)s',
+                        datefmt='%m/%d/%Y %I:%M:%S %p')
+    logging.info("You have specified that you want %s SNPs." %
+                 Args.NonSyn)
 
-    Table, SnpDict, head= read_snps_tab(Args.Table)
-    GenDict= read_gb(Args.GbkFile, SnpDict)
+    Table, SnpDict, head = read_snps_tab(Args.Table)
+    GenDict = read_gb(Args.GbkFile, SnpDict)
     count_aminoacids(SnpDict, GenDict)
-    out_f=Args.OutFile
-    nonsyn= Args.NonSyn
+    out_f = Args.OutFile
+    nonsyn = Args.NonSyn
     write_aa_table(out_f, SnpDict, nonsyn, head)
 
+
 if __name__ == "__main__":
-    Parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    Parser.add_argument("-f", dest="Table", default="", metavar="<mutation table>", required=True,
-                        help="path and name of the already created mutation table")
-    Parser.add_argument("-g", dest="GbkFile", metavar="<genbank>", required=True,
+    Parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    Parser.add_argument("-f", dest="Table", default="",
+                        metavar="<mutation table>", required=True,
+                        help="""path and name of the already created mutation
+                        table""")
+    Parser.add_argument("-g", dest="GbkFile",
+                        metavar="<genbank>", required=True,
                         help="path and name of the corresponding genbank file")
-    Parser.add_argument("-n", dest="NonSyn", choices=['all', 'non-syn'], default="all",
-                        help="specify if you want all SNPs returned or only non-synonymous ones")
-    Parser.add_argument("-o", dest="OutFile", metavar="<filename>", required=True,
+    Parser.add_argument("-n", dest="NonSyn",
+                        choices=['all', 'non-syn'], default="all",
+                        help="""specify if you want all SNPs returned or only
+                        non-synonymous ones""")
+    Parser.add_argument("-o", dest="OutFile",
+                        metavar="<filename>", required=True,
                         help="path and name of the output file")
 
     Args = Parser.parse_args()
     main(Args)
-

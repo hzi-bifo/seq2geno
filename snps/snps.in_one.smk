@@ -1,110 +1,117 @@
-#' Purpose:
-#' - Calculate SNPs matrix from mapping results of DNA-seq reads
-#' Materials:
-#' - DNA-seq reads
-#' - reference genome
-#' - adaptor file (optional)
-#' Methods:
-#' - Reads mapped using BWA-MEM
-#' - Variant sites called with samtools mpileup
-#' Output:
-#' - binary SNPs table  
-#' - SNPs effects (i.e. synnymous and non-synonymous)
-#' - vcf files
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Purpose:
+# - Calculate SNPs matrix from mapping results of DNA-seq reads
+# Materials:
+# - DNA-seq reads
+# - reference genome
+# - adaptor file (optional)
+# Methods:
+# - Reads mapped using BWA-MEM
+# - Variant sites called with samtools mpileup
+# Output:
+# - binary SNPs table
+# - SNPs effects (i.e. synnymous and non-synonymous)
+# - vcf files
 #
 import pandas as pd
 from snakemake.utils import validate
-#' parse the list of reads
-list_f= config['list_f']
-dna_reads= {}
+# parse the list of reads
+list_f = config['list_f']
+dna_reads = {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
-        d=l.strip().split('\t')
-        dna_reads[d[0]]= d[1].split(',')
+        d = l.strip().split('\t')
+        dna_reads[d[0]] = d[1].split(',')
         try:
-            assert ((len(d)==2) and (len(d[1].split(','))==2))
+            assert ((len(d) == 2) and (len(d[1].split(',')) == 2))
         except AssertionError:
             print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
             raise AssertionError
 
-strains= list(dna_reads.keys())
+strains = list(dna_reads.keys())
 
-ref_fasta=config['ref_fasta']
-ref_gbk=config['ref_gbk']
-annot_tab=config['annot_tab']
-r_annot=config['r_annot']
-mapping_results_dir= config['mapping_results_dir']
-snps_table=config['snps_table']
-snps_aa_table=config['snps_aa_table']
-nonsyn_snps_aa_table=config['nonsyn_snps_aa_table']
-snps_aa_bin_mat=config['snps_aa_bin_mat']
-nonsyn_snps_aa_bin_mat=config['nonsyn_snps_aa_bin_mat']
-adaptor_f= config['adaptor']
-new_reads_dir= config['new_reads_dir']
-table_subset_num=30
+ref_fasta = config['ref_fasta']
+ref_gbk = config['ref_gbk']
+annot_tab = config['annot_tab']
+r_annot = config['r_annot']
+mapping_results_dir = config['mapping_results_dir']
+snps_table = config['snps_table']
+snps_aa_table = config['snps_aa_table']
+nonsyn_snps_aa_table = config['nonsyn_snps_aa_table']
+snps_aa_bin_mat = config['snps_aa_bin_mat']
+nonsyn_snps_aa_bin_mat = config['nonsyn_snps_aa_bin_mat']
+adaptor_f = config['adaptor']
+new_reads_dir = config['new_reads_dir']
+table_subset_num = 30
+
 
 rule all:
     input:
         expand('{}/{{strain}}.{{file_ext}}'.format(mapping_results_dir),
-            strain= strains, 
-            file_ext= ['bam', 'bam.bai']),
+               strain=strains,
+               file_ext=['bam', 'bam.bai']),
         snps_aa_bin_mat,
         nonsyn_snps_aa_bin_mat,
-        expand('{in_tab}_{info}', 
-            in_tab= [snps_aa_bin_mat, nonsyn_snps_aa_bin_mat], 
-            info= ['GROUPS', 'NONRDNT'])
+        expand('{in_tab}_{info}',
+               in_tab=[snps_aa_bin_mat, nonsyn_snps_aa_bin_mat],
+               info=['GROUPS', 'NONRDNT'])
+
 
 rule remove_redundant_feat:
-    #' features grouped by patterns
-    input: 
-        F='{in_tab}'
-    output: 
-        GROUPS='{in_tab}_GROUPS',
-        NONRDNT='{in_tab}_NONRDNT'
+    # features grouped by patterns
+    input:
+        F = '{in_tab}'
+    output:
+        GROUPS = '{in_tab}_GROUPS',
+        NONRDNT = '{in_tab}_NONRDNT'
     conda: 'cmpr_env.yaml'
     script: 'featCompress.py'
 
+
 rule create_binary_table:
-    #' create the binary matrix for the variant sites
+    # create the binary matrix for the variant sites
     input:
-        snps_aa_table=snps_aa_table,
-        nonsyn_snps_aa_table=nonsyn_snps_aa_table
+        snps_aa_table = snps_aa_table,
+        nonsyn_snps_aa_table = nonsyn_snps_aa_table
     output:
-        snps_aa_bin_mat=snps_aa_bin_mat,
-        nonsyn_snps_aa_bin_mat=nonsyn_snps_aa_bin_mat
+        snps_aa_bin_mat = snps_aa_bin_mat,
+        nonsyn_snps_aa_bin_mat = nonsyn_snps_aa_bin_mat
     conda: 'py27.yml'
     params:
-        parse_snps_tool= 'parse_snps.py'
+        parse_snps_tool = 'parse_snps.py'
     threads: 1
     shell:
         '''
         {params.parse_snps_tool} {input.snps_aa_table} \
-{output.snps_aa_bin_mat} 
+{output.snps_aa_bin_mat}
         {params.parse_snps_tool} {input.nonsyn_snps_aa_table} \
-{output.nonsyn_snps_aa_bin_mat} 
+{output.nonsyn_snps_aa_bin_mat}
         '''
 
+
 rule create_table:
-    #' print the lsit of all variant sites 
+    # print the lsit of all variant sites 
     input:
-        flt_vcf=expand('{strain}.flt.vcf', strain= strains),
-        flatcount=expand('{strain}.flatcount', strain= strains),
-        dict_file='dict.txt',
-        ref_gbk=ref_gbk,
-        annofile=annot_tab
+        flt_vcf = expand('{strain}.flt.vcf', strain= strains),
+        flatcount = expand('{strain}.flatcount', strain= strains),
+        dict_file = 'dict.txt',
+        ref_gbk = ref_gbk,
+        annofile = annot_tab
     output:
-        snps_table=snps_table
+        snps_table = snps_table
     conda: 'snps_tab_mapping.yml'
     params:
-        split_tool='split_for_mutation_table.py',
-        isol_subset_num= lambda wildcards: min(table_subset_num,len(strains)),
-        isol_subset_top= lambda wildcards: min(table_subset_num,len(strains)) - 1,
-        isol_subset_dir= 'isols_subset',
-#        mut_tab_tool= 'mutation_table.py',
-        mut_tab_tool= 'mutation_table_py3.py',
-        snps_subset_dir= 'snps_subset'
-    #shadow: "shallow"
-    threads: 30
+        split_tool = 'split_for_mutation_table.py',
+        isol_subset_num = lambda wildcards: min(table_subset_num,len(strains)),
+        isol_subset_top = lambda wildcards: min(table_subset_num,len(strains)) - 1,
+        isol_subset_dir = 'isols_subset',
+        # mut_tab_tool= 'mutation_table.py',
+        mut_tab_tool = 'mutation_table_py3.py',
+        snps_subset_dir = 'snps_subset'
+    threads: 16 
     shell:
         '''
         if [ ! -d {params.isol_subset_dir} ]; then
@@ -136,17 +143,18 @@ rule create_table:
 > {output.snps_table}" | bash
         '''
 
+
 rule include_aa_into_table:
-    #' predict SNPs effect by translating the codons
+    # predict SNPs effect by translating the codons
     input:
-        ref_gbk=ref_gbk,
-        snps_table=snps_table
+        ref_gbk = ref_gbk,
+        snps_table = snps_table
     output:
-        snps_aa_table=snps_aa_table,
-        nonsyn_snps_aa_table=nonsyn_snps_aa_table
+        snps_aa_table = snps_aa_table,
+        nonsyn_snps_aa_table = nonsyn_snps_aa_table
     params:
 #        to_aa_tool= 'Snp2Amino.py' 
-        to_aa_tool= 'Snp2Amino_py3.py'
+        to_aa_tool = 'Snp2Amino_py3.py'
     threads: 1
 #    conda: 'py27.yml'
     conda: 'snps_tab_mapping.yml'
@@ -160,27 +168,28 @@ rule include_aa_into_table:
 
 
 rule isolate_dict:
-    #' ensure no empty file
+    # ensure no empty file
     input:
-        flt_vcf=expand('{strain}.flt.vcf', strain= strains),
-        flatcount=expand('{strain}.flatcount', strain= strains)
+        flt_vcf = expand('{strain}.flt.vcf', strain=strains),
+        flatcount = expand('{strain}.flatcount', strain=strains)
     output:
-        dict_file='dict.txt'
+        dict_file = 'dict.txt'
     threads:1
     wildcard_constraints:
-        strain='^[^\/]+$'
+        strain = '^[^\/]+$'
     params:
-        strains= strains
+        strains = strains
     run:
         import re
         import os
-        ## list and check all required files
+        # list and check all required files
         try:
             empty_files= [f for f in input if os.path.getsize(f)==0]
             if len(empty_files) > 0:
-                raise Exception('{} should not be empty'.format(
-','.join(empty_files)))
-        except Exception as e:
+                raise FileNotFoundError(
+                    '{} should not be empty'.format(
+                    ','.join(empty_files)))
+        except FileNotFoundError as e:
             sys.exit(str(e))
         
         with open(output[0], 'w') as out_fh:
@@ -188,13 +197,13 @@ rule isolate_dict:
 
 
 rule move_mapping_result:
-    #' allow phylo and snps workflow to reuse those done by each other workflow
+    # allow phylo and snps workflow to reuse those done by each other workflow
     input:
-        bam='{strain}.bam',
-        bam_index='{strain}.bam.bai'
+        bam = '{strain}.bam',
+        bam_index = '{strain}.bam.bai'
     output:
-        moved_bam= '{}/{{strain}}.bam'.format(mapping_results_dir),
-        moved_bam_index= '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
+        moved_bam = '{}/{{strain}}.bam'.format(mapping_results_dir),
+        moved_bam_index = '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
     shell:
         '''
         mv {input.bam} {output.moved_bam}
@@ -202,17 +211,17 @@ rule move_mapping_result:
         '''
 
 rule samtools_SNP_pipeline:
-    #' variant calling with samtools mpileup
+    # variant calling with samtools mpileup
     input:
-        sam='{strain}.sam',
-        reffile=ref_fasta
+        sam = '{strain}.sam',
+        reffile = ref_fasta
     output:
-        bam=temp('{strain}.bam'),
-        bam_index=temp('{strain}.bam.bai'),
-        raw_bcf='{strain}.raw.bcf',
-        flt_vcf='{strain}.flt.vcf'
-    params: 
-        min_depth= 0
+        bam = temp('{strain}.bam'),
+        bam_index = temp('{strain}.bam.bai'),
+        raw_bcf = '{strain}.raw.bcf',
+        flt_vcf = '{strain}.flt.vcf'
+    params:
+        min_depth = 0
     threads:1
     conda: 'snps_tab_mapping.yml'
     shell:
@@ -228,25 +237,26 @@ $PERL5LIB
 	set -u
         """
 
+
 rule bwa_pipeline_PE:
-    #' reads mapped to the reference genome with BWA-MEM
+    # reads mapped to the reference genome with BWA-MEM
     input:
-        infile1= lambda wildcards: os.path.join(
-        new_reads_dir, '{}.cleaned.1.fq.gz'.format(wildcards.strain)),
-        infile2= lambda wildcards: os.path.join(
-        new_reads_dir, '{}.cleaned.2.fq.gz'.format(wildcards.strain)),
-        reffile=ref_fasta,
-        ref_index_bwa=ref_fasta+'.bwt',
-        annofile=annot_tab,
-        Rannofile=r_annot
+        infile1 = lambda wildcards: os.path.join(
+          new_reads_dir, '{}.cleaned.1.fq.gz'.format(wildcards.strain)),
+        infile2 = lambda wildcards: os.path.join(
+          new_reads_dir, '{}.cleaned.2.fq.gz'.format(wildcards.strain)),
+        reffile = ref_fasta,
+        ref_index_bwa = ref_fasta+'.bwt',
+        annofile = annot_tab,
+        Rannofile = r_annot
     output:
-        sam=temp('{strain}.sam'),
-        art='{strain}.art',
-        sin='{strain}.sin',
-        flatcount='{strain}.flatcount',
-        rpg='{strain}.rpg',
-        stat='{strain}.stats'
-    threads:1
+        sam = temp('{strain}.sam'),
+        art = '{strain}.art',
+        sin = '{strain}.sin',
+        flatcount = '{strain}.flatcount',
+        rpg = '{strain}.rpg',
+        stat = '{strain}.stats'
+    threads: 1
     conda: 'snps_tab_mapping.yml'
     shell:
         """
@@ -260,15 +270,16 @@ rule bwa_pipeline_PE:
 	set -u
         """
 
+
 rule redirect_and_preprocess_reads:
-    #' reads processing before mapped to the reference 
-    input: 
-        infile1=lambda wildcards: dna_reads[wildcards.strain][0],
-        infile2=lambda wildcards: dna_reads[wildcards.strain][1]
+    # reads processing before mapped to the reference 
+    input:
+        infile1 = lambda wildcards: dna_reads[wildcards.strain][0],
+        infile2 = lambda wildcards: dna_reads[wildcards.strain][1]
     output:
-        log_f= os.path.join(new_reads_dir, '{strain}.log'),
-        f1= os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
-        f2= os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
+        log_f = os.path.join(new_reads_dir, '{strain}.log'),
+        f1 = os.path.join(new_reads_dir, '{strain}.cleaned.1.fq.gz'),
+        f2 = os.path.join(new_reads_dir, '{strain}.cleaned.2.fq.gz')
     params:
         adaptor_f= adaptor_f,
         tmp_f1= lambda wildcards: os.path.join(
@@ -293,17 +304,19 @@ rule redirect_and_preprocess_reads:
         fi
         '''
 
+
 rule create_annot:
     input:
-        ref_gbk=ref_gbk
+        ref_gbk = ref_gbk
     output:
-        anno_f=annot_tab
+        anno_f = annot_tab
     params:
-        ref_name='reference'
+        ref_name = 'reference'
     shell:
         '''
         create_anno.py -r {input.ref_gbk} -n {params.ref_name} -o {output.anno_f}
         '''
+
 
 rule create_r_annot:
     input:
@@ -314,6 +327,7 @@ rule create_r_annot:
         '''
         create_R_anno.py -r {input.ref_gbk} -o {output.R_anno_f}
         '''
+
 
 rule index_ref:
     input:

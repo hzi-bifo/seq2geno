@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 '''
 Compress binary features by their patterns among the samples.
 A representiative is selected for each pattern. The new feature name is composed of the representative feature 

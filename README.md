@@ -1,7 +1,10 @@
 # Seq2Geno
 
-- [What is Seq2Geno?](#intro)
-- [What does Seq2Geno cover?](#functions) 
+An integrated tool for microbial sequence analyses. The methods are refactored
+from those used by [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). The method reproducibility has beend evaulated with the same raw data but a differnet mechine.
+
+- [Repository structure](#structure)
+- [Available functions](#functions) 
 - [Get started](#install) 
 - [Usage and Input](#usage) 
     - [GUI](#gui)
@@ -13,15 +16,21 @@
 - [License](#license) 
 - [Contact](#contact) 
 
+### <a name="structure"></a>Repository structure
+This repository includes:
+- install: information and scripts for installation
+- main: the scripts for user interface and the calling methods of core
+  workflows
+- snps: the scripts for generating SNPs table
+- denovo: the scripts for computing de novo assemblies and the gene
+  presence/absence table
+- expr: the scripts for calculating expression levels
+- phylo: the scripts for phylogenetic tree inference
+- difexpr: the methods for identifying differentially expressed genes with the
+  expression levels matrix
+- cont_anc_rcn: ancestral reconstruction for continuous data such as expression levels
 
-### <a name="intro"></a>What is Seq2Geno?
-Seq2Geno2Pheno complements experiemental methods to facilitate the study of genotypes and phenotypes. As the first stage of Seq2Geno2Pheno, Seq2Geno provides user-friendly access to computational analyses with the next-generation sequencing data of bacterial samples. It enables the users to use either the graphical or the command line interface to edit the arguments and conduct the complex analyses. The final output data include the phylogenetic tree and the feature matrices of SNPs, gene presence/absence, and expression levels, which are formatted for the next stage of machine learning: Geno2Pheno.
-
-Besides the easy access, expanding the input dataset could be also effortless (See section [FAQ](#FAQ) for more details). Furthermore, Seq2Geno automatically resolves the dependencies among procedures and manages the procedure-specific computational environments, aiming to avoid error-prone behaviors of researchers (such as manually repeating processes or shifting computational environments). 
-
-The output data from Seq2Geno can be used to train phenotypic predictors using [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de). To have your data submitted to the Geno2Pheno server, please check [the section below](#genyml). 
-
-### <a name="functions"></a>What does Seq2Geno cover?
+### <a name="functions"></a>Available functions
 - detect single nucleotide variants
 - create de novo assemblies
 - compute gene presence/absence and the indels
@@ -30,19 +39,19 @@ The output data from Seq2Geno can be used to train phenotypic predictors using [
 - find differentially expressed genes (additional data that won't be used by Geno2Pheno)
 - reconstruct ancestral values of expression level (additional data that won't be used by Geno2Pheno)
 
-### <a name="install"></a>Get started
+### <a name="install"></a>Installation of standalone package
 - Prerequisites
 
-    - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.8.4)
+    - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.10.0)
     - file [.condarc](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-channels.html) that includes these channels and is detectable by your conda
       - hzi-bifo
       - conda-forge/label/broken
       - bioconda
       - conda-forge
       - defaults
-    - [python](https://www.python.org/downloads/) (tested verson: 3.6)
+    - [python](https://www.python.org/downloads/) (tested verson: 3.7)
     - [Linux](https://www.cyberciti.biz/faq/find-linux-distribution-name-version-number/) (tested version: Debian GNU/Linux 8.8 jessie)
-    - [git](https://git-scm.com/downloads) (tested version: 2.18)
+    - [git](https://git-scm.com/downloads) (tested version: 2.21)
 
 - Installation of Seq2Geno
 
@@ -200,3 +209,5 @@ Please refer to LICENSE
 Please open an issue here or contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmhotz-hzi.de). 
 We will need to know how to reproduce the problem. 
 
+### <a name="citation"></a>Citation
+Please cite: ...
