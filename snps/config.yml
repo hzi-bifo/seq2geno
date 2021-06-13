@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 list_f: 'data/samples.10.dna_full.tsv'
 ref_fasta: 'Pseudomonas_aeruginosa_PA14.edit.fasta'
 ref_gbk: 'Pseudomonas_aeruginosa_PA14_ncRNA.gbk'

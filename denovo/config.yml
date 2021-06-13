@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 list_f: 'data/samples.10.dna_full.with_ref.tsv'
 out_prokka_dir: 'prokka'
 out_roary_dir: 'roary'

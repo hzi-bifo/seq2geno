@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 # Purpose:
 # - De novo procedures of assemblies, annotation and orthologous clustering
 # Materials:
@@ -14,7 +18,7 @@
 #
 import os
 import pandas as pd
-#' parse the list of reads
+# parse the list of reads
 list_f = config['list_f']
 dna_reads= {}
 with open(list_f, 'r') as list_fh:
@@ -132,7 +136,7 @@ rule gpa_bin_mat:
         bin_df.rename(columns=name_dict, inplace=True)
         bin_df.to_csv(output_f, sep='\t', header=True, index=True,
             index_label= 'Isolate')
- 
+
 
 rule indel_select_core_genes:
     # Detect indels
@@ -142,8 +146,8 @@ rule indel_select_core_genes:
     output:
         core_gene_list = '{roary_dir}/core_genes_50.txt'
     params:
-        min_num_strains = 2, 
-        filter_awk_script = awk_script_f 
+        min_num_strains = 2,
+        filter_awk_script = awk_script_f
     conda:'indel_env.yml'
     threads: 12
     shell:
