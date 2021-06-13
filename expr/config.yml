@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 list_f: 'data/samples.10.rna_full.tsv'
 out_table: 'rpg.txt'
 out_log_table: 'rpg.log.txt'

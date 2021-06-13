@@ -1,13 +1,17 @@
-#' Purpose:
-#' - Quantify the expression levels and generate the features matrix
-#' Materials:
-#' - RNA-seq reads
-#' - reference genome
-#' - adaptor file (optional)
-#' Methods:
-#' - Reads mapped using BWA backtrack
-#' Output:
-#' - numeric expression table
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Purpose:
+# - Quantify the expression levels and generate the features matrix
+# Materials:
+# - RNA-seq reads
+# - reference genome
+# - adaptor file (optional)
+# Methods:
+# - Reads mapped using BWA backtrack
+# Output:
+# - numeric expression table
 #
 import pandas as pd
 
@@ -33,26 +37,29 @@ annot_tab= config['annot_tab']
 r_annot= config['r_annot']
 arx_file= 'rna_mapping.tar.gz'
 
+
 rule:
     input:
         arx_file,
         out_table,
         out_log_table
 
+
 rule archive_data:
-    #' archive the intermediate data 
+    # archive the intermediate data 
     input:
         check_file= out_table,
         target_files= expand('{strain}.{types}',
-                        strain= strains, 
-                        types= ['sam', 'sai', 'art', 'sin', 'flatcount', 'rpg', 'stats'])
+                        strain= strains,
+                        types= ['sam', 'sai','sin', 'rpg'])
+#                        types= ['sam', 'sai', 'art', 'sin', 'flatcount', 'rpg', 'stats'])
     output:
         arx= arx_file
     shell:
         '''
         tar -czvf {output.arx}  {input.target_files} --remove-files
         '''
-        
+
 
 rule collect_rpg:
     #' integrate the per-region coverages and form the matrix
@@ -78,43 +85,49 @@ rule collect_rpg:
         rpg_df.to_csv(output[0], sep='\t', index_label=False) 
 
         log_rpg_df= pd.np.log(rpg_df+1)
-        log_rpg_df.to_csv(out_log_table, sep = "\t", index_label='Isolate')    
+        log_rpg_df.to_csv(out_log_table, sep = "\t", index_label='Isolate')
+
 
 rule bwa_pipeline:
-    #' reads mapped to the reference genome with BWA backtrack algorithm
-    #' count the coverages for each coding region
+    # reads mapped to the reference genome with BWA backtrack algorithm
+    # count the coverages for each coding region
     input:
         #infile=strain_fq,
         infile=lambda wildcards: rna_reads[wildcards.strain],
         reffile=ref_fasta,
-#        ref_index_stampy=ref_fasta+'.stidx',
         ref_index_bwa=ref_fasta+'.bwt',
         annofile=annot_tab,
         Rannofile=r_annot
     output:
         sam=temp('{strain}.sam'),
         sai='{strain}.sai',
-        art='{strain}.art',
-        sin='{strain}.sin',
-        flatcount='{strain}.flatcount',
-        rpg='{strain}.rpg',
-        stat='{strain}.stats'
+        sin='{strain}.sin'
     threads:1
     conda: 'snps_tab_mapping.yml'
     shell:
         """
-        set +u
-        export PERL5LIB=$CONDA_PREFIX/\
-lib/perl5/5.22.2/x86_64-linux-thread-multi/:$PERL5LIB
-        export PERL5LIB=$CONDA_PREFIX/lib/perl5/5.22.2:$PERL5LIB
-        export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:$PERL5LIB
-        my_bwa_pipeline {wildcards.strain} {input.infile} \
-{input.reffile} {input.annofile} {input.Rannofile} 2> {wildcards.strain}.log
-        set -u
+        bwa aln {input.reffile} {input.infile} > {output.sai}
+        bwa samse -r $( echo "@RG\\tID:snps\\tSM:snps" ) \
+ {input.reffile} {output.sai} {input.infile} > {output.sam}
+        sam2art.py -s 2 -l --sam {output.sam} > {output.sin}
         """
 
+
+rule calc_genecounts:
+    input:
+        sin='{strain}.sin',
+        annofile=annot_tab
+    output:
+        rpg='{strain}.rpg'
+    shell:
+        '''
+        art2genecount.py --art {input.sin} -t tab -r {input.annofile} \
+ > {output.rpg} 
+        '''
+
+
 rule create_annot:
-    #' determine the coding regions to quantify the expression levels
+    # determine the coding regions to quantify the expression levels
     input:
         ref_gbk=ref_gbk
     output:
@@ -126,8 +139,9 @@ rule create_annot:
         create_anno.py -r {input.ref_gbk} -n {params.ref_name} -o {output.anno_f}
         '''
 
+
 rule create_r_annot:
-    #' determine the coding regions to quantify the expression levels
+    # determine the coding regions to quantify the expression levels
     input:
         ref_gbk=ref_gbk
     output:
@@ -136,6 +150,7 @@ rule create_r_annot:
         '''
         create_R_anno.py -r {input.ref_gbk} -o {output.R_anno_f}
         '''
+
 
 rule index_ref:
     input:
