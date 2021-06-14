@@ -24,12 +24,14 @@ dna_reads= {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d=l.strip().split('\t')
-        dna_reads[d[0]]= d[1].split(',')
         try:
             assert ((len(d)==2) and (len(d[1].split(','))==2))
         except AssertionError:
-            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
-            raise AssertionError
+            raise SyntaxError(
+                '{} has an incorrectly formatted line:\n{}'.format(
+                list_f, l.strip()))
+        else:
+            dna_reads[d[0]]= d[1].split(',')
 
 out_prokka_dir = config['out_prokka_dir']
 out_roary_dir = config['out_roary_dir']
@@ -60,7 +62,7 @@ rule remove_redundant_feat:
     output: 
         GROUPS = '{in_tab}_GROUPS',
         NONRDNT = '{in_tab}_NONRDNT'
-    conda: 'cmpr_env.yaml'
+    conda: 'cmpr_env.yml'
     script: 'featCompress.py'
 
 
@@ -72,9 +74,11 @@ rule make_annotation:
         tmp_annotation_map = '{roary_dir}/annotation_mapped.txt',
         tmp_gff = '{roary_dir}/tmp.gff'
     conda: 'indel_py37_env.yml'
+    params:
+        creator_script = 'mapping_tab_and_gff.py'
     shell:
         '''
-        mapping_tab_and_gff.py \
+        {params.creator_script} \
  -g {input.ref_gff} -t {input.anno_f} \
  -out_gff {output.tmp_gff} -out_annot {output.tmp_annotation_map}
         '''
@@ -92,12 +96,15 @@ rule abricate_dict:
         # tmp_gff = '{roary_dir}/tmp.gff',
         rename_dict = '{roary_dir}/roary_abricate.txt',
         tmp_refined_map = '{roary_dir}/refined_mapping.txt'
+    params:
+        refine_mapping_script = 'refine_mapping.py',
+        match_cluster_script = 'match_clusters.py'
     conda:'indel_env.yml'
     shell:
         '''
-        refine_mapping.py {input.tmp_annotation_map} \
+        {params.refine_mapping_script} {input.tmp_annotation_map} \
 > {output.tmp_refined_map}
-        match_clusters.py {output.tmp_refined_map} \
+        {params.match_cluster_script} {output.tmp_refined_map} \
 {input.roary_clustered_proteins} > {output.rename_dict}
         '''
 
@@ -328,10 +335,11 @@ rule create_annot:
     output:
         anno_f = annot_tab
     params:
-        ref_name = 'reference'
+        ref_name = 'reference',
+        creator_script = 'create_anno.py'
     shell:
         '''
-        create_anno.py -r {input.ref_gbk} -n {params.ref_name} -o {output.anno_f}
+        {params.creator_script} -r {input.ref_gbk} -n {params.ref_name} -o {output.anno_f}
         '''
 
 
@@ -352,7 +360,6 @@ rule spades_create_assembly:
         SPADES_OPT = '--careful',
         SPADES_BIN = 'spades.py'
     conda: 'spades_3_10_env.yml'
-#    script:'run_spades.py'
     shell:
         '''
         spades.py \
@@ -379,6 +386,7 @@ rule redirect_and_preprocess_reads:
             new_reads_dir, '{}.cleaned.1.fq'.format(wildcards.strain)),
         tmp_f2 = lambda wildcards: os.path.join(
             new_reads_dir, '{}.cleaned.2.fq'.format(wildcards.strain))
+    conda: 'eautils_env.yml'
     shell:
         '''
         if [ -e "{params.adaptor_f}" ]

@@ -31,7 +31,7 @@ with open(list_f, 'r') as list_fh:
                 '{} has an incorrectly formatted line:\n{}'.format(
                 list_f, l.strip()))
         else:
-          dna_reads[d[0]] = d[1].split(',')
+            dna_reads[d[0]] = d[1].split(',')
 
 strains = list(dna_reads.keys())
 ref_fasta = config['ref_fasta']

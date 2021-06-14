@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Aaron Weimann
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 BEGIN {
     FPAT = "([^,]+)|(\"[^\"]+\")"
 }
