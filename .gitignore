@@ -8,3 +8,5 @@ snps/env/
 expr/env/
 *.pyc
 */nohup.out
+refactor_*/
+.deprived/

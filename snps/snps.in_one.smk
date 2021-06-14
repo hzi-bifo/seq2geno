@@ -15,7 +15,7 @@
 # - binary SNPs table
 # - SNPs effects (i.e. synnymous and non-synonymous)
 # - vcf files
-#
+
 import pandas as pd
 from snakemake.utils import validate
 # parse the list of reads
@@ -24,15 +24,16 @@ dna_reads = {}
 with open(list_f, 'r') as list_fh:
     for l in list_fh:
         d = l.strip().split('\t')
-        dna_reads[d[0]] = d[1].split(',')
         try:
             assert ((len(d) == 2) and (len(d[1].split(',')) == 2))
         except AssertionError:
-            print('ERROR: Incorrect format detected in "{}"'.format(l.strip()))
-            raise AssertionError
+            raise SyntaxError(
+                '{} has an incorrectly formatted line:\n{}'.format(
+                list_f, l.strip()))
+        else:
+          dna_reads[d[0]] = d[1].split(',')
 
 strains = list(dna_reads.keys())
-
 ref_fasta = config['ref_fasta']
 ref_gbk = config['ref_gbk']
 annot_tab = config['annot_tab']
@@ -46,18 +47,37 @@ nonsyn_snps_aa_bin_mat = config['nonsyn_snps_aa_bin_mat']
 adaptor_f = config['adaptor']
 new_reads_dir = config['new_reads_dir']
 table_subset_num = 30
+arx_file = 'dna_var_calling.tar.gz'
 
 
 rule all:
     input:
+        # enabling reuse for the phylo workflow
         expand('{}/{{strain}}.{{file_ext}}'.format(mapping_results_dir),
                strain=strains,
                file_ext=['bam', 'bam.bai']),
+        arx_file,
         snps_aa_bin_mat,
         nonsyn_snps_aa_bin_mat,
         expand('{in_tab}_{info}',
                in_tab=[snps_aa_bin_mat, nonsyn_snps_aa_bin_mat],
                info=['GROUPS', 'NONRDNT'])
+
+
+rule archive_data:
+    # archive the intermediate data 
+    input:
+        snps_aa_bin_mat = snps_aa_bin_mat,
+        nonsyn_snps_aa_bin_mat = nonsyn_snps_aa_bin_mat,
+        target_files = expand('{strain}.{types}',
+                        strain=strains,
+                        types=['flatcount','flt.vcf', 'raw.bcf'])
+    output:
+        arx = arx_file
+    shell:
+        '''
+        tar -czvf {output.arx}  {input.target_files} --remove-files
+        '''
 
 
 rule remove_redundant_feat:
@@ -153,10 +173,8 @@ rule include_aa_into_table:
         snps_aa_table = snps_aa_table,
         nonsyn_snps_aa_table = nonsyn_snps_aa_table
     params:
-#        to_aa_tool= 'Snp2Amino.py' 
         to_aa_tool = 'Snp2Amino_py3.py'
     threads: 1
-#    conda: 'py27.yml'
     conda: 'snps_tab_mapping.yml'
     shell:
         """
@@ -226,16 +244,23 @@ rule samtools_SNP_pipeline:
     conda: 'snps_tab_mapping.yml'
     shell:
         """
-        sleep 10
-	set +u
-        export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:\
-$CONDA_PREFIX/lib/perl5/5.22.2:\
-$CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:\
-$PERL5LIB
-        echo $PERL5LIB
-        my_samtools_SNP_pipeline {wildcards.strain} {input.reffile} {params.min_depth} 
-	set -u
+        samtools view -bS {input.sam} > {output.bam}
+        samtools sort {output.bam} {wildcards.strain}
+        samtools index {output.bam}
+        samtools mpileup -uf {input.reffile} {output.bam} | \
+bcftools view -bvcg - > {output.raw_bcf}
+        bcftools view {output.raw_bcf} | \
+vcfutils.pl varFilter -d {params.min_depth} > {output.flt_vcf} 
         """
+#        sleep 10
+#	set +u
+#        export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:\
+#$CONDA_PREFIX/lib/perl5/5.22.2:\
+#$CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:\
+#$PERL5LIB
+#        echo $PERL5LIB
+#        my_samtools_SNP_pipeline {wildcards.strain} {input.reffile} {params.min_depth} 
+#	set -u
 
 
 rule bwa_pipeline_PE:
@@ -252,16 +277,17 @@ rule bwa_pipeline_PE:
     output:
         sam = temp('{strain}.sam'),
         flatcount = '{strain}.flatcount',
+    params:
+        sam2art_bin = 'sam2art.py'
     threads: 1
     conda: 'snps_tab_mapping.yml'
     shell:
         '''
         bwa mem -v 2 -M \
-  -t 1 \
-  -R $( echo "@RG\\tID:snps\\tSM:snps" ) \
-  {input.reffile} {input.infile1} {input.infile2} > {output.sam}
+-t 1 -R $( echo "@RG\\tID:snps\\tSM:snps" ) \
+{input.reffile} {input.infile1} {input.infile2} > {output.sam}
 
-        sam2art.py -f -s 2 -p --sam {output.sam} > {output.flatcount}
+        {params.sam2art_bin} -f -s 2 -p --sam {output.sam} > {output.flatcount}
         '''
 
 
@@ -280,6 +306,7 @@ rule redirect_and_preprocess_reads:
             new_reads_dir, '{}.cleaned.1.fq'.format(wildcards.strain)),
         tmp_f2= lambda wildcards: os.path.join(
             new_reads_dir, '{}.cleaned.2.fq'.format(wildcards.strain))
+    conda: './eautils_env.yml'
     shell:
         '''
         if [ -e "{params.adaptor_f}" ]
@@ -305,10 +332,11 @@ rule create_annot:
     output:
         anno_f = annot_tab
     params:
+        creator_script = 'create_anno.py',
         ref_name = 'reference'
     shell:
         '''
-        create_anno.py -r {input.ref_gbk} -n {params.ref_name} -o {output.anno_f}
+        {params.creator_script} -r {input.ref_gbk} -n {params.ref_name} -o {output.anno_f}
         '''
 
 
@@ -317,9 +345,11 @@ rule create_r_annot:
         ref_gbk=ref_gbk
     output:
         R_anno_f=r_annot
+    params:
+        creator_script = 'create_R_anno.py'
     shell:
         '''
-        create_R_anno.py -r {input.ref_gbk} -o {output.R_anno_f}
+        {params.creator_script} -r {input.ref_gbk} -o {output.R_anno_f}
         '''
 
 
