@@ -306,7 +306,7 @@ rule redirect_and_preprocess_reads:
             new_reads_dir, '{}.cleaned.1.fq'.format(wildcards.strain)),
         tmp_f2= lambda wildcards: os.path.join(
             new_reads_dir, '{}.cleaned.2.fq'.format(wildcards.strain))
-    conda: './eautils_env.yml'
+    conda: 'eautils_env.yml'
     shell:
         '''
         if [ -e "{params.adaptor_f}" ]
