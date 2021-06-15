@@ -16,9 +16,8 @@ import pandas as pd
 
 class SGProcess:
     # The class for each workflow 
-    # Methods:
-        # run_proc: execute the workflow
-        # EditEnv: update the environment variables
+    # run_proc: execute the workflow
+    # EditEnv: update the environment variables
     def __init__(self, wd, proc,
                  config_f, dryrun=True,
                  max_cores=1, mem_mb=-1):
@@ -43,34 +42,17 @@ class SGProcess:
         else:
             self.mem_mb = int(mem_mb)
 
-    def run_proc(self):
+    def run_proc(self, logger):
         proc = self.proc
         dryrun = True if self.dryrun == 'Y' else False
         max_cores = self.max_cores
         config_f = self.config_f
-        env_dict = self.EditEnv(proc)
-        print(proc)
-        try:
-            os.environ['PATH'] = env_dict['PATH']
-            if dryrun:
-                # test the environment and install if not yet ready
-                success = snakemake.snakemake(
-                    snakefile=env_dict['SNAKEFILE'],
-                    lock=False,
-                    restart_times=3,
-                    cores=max_cores,
-                    resources={'mem_mb': self.mem_mb},
-                    configfiles=[config_f],
-                    force_incomplete=True,
-                    workdir=os.path.dirname(config_f),
-                    use_conda=True,
-                    conda_prefix=os.path.join(env_dict['TOOL_HOME'], 'env'),
-                    conda_create_envs_only=True,
-                    printshellcmds=True,
-                    notemp=True
-                    )
+        env_dict = self.EditEnv(proc, logger)
+        logger.info(proc)
 
-            # run the process
+        os.environ['PATH'] = env_dict['PATH']
+        if dryrun:
+            # test the environment and install if not yet ready
             success = snakemake.snakemake(
                 snakefile=env_dict['SNAKEFILE'],
                 lock=False,
@@ -82,21 +64,32 @@ class SGProcess:
                 workdir=os.path.dirname(config_f),
                 use_conda=True,
                 conda_prefix=os.path.join(env_dict['TOOL_HOME'], 'env'),
-                dryrun=dryrun,
-                printshellcmds=True,
-                notemp=True
-                )
-            if not success:
-                raise RuntimeError('Snakemake workflow fails')
-        except RuntimeError:
-            print('ERROR ({})'.format(proc))
-            print('{}\t{}\n'.format(
-                datetime.now().isoformat(' ', timespec='minutes'),
-                sys.exc_info()))
-            raise RuntimeError('Unknown problem occured when '
-                               'lauching Snakemake')
+                conda_create_envs_only=True,
+                printshellcmds=False
+            )
 
-    def EditEnv(self, proc):
+        # run the process
+        success = snakemake.snakemake(
+            snakefile=env_dict['SNAKEFILE'],
+            lock=False,
+            restart_times=3,
+            cores=max_cores,
+            resources={'mem_mb': self.mem_mb},
+            configfiles=[config_f],
+            force_incomplete=True,
+            workdir=os.path.dirname(config_f),
+            use_conda=True,
+            conda_prefix=os.path.join(env_dict['TOOL_HOME'], 'env'),
+            dryrun=dryrun,
+            printshellcmds=False,
+            notemp=False
+            )
+
+        if not success:
+            logger.error('{} failed'.format(proc))
+            sys.exit()
+
+    def EditEnv(self, proc, logger):
         # Set up the enviornment variables accoring to the activated workflows
         script_dir = os.path.dirname(os.path.realpath(__file__))
         toolpaths_f = os.path.join(script_dir, 'ToolPaths.tsv')
@@ -108,21 +101,18 @@ class SGProcess:
             # ensure the most important variable
             assert 'SEQ2GENO_HOME' in os.environ
         except AssertionError:
-            print('ERROR ({})'.format('SEQ2GENO_HOME'))
-            print('{}\t{}\n'.format(
-                datetime.now().isoformat(' ', timespec='minutes'),
-                'SEQ2GENO_HOME not properly set'))
+            logger.error('"SEQ2GENO_HOME" not properly set')
             sys.exit()
 
         try:
+            # read the table of required paths
             env_series = env_df.loc[proc, :]
         except KeyError:
-            print('ERROR ({})'.format(proc))
-            print('{}\t{}\n'.format(
-                datetime.now().isoformat(' ', timespec='minutes'),
-                'unavailable function'))
+            # when unable to recognize the function
+            logger.error('Unknown function {}'.format(proc))
             sys.exit()
         else:
+            # start setting the environment variables
             try:
                 os.environ['TOOL_HOME'] = os.path.join(
                     os.environ['SEQ2GENO_HOME'],
@@ -139,10 +129,12 @@ class SGProcess:
                                      all_env_var[included_env],
                                      val)
                     env_dict[env] = val
-            except :
-                print('ERROR ({})'.format(proc))
-                print('{}\t{}\n'.format(
-                    datetime.now().isoformat(' ', timespec='minutes'),
-                    'Unable to set environment variables'))
+            except KeyError:
+                logger.error(
+                    'Unable to set environment for "{}"'.format(proc))
                 sys.exit()
-        return(env_dict)
+            else:
+                logger.info(
+                    'Environment variables for "{}" ready'.format(
+                        proc))
+                return(env_dict)

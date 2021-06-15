@@ -18,7 +18,9 @@ import pandas as pd
 list_f = config['list_f']
 rna_reads = {}
 with open(list_f, 'r') as list_fh:
-    for l in list_fh:
+    for l in list_fh.readlines():
+        if re.match('#', l):
+            continue
         d = l.strip().split('\t')
         try:
             assert len(d) == 2

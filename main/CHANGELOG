@@ -1,0 +1,3 @@
+15.June.21	enable packing the results (all, main, or g2p for only thoe needed by Geno2Pheno)
+		clean redundant scripts
+		update the logging method

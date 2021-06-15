@@ -2,9 +2,13 @@
 #
 # SPDX-License-Identifier: GPL3
 
-import logging 
+import logging
 
-def make_logger():
+
+def make_logger(log_f=''):
+    if log_f != '':
+        logging.basicConfig(filename=log_f)
+
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()

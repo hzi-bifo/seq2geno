@@ -3,7 +3,8 @@
 .dag/
 _developing/
 env/
-*.pyc
-*/nohup.out
+__pycache__/
+nohup.out
 refactor_*/
 .deprived/
+example_sg_dataset/

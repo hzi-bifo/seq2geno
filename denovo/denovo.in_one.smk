@@ -20,12 +20,14 @@ import os
 import pandas as pd
 # parse the list of reads
 list_f = config['list_f']
-dna_reads= {}
+dna_reads = {}
 with open(list_f, 'r') as list_fh:
-    for l in list_fh:
-        d=l.strip().split('\t')
+    for l in list_fh.readlines():
+        if re.match('#', l):
+            continue
+        d = l.strip().split('\t')
         try:
-            assert ((len(d)==2) and (len(d[1].split(','))==2))
+            assert ((len(d) == 2) and (len(d[1].split(',')) == 2))
         except AssertionError:
             raise SyntaxError(
                 '{} has an incorrectly formatted line:\n{}'.format(
@@ -35,7 +37,7 @@ with open(list_f, 'r') as list_fh:
 
 out_prokka_dir = config['out_prokka_dir']
 out_roary_dir = config['out_roary_dir']
-out_spades_dir= config['out_spades_dir']
+out_spades_dir = config['out_spades_dir']
 extracted_proteins_dir = config['extracted_proteins_dir']
 out_gpa_f = config['out_gpa_f']
 out_indel_f = config['out_indel_f']
