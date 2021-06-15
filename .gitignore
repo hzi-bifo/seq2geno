@@ -2,10 +2,7 @@
 .ori_backup/
 .dag/
 _developing/
-phylo/env/
-denovo/env/
-snps/env/
-expr/env/
+env/
 *.pyc
 */nohup.out
 refactor_*/

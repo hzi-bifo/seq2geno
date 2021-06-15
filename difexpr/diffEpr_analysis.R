@@ -1,4 +1,9 @@
 #!/usr/bin/env Rscript
+
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 .libPaths(paste(Sys.getenv('CONDA_PREFIX'), 'lib', 'R', 'library', sep='/'))
 
 library(DESeq2)
