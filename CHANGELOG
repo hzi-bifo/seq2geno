@@ -1,1 +1,3 @@
-10.06.21:	upgrade to python3.7; the other packages and scripts, including snakemake, adjusted to this change
+10.June.21	upgrade to python3.7
+		the other packages and scripts, including snakemake, adjusted to this change
+		clean and restyle the main workflows
