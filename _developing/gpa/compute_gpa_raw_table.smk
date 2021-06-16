@@ -1,1 +1,0 @@
-../../smk/rules/compute_gpa_raw_table/compute_gpa_raw_table.smk

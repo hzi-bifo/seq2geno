@@ -20,7 +20,6 @@ assert 'SEQ2GENO_HOME' in os.environ, 'SEQ2GENO_HOME not available'
 sys.path.append(os.environ['SEQ2GENO_HOME'])
 sys.path.append(os.path.join(os.environ['SEQ2GENO_HOME'], 'main'))
 from Seq2GenoUtils import Warehouse
-from Seq2GenoUtils import Crane
 import create_config
 from PackOutput import SGOutputPacker
 
@@ -147,50 +146,32 @@ if __name__ == '__main__':
     if primary_args.dsply_args:
         sys.exit(0)
 
-    # determine where to run the workflows
-    if primary_args.remote:
-        # pack the materials and send it to the server
-        new_zip_prefix = os.path.abspath(args.wd)
-        new_dir = new_zip_prefix
-        logger.info('Packing the materials to submit')
-        Warehouse.move_data(config_f=primary_args.yml_f,
-                            new_zip_prefix=new_zip_prefix,
-                            new_dir=new_dir,
-                            logger=logger)
-        logger.info('Uploading the data')
-        sg_crane = Crane.Seq2Geno_Crane(logger=logger)
-        if not os.path.isdir(args.wd):
-            os.makedirs(args.wd)
-        # launch the analyses
-        sg_crane.launch(args.wd, new_zip_prefix+'.zip')
-        logger.info('DONE (remote mode)')
+    # run in local machine
+    main(args, logger)
+    # pack the results orr not?
+    if primary_args.pack_output == 'none':
+        logger.info('Not packing the results')
     else:
-        # run in local machine
-        main(args, logger)
-        # pack the results orr not?
-        if primary_args.pack_output == 'none':
-            logger.info('Not packing the results')
-        else:
-            output_zip = '{}.zip'.format(args.wd)
-            packer = SGOutputPacker(seq2geno_outdir=args.wd,
-                          output_zip=output_zip)
-            if primary_args.pack_output == 'all':
-                logger.info('Packing all data')
-                packer.pack_all_output()
-            elif primary_args.pack_output == 'main':
-                logger.info('Packing the main data')
-                packer.pack_main_output()
-            elif primary_args.pack_output == 'g2p':
-                logger.info('Packing data needed by Geno2Pheno')
-                gp_config_yml = '{}.yml'.format(args.wd)
-                project_name = os.path.basename(args.wd)
-                packer.make_gp_input_zip(gp_config=gp_config_yml,
-                                         project_name=project_name,
-                                         logger=logger)
+        output_zip = '{}.zip'.format(args.wd)
+        packer = SGOutputPacker(seq2geno_outdir=args.wd,
+                      output_zip=output_zip)
+        if primary_args.pack_output == 'all':
+            logger.info('Packing all data')
+            packer.pack_all_output()
+        elif primary_args.pack_output == 'main':
+            logger.info('Packing the main data')
+            packer.pack_main_output()
+        elif primary_args.pack_output == 'g2p':
+            logger.info('Packing data needed by Geno2Pheno')
+            gp_config_yml = '{}.yml'.format(args.wd)
+            project_name = os.path.basename(args.wd)
+            packer.make_gp_input_zip(gp_config=gp_config_yml,
+                                     project_name=project_name,
+                                     logger=logger)
 
-            # ensure the zip file correctly generated
-            if not os.path.isfile(output_zip):
-                raise IOError('zip not created')
-            else:
-                shutil.rmtree(new_dir)
+        # ensure the zip file correctly generated
+        if not os.path.isfile(output_zip):
+            raise IOError('zip not created')
+        else:
+            shutil.rmtree(new_dir)
         logger.info('DONE (local mode)')

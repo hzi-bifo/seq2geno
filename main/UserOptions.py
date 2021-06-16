@@ -114,9 +114,6 @@ def make_parser():
     parser.add_argument('-l', dest='log_f', required=False,
                         default='',
                         help='a non-existing filename for log')
-    parser.add_argument('--remote', dest='remote', action='store_true',
-                        help='''upload the materials to Seq2Geno server and run the
-                        workflows''')
     parser.add_argument('--outzip', dest='pack_output',
                         choices=['none', 'all', 'main', 'g2p'],
                         default='none',
