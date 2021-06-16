@@ -135,12 +135,12 @@ def main(args, logger):
 
 
 if __name__ == '__main__':
-    logger = LogGenerator.make_logger()
-
-    logger.info('Parse arguments')
     parser = UserOptions.make_parser()
     primary_args = parser.parse_args()
+    # create logger
+    logger = LogGenerator.make_logger(primary_args.log_f)
     # check those primary arguments
+    logger.info('Parse arguments')
     args = UserOptions.parse_arg_yaml(primary_args.yml_f)
     args.print_args()
     # display the primary arguments only
@@ -157,15 +157,17 @@ if __name__ == '__main__':
                             new_zip_prefix=new_zip_prefix,
                             new_dir=new_dir,
                             logger=logger)
-        logger.info('Communicating with the server')
+        logger.info('Uploading the data')
         sg_crane = Crane.Seq2Geno_Crane(logger=logger)
         if not os.path.isdir(args.wd):
             os.makedirs(args.wd)
+        # launch the analyses
         sg_crane.launch(args.wd, new_zip_prefix+'.zip')
         logger.info('DONE (remote mode)')
     else:
         # run in local machine
         main(args, logger)
+        # pack the results orr not?
         if primary_args.pack_output == 'none':
             logger.info('Not packing the results')
         else:
@@ -189,6 +191,6 @@ if __name__ == '__main__':
             # ensure the zip file correctly generated
             if not os.path.isfile(output_zip):
                 raise IOError('zip not created')
-#            else:
-#                shutil.rmtree(new_dir)
+            else:
+                shutil.rmtree(new_dir)
         logger.info('DONE (local mode)')

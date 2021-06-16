@@ -1,9 +1,7 @@
 [submodule "denovo/lib/Roary"]
 	path = denovo/lib/Roary
 	url = https://github.com/hzi-bifo/Roary.git
-#[submodule "denovo/lib/jvarkit"]
-#	path = denovo/lib/jvarkit
-#	url = https://github.com/lindenb/jvarkit.git
+
 [submodule "lib/Geno2PhenoClient"]
 	path = lib/Geno2PhenoClient
 	url = https://github.com/hzi-bifo/Geno2PhenoClient.git

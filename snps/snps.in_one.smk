@@ -213,7 +213,7 @@ rule isolate_dict:
                     ','.join(empty_files)))
         except FileNotFoundError as e:
             sys.exit(str(e))
-        
+
         with open(output[0], 'w') as out_fh:
             out_fh.write('\n'.join(params.strains))
 
@@ -228,22 +228,41 @@ rule move_mapping_result:
         moved_bam_index = '{}/{{strain}}.bam.bai'.format(mapping_results_dir)
     shell:
         '''
-        mv {input.bam} {output.moved_bam}
-        mv {input.bam_index} {output.moved_bam_index}
+        ln -s $( realpath {input.bam} ) {output.moved_bam}
+        ln -s $( realpath {input.bam_index} ) {output.moved_bam_index}
         '''
 
-rule samtools_SNP_pipeline:
+
+rule call_var:
     # variant calling with samtools mpileup
+    input:
+        bam = '{strain}.bam',
+        bam_index = '{strain}.bam.bai',
+        reffile = ref_fasta
+    output:
+        raw_bcf = '{strain}.raw.bcf',
+        flt_vcf = '{strain}.flt.vcf'
+    threads:1
+    params:
+        min_depth = 0
+    conda: 'snps_tab_mapping.yml'
+    shell:
+        """
+        samtools mpileup -uf {input.reffile} {input.bam} | \
+bcftools view -bvcg - > {output.raw_bcf}
+        bcftools view {output.raw_bcf} | \
+vcfutils.pl varFilter -d {params.min_depth} > {output.flt_vcf}
+        """
+
+
+rule samtools_SNP_pipeline:
+    # mapping the reads 
     input:
         sam = '{strain}.sam',
         reffile = ref_fasta
     output:
-        bam = temp('{strain}.bam'),
-        bam_index = temp('{strain}.bam.bai'),
-        raw_bcf = '{strain}.raw.bcf',
-        flt_vcf = '{strain}.flt.vcf'
-    params:
-        min_depth = 0
+        bam = '{strain}.bam',
+        bam_index = '{strain}.bam.bai'
     threads:1
     conda: 'snps_tab_mapping.yml'
     shell:
@@ -251,20 +270,7 @@ rule samtools_SNP_pipeline:
         samtools view -bS {input.sam} > {output.bam}
         samtools sort {output.bam} {wildcards.strain}
         samtools index {output.bam}
-        samtools mpileup -uf {input.reffile} {output.bam} | \
-bcftools view -bvcg - > {output.raw_bcf}
-        bcftools view {output.raw_bcf} | \
-vcfutils.pl varFilter -d {params.min_depth} > {output.flt_vcf} 
         """
-#        sleep 10
-#	set +u
-#        export PERL5LIB=$CONDA_PREFIX/lib/perl5/site_perl/5.22.0:\
-#$CONDA_PREFIX/lib/perl5/5.22.2:\
-#$CONDA_PREFIX/lib/perl5/5.22.2/x86_64-linux-thread-multi/:\
-#$PERL5LIB
-#        echo $PERL5LIB
-#        my_samtools_SNP_pipeline {wildcards.strain} {input.reffile} {params.min_depth} 
-#	set -u
 
 
 rule bwa_pipeline_PE:
@@ -280,7 +286,7 @@ rule bwa_pipeline_PE:
         Rannofile = r_annot
     output:
         sam = temp('{strain}.sam'),
-        flatcount = '{strain}.flatcount',
+        flatcount = '{strain}.flatcount'
     params:
         sam2art_bin = 'sam2art.py'
     threads: 1
