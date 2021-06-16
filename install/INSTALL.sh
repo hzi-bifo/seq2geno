@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 export SEQ2GENO_HOME=$( realpath ../ )
 export PATH=$SEQ2GENO_HOME'/main:'$PATH
 echo 'SEQ2GENO_HOME is '$SEQ2GENO_HOME
