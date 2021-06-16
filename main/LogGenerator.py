@@ -28,5 +28,5 @@ def make_logger(log_f=''):
         log_fh = logging.FileHandler(filename=log_f)
         log_fh.setLevel(logging.DEBUG)
         log_fh.setFormatter(formatter)
-    logger.addHandler(log_fh)
+        logger.addHandler(log_fh)
     return(logger)
