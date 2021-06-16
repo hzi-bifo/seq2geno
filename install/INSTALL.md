@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 _You might want to run the same procedures by running INSTALL.sh_
 
 #### Step 1. check if Conda is installed and the channels (as described in ../README.md) are included 
