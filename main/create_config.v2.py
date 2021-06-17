@@ -2,8 +2,8 @@
 
 # SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 #
-# SPDX-License-Identifier: GPL3
-
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 # Purpose: Determine parameters and filepaths of intermediate data
 
 import os
@@ -17,9 +17,9 @@ def test_required_files(required_files):
                          (os.stat(required_files[f_name]).st_size > 0))}
     if len(bad_files) > 0:
         raise FileNotFoundError('\n' +
-            '\n'.join(['{}:{}'.format(
-                f_name, bad_files[f_name])
-                for f_name in bad_files]))
+                                '\n'.join(['{}:{}'.format(
+                                    f_name, bad_files[f_name])
+                                    for f_name in bad_files]))
 
 
 class phylo_args:

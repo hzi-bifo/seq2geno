@@ -2,10 +2,8 @@
 
 # SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 #
-# SPDX-License-Identifier: GPL3
-
-# Role: Front desk
-# Purpose:
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 # Parse the yaml file and pass the user's options to the package facade
 import yaml
 import os
@@ -16,9 +14,7 @@ import re
 
 
 class arguments:
-    '''
-    The object of arguments, as argparse is replaced
-    '''
+    # The object of arguments, as argparse is replaced
     def add_opt(self, **entries):
         self.__dict__.update(entries)
 
@@ -120,10 +116,13 @@ def make_parser():
                         help=(
                             "Pack the results into a zip file. Opt 'none' "
                             "for keeping the folder;\n'all' for packing "
-                            "everything, including the intermediate data;\n"
-                            "'main' for packing the main results;\n"
+                            "everything, including the intermediate data, and "
+                            "delete the working directory;\n"
+                            "'main' for packing the main results and deleting "
+                            "the working directory;\n"
                             "'g2p' for packing only those needed by the "
-                            "predictive package Geno2Pheno (automatically "
+                            "predictive package Geno2Pheno and deleting "
+                            "the workign directory (automatically "
                             "opted in the remote mode)"))
     return(parser)
 

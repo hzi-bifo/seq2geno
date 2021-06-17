@@ -2,7 +2,7 @@
 
 # SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 #
-# SPDX-License-Identifier: GPL3
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Determine, initiate and launch the workflows based on user-defined
 # arguments
@@ -14,6 +14,7 @@ from SGProcesses import SGProcess
 import UserOptions
 from CollectResults import collect_results
 import LogGenerator
+import shutil
 
 # ensure the core environment variable
 assert 'SEQ2GENO_HOME' in os.environ, 'SEQ2GENO_HOME not available'
@@ -149,29 +150,30 @@ if __name__ == '__main__':
     # run in local machine
     main(args, logger)
     # pack the results orr not?
-    if primary_args.pack_output == 'none':
-        logger.info('Not packing the results')
-    else:
-        output_zip = '{}.zip'.format(args.wd)
-        packer = SGOutputPacker(seq2geno_outdir=args.wd,
-                      output_zip=output_zip)
-        if primary_args.pack_output == 'all':
-            logger.info('Packing all data')
-            packer.pack_all_output()
-        elif primary_args.pack_output == 'main':
-            logger.info('Packing the main data')
-            packer.pack_main_output()
-        elif primary_args.pack_output == 'g2p':
-            logger.info('Packing data needed by Geno2Pheno')
-            gp_config_yml = '{}.yml'.format(args.wd)
-            project_name = os.path.basename(args.wd)
-            packer.make_gp_input_zip(gp_config=gp_config_yml,
-                                     project_name=project_name,
-                                     logger=logger)
-
-        # ensure the zip file correctly generated
-        if not os.path.isfile(output_zip):
-            raise IOError('zip not created')
+    if args.dryrun != 'Y':
+        if primary_args.pack_output == 'none':
+            logger.info('Not packing the results')
         else:
-            shutil.rmtree(new_dir)
-        logger.info('DONE (local mode)')
+            output_zip = '{}.zip'.format(args.wd)
+            packer = SGOutputPacker(seq2geno_outdir=args.wd,
+                                    output_zip=output_zip)
+            if primary_args.pack_output == 'all':
+                logger.info('Packing all data')
+                packer.pack_all_output()
+            elif primary_args.pack_output == 'main':
+                logger.info('Packing the main data')
+                packer.pack_main_output()
+            elif primary_args.pack_output == 'g2p':
+                logger.info('Packing data needed by Geno2Pheno')
+                gp_config_yml = '{}.yml'.format(args.wd)
+                project_name = os.path.basename(args.wd)
+                packer.make_gp_input_zip(gp_config=gp_config_yml,
+                                         project_name=project_name,
+                                         logger=logger)
+
+            # ensure the zip file correctly generated
+            if not os.path.isfile(output_zip):
+                raise IOError('zip not created')
+            else:
+                shutil.rmtree(args.wd)
+            logger.info('DONE (local mode)')

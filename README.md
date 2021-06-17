@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Seq2Geno
 
 An integrated tool for microbial sequence analyses. The methods are refactored
@@ -28,7 +34,7 @@ This repository includes:
 - phylo: the scripts for phylogenetic tree inference
 - difexpr: the methods for identifying differentially expressed genes with the
   expression levels matrix
-- cont_anc_rcn: ancestral reconstruction for continuous data such as expression levels
+- cont\_anc\_rcn: ancestral reconstruction for continuous data such as expression levels
 
 ### <a name="functions"></a>Available functions
 - detect single nucleotide variants
@@ -40,7 +46,7 @@ This repository includes:
 - reconstruct ancestral values of expression level (additional data that won't be used by Geno2Pheno)
 
 ### <a name="install"></a>Installation of standalone package
-- Prerequisites
+1. Check the prerequisites
 
     - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.10.0)
     - file [.condarc](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-channels.html) that includes these channels and is detectable by your conda
@@ -53,57 +59,48 @@ This repository includes:
     - [Linux](https://www.cyberciti.biz/faq/find-linux-distribution-name-version-number/) (tested version: Debian GNU/Linux 8.8 jessie)
     - [git](https://git-scm.com/downloads) (tested version: 2.21)
 
-- Installation of Seq2Geno
+2. Download this package
 
-	Seq2Geno doen't need compilation. Therefore, you will only need to clone Seq2Geno:
-	```
-	git clone --recurse-submodules https://github.com/hzi-bifo/seq2geno.git
-	cd seq2geno
-	git submodule update --init --recursive
-	```
+```
+git clone --recurse-submodules https://github.com/hzi-bifo/seq2geno.git
+cd seq2geno
+git submodule update --init --recursive
+```
 
-	The option `--recurse-submodules` helps to download the submodules that are located at another repository (i.e. Seq2Geno and Geno2Pheno). The flag is available only in git version >2.13, and users of earlier git versions may need to find the substitute.  
+The option **--recurse-submodules** helps to download the submodules that are located at another repository (i.e. Seq2Geno and Geno2Pheno). The flag is available only in git version >2.13, and users of earlier git versions may need to find the substitute. After downloaded, *main/seq2geno* and *main/seq2geno_gui* are the executable scripts for Seq2Geno. 
 
-- Installation of the environments 
+3. In case you encounter problems or want to ensure the environment, this repository includes automatic tools: 
 
-Please go to `install/` and either use the `INSTALL.sh` or follow the manual `INSTAL.md`. 
+- For only ensuring the environemnt:
+
+You might want to use the automatic tool *install/SETENV.sh* or follow the steps in *install/README.md*. The methods will help you to set environment variables, check python packages, etc.
+
+- Set up the environment and install the process-specific software
+
+You might want to use the automatic tool *install/INSTALL.sh* or follow the steps in *install/README.md*. Besides those covered by *install/SETENV.sh*, this script will help you to further download the process-specific software such as samtools, etc.
+
 
 ### <a name="usage"></a>Usage and Input
 
 The graphical user interface (GUI) `seq2geno_gui` and the command line `seq2geno` can be either launched using the launcher `S2G`, put under the home folder of seq2geno, or found in the main folder. When no argument is set for `S2G`, the GUI will be launched; otherwise, it passes arguments to the command line tool:
 
-```
-  S2G -d -f [options_yaml] -l [log_file]
-```
-
 Please read the subset about [command line](#commandline) for more information.
  
-
-To use the two interfaces without the launcher, please remeber to activate the core environment:
-
-```
-conda activate snakemake_env
-``` 
-
-or 
-```
-source activate snakemake_env
-```
 
 . More information about usages are listed below.
 
 - <a name="gui"></a>GUI
 
-Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. To learn more, please read the the manual `doc/GUI_manual.pdf`.
+The commands `S2G` or `seq2geno_gui` will launch the graphic user interface. Use the tool `seq2geno_gui` to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. To learn more, please read the the manual `doc/GUI_manual.pdf`.
 
 - <a name="commandline"></a>command line
 
 The input for seq2geno is a single yaml file describing all arguments:
 ```
-  seq2geno -d -f [options_yaml] -l [log_file]
+S2G -d -f [options_yaml] -l [log_file] --outzip [output_zip_type]
 ```
 
-The [options\_yaml] describes all the options and input data for Seq2Geno. The [log\_file] should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr.
+The [options\_yaml] describes all the options and input data for Seq2Geno. The [log\_file] should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr. The [output\_zip\_type] specifies whether or how the output results should be packed into an zip file.
 
 - <a name="args"></a>arguments
 

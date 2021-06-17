@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 # To submit the data to Seq2Geno server, this script helps to
 # pack the data, write new config file, and finally generate a zip file
 import shutil
