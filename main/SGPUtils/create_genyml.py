@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
+
+# Folder -> check if absent or empty
+# File -> check if absent
 import argparse
 import yaml
 import os
+from LoadFile import LoadFile
 
 
-class Items(list):
-    pass
-
-
-def items_representer(dumper, data):
-    return dumper.represent_sequence('tag:yaml.org,2002:seq',
-                                     data, flow_style=True)
-
-
-def make_parser():
+def parse_usr_opts():
     parser = argparse.ArgumentParser(
             formatter_class=argparse.RawTextHelpFormatter,
             description='create yaml file from Seq2Geno output for Geno2Pheno')
@@ -24,12 +19,10 @@ def make_parser():
                         help='seq2geno project folder', required=True)
     parser.add_argument('--yaml', dest='yaml',
                         help='the yaml file to be generated', required=True)
-    parser.add_argument('--proj', dest='proj',
-                        help='project name', default='sgp')
 
     # prediction block
     pred_args = parser.add_argument_group('predict')
-    pred_args.add_argument('--opt', dest='optimize', default='f1_macro',
+    pred_args.add_argument('--opt', dest='optimize', default=['f1_macro'],
                            help='target performance metric to optimize',
                            choices=['accuracy', 'f1_pos', 'f1_macro'])
     pred_args.add_argument('--fold_n', dest='fold_n',
@@ -42,129 +35,112 @@ def make_parser():
                            help='method to partition dataset',
                            choices=['rand'])
     pred_args.add_argument('--models', dest='models', nargs='*',
-                           default=['rf', 'svm'],
+                           default=['svm'],
                            help='machine learning algorithms',
                            choices=['lsvm', 'svm', 'rf', 'lr'])
     pred_args.add_argument('--k-mer', dest='kmer', type=int,
                            help='the k-mer size for prediction',
                            default=6)
     pred_args.add_argument('--cls', dest='classes_f',
-                           help='''a two-column file to specify labels and
-                           prediction groups''')
+                           help='''a two-column file to specify label
+                           and prediction group''')
     pred_args.add_argument('--cpu', dest='cpu', type=int, default=1,
                            help='number of cpus for parallel computation')
-    return(parser)
 
-
-def parse_usr_opts():
-    parser = make_parser()
     args = parser.parse_args()
     return(args)
 
 
 def make_genyml(args):
     blocks = dict()
-    sg_abs_path = os.path.abspath(args.sg)
-
-    ####
-    # metadata block
-    ####
+    # ###
+    # # metadata block
+    # ###
     blocks['metadata'] = dict(
-        project=args.proj,
-        phylogenetic_tree=os.path.join(sg_abs_path, 'RESULTS',
-                                       'phylogeny',
-                                       'tree.nwk'),
-        phenotype_table=os.path.join(sg_abs_path, 'RESULTS',
-                                     'phenotype',
-                                     'phenotypes.mat'),
-        output_directory='results/',
+        project='sgp',
+        phylogenetic_tree=os.path.abspath(os.path.join(args.sg, 'RESULTS',
+                                                       'phylogeny',
+                                                       'tree.nwk')),
+        phenotype_table=os.path.abspath(os.path.join(args.sg, 'RESULTS',
+                                                     'phenotype',
+                                                     'phenotypes.mat')),
         number_of_cores=args.cpu
     )
-    ####
-    # genotype tables
-    ####
-    poss_tabs = [
-        dict(sequence=dict(
-            name='{}mer'.format(str(args.kmer)),
-            path=os.path.join(sg_abs_path, 'RESULTS', 'assemblies'),
+    # ###
+    # # genotype tables
+    # ###
+    # example:
+    # dict(
+    #         table= 'gpagenexp',
+    #         path=
+    #         "/Users/vwr33vv/Documents/project_outputs/geno2pheno/new_test/reproduce/features/features/Tobramycin_S-vs-R_features_gpa_expr.txt",
+    #         preprocessing= 'none',
+    #         datatype= 'text'
+    #     )
+    poss_tabs = {
+        'kmer': dict(
+            path=os.path.join(args.sg, 'RESULTS', 'assemblies'),
             preprocessing='l1',
-            k_value=args.kmer)),
-        dict(table=dict(
-            name='gpa',
-            delimiter='\t',
-            path=os.path.join(sg_abs_path, 'RESULTS', 'bin_tables',
-                              'gpa.mat_NONRDNT'),
-            preprocessing='binary',
-            datatype='numerical')),
-        dict(table=dict(
-            name='indel',
-            delimiter='\t',
-            path=os.path.join(sg_abs_path, 'RESULTS', 'bin_tables',
-                              'indel.mat_NONRDNT'),
-            preprocessing='binary',
-            datatype='numerical')),
-        dict(table=dict(
-            name='snp',
-            delimiter='\t',
-            path=os.path.join(sg_abs_path, 'RESULTS', 'bin_tables',
-                              'nonsyn_SNPs_final.bin.mat_NONRDNT'),
-            preprocessing='binary',
-            datatype='numerical')),
-        dict(table=dict(
-            name='expr',
-            delimiter='\t',
-            path=os.path.join(sg_abs_path, 'RESULTS',
-                              'num_tables/expr.log.mat'),
+            k_value=args.kmer),
+        'gpa': dict(
+            path=os.path.join(args.sg, 'RESULTS',
+                              'bin_tables/gpa.mat_NONRDNT'),
+            table='gpa',
             preprocessing='none',
-            datatype='numerical'))]
-    blocks['genotype_tables'] = dict(tables=[])
-    for t in poss_tabs:
-        if 'table' in t:
-            if os.path.isfile(t['table']['path']):
-                blocks['genotype_tables']['tables'].append(t)
-        elif 'sequence' in t:
-            if os.path.isdir(t['sequence']['path']):
-                blocks['genotype_tables']['tables'].append(t)
+            datatype='text'),
+        'indel': dict(
+            path=os.path.join(args.sg, 'RESULTS',
+                              'bin_tables/indel.mat_NONRDNT'),
+            table='indel',
+            preprocessing='none',
+            datatype='text'),
+        'snp': dict(
+            path=os.path.join(args.sg, 'RESULTS',
+                              'bin_tables/nonsyn_SNPs_final.bin.mat_NONRDNT'),
+            table='snp',
+            preprocessing='none',
+            datatype='text'),
+        'expr': dict(
+            path=os.path.join(args.sg, 'RESULTS', 'num_tables/expr.log.mat'),
+            table='expr',
+            preprocessing='none',
+            datatype='numerical')}
+    blocks['genotype_tables'] = dict(
+        tables=[poss_tabs[t] for t in poss_tabs
+                if (os.path.isfile(poss_tabs[t]['path'])
+                    | os.path.isdir(poss_tabs[t]['path']))]
+    )
+    # ###
+    # # prediction block
+    # ###
 
-    ####
-    # prediction block
-    ####
     def parse_classes(classes_f):
         classses_dict = {}
         if args.classes_f is None:
-            classses_dict = {1: 1, 0: 0}
+            classses_dict = {'1': '1', '0': '0'}
         else:
-            with open(classes_f, 'r') as cls_fh:
+            with LoadFile(classes_f) as cls_fh:
                 for line in cls_fh:
                     d = line.strip().split('\t')
                     classses_dict[str(d[0])] = d[1]
         return(classses_dict)
 
-    available_feat_names = [t['table']['name']
-                            if 'table' in t else t['sequence']['name']
-                            for t in blocks['genotype_tables']['tables']]
     blocks['predictions'] = [dict(
-        prediction=dict(
-            name=os.path.basename(sg_abs_path),
-            label_mapping=parse_classes(args.classes_f),
-            optimized_for=str(args.optimize),
-            reporting=Items(['accuracy', 'f1_pos', 'f1_macro']),
-            features=[
-                dict(feature="seq2geno_feats",
-                     list=Items(available_feat_names),
-                     validation_tuning=dict(
-                         name='cv_tree',
-                         train={'method': "treebased", 'folds': 10},
-                         test={'method': "treebased", 'ratio': 0.10},
-                         inner_cv=10))],
-            classifiers=args.models
-        ))]
+        prediction=args.sg.strip('/').split('/')[-1],
+        label_mapping=parse_classes(args.classes_f),
+        optimized_for=args.optimize,
+        reporting=['accuracy', 'f1_pos', 'f1_macro'],
+        features=[dict(
+            feature="seq2geno_feats",
+            list=list(poss_tabs.keys()),
+            use_validation_tuning='cv_tree')],
+        classifiers={line: ("%(config)%/scikit_models/{}/"
+                            "test_{}.json").format(line, line)
+                     for line in args.models}
+    )]
     yaml_f = args.yaml
-    with open(yaml_f, 'w') as outfile:
-        yaml.representer.SafeRepresenter.add_representer(
-            Items, items_representer)
-        yaml.safe_dump(blocks, outfile, default_flow_style=False,
-                       sort_keys=False)
+    with LoadFile(yaml_f) as outfile:
+        yaml.dump(blocks, outfile, default_flow_style=False)
 
 
 if __name__ == '__main__':

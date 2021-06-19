@@ -2,6 +2,7 @@
 
 # SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 #
+# SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-License-Identifier: GPL3
 
 # Determine, initiate and launch the workflows based on user-defined
@@ -172,6 +173,4 @@ if __name__ == '__main__':
         # ensure the zip file correctly generated
         if not os.path.isfile(output_zip):
             raise IOError('zip not created')
-        else:
-            shutil.rmtree(new_dir)
         logger.info('DONE (local mode)')

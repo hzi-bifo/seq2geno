@@ -2,6 +2,7 @@
 
 # SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 #
+# SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-License-Identifier: GPL3
 
 # Role: Front desk
@@ -13,6 +14,7 @@ from pprint import pprint
 import sys
 import argparse
 import re
+from LoadFile import LoadFile
 
 
 class arguments:
@@ -64,7 +66,7 @@ def parse_arg_yaml(yml_f):
     # read the arguments
     # flatten the structure
     opt_dict = {}
-    with open(yml_f, 'r') as yml_fh:
+    with LoadFile(yml_f) as yml_fh:
         opt_dict = yaml.safe_load(yml_fh)
     # reuse the old config files
     if not ('old_config' in opt_dict['general']):
@@ -87,7 +89,7 @@ def check_primary_args(primary_args):
         primary_args.pack_output = 'g2p'
     # When the log file is used, merging the stdout and stderr
     if primary_args.log_f != '':
-        sys.stdout = open(primary_args.log_f, 'w')
+        sys.stdout = LoadFile(primary_args.log_f)
         sys.stderr = sys.stdout
 
     # the yml file must exist

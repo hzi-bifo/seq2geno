@@ -13,10 +13,11 @@
 # - list of differntially expressed genes
 
 import yaml
+from LoadFile import LoadFile
 DIF_XPR_OUT = config['out_dir']
 PHE_TABLE_F = config['pheno_tab']
 expr_config_f = config['expr_config']
-expr_config = yaml.load(open(expr_config_f, 'r'))
+expr_config = yaml.load(LoadFile(expr_config_f))
 EXPR_OUT = os.path.join(os.path.dirname(expr_config_f),
     expr_config['out_table'])
 DIFXPR_ALPHA = config['alpha']

@@ -31,6 +31,7 @@ aln_f = args.i
 out_f = args.o
 cutoff = int(args.cutoff_num)
 case = args.case_sensitive
+
 aln = SeqIO.to_dict(SeqIO.parse(aln_f, 'fasta'))
 
 # detect invariant sites

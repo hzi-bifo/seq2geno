@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# activate the environment
+source activate test_snakemake_py37_env || conda activate test_snakemake_py37_env
+#source activate snakemake_py37_env || conda activate snakemake_py37_env
+#source activate snakemake_env || conda activate snakemake_env
+if [ $# -eq 0 ];then
+	seq2geno_gui
+else
+	seq2geno.py $@
+fi
+source deactivate || conda deactivate
+

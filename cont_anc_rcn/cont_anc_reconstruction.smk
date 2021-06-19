@@ -16,10 +16,11 @@
 
 import os
 import yaml
+from LoadFile import LoadFile
 expr_config_f = config['expr_config']
 phylo_config_f = config['phylo_config']
-expr_config = yaml.load(open(expr_config_f, 'r'))
-phylo_config = yaml.load(open(phylo_config_f, 'r'))
+expr_config = yaml.load(LoadFile(expr_config_f))
+phylo_config = yaml.load(LoadFile(phylo_config_f))
 EXPR_OUT = os.path.join(os.path.dirname(expr_config_f),
     expr_config['out_table'])
 TREE_OUT = os.path.join(os.path.dirname(phylo_config_f),
@@ -36,7 +37,7 @@ rule cont_anc_reconstruction:
     input:
         tree_f = TREE_OUT,
         data_f = EXPR_OUT
-    output: 
+    output:
         output_dir = directory(C_ANCREC_OUT)
     conda: 'ar_env.yml'
     script: 'contAncRec.R'

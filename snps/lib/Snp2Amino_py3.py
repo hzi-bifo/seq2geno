@@ -4,13 +4,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-'''
-Rewritten and restyled from the old script by spo12 2013
-    - removing global variables
-    - python3
-    - encapsulating repeated commands into functions
-    - improving readibility for maintenance
-'''
+# Rewritten and restyled from the old script by spo12 2013
+#     - removing global variables
+#     - python3
+#     - encapsulating repeated commands into functions
+#     - improving readibility for maintenance
 
 import math
 import argparse
@@ -21,6 +19,31 @@ from Bio.Seq import Seq
 import logging
 from collections import defaultdict
 import re
+def LoadFile(f):
+    # The files might have different encoding methods
+    # To void the problem, this is a generalized loader to create file handels
+    encoding_set = ['utf-8', 'latin1', 'windows-1252']
+    right_encoding = encoding_set.pop()
+    fh = open(f, 'r', encoding=right_encoding)
+    found = False
+    while (not found) and (len(encoding_set) > 0):
+        try:
+            # test whether the file can be read
+            fh.readlines()
+            found = True
+        except UnicodeDecodeError:
+            # shift the decoding to the next
+            right_encoding = encoding_set.pop()
+        finally:
+            # open the file with either the same or another decoding method
+            fh.close()
+            fh = open(f, 'r', encoding=right_encoding)
+
+    if found:
+        return(fh)
+    else:
+        raise UnicodeDecodeError(
+            'The encodings of {} is not recognizable'.format(f))
 
 
 def write_aa_table(out_f, SnpDict, nonsyn, head):
@@ -46,14 +69,12 @@ def write_aa_table(out_f, SnpDict, nonsyn, head):
 
 
 def determine_pos(snp, gene, strand, GenDict):
-    '''
-    Be careful about the positions because division in python3 and python2
-    differ. Python2 division for integers applies floor after the division.
-    For example, in python2:
-    38/3 == 12
-    However in python3:
-    38/3 == 12.6666666667
-    '''
+    # Be careful about the positions because division in python3 and python2
+    # differ. Python2 division for integers applies floor after the division.
+    # For example, in python2:
+    # 38/3 == 12
+    # However in python3:
+    # 38/3 == 12.6666666667
     ref = -1
     alt = -1
     snppos = -1
@@ -121,7 +142,9 @@ def count_aminoacids(SnpDict, GenDict):
 def read_gb(gb_f, SnpDict):
     logging.info("Reading GBK file.")
     GenDict = {}
-    for seq_record in SeqIO.parse(gb_f, "genbank"):
+    gb_fh = LoadFile(gb_f)
+
+    for seq_record in SeqIO.parse(gb_fh, "genbank"):
         sequence = seq_record.seq
         if isinstance(sequence, Bio.Seq.UnknownSeq):
             sys.exit(
@@ -142,6 +165,7 @@ def read_gb(gb_f, SnpDict):
                                 seq_record.seq[start:end].reverse_complement())
                         GenDict[locus] = [int(start), int(end),
                                           gene_seq, strand]
+    gb_fh.close()
     return(GenDict)
 
 

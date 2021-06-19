@@ -19,11 +19,36 @@
 import pandas as pd
 from snakemake.utils import validate
 import re
+def LoadFile(f):
+    # The files might have different encoding methods
+    # To void the problem, this is a generalized loader to create file handels
+    encoding_set = ['utf-8', 'latin1', 'windows-1252']
+    right_encoding = encoding_set.pop()
+    fh = open(f, 'r', encoding=right_encoding)
+    found = False
+    while (not found) and (len(encoding_set) > 0):
+        try:
+            # test whether the file can be read
+            fh.readlines()
+            found = True
+        except UnicodeDecodeError:
+            # shift the decoding to the next
+            right_encoding = encoding_set.pop()
+        finally:
+            # open the file with either the same or another decoding method
+            fh.close()
+            fh = open(f, 'r', encoding=right_encoding)
+
+    if found:
+        return(fh)
+    else:
+        raise UnicodeDecodeError(
+            'The encodings of {} is not recognizable'.format(f))
 
 # parse the list of reads
 list_f = config['list_f']
 dna_reads = {}
-with open(list_f, 'r') as list_fh:
+with LoadFile(list_f) as list_fh:
     for l in list_fh.readlines():
         if re.match('#', l):
             continue
@@ -179,7 +204,6 @@ rule include_aa_into_table:
     params:
         to_aa_tool = 'Snp2Amino_py3.py'
     threads: 1
-    conda: 'snps_tab_mapping.yml'
     shell:
         """
         {params.to_aa_tool} -f {input.snps_table} -g {input.ref_gbk} \

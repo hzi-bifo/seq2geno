@@ -17,7 +17,8 @@ def run(f_l, out_d, stats_f):
 
     families = {}
     # parse the list of files per strain
-    for line in open(f_l, 'r'):
+    f_lh = open(f_l, 'r')
+    for line in f_lh.readlines():
         strain, f = line.strip().split('\t')
         records = SeqIO.parse(f, 'fasta')
         for rec in records:
@@ -32,6 +33,8 @@ def run(f_l, out_d, stats_f):
             else:
                 families[family_name] = [rec]
 
+    f_lh.close()
+
     # write sequences per family
     for f in families:
         SeqIO.write(families[f], os.path.join(out_d, f+'.fa'), 'fasta')
@@ -43,7 +46,6 @@ def run(f_l, out_d, stats_f):
         max_l = int(max(lengths))
         min_l = int(min(lengths))
         stats_fh.write('{}\t{}\t{}\n'.format(f, min_l, max_l))
-
     stats_fh.close()
 
 

@@ -18,10 +18,37 @@
 #
 import os
 import pandas as pd
+def LoadFile(f):
+    # The files might have different encoding methods
+    # To void the problem, this is a generalized loader to create file handels
+    encoding_set = ['utf-8', 'latin1', 'windows-1252']
+    right_encoding = encoding_set.pop()
+    fh = open(f, 'r', encoding=right_encoding)
+    found = False
+    while (not found) and (len(encoding_set) > 0):
+        try:
+            # test whether the file can be read
+            fh.readlines()
+            found = True
+        except UnicodeDecodeError:
+            # shift the decoding to the next
+            right_encoding = encoding_set.pop()
+        finally:
+            # open the file with either the same or another decoding method
+            fh.close()
+            fh = open(f, 'r', encoding=right_encoding)
+
+    if found:
+        return(fh)
+    else:
+        raise UnicodeDecodeError(
+            'The encodings of {} is not recognizable'.format(f))
+
+
 # parse the list of reads
 list_f = config['list_f']
 dna_reads = {}
-with open(list_f, 'r') as list_fh:
+with LoadFile(list_f) as list_fh:
     for l in list_fh.readlines():
         if re.match('#', l):
             continue
@@ -70,6 +97,7 @@ rule remove_redundant_feat:
 
 rule make_annotation:
     input:
+        gpa_csv = os.path.join(out_roary_dir, 'gene_presence_absence.csv'),
         ref_gff = REF_GFF,
         anno_f = annot_tab
     output:
@@ -306,10 +334,10 @@ $ROARY_HOME/build/bedtools2/lib:$PERL5LIB
 
 rule create_gff:
     # Detect coding regions 
-    input: 
+    input:
         contigs = os.path.join(out_spades_dir,'{strain}', 'contigs.fasta')
-    output: 
-        os.path.join(out_prokka_dir, '{strain}', '{strain}.gff'), 
+    output:
+        os.path.join(out_prokka_dir, '{strain}', '{strain}.gff'),
         os.path.join(out_prokka_dir, '{strain}', '{strain}.ffn')
     threads: 1
     #conda: 'perl_for_prokka.yml'

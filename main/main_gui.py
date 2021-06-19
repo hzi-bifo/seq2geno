@@ -2,6 +2,7 @@
 
 # SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 #
+# SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-License-Identifier: GPL3
 
 # Parse the arguments through the GUI
@@ -19,6 +20,7 @@ from pprint import pprint
 import subprocess
 
 import UserOptions
+from LoadFile import LoadFile
 # >>>>
 # Appearance attributes
 # fieldname_font=("Helvetica",12,"bold")
@@ -281,7 +283,7 @@ def make_arguments_for_main(func_dict, config_dict, argspace):
 
 
 def read_arguments_space(as_f):
-    as_fh = open(as_f, 'r')
+    as_fh = LoadFile(as_f)
     args = yaml.safe_load(as_fh)
     as_fh.close()
     return(args)
@@ -332,7 +334,7 @@ def write_yaml(func_dict, config_dict):
                                          initialdir='.')
     if len(yml_f) > 0:
         primary_dict['yml_f'].set(yml_f)
-        with open(yml_f, 'w') as yml_fh:
+        with LoadFile(yml_f) as yml_fh:
             yaml.safe_dump(arg_dict, yml_fh)
         return(yml_f)
 
@@ -342,8 +344,6 @@ def load_old_log(out):
     Read the old log file to allow the user to know the current status
     '''
     # open the log file
-    import UserOptions 
-    import os
     log_f = filedialog.askopenfilename(title='select file',
                                        initialdir='.',
                                        filetypes=[('log', '*.log'),
@@ -353,7 +353,7 @@ def load_old_log(out):
     # print the information in the log file
     yml_f = ''
     out.delete('1.0', tk.END)
-    with open(log_f, 'r') as log_fh:
+    with LoadFile(log_f) as log_fh:
         for l in log_fh.readlines():
             is_config_line = re.search('#CONFIGFILE:(.+)', l.strip())
             if is_config_line is not None:
@@ -484,7 +484,7 @@ class seq2geno_gui:
             label.configure(font=('nimbus mono l', 12))
             label.pack(side="top", fill=tk.X)
             popup_msgframe.pack(side=tk.TOP)
-            for l in open(f, 'r').readlines():
+            for l in LoadFile(f).readlines():
                 label.insert(tk.END, l)
             popup_butframe = ttk.Frame(popup)
             end_but = ttk.Button(popup_butframe, text="okay",

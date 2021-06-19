@@ -11,6 +11,7 @@ import argparse
 from main.UserOptions import main as AskArg
 from main.UserOptions import arguments, make_parser
 from main.UserOptions import parse_arg_yaml, check_primary_args
+from LoadFile import LoadFile
 
 
 def test_material(f):
@@ -30,7 +31,7 @@ def move_data(config_f, new_zip_prefix, new_dir,
         logger.error('{} not found')
         raise FileNotFoundError
     new_config_yaml_dict = {}
-    with open(config_f, 'r') as config_fh:
+    with LoadFile(config_f) as config_fh:
         config_yaml_dict = yaml.safe_load(config_fh)
         new_config_yaml_dict = config_yaml_dict
     # fix the paths because the server will need to go editting them
@@ -81,7 +82,7 @@ def move_data(config_f, new_zip_prefix, new_dir,
         os.makedirs(redirected_reads_dir)
     dna_reads = {}
     new_dna_reads = {}
-    list_lines = open(list_f, 'r').readlines()
+    list_lines = LoadFile(list_f).readlines()
     for line in tqdm(list_lines):
         d = line.strip().split('\t')
         dna_reads[d[0]] = d[1].split(',')
@@ -123,7 +124,7 @@ def move_data(config_f, new_zip_prefix, new_dir,
             os.makedirs(redirected_rna_reads_dir)
         rna_reads = {}
         new_rna_reads = {}
-        rna_list_lines = open(rna_list_f, 'r').readlines()
+        rna_list_lines = LoadFile(rna_list_f).readlines()
         for line in tqdm(rna_list_lines):
             d = line.strip().split('\t')
             rna_reads[d[0]] = d[1]

@@ -5,18 +5,36 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
 import re
 import argparse
+def LoadFile(f):
+    # The files might have different encoding methods
+    # To void the problem, this is a generalized loader to create file handels
+    encoding_set = ['utf-8', 'latin1', 'windows-1252']
+    right_encoding = encoding_set.pop()
+    fh = open(f, 'r', encoding=right_encoding)
+    found = False
+    while (not found) and (len(encoding_set) > 0):
+        try:
+            # test whether the file can be read
+            fh.readlines()
+            found = True
+        except UnicodeDecodeError:
+            # shift the decoding to the next
+            right_encoding = encoding_set.pop()
+        finally:
+            # open the file with either the same or another decoding method
+            fh.close()
+            fh = open(f, 'r', encoding=right_encoding)
 
-# arg_formatter = lambda prog: argparse.RawTextHelpFormatter(prog,
-#         max_help_position=4, width = 80)
-
-class arg_formatter(argparse.RawTextHelpFormatter):
-    width= 80
+    if found:
+        return(fh)
+    else:
+        raise UnicodeDecodeError(
+            'The encodings of {} is not recognizable'.format(f))
 
 parser = argparse.ArgumentParser(
-    formatter_class=arg_formatter,
+    formatter_class=argparse.RawTextHelpFormatter,
     description='create annotation table')
 parser.add_argument('-r', dest='ref_gbk', type=str,
                     help='the reference genbank file')
@@ -31,7 +49,7 @@ ref_strain = args.ref_name
 out_f = args.out_f
 
 # read the gbk
-rec = SeqIO.read(open(gbk_f, 'r', encoding='windows-1252'), 'gb')
+rec = SeqIO.read(LoadFile(gbk_f), 'gb')
 chr_len = str(len(rec.seq))
 acc = rec.id
 sequence_type = 'Chromosome'
