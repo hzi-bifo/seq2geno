@@ -9,7 +9,7 @@ import os
 def make_logger(log_f=''):
     logging.basicConfig()
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     log_sh = logging.StreamHandler()
     # set the level of messages to report
     log_sh.setLevel(logging.DEBUG)
