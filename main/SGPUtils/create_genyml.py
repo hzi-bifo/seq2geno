@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-# Folder -> check if absent or empty
-# File -> check if absent
+# SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import argparse
 import yaml
 import os

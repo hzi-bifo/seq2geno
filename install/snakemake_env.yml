@@ -43,6 +43,7 @@ dependencies:
   - cffi=1.14.5=py37hc58025e_0
   - chardet=4.0.0=py37h89c1867_1
   - coincbc=2.10.5=hcee13e7_1
+  - conda=4.10.1=py37h89c1867_0
   - conda-package-handling=1.7.3=py37h5e8e339_0
   - configargparse=1.4.1=pyhd8ed1ab_0
   - connection_pool=0.0.3=pyhd3deb0d_0
@@ -143,6 +144,7 @@ dependencies:
   - logmuse=0.2.6=pyh8c360ce_0
   - lz4-c=1.9.3=h9c3ff4c_0
   - lzo=2.10=h516909a_1000
+  - mamba=0.13.0=py37h7f483ca_0
   - markupsafe=2.0.1=py37h5e8e339_0
   - more-itertools=8.8.0=pyhd8ed1ab_0
   - msrest=0.6.21=pyh44b312d_0

@@ -1,22 +1,18 @@
 # SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-# SPDX-License-Identifier: GPL3
-
-# Role: Workers
-# Purpose: Define the class of workflow
+# Define the class of workflow
 
 import os
 import psutil
 import sys
-from datetime import datetime
 import snakemake
 import re
 import pandas as pd
 
 
 class SGProcess:
-    # The class for each workflow 
+    # The class for each workflow
     # run_proc: execute the workflow
     # EditEnv: update the environment variables
     def __init__(self, wd, proc,

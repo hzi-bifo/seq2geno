@@ -21,7 +21,7 @@ def collect_results(project_dir, config_files):
     diffexpr_config = config_files['de']
 
     # de novo assemblies
-    d_config = yaml.safe_load(LoadFile(denovo_config))
+    d_config = yaml.safe_load(open(denovo_config, 'r'))
     assem_newdir = os.path.join(results_newdir, 'assemblies')
     assem_outdir = os.path.join(os.path.dirname(denovo_config),
                                 d_config['out_spades_dir'])
@@ -39,8 +39,10 @@ def collect_results(project_dir, config_files):
     os.mkdir(bin_tab_newdir)
     s_config = yaml.safe_load(open(snps_config, 'r'))
     bin_tables = [
-        os.path.join(os.path.dirname(denovo_config), d_config['out_gpa_f']),
-        os.path.join(os.path.dirname(denovo_config), d_config['out_indel_f']),
+        os.path.join(os.path.dirname(denovo_config),
+                     d_config['out_gpa_f']),
+        os.path.join(os.path.dirname(denovo_config),
+                     d_config['out_indel_f']),
         os.path.join(os.path.dirname(snps_config),
                      s_config['snps_aa_bin_mat']),
         os.path.join(os.path.dirname(snps_config),
@@ -69,9 +71,10 @@ def collect_results(project_dir, config_files):
     if os.path.isfile(phylo_nwk):
         os.symlink(os.path.abspath(phylo_nwk), new)
 
-    ####
+    # ###
     # optional
     # need to check existence before collecting them
+    #
     # expr
     e_config = yaml.safe_load(open(expr_config, 'r'))
     expr_mat = os.path.join(os.path.dirname(expr_config),

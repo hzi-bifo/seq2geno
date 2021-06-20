@@ -80,9 +80,6 @@ fi
 source $( dirname $( dirname $( which conda ) ) )/etc/profile.d/conda.sh
 conda activate snakemake_env || source activate snakemake_env
 set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
-set_roary_dependencies || { echo "Errors in installation of Roary dependecies"; exit; }
-download_proc_specific_env || { echo "Errors in installation of the process-specific environments failed"; exit; }
-conda deactivate || source deactivate
 
 ## Finalize
 export SEQ2GENO_HOME=$( realpath ../ )
@@ -90,6 +87,6 @@ export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
 chmod +x $SEQ2GENO_HOME/main/S2G
 mv $SEQ2GENO_HOME/main/S2G $SEQ2GENO_HOME
 echo '-----'
-echo 'Environment set and dependencies installed! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
+echo 'Environment set! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
 echo '- copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable '
 echo '- go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'

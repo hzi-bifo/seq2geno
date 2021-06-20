@@ -4,7 +4,9 @@ SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-_You might want to run the same procedures by running INSTALL.sh_
+You can either use **SETENV.sh** (for only setting up the environment and ensuring python apckages) 
+or **INSTALL.sh** (for downloading all process-specific software once) to automatlically set up 
+everything. Alternatively, you can follow the instruction below:
 
 #### Step 1. check if Conda is installed and the channels (as described in ../README.md) are included 
 #### Step 2. check where seq2geno home folder is
@@ -65,6 +67,6 @@ seq2geno -f ./seq2geno_inputs.yml
 
 #### Step 7. 
 
-Environments installed! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: 
+Environment set and dependencies installed! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: 
 - for the convenience, copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable; alternatively, add `$SEQ2GENO_HOME/main` to your PATH variable and edit either `~/.profile` or `~/.bashrc` accordingly
 - go to '$SEQ2GENO_HOME'/example_sg_dataset/, read and modify the settings in `seq2geno_inputs.yml`, and try running seq2geno 
