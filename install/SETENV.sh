@@ -4,8 +4,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-export SEQ2GENO_HOME=$( realpath ../ )
-export PATH=$SEQ2GENO_HOME'/main:'$PATH
+SEQ2GENO_HOME=$( realpath ../ )
+PATH=$SEQ2GENO_HOME'/main:'$PATH
 echo 'SEQ2GENO_HOME is '$SEQ2GENO_HOME
 
 check_conda_channels () {
@@ -39,54 +39,50 @@ set_core_env_vars () {
 	cd $SEQ2GENO_HOME
 }
 
-set_roary_dependencies () {
-	## Roary dependencies
-	cd $SEQ2GENO_HOME/denovo/lib/Roary
-	export PERL_MM_USE_DEFAULT=1
-	export PERL5LIB=$( realpath . )/lib:$PERL5LIB
-	./install_dependencies.sh
-	cd $SEQ2GENO_HOME
-}
-
-download_proc_specific_env () {
-	## decompress the example dataset to install the process-specific environments
-  	echo $( realpath . )
-	echo '+extract example dataset'
-	tar -zxvf example_sg_dataset.tar.gz 
-	cd $SEQ2GENO_HOME/example_sg_dataset/
-	./CONFIG.sh
-	echo '+install process-specific environments and dryrun the procedures for the example dataset'
-	$SEQ2GENO_HOME/main/seq2geno -f ./seq2geno_inputs.yml || return false
-}
 create_core_env ()  {
 	## create snakemake_env 
 	echo '+enter install/'
 	cd $SEQ2GENO_HOME/install
-	conda env create -n snakemake_env --file=snakemake_env.yml || return false
+	core_env_name=$1
+	if [[ $core_env_name == '' ]]; then
+	  core_env_name=snakemake_env
+	fi
+	conda env create -n $core_env_name --file=snakemake_env.yml || return false
 	cd $SEQ2GENO_HOME
 }
 
-#>>>
-check_conda_channels ||{ echo "Errors in setting conda channels"; exit; }
-if [ -d $( dirname $( dirname $( which conda ) ) )/envs/snakemake_env ]; then
-	echo '-----'
-	echo 'Naming conflict: an existing environment is also called "snakemake_env".'
-	echo 'Please remove it (with or without cloning it with the other name).'
-	exit
+# user's input
+core_env_name=''
+if [ "$#" -lt 1 ]; then
+  core_env_name='snakemake_env'  
 else
-	create_core_env || { echo "Errors in downloading the core environment"; exit; }
+  core_env_name=$1
 fi
-## activate the environment
+echo 'Creating environment "'$core_env_name'"' 
+
+# ensure the conda channels
+check_conda_channels ||{ echo "Errors in setting conda channels"; exit; }
+if [ -d $( dirname $( dirname $( which conda ) ) )/envs/$core_env_name ]; then
+  echo '-----'
+  echo 'Naming conflict: an existing environment with same name found: '
+  echo $( dirname $( dirname $( which conda ) ) )/envs/$core_env_name
+  exit
+else
+  # start creating the environment
+  create_core_env $core_env_name || { echo "Errors in downloading the core environment"; exit; }
+fi
+# activate the environment
 source $( dirname $( dirname $( which conda ) ) )/etc/profile.d/conda.sh
-conda activate snakemake_env || source activate snakemake_env
+conda activate $core_env_name || source activate $core_env_name
+# make variables automatically set when the environment is activated 
 set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
 
 ## Finalize
-export SEQ2GENO_HOME=$( realpath ../ )
-export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
-chmod +x $SEQ2GENO_HOME/main/S2G
-mv $SEQ2GENO_HOME/main/S2G $SEQ2GENO_HOME
-echo '-----'
-echo 'Environment set! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
-echo '- copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable '
-echo '- go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'
+#export SEQ2GENO_HOME=$( realpath ../ )
+#export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
+#chmod +x $SEQ2GENO_HOME/main/S2G
+#mv $SEQ2GENO_HOME/main/S2G $SEQ2GENO_HOME
+#echo '-----'
+#echo 'Environment set! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
+#echo '- copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable '
+#echo '- go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'

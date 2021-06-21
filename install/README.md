@@ -4,8 +4,8 @@ SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-You can either use **SETENV.sh** (for only setting up the environment and ensuring python apckages) 
-or **INSTALL.sh** (for downloading all process-specific software once) to automatlically set up 
+You can either use **SETENV.sh** (for setting up the environment and ensuring python apckages) 
+and **TESTING.sh** (which will dryrun Seq2Geno with the example dataset) to automatlically set up 
 everything. Alternatively, you can follow the instruction below:
 
 #### Step 1. check if Conda is installed and the channels (as described in ../README.md) are included 

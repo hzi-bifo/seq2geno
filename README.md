@@ -69,20 +69,18 @@ git submodule update --init --recursive
 
 The command uses **--recurse-submodules** to download the submodules. The flag is available only in git version >2.13. Earlier git versions might have the substitute. After the package is downloaded, *main/seq2geno* and *main/seq2geno_gui* are the executable scripts for Seq2Geno. 
 
-3. In case you encounter problems or want to ensure the environment, this repository includes automatic tools: 
+3. To ensure the environment and test the package, please either follow the steps in *install/README.md* or use the automatic tools:
 
-- For only ensuring the environemnt:
-
-You might want to use the automatic tool *install/SETENV.sh* or follow the steps in *install/README.md*. The methods will help you to set environment variables, check python packages, etc.
-
-- For setting up the environment and installing the process-specific software
-
-You might want to use the automatic tool *install/INSTALL.sh* or follow the steps in *install/README.md*. Besides those covered by *install/SETENV.sh*, this script will help you to further download the process-specific software such as samtools, etc.
-
+```
+cd install/
+SETENV.sh snakemake_env
+conda activate snakemake_env
+TESTING.sh
+```
 
 ### <a name="usage"></a>Usage and Input
 
-Seq2Geno can be launched using the [graphical user interface (GUI)](#gui) or [command line](#commandline) 
+Once the environment is properly set up, Seq2Geno can be launched using the [graphical user interface (GUI)](#gui) or [command line](#commandline) 
 
 - <a name="gui"></a>GUI
 
