@@ -101,10 +101,12 @@ will launch the graphic user interface. Use the tool to read, edit, or save the 
 
 The input for seq2geno is a single yaml file describing all arguments:
 ```
-S2G -d -f [options_yaml] -l [log_file] --outzip [output_zip_type]
+S2G -d -f [options_yaml] -z [zip_input] -l [log_file] --outzip [output_zip_type]
 ```
 
-The [options\_yaml] describes all the options and input data for Seq2Geno. The [log\_file] should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr. The [output\_zip\_type] specifies whether or how the output results should be packed into an zip file.
+Both [options\_yaml] and [zip\_input] specify the materials to use. At least one of them should be used. When [options\_yaml] is properly set, [zip\_input] will be neglected. The [options\_yaml] describes all the options and paths to input data for Seq2Geno. The [zip\_input] packs all the materials and has a structure that Seq2Geno can recognize (see *input_zip_structure.md* for more details). 
+
+The [log\_file] should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr. The [output\_zip\_type] specifies whether or how the output results should be packed into an zip file.
 
 - <a name="args"></a>arguments
 
