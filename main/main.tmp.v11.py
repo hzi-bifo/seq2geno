@@ -23,6 +23,7 @@ sys.path.append(os.path.join(os.environ['SEQ2GENO_HOME'], 'main'))
 from Seq2GenoUtils import Warehouse
 import create_config
 from PackOutput import SGOutputPacker
+from ZIP2Config import *
 
 
 def filter_procs(args, logger):
@@ -137,6 +138,13 @@ def main(args, logger):
 if __name__ == '__main__':
     parser = UserOptions.make_parser()
     primary_args = parser.parse_args()
+    # ensure yml or zip specified
+    if ((not os.path.isfile(primary_args.yml_f))
+        and os.path.isfile(primary_args.zip_f)):
+        primary_args.yml_f = zip2config(primary_args.zip_f)
+    elif ((not os.path.isfile(primary_args.yml_f))
+          and (not os.apth.isfile(primary_args.zip_f))):
+        raise AttributeError('Neither input yml nor zip found')
     # create logger
     logger = LogGenerator.make_logger(primary_args.log_f)
     # check those primary arguments

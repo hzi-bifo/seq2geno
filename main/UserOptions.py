@@ -78,6 +78,7 @@ def parse_arg_yaml(yml_f):
 
 
 def check_primary_args(primary_args):
+    print(primary_args)
     # When remote mode is opted, the output must be 'g2p' zip file
     if primary_args.remote:
         primary_args.pack_output = 'g2p'
@@ -105,8 +106,10 @@ def make_parser():
     parser.add_argument('-d', dest='dsply_args', action='store_true',
                         help='''show the arguments described in
                         the config file (yaml) and exit''')
-    parser.add_argument('-f', dest='yml_f', required=True,
+    parser.add_argument('-f', dest='yml_f', required=False, default='',
                         help='the yaml file where the arguments are listed')
+    parser.add_argument('-z', dest='zip_f', required=False, default='',
+                        help='the zip file of materials')
     parser.add_argument('-l', dest='log_f', required=False,
                         default='',
                         help='a non-existing filename for log')
@@ -130,6 +133,7 @@ def make_parser():
 def main():
     parser = make_parser()
     primary_args = parser.parse_args()
+
     # check those primary arguments
     check_primary_args(primary_args)
 

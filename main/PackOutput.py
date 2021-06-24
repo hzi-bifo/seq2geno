@@ -38,14 +38,15 @@ class SGOutputPacker:
             raise FileExistsError('{} exists'.format(self.output_zip))
         genml_creator_args_array = [
             '--seq2geno', self.seq2geno_outdir,
-            '--yaml', gp_config,
-            '--proj', project_name]
+            '--proj', 'SGP',
+            '--yaml', gp_config]
         genml_creator_args_parser = create_genyml.make_parser()
         genml_creator_args = genml_creator_args_parser.parse_args(
             genml_creator_args_array)
         try:
             create_genyml.make_genyml(genml_creator_args)
-        except IOError:
+        except IOError as e:
+            print(e)
             print('Creation of {} failed'.format(gp_config))
 
         ####
