@@ -4,8 +4,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-SEQ2GENO_HOME=$( realpath ../ )
-PATH=$SEQ2GENO_HOME'/main:'$PATH
+export SEQ2GENO_HOME=$( realpath $( dirname $( dirname ${BASH_SOURCE[0]} ) ) )
+export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
 echo 'SEQ2GENO_HOME is '$SEQ2GENO_HOME
 
 check_conda_channels () {
@@ -78,11 +78,18 @@ conda activate $core_env_name || source activate $core_env_name
 set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
 
 # Finalize
-export SEQ2GENO_HOME=$( realpath ../ )
+export SEQ2GENO_HOME=$( realpath $( dirname $( dirname ${BASH_SOURCE[0]} ) ) )
 export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
-chmod +x $SEQ2GENO_HOME/main/S2G
-mv $SEQ2GENO_HOME/main/S2G $SEQ2GENO_HOME
-echo '-----'
-echo 'Environment set! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
-echo '- copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable '
-echo '- go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'
+
+cat $SEQ2GENO_HOME/main/S2G| sed "s/_core_env/$core_env/g" \
+	> $SEQ2GENO_HOME/S2G
+chmod +x $SEQ2GENO_HOME/S2G
+if [ -f $SEQ2GENO_HOME/S2G ]; then
+	echo '-----'
+	echo 'Environment set! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
+	echo '- copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable '
+	echo '- go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'
+else
+	echo 'Cannot create the launcher "S2G" to '$SEQ2GENO_HOME
+	echo 'You still can use main/seq2geno and main/seq2geno_gui' 
+fi
