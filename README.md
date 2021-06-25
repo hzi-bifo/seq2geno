@@ -6,13 +6,13 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # Seq2Geno
 
-An integrated tool for microbial sequence analyses. The methods are refactored
-from those used by [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). 
-The method reproducibility has beend evaulated with the same raw data using a differnet mechine.
+This package is an integrated tool for microbial sequence analyses. The methods are refactored
+from methods [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). 
+We evaluated the results reproducibility with the same raw data in a differnet mechine.
 
 - [Repository structure](#structure)
 - [Available functions](#functions) 
-- [Get started](#install) 
+- [Download Seq2Geno and ensure the enviornment](#install) 
 - [Usage and Input](#usage) 
     - [GUI](#gui)
     - [command line](#commandline)
@@ -48,7 +48,7 @@ This repository includes:
 - find differentially expressed genes (additional data that won't be used by Geno2Pheno)
 - reconstruct ancestral values of expression level (additional data that won't be used by Geno2Pheno)
 
-### <a name="install"></a>Installation of standalone package
+### <a name="install"></a>Download Seq2Geno and ensure the enviornment
 1. Check the prerequisites
 
     - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.10.0)
@@ -229,7 +229,7 @@ __Note: you might need to ensure the memory setting in the seq2geno_input.yml__
 GPLv3 (please refer to LICENSE)
 
 ### <a name="contact"></a>Contact
-Please open an issue here or contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmhotz-hzi.de). 
+Please open an issue here or contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmholtz-hzi.de). 
 We will need to know how to reproduce the problem. 
 
 ### <a name="citation"></a>Citation

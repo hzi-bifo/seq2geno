@@ -1,2 +1,0 @@
-config_f: config.yml
-in_tab: snps/all_SNPs_final.bin.mat,snps/nonsyn_SNPs_final.bin.mat,denovo/gpa.mat,denovo/indel.mat

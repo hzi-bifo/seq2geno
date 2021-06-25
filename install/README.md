@@ -38,7 +38,7 @@ source deactivate
 ```
 Yoou might need to replace `source activate` with `conda activate` 
 
-#### Step 4. test 
+#### Step 4. test the environment
 ```
 source activate $env_name
 seq2geno -h
@@ -58,11 +58,8 @@ These softwares should now be available under `$SEQ2GENO_HOME/denovo/lib/Roary/b
 
 #### Step 6. install process-specific environments and dryrun the procedures for the example dataset
 ```
-cd $SEQ2GENO_HOME
-tar -zxvf example_sg_dataset.tar.gz 
-cd example_sg_dataset/
-./CONFIG.sh
-seq2geno -f ./seq2geno_inputs.yml
+cd $SEQ2GENO_HOME/examples
+S2G -z example_input.zip
 ```
 
 #### Step 7. 

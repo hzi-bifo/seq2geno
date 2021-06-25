@@ -7,5 +7,5 @@ __pycache__/
 nohup.out
 refactor_*/
 .deprived/
-example_sg_dataset/
+examples/example_input/
 S2G
