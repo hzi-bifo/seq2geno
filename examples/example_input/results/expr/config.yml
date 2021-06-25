@@ -1,0 +1,8 @@
+annot_tab: annotation.tab
+config_f: expr/config.yml
+list_f: /home/thkuo/test_seq2geno/seq2geno/examples/example_input/rna_list
+out_log_table: expr.mat_log_transformed
+out_table: expr.mat
+r_annot: R_annotation.tab
+ref_fasta: /home/thkuo/test_seq2geno/seq2geno/examples/example_input/reference/pseudomonas.fna
+ref_gbk: /home/thkuo/test_seq2geno/seq2geno/examples/example_input/reference/pseudomonas.gbk

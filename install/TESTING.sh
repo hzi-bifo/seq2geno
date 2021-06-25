@@ -33,11 +33,9 @@ download_proc_specific_env () {
 	## decompress the example dataset to install the process-specific environments
   	echo $( realpath . )
 	echo '+extract example dataset'
-	tar -zxvf example_sg_dataset.tar.gz 
-	cd $SEQ2GENO_HOME/example_sg_dataset/
-	./CONFIG.sh
+	cd $SEQ2GENO_HOME/examples
 	echo '+test the procedures in dryrun mode with the example dataset'
-	$SEQ2GENO_HOME/main/seq2geno -f ./seq2geno_inputs.yml || return false
+	$SEQ2GENO_HOME/main/seq2geno -z example_input.zip || return false
 }
 
 #>>>
@@ -46,4 +44,4 @@ set_roary_dependencies || { echo "Errors in installation of Roary dependecies"; 
 download_proc_specific_env || { echo "Errors in installation of the process-specific environments failed"; exit; }
 
 ## Finalize
-echo 'Finished. You might want to go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'
+echo 'Finished. More details in '$SEQ2GENO_HOME'/examples'

@@ -1,0 +1,6 @@
+alpha: 0.05
+config_f: de_config.yml
+expr_config: expr/config.yml
+lfc: 1
+out_dir: expr/dif
+pheno_tab: /home/thkuo/test_seq2geno/seq2geno/examples/example_input/phenotype/mem_phenotypes.mat

@@ -13,7 +13,7 @@ ABC/  # same as the zip filename
 │   └── rna/  # single-end RNA-seq reads
 ├── functions/
 │   └── functions  # a list of features to include; each one in a line 
-├── reference/  # ference data
+├── reference/  # reference data
 ├── resources/
 │   └── resources  # the resource allowance
 └── phenotype/  # phenotype data
@@ -33,7 +33,7 @@ after the sample names and have an extension of either **.fastq.gz** or
 
 - reference/:
 This folder contains reference sequence and annotation files, of which the file extensions should be
-include **.fna** (genome sequence; fasta format), **.gbk** (annotation genbank
+ **.fna** (genome sequence; fasta format), **.gbk** (annotation genbank
 file), and **gff** (annotation gff file). 
 
 - functions/functions:

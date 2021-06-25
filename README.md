@@ -7,7 +7,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
 # Seq2Geno
 
 An integrated tool for microbial sequence analyses. The methods are refactored
-from those used by [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). The method reproducibility has beend evaulated with the same raw data using a differnet mechine.
+from those used by [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). 
+The method reproducibility has beend evaulated with the same raw data using a differnet mechine.
 
 - [Repository structure](#structure)
 - [Available functions](#functions) 
@@ -16,8 +17,8 @@ from those used by [the published research](https://zenodo.org/record/3591847/ex
     - [GUI](#gui)
     - [command line](#commandline)
     - [arguments](#args)
+- [Example data and usages](#example) 
 - [Train the phenotypic predictor with the Seq2Geno results](#genyml) 
-- [Example usages and data](#example) 
 - [FAQ](#FAQ)
 - [License](#license) 
 - [Contact](#contact) 
@@ -25,6 +26,7 @@ from those used by [the published research](https://zenodo.org/record/3591847/ex
 ### <a name="structure"></a>Repository structure
 This repository includes:
 - install: information and scripts for installation
+- examples: the example data ([the tutorial](#example) )
 - main: the scripts for user interface and the calling methods of core
   workflows
 - snps: the scripts for generating SNPs table
@@ -35,6 +37,7 @@ This repository includes:
 - difexpr: the methods for identifying differentially expressed genes with the
   expression levels matrix
 - cont\_anc\_rcn: ancestral reconstruction for continuous data such as expression levels
+
 
 ### <a name="functions"></a>Available functions
 - detect single nucleotide variants
@@ -95,7 +98,7 @@ or
 seq2geno_gui
 ``` 
 
-will launch the graphic user interface. Use the tool to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in background should be more convenient. To learn more, please read the the manual `doc/GUI_manual.pdf`.
+will launch the graphic user interface. Use the tool to read, edit, or save the arguments in a yaml file. Once the arguments are ready, the analyses can be launched with this interface; for large-scale researches, however, generating the yaml file and launching the analyses with the command line method (described below) might be more convenient, as having processes running in the background should be more convenient. To learn more, please read the manual *doc/GUI_manual.pdf*.
 
 - <a name="commandline"></a>command line
 
@@ -104,9 +107,11 @@ The input for seq2geno is a single yaml file describing all arguments:
 S2G -d -f [options_yaml] -z [zip_input] -l [log_file] --outzip [output_zip_type]
 ```
 
-Both [options\_yaml] and [zip\_input] specify the materials to use. At least one of them should be used. When [options\_yaml] is properly set, [zip\_input] will be neglected. The [options\_yaml] describes all the options and paths to input data for Seq2Geno. The [zip\_input] packs all the materials and has a structure that Seq2Geno can recognize (see *input_zip_structure.md* for more details). 
+Both **options_yaml** and **zip_input** specify the materials to use. At least one of them should be used. When **options_yaml** is properly set, **zip_input** will be neglected. The **options_yaml** describes all the options and paths to input data for Seq2Geno. The **zip_input** packs all the materials and has a structure that Seq2Geno can recognize (see *input_zip_structure.md* for more details). 
 
-The [log\_file] should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr. The [output\_zip\_type] specifies whether or how the output results should be packed into an zip file.
+The **log_file** should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr. 
+
+The **output_zip_type** should be one of 'none' (default), 'all', 'main', or 'g2p'. The choice specifies whether or how the output results should be packed into an zip file.
 
 - <a name="args"></a>arguments
 
@@ -173,15 +178,30 @@ To only create the folder and config files, please turn off the last six options
 
     The fasta file of adaptors of DNA-seq. It is used to process the DNA-seq reads. 
 
+
+### <a name="example"></a>Example data and usages
+The folder *examples/* includes a structured zip file and a yaml file--the two input formats that Seq2Geno can recognize. The zip file can be used as the input with this command:
+
+```
+S2G -z examples/example_input.zip\
+ -l examples/example_input_zip.log\
+ --outzip g2p
+```
+
+To use the configuration yaml file, please ensure unpacked example data (that
+is, the zip file) and edit the yaml file to ensure the right paths to
+those example data. After they are ready, please run with this command:
+
+```
+S2G -f examples/seq2geno_input.yml\
+ -l exapmles/seq2geno_input_yml.log\
+ --outzip g2p
+```
+
 ### <a name="genyml"></a>Train the phenotypic predictor with the Seq2Geno results 
-[Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de) requires all input data packed in a single zip file. The input file for the validator and gnerator of that zip file can be generated using submission\_tool/create\_genyml.py. 
+Please visit [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de)  
 
-### <a name="example"></a>Example usages and data
-The tutorials and example data and commands can be found in  `example_sg_dataset`. In case the folder was not decompressed from the tar.gz file, please
 
-```
-tar zxvf ./example_sg_dataset.tar.gz 
-```
 ### <a name="FAQ"></a>FAQ
 __Will every procedure be rerun if I want to add one sample?__
 

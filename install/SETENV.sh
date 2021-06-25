@@ -77,12 +77,12 @@ conda activate $core_env_name || source activate $core_env_name
 # make variables automatically set when the environment is activated 
 set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
 
-## Finalize
-#export SEQ2GENO_HOME=$( realpath ../ )
-#export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
-#chmod +x $SEQ2GENO_HOME/main/S2G
-#mv $SEQ2GENO_HOME/main/S2G $SEQ2GENO_HOME
-#echo '-----'
-#echo 'Environment set! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
-#echo '- copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable '
-#echo '- go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'
+# Finalize
+export SEQ2GENO_HOME=$( realpath ../ )
+export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
+chmod +x $SEQ2GENO_HOME/main/S2G
+mv $SEQ2GENO_HOME/main/S2G $SEQ2GENO_HOME
+echo '-----'
+echo 'Environment set! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: '
+echo '- copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable '
+echo '- go to '$SEQ2GENO_HOME'/example_sg_dataset/ and try'
