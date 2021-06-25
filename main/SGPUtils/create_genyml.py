@@ -34,22 +34,35 @@ def make_parser():
 
     ## prediction block
     pred_args=  parser.add_argument_group('predict')
+    pred_args.add_argument('--report', dest= 'report', default= ['f1_macro'], 
+            nargs= '+',
+            help= 'the metrics to include in the report', 
+            choices=['accuracy',  'auc_score_macro',  'auc_score_micro',  
+                     'f1_macro',  'f1_micro',  'f1_neg',  
+                     'f1_pos',  'p_neg',  'p_pos',  
+                     'precision_macro',  'precision_micro',  'r_neg',  
+                     'r_pos',  'recall_macro',  'recall_micro'])
     pred_args.add_argument('--opt', dest= 'optimize', default= 'f1_macro', 
+            nargs= 1, 
             help= 'target performance metric to optimize', 
-            choices=['accuracy', 'f1_pos', 'f1_macro'])
+            choices=['accuracy',  'auc_score_macro',  'auc_score_micro',  
+                     'f1_macro',  'f1_micro',  'f1_neg',  
+                     'f1_pos',  'p_neg',  'p_pos',  
+                     'precision_macro',  'precision_micro',  'r_neg',  
+                     'r_pos',  'recall_macro',  'recall_micro'])
     pred_args.add_argument('--fold_n', dest= 'fold_n', 
             help= 'number of folds during validation', 
             default= 10)
     pred_args.add_argument('--test_ratio', dest= 'test_ratio', 
             help= 'proportion of samples for testing', 
             default= 0.1)
-    pred_args.add_argument('--part', dest= 'part', 
-            help= 'method to partition dataset', 
-            choices= ['rand'])
+    pred_args.add_argument('--part', dest= 'part', default= 'treebased',
+            nargs= 1, 
+            help= 'method to partition dataset', choices= ['treebased','random'])
     pred_args.add_argument('--models', dest= 'models', nargs= '*',  
-            default= ['rf', 'svm'],
+            default= ['svm'],
             help= 'machine learning algorithms', 
-            choices= ['lsvm', 'svm', 'rf', 'lr'])
+            choices= ['svm', 'rf','lsvm',  'lr'])
     pred_args.add_argument('--k-mer', dest= 'kmer',type= int, 
             help= 'the k-mer size for prediction', 
             default= 6)
@@ -60,11 +73,19 @@ def make_parser():
     return(parser)
 
 def parse_usr_opts():
-    parser= make_parser() 
+    parser= make_parser()
     args = parser.parse_args()
     return(args)
 
 def make_genyml(args):
+
+    #' ensure the seq2geno file exists
+    results_dir= os.path.join(args.sg, 'RESULTS')
+    try:
+        assert os.path.isdir(results_dir)
+    except AssertionError:
+        print('{} not found'.format(results_dir))
+        exit()
 
     blocks= dict()
     ####
@@ -144,14 +165,14 @@ def make_genyml(args):
             name= args.sg.strip('/').split('/')[-1],
             label_mapping= parse_classes(args.classes_f),
             optimized_for= str(args.optimize),
-            reporting= Items(['accuracy', 'f1_pos', 'f1_macro']),
+            reporting= Items(args.report),
             features= [
                 dict(feature= "seq2geno_feats",
                      list= Items(available_feat_names),
                      validation_tuning= dict(
                          name= 'cv_tree', 
-                         train= {'method':"treebased",'folds': 10},
-                         test={'method':"treebased",'ratio': 0.10}, 
+                         train= {'method':args.part,'folds': args.fold_n},
+                         test={'method':args.part,'ratio': args.test_ratio}, 
                          inner_cv= 10))],
             classifiers= args.models
         ))]
