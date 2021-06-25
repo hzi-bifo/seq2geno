@@ -66,4 +66,4 @@ S2G -z example_input.zip
 
 Environment set and dependencies installed! The launcher "S2G" has been created in '$SEQ2GENO_HOME'. You might also want to: 
 - for the convenience, copy '$SEQ2GENO_HOME'/S2G to a certain idirectory that is already included in your PATH variable; alternatively, add `$SEQ2GENO_HOME/main` to your PATH variable and edit either `~/.profile` or `~/.bashrc` accordingly
-- go to '$SEQ2GENO_HOME'/example_sg_dataset/, read and modify the settings in `seq2geno_inputs.yml`, and try running seq2geno 
+- go to '$SEQ2GENO_HOME'/examples/, read and modify the settings in `seq2geno_inputs.yml`, and try running seq2geno 
