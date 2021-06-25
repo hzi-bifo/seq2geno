@@ -203,27 +203,29 @@ Please visit [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de)
 
 
 ### <a name="FAQ"></a>FAQ
+__Why the analyses crushed?__
+
+Please check the log file or STDOUT and STDERR and determine the exact error. 
+
 __Will every procedure be rerun if I want to add one sample?__
 
-No, you will need to add one more line in your reads list (i.e., the dna or the rna reads. See section [arguments](#args) for more details.) and then run the same workflow again. Seq2Geno use Snakemake to determine whether certain intermediate data need to be recomputed or not. 
+No, you just need to add one more line in your reads list (i.e., the dna or the rna reads. See section [arguments](#args) for more details.) and then run the same workflow again. Seq2Geno uses Snakemake to determine whether certain intermediate data need to be recomputed or not. 
 
 __Will every procedure be rerun if I want to exclude one sample?__
 
 No; however, besides excluding that sample from the reads list, you will need to remove all the subsequent results that were previously computed. That could be risky.
 
-__Will every procedure be rerun if I accidentally delete some intermediate data?__
+__Will every procedure be rerun if I accidentally delete some data?__
 
 No, only the deleted one and the subsequent data will be recomputed.
 
 __Where is the final data?__
 
-Under your working directory, they are collected in the subfolder `RESULTS/`.
+In the working directory, the main results are collected in the subfolder `RESULTS/`. You can also find the other intermediate data in the corresponding folders (e.g., mapping results)
 
 __What is the current status?__
 
-If the log file was specified when Seq2Geno was launched, you could check the log file to determine the current status. Otherwise, the status should be directed to your STDOUT or STDERR.
-
-__Note: you might need to ensure the memory setting in the seq2geno_input.yml__
+If the log file was specified, you could check the log file to determine the current status. Otherwise, the status should be directed to your STDOUT or STDERR.
 
 ### <a name="license"></a>License
 GPLv3 (please refer to LICENSE)
@@ -237,14 +239,14 @@ The paper for the joint package Seq2Geno and Geno2Pheno will be published.
 Before that, please use 
 
 ```
-Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno (v0.00001) [A reproducibility-aware, integrated package for microbial sequence analyses].
+Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno (v0.00003) [A reproducibility-aware, integrated package for microbial sequence analyses].
 ```
 or 
 ```
 @software{thkuo2021seq2geno,
   author = {Tzu-Hao Kuo, Aaron Weimann, Andreas Bremges, Alice C. McHardy},
   title = {Seq2Geno: a reproducibility-aware, integrated package for microbial sequence analyses},
-  version = {v0.00001},
+  version = {v0.00003},
   date = {2021-06-20},
 }
 ```
