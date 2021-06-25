@@ -81,7 +81,7 @@ set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
 export SEQ2GENO_HOME=$( realpath $( dirname $( dirname ${BASH_SOURCE[0]} ) ) )
 export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
 
-cat $SEQ2GENO_HOME/main/S2G| sed "s/_core_env/$core_env/g" \
+cat $SEQ2GENO_HOME/main/S2G| sed "s/_core_env/$core_env_name/g" \
 	> $SEQ2GENO_HOME/S2G
 chmod +x $SEQ2GENO_HOME/S2G
 if [ -f $SEQ2GENO_HOME/S2G ]; then
