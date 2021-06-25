@@ -12,7 +12,7 @@ We evaluated the results reproducibility with the same raw data in a differnet m
 
 - [Repository structure](#structure)
 - [Available functions](#functions) 
-- [Download Seq2Geno and ensure the enviornment](#install) 
+- [Download Seq2Geno and ensure the environment](#install) 
 - [Usage and Input](#usage) 
     - [GUI](#gui)
     - [command line](#commandline)
@@ -48,7 +48,7 @@ This repository includes:
 - find differentially expressed genes (additional data that won't be used by Geno2Pheno)
 - reconstruct ancestral values of expression level (additional data that won't be used by Geno2Pheno)
 
-### <a name="install"></a>Download Seq2Geno and ensure the enviornment
+### <a name="install"></a>Download Seq2Geno and ensure the environment
 1. Check the prerequisites
 
     - [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) (tested version: 4.10.0)
