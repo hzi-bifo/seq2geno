@@ -4,11 +4,13 @@ SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
+[ver]: v1.00001
+
 # Seq2Geno
 
 This package is an integrated tool for microbial sequence analyses. The methods are refactored
-from methods [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). 
-We evaluated the results reproducibility with the same raw data in a differnet mechine.
+from methods of [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). 
+We evaluated the results reproducibility with the same raw data.
 
 - [Repository structure](#structure)
 - [Available functions](#functions) 
@@ -19,6 +21,8 @@ We evaluated the results reproducibility with the same raw data in a differnet m
     - [arguments](#args)
 - [Example data and usages](#example) 
 - [Train the phenotypic predictor with the Seq2Geno results](#genyml) 
+    - [Start from Seq2Geno](#automatic_submission)
+    - [With precomputed data](#visit_gp_server)
 - [FAQ](#FAQ)
 - [License](#license) 
 - [Contact](#contact) 
@@ -199,7 +203,20 @@ S2G -f examples/seq2geno_input.yml\
 ```
 
 ### <a name="genyml"></a>Train the phenotypic predictor with the Seq2Geno results 
-Please visit [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de)  
+- <a name="automatic_submission"></a> Start from Seq2Geno
+
+To include automatic submission to the Geno2Pheno server, just use the flag
+`--to_gp`:
+
+```
+S2G -f examples/seq2geno_input.yml\
+ -l exapmles/seq2geno_input_yml.log\
+ --outzip g2p --to_gp
+```
+
+- <a name="visit_gp_server"></a> With precomputed data
+
+Please directly visit [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de)  
 
 
 ### <a name="FAQ"></a>FAQ
@@ -231,22 +248,23 @@ If the log file was specified, you could check the log file to determine the cur
 GPLv3 (please refer to LICENSE)
 
 ### <a name="contact"></a>Contact
-Please open an issue here or contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmholtz-hzi.de). 
-We will need to know how to reproduce the problem. 
+Please contact Tzu-Hao Kuo (Tzu-Hao.Kuo@helmholtz-hzi.de) and specify:
+- the error message or unexpected situation
+- how to reproduce the problem
 
 ### <a name="citation"></a>Citation
-The paper for the joint package Seq2Geno and Geno2Pheno will be published.
+We will be publishing the paper for the joint work of Seq2Geno and Geno2Pheno.
 Before that, please use 
 
 ```
-Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno (v0.00003) [A reproducibility-aware, integrated package for microbial sequence analyses].
+Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno ([ver]) [A reproducibility-aware, integrated package for microbial sequence analyses].
 ```
 or 
 ```
 @software{thkuo2021seq2geno,
   author = {Tzu-Hao Kuo, Aaron Weimann, Andreas Bremges, Alice C. McHardy},
   title = {Seq2Geno: a reproducibility-aware, integrated package for microbial sequence analyses},
-  version = {v0.00003},
+  version = {[ver]},
   date = {2021-06-20},
 }
 ```
