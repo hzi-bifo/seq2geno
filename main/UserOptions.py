@@ -79,8 +79,8 @@ def parse_arg_yaml(yml_f):
 
 def check_primary_args(primary_args):
     print(primary_args)
-    # When remote mode is opted, the output must be 'g2p' zip file
-    if primary_args.remote:
+    # When to_gp is opted, the output must be 'g2p' zip file
+    if primary_args.to_gp:
         primary_args.pack_output = 'g2p'
     # When the log file is used, merging the stdout and stderr
     if primary_args.log_f != '':
@@ -104,8 +104,8 @@ def make_parser():
     parser.add_argument('-v', action='version',
                         version='v.Beta')
     parser.add_argument('-d', dest='dsply_args', action='store_true',
-                        help='''show the arguments described in
-                        the config file (yaml) and exit''')
+                        help='show the arguments described in '\
+                        'the config file (yaml) and exit')
     parser.add_argument('-f', dest='yml_f', required=False, default='',
                         help='the yaml file where the arguments are listed')
     parser.add_argument('-z', dest='zip_f', required=False, default='',
@@ -113,6 +113,8 @@ def make_parser():
     parser.add_argument('-l', dest='log_f', required=False,
                         default='',
                         help='a non-existing filename for log')
+    parser.add_argument('--to_gp', dest='to_gp', action='store_true',
+                        help='''submit the result to Geno2Pheno server''')
     parser.add_argument('--outzip', dest='pack_output',
                         choices=['none', 'all', 'main', 'g2p'],
                         default='none',
@@ -126,7 +128,7 @@ def make_parser():
                             "'g2p' for packing only those needed by the "
                             "predictive package Geno2Pheno and deleting "
                             "the workign directory (automatically "
-                            "opted in the remote mode)"))
+                            "opted in the to_gp mode)"))
     return(parser)
 
 

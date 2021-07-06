@@ -10,18 +10,19 @@
 import os
 import sys
 from tqdm import tqdm
+import shutil
 from SGProcesses import SGProcess
 import UserOptions
 from CollectResults import collect_results
 import LogGenerator
-import shutil
+import create_config
 
 # ensure the core environment variable
 assert 'SEQ2GENO_HOME' in os.environ, 'SEQ2GENO_HOME not available'
 sys.path.append(os.environ['SEQ2GENO_HOME'])
 sys.path.append(os.path.join(os.environ['SEQ2GENO_HOME'], 'main'))
 from Seq2GenoUtils import Warehouse
-import create_config
+from Seq2GenoUtils.Crane import Seq2Geno_Crane
 from PackOutput import SGOutputPacker
 from ZIP2Config import *
 
@@ -157,7 +158,7 @@ if __name__ == '__main__':
 
     # run in local machine
     main(args, logger)
-    # pack the results orr not?
+    # pack the results or not?
     if args.dryrun != 'Y':
         if primary_args.pack_output == 'none':
             logger.info('Not packing the results')
@@ -182,4 +183,11 @@ if __name__ == '__main__':
             # ensure the zip file correctly generated
             if not os.path.isfile(output_zip):
                 raise IOError('zip not created')
+
+            # submit the data to Geno2Pheno server
+            if primary_args.pack_output == 'g2p' and primary_args.to_gp:
+                c = Seq2Geno_Crane(logger=logger)
+                c.choose_materials(output_zip)
+                c.launch()
+            
         logger.info('DONE (local mode)')
