@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-export SEQ2GENO_HOME=$( realpath $( dirname $( dirname ${BASH_SOURCE[0]} ) ) )
+export SEQ2GENO_HOME=$( dirname $( dirname $( realpath ${BASH_SOURCE[0]} ) ) )
 export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
 echo 'SEQ2GENO_HOME is '$SEQ2GENO_HOME
 
@@ -78,7 +78,7 @@ conda activate $core_env_name || source activate $core_env_name
 set_core_env_vars || { echo "Errors in setting up the core environment"; exit; }
 
 # Finalize
-export SEQ2GENO_HOME=$( realpath $( dirname $( dirname ${BASH_SOURCE[0]} ) ) )
+export SEQ2GENO_HOME=$( dirname $( dirname $( realpath ${BASH_SOURCE[0]} ) ) )
 export PATH=$SEQ2GENO_HOME:$SEQ2GENO_HOME/main:$PATH
 
 cat $SEQ2GENO_HOME/main/S2G| sed "s/_core_env/$core_env_name/g" \
