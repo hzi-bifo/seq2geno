@@ -60,6 +60,10 @@ else
 fi
 echo 'Creating environment "'$core_env_name'"' 
 
+# check conda and python versions
+echo $( conda -V )
+echo $( python -V )
+
 # ensure the conda channels
 check_conda_channels ||{ echo "Errors in setting conda channels"; exit; }
 if [ -d $( dirname $( dirname $( which conda ) ) )/envs/$core_env_name ]; then
