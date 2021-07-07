@@ -4,8 +4,6 @@ SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-[ver]: v1.00001
-
 # Seq2Geno
 
 This package is an integrated tool for microbial sequence analyses. The methods are refactored
@@ -26,6 +24,7 @@ We evaluated the results reproducibility with the same raw data.
 - [FAQ](#FAQ)
 - [License](#license) 
 - [Contact](#contact) 
+- [Citation](#citation) 
 
 ### <a name="structure"></a>Repository structure
 This repository includes:
@@ -257,14 +256,14 @@ We will be publishing the paper for the joint work of Seq2Geno and Geno2Pheno.
 Before that, please use 
 
 ```
-Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno ([ver]) [A reproducibility-aware, integrated package for microbial sequence analyses].
+Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno (v1.00001) [A reproducibility-aware, integrated package for microbial sequence analyses].
 ```
 or 
 ```
 @software{thkuo2021seq2geno,
   author = {Tzu-Hao Kuo, Aaron Weimann, Andreas Bremges, Alice C. McHardy},
   title = {Seq2Geno: a reproducibility-aware, integrated package for microbial sequence analyses},
-  version = {[ver]},
+  version = {v1.00001},
   date = {2021-06-20},
 }
 ```
