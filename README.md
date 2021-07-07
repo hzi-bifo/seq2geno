@@ -4,13 +4,11 @@ SPDX-FileCopyrightText: 2021 Tzu-Hao Kuo
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-[ver]: v1.00001
-
 # Seq2Geno
 
-This package is an integrated tool for microbial sequence analyses. The methods are refactored
-from methods of [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5). 
-We evaluated the results reproducibility with the same raw data.
+This package is an integrated tool for microbial sequence analyses. We refactored and packed the 
+methods of [the published research](https://zenodo.org/record/3591847/export/hx#.YL89KyaxWV5) and
+evaluated the reproducibility with the same raw data.
 
 - [Repository structure](#structure)
 - [Available functions](#functions) 
@@ -26,6 +24,7 @@ We evaluated the results reproducibility with the same raw data.
 - [FAQ](#FAQ)
 - [License](#license) 
 - [Contact](#contact) 
+- [Citation](#citation) 
 
 ### <a name="structure"></a>Repository structure
 This repository includes:
@@ -106,20 +105,21 @@ will launch the graphic user interface. Use the tool to read, edit, or save the 
 
 - <a name="commandline"></a>command line
 
-The input for seq2geno is a single yaml file describing all arguments:
 ```
-S2G -d -f [options_yaml] -z [zip_input] -l [log_file] --outzip [output_zip_type]
+S2G -d -f [options_yaml] -z [zip_input] -l [log_file] --outzip [output_zip_type] --to_gp
 ```
 
-Both **options_yaml** and **zip_input** specify the materials to use. At least one of them should be used. When **options_yaml** is properly set, **zip_input** will be neglected. The **options_yaml** describes all the options and paths to input data for Seq2Geno. The **zip_input** packs all the materials and has a structure that Seq2Geno can recognize (see *input_zip_structure.md* for more details). 
+Both **options_yaml** and **zip_input** specify the materials to use (see the *examples/*). At least one of them should be used. When **options_yaml** is properly set, **zip_input** will be neglected. The **options_yaml** describes all the options and paths to input data for Seq2Geno. The **zip_input** packs all the materials and has a structure that Seq2Geno can recognize (see *input_zip_structure.md* for more details). 
 
 The **log_file** should be a non-existing filename to store the log information; if not set, the messages will be directed to stdout and stderr. 
 
 The **output_zip_type** should be one of 'none' (default), 'all', 'main', or 'g2p'. The choice specifies whether or how the output results should be packed into an zip file.
 
+The flag `--to_gp` specifies whether to submit the results to the Geno2Pheno server.
+
 - <a name="args"></a>arguments
 
-The input file is an yaml file where all options are described. The file includes two parts:
+The input file is an yaml file where all options are described (a template in examples/). The file includes two parts:
 
 1. features:
 
@@ -257,14 +257,14 @@ We will be publishing the paper for the joint work of Seq2Geno and Geno2Pheno.
 Before that, please use 
 
 ```
-Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno ([ver]) [A reproducibility-aware, integrated package for microbial sequence analyses].
+Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno (v1.00001) [A reproducibility-aware, integrated package for microbial sequence analyses].
 ```
 or 
 ```
 @software{thkuo2021seq2geno,
   author = {Tzu-Hao Kuo, Aaron Weimann, Andreas Bremges, Alice C. McHardy},
   title = {Seq2Geno: a reproducibility-aware, integrated package for microbial sequence analyses},
-  version = {[ver]},
+  version = {v1.00001},
   date = {2021-06-20},
 }
 ```
