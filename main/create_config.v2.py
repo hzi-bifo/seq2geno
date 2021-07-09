@@ -93,8 +93,9 @@ class snps_args:
 
 
 class denovo_args:
-    def __init__(self, list_f, REF_GFF, ref_gbk, adaptor,
+    def __init__(self, assemblies, list_f, REF_GFF, ref_gbk, adaptor,
                  redirected_reads_dir, config_f='config.yml'):
+        self.assemblies = assemblies
         self.list_f = list_f
         self.REF_GFF = REF_GFF
         self.ref_gbk = ref_gbk
@@ -178,7 +179,8 @@ def main(args, logger):
         logger.info('Skip creating config files for snps workflow')
 
     # denovo
-    d_args = denovo_args(list_f=os.path.abspath(args.dna_reads),
+    d_args = denovo_args(assemblies=args.assemblies,
+                         list_f=os.path.abspath(args.dna_reads),
                          REF_GFF=args.ref_gff,
                          adaptor=args.adaptor,
                          redirected_reads_dir=os.path.join(

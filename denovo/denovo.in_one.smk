@@ -17,7 +17,9 @@
 # - binary GPA table
 #
 import os
+import shutil
 import pandas as pd
+import logging
 def LoadFile(f):
     # The files might have different encoding methods
     # To void the problem, this is a generalized loader to create file handels
@@ -74,6 +76,32 @@ annot_tab = config['annot_tab']
 awk_script_f = os.path.join(os.environ['TOOL_HOME'], 'lib', 'filter.awk')
 adaptor_f = config['adaptor']
 new_reads_dir = config['new_reads_dir']
+
+# enable utility of precomputed assemblies
+if 'assemblies' in config:
+    if not os.path.isdir(out_spades_dir):
+        os.makedirs(out_spades_dir)
+    assem_list_f = config['assemblies']
+    with LoadFile(assem_list_f) as assem_list_fh:
+        for l in assem_list_fh.readlines():
+            if re.match('#', l):
+                continue
+            d = l.strip().split('\t')
+            strain = d[0]
+            assem_f = d[1]
+            assert os.path.isfile(assem_f), (
+                'Assembly file {} not found'.format(assem_f))
+            out_spades_strain_dir = os.path.join(out_spades_dir, strain)
+            contigs_f = os.path.join(out_spades_strain_dir, 'contigs.fasta')
+            if os.path.isfile(contigs_f):
+                logging.info('{} exists, so {} will be ignored')
+            else:
+                logging.info('Use precomputed assembly file {}. '
+                    'De novo assemly will be skipped for {}'.format(
+                    assem_f, strain))
+                if not os.path.isdir(out_spades_strain_dir):
+                    os.makedirs(out_spades_strain_dir)
+                shutil.copyfile(assem_f, contigs_f)
 
 
 rule all:
@@ -164,7 +192,7 @@ rule gpa_bin_mat:
             name_dict[d[0]] = d[1]
 
         # read roary result and identify single-copy genes
-        df=pd.read_csv(gpa_f, sep= ',',
+        df = pd.read_csv(gpa_f, sep= ',',
                 header=0, index_col=0, quotechar='"', low_memory=False)
 
         # filter and convert the states

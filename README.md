@@ -168,6 +168,15 @@ To only create the folder and config files, please turn off the last six options
     sample03	/transcription/reads/sample03.rna.fastq.gz
     ```
 
+    - assemblies: the list of precomputed assemblies data. (string of filename)
+
+    It should be a two-column list, where the first column includes all samples and the second column lists the __genome sequence files__. For the samples that are included in the reads list but not in this assemblies list, Seq2Geno will compute the *de novo* assemblies for them. The first line of the list is the first sample.
+    ```
+    sample01	/denovo/assemblies/sample01.fa
+    sample02	/denovo/assemblies/sample02.fa
+    sample03	/denovo/assemblies/sample03.fa
+    ```
+
     - phe_table: the phenotype table (string of filename)
 
     The table is tab-separated. For n samples with m phenotypes, the table is (n+1)-by-(m+1) as shown below. The first column should be sample names. The header line should includes names of phenotypes. Missing values are acceptable.
@@ -216,7 +225,8 @@ S2G -f examples/seq2geno_input.yml\
 
 - <a name="visit_gp_server"></a> With precomputed data
 
-Please directly visit [Geno2Pheno](https://genopheno.bifo.helmholtz-hzi.de)  
+The precomputed data are unnecessarily generated using Seq2Geno as long as they meet the [correct formats](https://github.com/hzi-bifo/Geno2PhenoClient). 
+Please directly visit the [Geno2Pheno server](https://genopheno.bifo.helmholtz-hzi.de).
 
 
 ### <a name="FAQ"></a>FAQ
