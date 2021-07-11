@@ -79,9 +79,9 @@ The command uses **--recurse-submodules** to download the submodules. The flag i
 
 ```
 cd install/
-SETENV.sh snakemake_env
+./SETENV.sh snakemake_env
 conda activate snakemake_env
-TESTING.sh
+./TESTING.sh
 ```
 
 ### <a name="usage"></a>Usage and Input
@@ -196,7 +196,7 @@ To only create the folder and config files, please turn off the last six options
 The folder *examples/* includes a structured zip file and a yaml file--the two input formats that Seq2Geno can recognize. The zip file can be used as the input with this command:
 
 ```
-S2G -z examples/example_input.zip\
+S2G -z examples/example_input/seq2geno_input.yml\
  -l examples/example_input_zip.log\
  --outzip g2p
 ```
@@ -206,7 +206,7 @@ is, the zip file) and edit the yaml file to ensure the right paths to
 those example data. After they are ready, please run with this command:
 
 ```
-S2G -f examples/seq2geno_input.yml\
+S2G -f examples/example_input/seq2geno_input.yml\
  -l exapmles/seq2geno_input_yml.log\
  --outzip g2p
 ```
@@ -218,7 +218,7 @@ To include automatic submission to the Geno2Pheno server, just use the flag
 `--to_gp`:
 
 ```
-S2G -f examples/seq2geno_input.yml\
+S2G -f examples/example_input/seq2geno_input.yml\
  -l exapmles/seq2geno_input_yml.log\
  --outzip g2p --to_gp
 ```

@@ -264,7 +264,7 @@ def write_yaml(func_dict, config_dict):
                                          initialdir='.')
     if len(yml_f) > 0:
         primary_dict['yml_f'].set(yml_f)
-        with LoadFile(yml_f) as yml_fh:
+        with open(yml_f, 'w') as yml_fh:
             yaml.safe_dump(arg_dict, yml_fh)
         return(yml_f)
 
