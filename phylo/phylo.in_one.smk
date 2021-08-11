@@ -62,7 +62,7 @@ rule tree:
         '''
         set +u
         export OMP_NUM_THREADS={threads}
-        FastTreeMP -nt -gtr -gamma \
+        FastTreeMP -nt -gtr -gamma -seed 1234 \
 -log {output.tree}.log -out {output.tree} {input.alignment}
         set -u
         '''
@@ -118,7 +118,9 @@ rule list_families:
             target_fam= [fam[0] for fam in families 
                 if (int(fam[2])-int(fam[1]))/int(fam[2]) <= params.indel_cutoff]
         with open(output.out_fam_list, 'w') as out_fh:
-            for f in input.out_seq:
+            aln_files = [f for f in input.out_seq]
+            aln_files.sort()
+            for f in aln_files:
                 fam= re.sub('\.aln$', '', basename(f))
                 if fam in target_fam:
                     out_fh.write(f+'\n')
