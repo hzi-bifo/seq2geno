@@ -144,7 +144,7 @@ if __name__ == '__main__':
         and os.path.isfile(primary_args.zip_f)):
         primary_args.yml_f = zip2config(primary_args.zip_f)
     elif ((not os.path.isfile(primary_args.yml_f))
-          and (not os.apth.isfile(primary_args.zip_f))):
+          and (not os.path.isfile(primary_args.zip_f))):
         raise AttributeError('Neither input yml nor zip found')
     # create logger
     logger = LogGenerator.make_logger(primary_args.log_f)
