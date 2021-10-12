@@ -187,7 +187,7 @@ To only create the folder and config files, please turn off the last six options
 The folder *examples/* includes a structured zip file and a yaml file--the two input formats that Seq2Geno can recognize. The zip file can be used as the input with this command:
 
 ```
-S2G -z examples/example_input/seq2geno_input.yml\
+S2G -z examples/example_input/seq2geno_input.zip\
  -l examples/example_input_zip.log\
  --outzip g2p
 ```
@@ -257,14 +257,14 @@ We will be publishing the paper for the joint work of Seq2Geno and Geno2Pheno.
 Before that, please use 
 
 ```
-Kuo, T.-H., Weimann, A., Bremges, A., & McHardy, A. C. (2021). Seq2Geno (v1.00001) [A reproducibility-aware, integrated package for microbial sequence analyses].
+Asgari*, E., Kuo*, T.-H., Bremges, A., Robertson, G., Weimann, A. & McHardy, A. C. (2021). Seq2Geno2Pheno [A Computational Workflow for Phenotype Predictive-Modeling and Biomarker Detection from Microbial Sequence Data]
 ```
 or 
 ```
-@software{thkuo2021seq2geno,
-  author = {Tzu-Hao Kuo, Aaron Weimann, Andreas Bremges, Alice C. McHardy},
-  title = {Seq2Geno: a reproducibility-aware, integrated package for microbial sequence analyses},
-  version = {v1.00001},
-  date = {2021-06-20},
+@software{seq2geno2pheno2021,
+  author = {Ehsaneddin Asgari*, Tzu-Hao Kuo*, Andreas Bremges, Gary Robertson, Aaron Weimann, Alice C. McHardy},
+  title = {Seq2Geno2Pheno: A Computational Workflow for Phenotype Predictive-Modeling and Biomarker Detection from Microbial Sequence Data},
+  version = {v2.00001},
+  date = {2021-07-07},
 }
 ```
