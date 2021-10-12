@@ -10,6 +10,7 @@ cpanm --force XML::Parser
 cpanm --force Graph
 cpanm --force Graph::Writer::Dot
 cpanm --force File::Find::Rule
+cpanm --force Exception::Class
 #cpanm Bio::Perl
 #cpanm Moose
 #cpanm Log::Log4perl
